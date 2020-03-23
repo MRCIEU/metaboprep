@@ -9,13 +9,23 @@ date: June 3rd 2019
 	 i. quick install
 	
 		a. start an R session
-		b. install MetaboQC with
+		b. install the MetaboQC package with
 
 			> devtools::install_github("MRCIEU/MetaboQC")
 
+		c. from this repo download a copy of the following files
+			1. run_MetaboQC_pipeline.R
+			2. parameter_file.txt
+			3. QC_Report.Rmd
+			
+			* You download or clone the entire repo with
+				> git clone https://github.com/MRCIEU/MetaboQC.git
+
 	ii. alternatively you can download the package manually
 
-		a. download the depository
+		a. download a copy of the depository
+			* or git clone
+				> git clone https://github.com/MRCIEU/MetaboQC.git
 		b. unzip/pack the download
 		c. place the directory somewhere sensible
 		d. start an R session
@@ -25,13 +35,14 @@ date: June 3rd 2019
 		   > devtools::install("MetaboQC")
 
 
-## To run the QC over your data
+## To run the MetaboQC
 
-1. Edit the paramater (paramater_file.txt) file
+1. Edit the paramater (parameter_file.txt) file
 	*	do not add any spaces before or after the "=" sign in the paramater file.
-2. Load R into your environment, if necesasry.
+2. Make sure that R is in your environment, often necessary if working on an HPC.
+	* module add languages/R-3.5-ATLAS-gcc-7.1.0
 3. Run the QC by running the following line of code.
-	* > Rscript process_raw_data_files.R paramater_file.txt
+	* > Rscript /FULL/PATH/TO/run_MetaboQC_pipeline.R /FULL/PATH/TO/paramater_file.txt
 
 
 ## QC steps in brief
