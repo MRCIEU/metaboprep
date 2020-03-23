@@ -6,6 +6,13 @@ date: June 3rd 2019
 ## Install MetaboQC
 1. To install do the following
 
+	a. start an R session
+	b. install MetaboQC with
+
+		> devtools::install_github("MRCIEU/MetaboQC")
+
+	c. alternatively you can download the package manually
+
 		a. download the depository
 		b. unzip/pack the download
 		c. place the directory somewhere sensible
