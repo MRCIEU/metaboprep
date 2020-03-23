@@ -1,0 +1,31 @@
+############################################################
+## Paramater file for Nightingale & Metabolon QC Processing
+## 			by: Laura Corbin and David Hughes
+## 			date: May 15th 2019
+############################################################
+## (1) Name of your project
+projectname=MYPROJECTNAME
+## (2) Full path to the directory holding your data file(s)
+datadirectory=/FULL/PATH/TO/DATA/DIRECTORY/
+## (3) The name of the raw EXCEL sheet from Metabolon or Nightingale. 
+## 		Or a flat text file (csv or txt) with metabolites in columns, samples in rows
+rawdata_EXCEL_or_Flat_testFile=TheNameOfMyComercial_Metabolon_ExcelSheet.xls
+## (4) feature (metabolite) annotation file
+## 		- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 		- features in row, annotation in columns
+## 		- NOTE: Metabolon QC requires a "SUPER_PATHWAY" column header to identify Xenobiotics
+feature_annotation_file=NA
+## (5) sample annotation file (batch variables)
+## 		- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 		- samples in rows, annotation in columns
+sample_annotation_file=NA
+## (6) Is your dataset from Metabolon, Nightingale, or Other
+Nightingale_OR_Metabolon=Metabolon
+## (7) FEATURE QC: Proportion of missinginess on features used as a QC threshold. 
+feature_missingness=0.2
+## (8) SAMPLE QC: Proportion of missinginess on samples used as a QC threshold. 
+sample_missingness=0.2
+## (9) SAMPLE QC: The number fo Standard Deviation (SD) units from the mean to perform a sample QC based on total peak area
+total_peak_area_SD=5
+## (10) SAMPLE QC: The number fo Standard Deviation (SD) units from the mean to perform a sample QC based on principal components
+PC_outlier_SD=5

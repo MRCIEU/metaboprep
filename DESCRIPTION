@@ -1,0 +1,42 @@
+Package: MetaboQC
+Title: Metabolomics processing and quality control
+Version: 0.0.1
+Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
+    person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")) )
+Description: Reads in raw Metabolon and Nightingale xls sheets and aids in quality control of all metabolomics data sets.
+Depends: R (>= 3.4.0)
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1.9000
+Imports:
+    car,
+    corrplot,
+    data.table,
+    dplyr,
+    forcats,
+    ggfortify,
+    ggplot2,
+    ggpubr,
+    gridExtra,
+    kableExtra,
+    knitr,
+    MASS,
+    nFactors,
+    psych,
+    purrr,
+    pwr,
+    RColorBrewer,
+    readr,
+    readxl,
+    stats,
+    stringr,
+    tibble,
+    tidyr,
+    tidyverse
+    
+    
+    
+    
+    
+    
