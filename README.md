@@ -5,52 +5,25 @@ date: June 3rd 2019
 
 ## Install MetaboQC
 1. To install do the following
+	
+	 i. quick install
+	
+		a. start an R session
+		b. install MetaboQC with
 
-	a. start an R session
-	b. install MetaboQC with
+			> devtools::install_github("MRCIEU/MetaboQC")
 
-		> devtools::install_github("MRCIEU/MetaboQC")
-
-	c. alternatively you can download the package manually
+	ii. alternatively you can download the package manually
 
 		a. download the depository
 		b. unzip/pack the download
 		c. place the directory somewhere sensible
-		d. start an R session and set working directory to your new folder
-		e. insure that devtools is an available package in your environment
+		d. start an R session
+		e. set your working directory to the parent directory of the repo
 		f. install R package with: 
-		    devtools::install("MetaboQC")
+		  
+		   > devtools::install("MetaboQC")
 
-2. If installing on a cluster you may need to try the following installation
-
-		a. Use R version 3.5
-			module add languages/R-3.5-ATLAS-gcc-7.1.0
-		b. Move into the downloaded directory.
-			Into the parent directory of "MetaboQC" folder.
-		c. Attempt a devtools installation
-			devtools::install("MetaboQC")
-		d. Do install any suggested updates
-		e. if that fails, note the dependent packages that did not install and install them manually.
-		#######
-		newpacks = c("ggfortify", "ggpubr", "kableExtra", "nFactors", "pwr")
-		oldpacks = installed.packages()[,"Package"]
-		mispacks = newpacks[!newpacks %in% oldpacks]
-		if(length(mispacks)>0){ 
-	  		if (!requireNamespace("BiocManager", quietly = TRUE)){
-   		 		install.packages("BiocManager")
-	  		}
-   	 		BiocManager::install(mispacks)
-			}
-		#######
-		f. attempt installation of MetaboQC again:
-			1) devtools::install("MetaboQC")
-			2) Or write to a local directory of choice with:
-				 "R CMD INSTALL -l ~/PATH/TO/yourlocal_R_library_directory/ MetaboQC"
-		
-		    
-3. Would like to try to get this to work but it is in development
-
-		a. devtools::install_git(url = url)
 
 ## To run the QC over your data
 
