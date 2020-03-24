@@ -67,7 +67,11 @@ if(substring(data_dir, nchar(data_dir)) != "/"){
 ## IV) Make a new sub directory
 ##
 #######################################
-cmd = paste0("mkdir -p ", data_dir, "MetaboQC_release_", today)
+## check for spaces in fle paths
+dd = data_dir
+dd = gsub(" ","\\\\ ", dd)
+#cmd = paste0("mkdir -p ", data_dir, "MetaboQC_release_", today)
+cmd = paste0("mkdir -p ", dd, "MetaboQC_release_", today)
 system(cmd)
 
 #######################################
@@ -354,7 +358,10 @@ if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
 cat( paste0("\tb. Writing sample summary statistics to file.\n") )
 
 ## make a sum stats directory in data_dir
-cmd = paste0("mkdir ", data_dir,  "MetaboQC_release_", today, "/", "sumstats")
+dd = data_dir
+dd = gsub(" ","\\\\ ", dd)
+###
+cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "sumstats")
 system(cmd)
 
 
@@ -423,7 +430,10 @@ cat( paste0("\tf. Re-Writing sample summary statistics to file to include PCs.\n
 #samplesumstats = cbind(samplesumstats, PCs_outliers[[1]])
 
 ## make a sum stats directory in data_dir
-cmd = paste0("mkdir ", data_dir,  "MetaboQC_release_", today, "/", "sumstats")
+dd = data_dir
+dd = gsub(" ","\\\\ ", dd)
+##
+cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "sumstats")
 system(cmd)
 
 
@@ -464,7 +474,10 @@ save(feature_tree, file = n)
 #########################
 cat( paste0("V. Performing data quality control.\n") )
 
-cmd = paste0("mkdir ", data_dir, "MetaboQC_release_", today, "/", "qc_data")
+dd = data_dir
+dd = gsub(" ","\\\\ ", dd)
+##
+cmd = paste0("mkdir -p ", dd, "MetaboQC_release_", today, "/", "qc_data")
 system(cmd)
 
 ### xenobiotics to exclude
