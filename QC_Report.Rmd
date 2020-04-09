@@ -1,11 +1,18 @@
 ---
 title: "Metabolomics QC Report"
-author: "L.J.Corbin and D.A.Hughes"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: 
+  pdf_document:
+    number_sections: true
+    toc: false
+    toc_depth: 2
+space_betwee_paragraphs: true
+fig_caption: true
+always_allow_html: yes
+link-citations: true
 params: 
-  Rdatafile: NA
-  out_dir : out_dir
+ Rdatafile: NA
+ out_dir: out_dir
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +42,6 @@ out_dir = params$out_dir
 
 ```
 
-
 ```{r data_2_tibble, include = FALSE, quote=F, comment=NA, warning=FALSE, message=FALSE, error=FALSE }
 
 ## turn data into tibbles
@@ -54,21 +60,63 @@ qdata = tibble::as_tibble(qdata)
 varexp = varexp[,1]
 ```
 
+<!---The <style> code below centers the title and date and justifys all paragraph text --->
+<style type="text/css">
+h1.title {
+  font-size: 38px;
+  text-align: center;
+}
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 18px;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  text-align: center;
+}
+body {
+text-align: justify
+}
+</style>
+<!--- --->
 
-Report relates to:  
-  -- Project: `r project`  
-  -- Platform: `r platform`
+Report relates to:
+
+  * Project: `r project`  
+  * Platform: `r platform`
+
+The `MetaboQC` `R` package performs two operations: it provides an assessment of the raw metabolomics data and then performs quality control on this data. This report provides descriptive information for raw and quality controlled metabolomics data for the project `r project`. The quality control pipeline is as follows (in order):
+
+```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='100%'}
+#knitr::include_graphics("")
+```
+
+1.
+2.
+3.
+4.
+5.
+
+Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes](mailto:d.a.hughes@bristol.ac.uk).
+
+`MetaboQC` is published in [Wellcome Open Research]() and can be cited as:
+
+> `MetaboQC`: an `R` package for metabolomics quality control across analytical platforms.......................
+
+***
+
+\pagebreak
+
+# Raw data
   
-## I. Description of raw, non-QC'd, `r project` `r platform` data set. 
-  
-## II. Data N:  
-  -- Number of samples in data = `r nrow(metdata)`  
-  -- Number of features in data = `r ncol(metdata)`  
+## N  
+  * Number of samples in data = `r nrow(metdata)`  
+  * Number of features in data = `r ncol(metdata)`  
 
-## III. Power exploration for case/control and continuous outcome data:
+## Power
+**Exploration for case/control and continuous outcome data:**
 
-Analytical power analysis for both case/control (50%/50%) and continuous variable analysis given you max sample size (N) and smaller N's in the instance of variabitiy in missingness among features. The case control power analysis assumes that cases and controls are split evenly in your dataset, and the N on the x-axis is the total N. 
-
+Analytical power analysis for both case/control (50%/50%) and continuous variable analysis. Estimated power is given for the max sample size (N) and smaller N's in the instance of variabitiy in missingness among features. The case control power analysis assumes that cases and controls are split evenly in your dataset, and the N on the x-axis is the total N. 
 
 ```{r power_exploration, echo=F, quote=F, comment=NA, fig.width=8, fig.height=5, warning=FALSE, message=FALSE, error=FALSE }
 ####################################   
@@ -77,17 +125,14 @@ Analytical power analysis for both case/control (50%/50%) and continuous variabl
 ( run.power.make.plot(mydata = metdata ) )
 
 ```
-  
 
-## IV. Summary of Missingness:
+## Missingness
+Missingness is evaluated across samples and features using the original/raw scaled data set. 
 
- -- Missingness is evaluated across samples and features using the original/raw scaled data set. 
+### Summary of missingness 
+Figures give the sample and feature missingness distributions. The median point estimates are indicated by the red vertical line. 
 
-### IVa. summary table of missingness 
-
-  -- An illustration of what your sample and feature missingness distributions look like, with their median point estimates indicated with the red vertical line. 
-
-  -- An estimate of the proportion of missingness for quintiles of the sample and feature missingness data distribution. 
+The table gives an estimate of the proportion of missingness for quintiles of the sample and feature missingness data distribution. 
 
 ```{r run.missingness, echo = FALSE, fig.width = 10, fig.height = 3.5, warning=FALSE, message=FALSE, error=FALSE}
 mis = missingness.sum(mydata = metdata)
@@ -103,20 +148,15 @@ gridExtra::grid.arrange( gridExtra::arrangeGrob ( mis[[4]][[1]] ,
 ```
   
     
-### IVb. your sample size at various levels of feature missingness
-
-  -- Given your study sample size the table below provides the sample size for a features at various levels of missingness.
+### Feature missingnes: sample size
+Given the study sample size, the table below provides the sample size for features at various levels of missingness.
 
 ```{r samplesize.withmissingness, echo = FALSE, fig.width = 5, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 mis[[4]][[4]]
 ```
 
-### IVc. *feature missingness* as influenced by possible explanatory variables supplied by the commercial company
-
-note: Feature missingness may be influenced by the metabolites|features biology or pathway calssification, or the mass spec methodology. 
-
---- The figure below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the commercial raw data files. 
-  
+### Feature missingness: influenced by possible explanatory variables 
+Feature missingness may be influenced by the metabolites|features biology or pathway calssification, or the mass spec methodology. The figure provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
 
 ```{r featurebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ## possible batch variables that have been observed in 
@@ -132,8 +172,6 @@ w = which( apply(fdata[,matched_variables], 2, function(x){length(table(x))}) > 
 class_variables = matched_variables[w]
 
 ```
-
-
 
 ```{r featuremissingnessPLOT,  echo=F, fig.width = 12, fig.height = 8, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
@@ -154,12 +192,10 @@ gridExtra::grid.arrange( grobs = ClassMisPlots, ncol = 1)
 
 ```
 
+### Sample missingness: batch effects/variables
 
-
-### IVd. the univariate influence of batch effects on *sample* missingness
- 
---- The figure below provides an illustrative evaluation of the proportion of *sample missigness* as a product of sample batch variables provided by your supplier. 
-   
+#### Univariate evaluation: batch effects
+The figure provides an illustrative evaluation of the proportion of *sample missigness* as a product of sample batch variables provided by your supplier. This is the univariate influence of batch effects on *sample missingness*.
    
 ```{r samplebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ## possible batch variables that have been observed in 
@@ -187,8 +223,6 @@ if(length(batch_variables) == 0){ batch_variables = NA }
 
 ```
 
-
-
 ```{r Sam_missingnessPLOT,  echo=F, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
@@ -214,13 +248,8 @@ if( !is.na(batch_variables[1]) ) {
 
 ```
 
-
-
-### IVe. a multivariate evaluation of batch variables on *sample missingness*
-
-TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. 
-  
-    
+#### Multivariate evaluation: batch variables
+TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*.
 
 ```{r sample_missingness_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 2, warning=FALSE, message=FALSE, error=FALSE}
 if( !is.na(batch_variables[1]) ) {
@@ -230,18 +259,17 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 
-## V. Summary of Sample Total Peak Area (TPA):
-
-Total peak area (TPA) is simply the sum of the abundances measured across all features. TPA is one measure that can be used to identify unusal samples given their entire profile. However, the level of missingness in a sample may influence TPA, so here we:  
+## Sample Total Peak Area (TPA):
+Total peak area (TPA) is simply the sum of the abundances measured across all features. TPA is one measure that can be used to identify unusual samples given their entire profile. However, the level of missingness in a sample may influence TPA. To account for this we:  
 
 1. Evaluate the correlation between TPA estimates across all features with TPA measured using only those features with complete data (no missingness).  
 2. Evaluate the relationship between sample missingness on TPA, using only complete feature data. 
     * Note: it is expected, and has been observed, that TPA using all features (not accounting for missingness) will exhibit a stronger relationship with sample missingness, but that is not explicitly evaluated here.
+
 3. Determine if the batch effects have a measurable impact on TPA.
 
-
-### Va. corrleation between total peak area at complete features and missingness
-
+### Corrleation
+Correlation between total peak area (at complete features) and missingness
 
 ```{r, echo=F, fig.width = 7, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 a = cor.test( sdata$sample_missingness, sdata$TPA_completefeature)
@@ -258,11 +286,8 @@ a = cor.test( sdata$sample_missingness, sdata$TPA_completefeature)
 
 ```
 
-
-### Vb. the influence of batch effects on sample total peak area
- 
---- The figure below provides an illustrative evaluation of the  *total peak area* as a product of sample batch variables provided by your supplier. 
-   
+### Univariate evaluation: batch effects
+The figure below provides an illustrative evaluation of the  *total peak area* as a product of sample batch variables provided by your supplier. 
 
 ```{r TPAsummary, echo = FALSE, fig.width = 12, fig.height = 10,  warning=FALSE, message=FALSE, error=FALSE}
 
@@ -285,11 +310,8 @@ if( !is.na(batch_variables[1]) ) {
 
 ```
 
-
-### Vc. a multivariate evaluation of batch variables on total peak area
-
-TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. 
-  
+### Multivariate evaluation: batch variables
+TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on thçe proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *TPA*.
 
 ```{r sample_tpa_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 2, warnings = FALSE, message=FALSE, error=FALSE}
 if( !is.na(batch_variables[1]) ) {
@@ -300,10 +322,10 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 
-## VI. Feature Distributions
+## Feature Distributions
 
-
-### VIa. how many feature distributions may be considered normal distributions?
+### Normality
+**How many feature distributions may be considered normal distributions?**
 
 ```{r ,echo=F, warning=FALSE, message=FALSE, error=FALSE}
 wstat = apply(metdata, 2, function(x){
@@ -326,13 +348,12 @@ normalcount = sum(wstat >= 0.9, na.rm = TRUE)
 
 ```
 
-
- -- Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or to few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9. --
+Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or to few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
  
-### VIb. W-stat distributions and does loging your data always improve the W-stat? 
+### W-stat and log transform
+**W-stat distributions and does loging your data always improve the W-stat?**
 
--- Note that a W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. 
-
+A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Log transformation of data *may not* improve its normality.
 
 ```{r shpiroW, echo = FALSE, fig.width = 10, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
 W = wstat
@@ -376,20 +397,13 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 
 ```
 
-  -- do note that logging your data *may not* always improve on the normality of your data.
+### Distributions
+A pdf report is being written to `r paste0( out_dir, project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
 
-### VIc. All distributions printed to file
+## Outliers
+**Evaluation of the number of samples and features that are outliers across the data.**
 
-  -- A pdf report is being written to `r paste0( out_dir, project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions. --
-
---- 
-
-## V. Feature & Sample Outliers
-
-### Va. quatile evaluation of the number of samples and features that are outliers across the data set
-
-Below we report point estimates for the minimum (0%), median (50%), and maximum (100%) number of (1) outlying features across samples and (b) outlying samples across features. 
-
+The table reports the number of point estimates for the minimum (0%), median (50%), and maximum (100%) number of outlying features across samples and outlying samples across features. 
 
 ```{r, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 today = Sys.Date()
@@ -404,16 +418,14 @@ outlier_summary = outlier.summary(dtst = metdata,
                            nsd = 5)
 ```
 
-
 ```{r, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 outlier_summary[[2]]
 ```
 
-## VI. Feature correlation structure
+## Feature correlation structure
 
-### VIa. correlation struture among features
-
-A clustering dendrogram
+### Correlation structure among features
+The figure shows a clustering dendrogram of feature correlation. The horizontal line represents a Spearman's rho of approximately 0.75.
 
 ```{r featuredendrogram, echo = FALSE, fig.width = 15, fig.height = 6,  warning=FALSE, message=FALSE, error=FALSE}
 ######
@@ -427,18 +439,16 @@ plot(tree, nodePar = nodePar, leaflab = "none", edgePar = list(col = c("grey30",
 abline(h = 0.4, col = "coral2", lwd = 2)
 ```
 
-### VIb. Independent features
+### Independent features
+We estimate, based on clustering analysis, that there are a total of `r sum(fdata$independent_features_binary)` independent features in your metabolite data set. This is given a Spearman's rho of approximately 0.75, among the `r sum( !is.na(fdata$k) )` features with data for at least 20% of samples (<= 80% missingness allowed in correlation analysis). 
 
-We estimate that there are a total of `r sum(fdata$independent_features_binary)` independent features in your metabolite data set. This is given a Spearman's rho of approximately 0.75, among the `r sum( !is.na(fdata$k) )` features with data for at least 20% of samples (<= 80% missingness allowed in correlation analysis). 
-
----
-
-Note: A total of `r sum(table(fdata$k) == 1)` features correlated with NO other features at an Spearman's rho > 0.75, and are strictly independent. There were only `r sum(table(fdata$k) > 1)` clusters of features consisting of two or more features. The largest cluster consists of `r max(table(fdata$k))` features.
+**Note**: A total of `r sum(table(fdata$k) == 1)` features correlated with NO other features at a Spearman's rho > 0.75, and are strictly independent. There were only `r sum(table(fdata$k) > 1)` clusters of features consisting of two or more features. The largest cluster consists of `r max(table(fdata$k))` features.
 
 
-## VII. Sample correlation structure
+## Sample correlation structure
 
-### VIIa. correaltion structure among samples
+### Correaltion structure among samples
+The scree plot (left) gives the number of principal components (PCs) and the sample variance explained by each PC. The PC plot (right) shows the top two PCs explaining the largest proportion of sample variance.
 
 ```{r PCA_1, echo = FALSE, fig.width = 10, fig.height = 5 , warning=FALSE, message=FALSE, error=FALSE }
 pcol = RColorBrewer::brewer.pal(9, "Set1")
@@ -502,17 +512,17 @@ for(i in 1:3){
 
 ```
 
-1. The principle component plot above includes exclusion lines at 5SD (red), 4SD (orange), and 3SD (grey) from the mean.
+1. The PC plot includes exclusion lines at 5SD (red), 4SD (orange), and 3SD (grey) from the mean.
+
 2. Missing data was imputed to median estimates of that feature to retain as many features as possible.
+
 3. Given the observations from the principle component analysis:
-  + a total of `r sigpcs` have been delared significant given the estimated acceleration factor (min = 2, for any analysis).
-  + a total of `r sum( c( sdata$PCA_outliers ) )` individuals are flagged for possible exclusion from further analysis, given a standard deviation cuttoff of 3SD of the mean. An exclusion (0|1, 1 = exclude) variable "PCA_outliers" is available in your sample annotation file.
+    * a total of `r sigpcs` PCs have been declared significant given the estimated acceleration factor (min = 2, for any analysis).
+    * a total of `r sum( c( sdata$PCA_outliers ) )` individuals are flagged for possible exclusion from further analysis, given a standard deviation cuttoff of 3SD of the mean. An exclusion (0|1, 1 = exclude) variable "PCA_outliers" is available in your sample annotation file.
 
+### Top 5 PCs
 
-
-### VIIb. Top 5 PCs
-
-A paris or matrix plot of the top 5 PCS, unless the PC acceleration factor estimated for your data set exceeds 5 then the number of PCs plotted will equal the acceleration factor (max = 10). Included in the plot are the 3rd (grey), 4th (orange), and 5th (red) SD from the mean, which are each possible cuttoffs for outlier filtering. 
+A matrix plot of the top 5 PCS, unless the PC acceleration factor estimated for your data set exceeds 5 then the number of PCs plotted will equal the acceleration factor (max = 10). Included in the plot are the 3rd (grey), 4th (orange), and 5th (red) SD from the mean, which are each possible cuttoffs for outlier filtering. 
 
 ```{r PCApairsplot, echo = FALSE, fig.width = 12, fig.height = 12, warning=FALSE, message=FALSE, error=FALSE}
 
@@ -524,22 +534,25 @@ pcapairs_bymoose( mypca[, 1:x ], varexp)
 
 ```
 
+***
 
+\pagebreak
 
-# QC'd data set
+# QC data
 
-## I. Data N:  
-  -- Number of samples in data = `r nrow(qdata)`  
-  -- Number of features in data = `r ncol(qdata)`  
+## N 
+  * Number of samples in data = `r nrow(qdata)`  
+  * Number of features in data = `r ncol(qdata)`  
 
-## II. Relative to the raw data set:
-  -- `r nrow(metdata) - nrow(qdata)` samples were QC'd out, given the user's criteria.
-  -- `r ncol(metdata) - ncol(qdata)` features were QC'd out, given the user's criteria.
-  -- Please review your log file for the number of features and samples excluded and why. 
+## Relative to the raw data
+  * `r nrow(metdata) - nrow(qdata)` samples were QC'd out, given the user's criteria.
+  * `r ncol(metdata) - ncol(qdata)` features were QC'd out, given the user's criteria.
+  * Please review your log file for the number of features and samples excluded and why. 
   
-## NOTE: Outlying samples at each metabolite|feature
+## Notes
+### Outlying samples at each metabolite|feature
 
-Do not that there may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to
+There may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to:
 
 1. turn these observations into NAs
 2. windsorize the data to some maximum value
