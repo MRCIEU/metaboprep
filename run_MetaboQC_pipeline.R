@@ -162,10 +162,10 @@ total_peak_area_SD = as.numeric( pfile[9,2] )
 cat(paste0("\t- Sample filtering: Your declared total peak area filter level, in standard deviations from the mean is: ", total_peak_area_SD, "\n"))
 
 PC_outlier_SD = as.numeric( pfile[10,2] )
-cat(paste0("\t- Sample filtering: Your declared  principal component (PC1 and PC2) exclusion, in standard deviations from the mean is: ", PC_outlier_SD, "\n\n"))
+cat(paste0("\t- Sample filtering: Your declared principal component (PC1 and PC2) exclusion, in standard deviations from the mean is: ", PC_outlier_SD, "\n"))
 
 tree_cut_height = as.numeric( pfile[11,2] )
-cat(paste0("\t- Metabolite independnce: Your declared tree cut height is: ", tree_cut_height, "\n\n"))
+cat(paste0("\t- Metabolite independence: Your declared tree cut height is: ", tree_cut_height, "\n\n"))
 
 #######################################
 ##
@@ -380,7 +380,7 @@ if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
 }
 
 ### write sample sum stats to file
-cat( paste0("\tb. Writing sample summary statistics to file.\n") )
+cat( paste0("\t\t- Writing sample summary statistics to file.\n") )
 
 ## make a sum stats directory in data_dir
 ## evaluate and account for spaces in file paths
@@ -413,19 +413,21 @@ if( "sampledata" %in% names(mydata) ){
 ##################################
 ## B. Summary Statistics for features
 ##################################
-cat( paste0("\tc. Estimating summary statistics for features.\n") )
+cat( paste0("\tb. Estimating summary statistics for features.\n") )
 
 if( length(samplesumstats$sample_missingness_w_exclusions) > 0){
   featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness_w_exclusions, tch = tree_cut_height)
+                                       sammis = samplesumstats$sample_missingness_w_exclusions, 
+                                       tch = tree_cut_height)
 } else {
   featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness, tch = tree_cut_height)
+                                       sammis = samplesumstats$sample_missingness, 
+                                       tch = tree_cut_height)
 }
 
 
 ### write feature sum stats to file
-cat( paste0("\td. Writing feature summary statistics to file.\n") )
+cat( paste0("\t\t- Writing feature summary statistics to file.\n") )
 
 if( "featuredata" %in% names(mydata) ){
   mydata$featuredata = cbind(mydata$featuredata, featuresumstats$table)
@@ -444,7 +446,7 @@ if( "featuredata" %in% names(mydata) ){
 ##################################
 ## C. PC outliers
 ##################################
-cat( paste0("\te. Performing principle component analysis and identifying outliers.\n") )
+cat( paste0("\tc. Performing principle component analysis and identifying outliers.\n") )
 
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
@@ -454,7 +456,7 @@ PCs_outliers = pc.and.outliers(metabolitedata =  mydata$metabolitedata,
                                indfeature_names = indf)
 
 ### write sample sum stats to file
-cat( paste0("\tf. Re-Writing sample summary statistics to file to include PCs.\n") )
+cat( paste0("\t\t- Re-Writing sample summary statistics to file to include PCs.\n") )
 
 ### SAMPLES
 if( "sampledata" %in% names(mydata) ){
@@ -473,7 +475,7 @@ if( "sampledata" %in% names(mydata) ){
 
 
 ### write the variance explained by pcs out to file
-cat( paste0("\tg. Writing PC statistics to file.\n\n") )
+cat( paste0("\t\t- Writing PC statistics to file.\n\n") )
 
 varexp = data.frame(VarExp = PCs_outliers[[2]])
 n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_pc_varexp.txt")
