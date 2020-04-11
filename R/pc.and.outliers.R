@@ -70,7 +70,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   
   dataout = list(pcs = PCout, varexp = varexp, accelerationfactor = accelerationfactor, nsig_parrallel = nsig_parrallel  )
   
-  detach("package:MASS", unload=TRUE)
+  # detach("package:MASS", unload=TRUE)
 
   return(dataout)
 }

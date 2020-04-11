@@ -10,7 +10,9 @@
 #' tree_and_independent_features()
 tree_and_independent_features = function(wdata, minimum_samplesize = 50, treecutheight = 0.5){
   cat(paste0("\t\t- Estimating the number of indpendent features.\n"))
+  ## feature ids
   fids = colnames(wdata)
+  
   ## identify features with no variance
   rowvar0 <- which( apply(wdata,2,function(x) var(x,na.rm=T)==0) )
   if(length(rowvar0) > 0){ 
