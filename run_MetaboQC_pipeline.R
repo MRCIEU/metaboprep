@@ -341,7 +341,7 @@ if(isexcel > 0){
     if( !is.na(pfile[3,2]) ){
       ## Read in the raw data, excel files, write to flat text in the data directory and return all data as a list
       mydata = read.in.metabolon( file2process = METABO_file2process, data_dir = data_dir, projectname = project )
-      cat( paste0("\t- Your raw Nightingale data has been read in and converted to working tab delimited text files.\n\n") )
+      cat( paste0("\t- Your raw Metabolon data has been read in and converted to working tab delimited text files.\n\n") )
 
       } 
   }
