@@ -7,7 +7,7 @@
 #' @param feature_colnames_2_exclude names of columns to be excluded from this analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.
 #' @param tpa_out_SD defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for total peak area. Pass NA to this paramater to exclude this step.
 #' @param PC_out_SD defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for principle components. NA is NOT an excepted paramater.
-#' @param ind_feature_names If you have previously identified independent features in your data set they can be provided here a vector of column names. Pass NA to this paramater to have the function estimate indpendence for you.
+#' @param tree_cut_height The height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.
 #' @keywords metabolomics
 #' @export
 #' @examples
@@ -16,7 +16,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
                                  feature_colnames_2_exclude = NA, 
                                  tpa_out_SD = 5, 
                                  PC_out_SD = 5,
-                                 ind_feature_names = NA ){
+                                 tree_cut_height = 0.5 ){
   ## remove and retain exclusions
   if( is.na( feature_colnames_2_exclude[1] ) == FALSE ){
     if( length(feature_colnames_2_exclude) > 0){
@@ -33,10 +33,10 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   samplemis = sample.missingness(wdata)
   
   ## 2) exclude terrible samples (smis > 0.8)
-  cat( paste0("\t\t- QCstep: exclude those sample with missingness > 80%.\n") )
+  cat( paste0("\t\t- QCstep: exclude those sample with missingness >= 80%.\n") )
   r = which(samplemis[,1] >= 0.8)
   if( length(r) > 0) { 
-    cat( paste0("\t\t\t* ", length(r), " samples excluded for extreme missingness.\n") )
+    cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for extreme missingness.\n") )
     wdata = wdata[ -r, ]; samplemis = samplemis[-r] 
   } else {
     cat( paste0("\t\t\t* 0 samples excluded for extreme missingness.\n") )
@@ -47,39 +47,39 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   featuremis = feature.missingness(wdata = wdata, samplemissingness = samplemis)
   
   ## 4) exclude terrible features (fmis > 0.8)
-  cat( paste0("\t\t- QCstep: exclude those features with missingness > 80%.\n") )
+  cat( paste0("\t\t- QCstep: exclude those features with missingness >= 80%.\n") )
   r = which(featuremis >= 0.8)
   if( length(r) > 0) {  
-    cat( paste0("\t\t\t* ", length(r), " features excluded for extreme missingness.\n") )
+    cat( paste0("\t\t\t* ", length(r), " feature(s) excluded for extreme missingness.\n") )
     wdata = wdata[ , -r ]  
   } else {
     cat( paste0("\t\t\t* 0 features excluded for extreme missingness.\n") )
   }
   
-  ## 5) re-estimate  sample missingness
+  ## 5) re-estimate sample missingness
   cat( paste0("\t\t- QCstep: RE-estimate sample missingness.\n") )
   samplemis = sample.missingness(wdata)
   
   ## 6) exclude samples defined by user ( smis > 0.2 (default) )
-  cat( paste0("\t\t- QCstep: exclude those sample with missingness > ", smis*100,"%.\n") )
+  cat( paste0("\t\t- QCstep: exclude those sample with missingness >= ", smis*100,"%.\n") )
   r = which(samplemis[,1] >= smis )
   if( length(r) > 0) { 
-    cat( paste0("\t\t\t* ", length(r), " samples excluded for user defined missingness.\n") )
+    cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for user defined missingness.\n") )
     wdata = wdata[ -r, ]
     samplemis = samplemis[-r] 
   } else {
     cat( paste0("\t\t\t* 0 samples excluded for user defined missingness.\n") )
   }
   
-  ## 7) estimate inital feature missingness
+  ## 7) re-estimate feature missingness
   cat( paste0("\t\t- QCstep: RE-estimate feature missingness.\n") )
   featuremis = feature.missingness(wdata = wdata, samplemissingness = samplemis)
   
-  ## 8) exclude terrible features ( fmis > 0.2 (default) )
-  cat( paste0("\t\t- QCstep: exclude those features with missingness > ", fmis*100,"%.\n") )
+  ## exclude features based on user defined feature missingness ( fmis > 0.2 (default) )
+  cat( paste0("\t\t- QCstep: exclude those features with missingness >= ", fmis*100,"%.\n") )
   r = which(featuremis >= fmis)
   if( length(r) > 0) {  
-    cat( paste0("\t\t\t* ", length(r), " features excluded for user defined missingness.\n") )
+    cat( paste0("\t\t\t* ", length(r), " feature(s) excluded for user defined missingness.\n") )
     wdata = wdata[ , -r ]  
   } else {
     cat( paste0("\t\t\t* 0 features excluded for user defined missingness.\n") )
@@ -88,52 +88,59 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   ### 9) total peak area
   cat( paste0("\t\t- QCstep: estimate total peak area.\n") )
   tpa = total.peak.area(wdata)
+  
   ## if you want to filter on TPA
   if( is.na(tpa_out_SD) == FALSE){
-    cat( paste0("\t\t- QCstep: exclude those features with TPA > ", tpa_out_SD,"SD from the mean.\n") )
+    cat( paste0("\t\t- QCstep: exclude those features with TPA >= ", tpa_out_SD,"SD from the mean.\n") )
     s = sd( tpa[,1] ); m = mean( tpa[,1] )
     sdout = m + (tpa_out_SD * s)
     w = which(tpa[,1] >= sdout | tpa[,1] <= -sdout )
     if( length(w) > 0 ){
-      cat( paste0("\t\t\t* ", length(w), " samples excluded for user defined TPA SD from the mean.\n") )
+      cat( paste0("\t\t\t* ", length(w), " sample(s) excluded for user defined TPA SD from the mean.\n") )
       wdata = wdata[ -w, ]
     } else {
     cat( paste0("\t\t\t* 0 samples excluded for user defined TPA SD from the mean.\n") )
     }
+  } else {
+    cat( paste0("\t\t\tYou have chosen NOT to apply a QC-filter on individuals total peak area.\n") )
+    cat( paste0("\t\t\total_peak_area_SD in the parameter file was set to NA.\n") )
   }
   
-  ### 10) feature independence and PC outliers
-  if( is.na(ind_feature_names[1]) == TRUE ){
-    cat( paste0("\t\t- QCstep: identify independent features through correlation analysis and dendrogram clustering.\n") )
-    ## we need to estimate independent features denovo, if not available
-    featuresumstats = feature.sum.stats( wdata = wdata, sammis = samplemis)
-    w = which(featuresumstats$table$independent_features_binary == 1)
-    ind_feature_names = rownames(featuresumstats$table)[w]
-    cat( paste0("\t\t\t* ", length(ind_feature_names), " independent features identified.\n") )
-  }
+  ### 10) re-identify feature independence and PC outliers
+  cat( paste0("\t\t- QCstep: re-identify independent features through correlation analysis and dendrogram clustering.\n") )
+  cat( paste0("\t\t\t- using currently QCd data.\n") )
   
-  ## Take the list of independent features and find them
-  ## in the wdata data frame.
-    # k = which(colnames(wdata) %in% ind_feature_names)
+  ## re-estimate independent features using the qc-data to this point
+  featuresumstats = feature.sum.stats( wdata = wdata, sammis = samplemis, tch = tree_cut_height)
   
-  ## binary index of binary features needed for the pc.and.outliers
-  ## function
+  ## extract independent feature list
+  w = which(featuresumstats$table$independent_features_binary == 1)
+  ind_feature_names = rownames(featuresumstats$table)[w]
+  cat( paste0("\t\t\t* ", length(ind_feature_names), " independent features identified.\n") )
+  
+  
+  ## identify PC outliers
   cat( paste0("\t\t- QCstep: Perform Principle Componenet Analysis of currently QC'd data.\n") )
   PCs_outliers = pc.and.outliers(metabolitedata =  wdata, 
                                  indfeature_names = ind_feature_names )
   pcs = PCs_outliers[[1]][, 1:2]
 
-  ## identify PC outliers
-  cat( paste0("\t\t- QCstep: Identify PC 1-&-2 outliers at > ", PC_out_SD , "SD of the mean.\n") )
-  outliers = outlier.matrix(pcs, nsd = PC_out_SD)
-  outliers = apply(outliers, 1, sum)
-  w = which(outliers>0)
-  if(length(w)>0){
-    cat( paste0("\t\t\t* ", length(w), " samples excluded as PC outliers.\n") )
-    wdata = wdata[-w, ]
+  ## perform exclusion on PC outliers
+  cat( paste0("\t\t- QCstep: Identify PC 1-&-2 outliers >= +/-", PC_out_SD , "SD of the mean.\n") )
+  if( is.na(PC_out_SD) == FALSE){
+    outliers = outlier.matrix(pcs, nsd = PC_out_SD)
+    outliers = apply(outliers, 1, sum)
+    w = which(outliers>0)
+    if(length(w)>0){
+      cat( paste0("\t\t\t* ", length(w), " samples excluded as PC outliers.\n") )
+      wdata = wdata[-w, ]
+    } else {
+      cat( paste0("\t\t\t* 0 samples excluded as PC outliers.\n") )
+      }
   } else {
-    cat( paste0("\t\t\t* 0 samples excluded as PC outliers.\n") )
-    }
+    cat( paste0("\t\t\tYou have chosen NOT to apply a QC-filter on individuals based on their PC eigenvectors.\n") )
+    cat( paste0("\t\t\tPC_outlier_SD in the parameter file was set to NA.\n") )
+  }
   
   ## 11) put the exclusion features back
   if( exists("exdata") ){

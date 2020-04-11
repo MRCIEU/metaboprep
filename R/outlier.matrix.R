@@ -13,7 +13,7 @@ outlier.matrix = function(wdata, nsd = 5){
     cutoff = msd[1] + (msd[2]*nsd)
     ##
     dataout = rep(0, length(x))
-    w = which(x > cutoff | x < -cutoff)
+    w = which(x >= cutoff | x <= -cutoff)
     if(length(w)> 0){
       dataout[w] = 1
     } 

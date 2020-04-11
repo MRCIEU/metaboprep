@@ -8,7 +8,7 @@
 #' @export
 #' @examples
 #' tree_and_independent_features()
-tree_and_independent_features = function(wdata, minimum_samplesize = 50, treecutheight = 0.2){
+tree_and_independent_features = function(wdata, minimum_samplesize = 50, treecutheight = 0.5){
   cat(paste0("\t\t- Estimating the number of indpendent features.\n"))
   fids = colnames(wdata)
   ## identify features with no variance
@@ -31,7 +31,7 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, treecut
                      hclust_method="complete")
   
   # restrict based on cut off
-  cat(paste0("\t\t\t- Performing tree cut.\n"))
+  cat(paste0("\t\t\t- Performing tree cut. Cut height defined at ", treecutheight ,"\n"))
   k = cutree(stree, h = treecutheight)
   
   # restrict so as to keep the first feature in each cluster

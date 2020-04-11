@@ -3,11 +3,12 @@
 #' This function estiamtes feature statistics for samples in a matrix of metabolite features. 
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @param sammis a vector of sample missingness estimates, that is ordered to match the samples in the rows of your data matrix.
+#' @param tch tree cut height is the height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.
 #' @keywords metabolomics
 #' @export
 #' @examples
 #' feature.sum.stats()
-feature.sum.stats = function( wdata, sammis = NA){
+feature.sum.stats = function( wdata, sammis = NA, tch = 0.5){
   ## feature missingness
   featuremis = feature.missingness(wdata, samplemissingness = sammis)
   ### distribution discritions
@@ -21,7 +22,7 @@ feature.sum.stats = function( wdata, sammis = NA){
   } else {
     MSS = 50  
   }
-  indf = tree_and_independent_features(wdata, minimum_samplesize = MSS, treecutheight = 0.4)
+  indf = tree_and_independent_features(wdata, minimum_samplesize = MSS, treecutheight = tch )
   ### data out
   out = cbind(featuremis, foutlier, description, indf[[3]] )
   return(  list( table = out, tree = indf[[1]] ) )
