@@ -54,7 +54,7 @@ date: June 3rd 2019
 5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
 	1. move to your newly generated MetaboQC project directory. 
 		* it will take the form of "../MetaboQC_release_TODAYSDATE/"
-	2. You should find a an R data object called "ReportData.Rdata". Save a copy locally.
+	2. You should find an R data object called "ReportData.Rdata". Save a copy locally.
 	3. Open an R session
 	4. produce report with
 		
@@ -66,29 +66,28 @@ date: June 3rd 2019
 
 ## QC steps in brief
 
-### -- a detailed synopsis can be found on the wiki --
+### -- a detailed synopsis can be found on this git repository's wiki --
 
 ### (A) General Outline of MetaboQC
 1. Read in the paramater file
-2. Read in the data, *typically from a commercially provided excel file*
+2. Read in the data  -  *(typically from a commercially provided excel file)*
 	* metabolite abundance
 	* sample annotation
 	* feature annotation
 3. Write metabolite data, sample annotation and feature annotation to flat text file.
-4. Estimate Summary Statstics on the raw data set **(step B below)**
+4. Estimate summary statistics on the raw data set **(step B below)**
 	* write summary stats to file
-5. Perfom the Quality Control **(step C below)**
+5. Perfom the quality control **(step C below)**
 	* using parameters passed in the parameter file 
 	* write QC data set to file
-6. Estimate Sumary Statistics on the QC'd data set **(step B below)**
+6. Estimate sumary statistics on the QC'd data set **(step B below)**
 	* write summary stats to file
-7. Generate PDF Report
+7. Generate PDF report
 
 ### (B) Summary Statistic Estimation
 1. Sample Summary Statistics
-	* sample missingness **(derived variables excluded)**
+	* sample missingness **(xenobiotics and derived variables excluded)**
 		+ all features
-		+ exclude xenobiotics *(specific to metabolon)*
 	* sample total peak area (TPA) **(derived variables excluded)**
 		+ with all features 
 		+ with complete features only (no missingness) 
@@ -118,28 +117,30 @@ date: June 3rd 2019
 			+ outliers determined as those +/- 5 SD of the mean.
 3. Feature and Sample structure
 	* feature:feature correlation structure **(derived variables excluded)**
+		+ only includes features with at least 50 measurments
+			+ or if the data set has an N<50 the missingness allowed is 0.8 * N
 		+ estimate the number of independent features
 		+ tag representitive features of feature clusters
 	* sample:sample correaltion structure **(derived variables excluded)**
 		+ principle components (PCA)
-			* derived from independent and complete features only
-			* -- probabilistic PCA, with missing data is possible --
-			* determine the number of significant PCs
+			* derived from independent features
+			* missing data is imputed to the median estiamte of each feature
 			* identify PC outliers
 				* +/- 3,4,5 SD of mean for all significant PCs
 
 ### (C) Quality Control Steps
-1. If data is from Metabolon, exclude but retain xenobiotic metabolites from anlaysis.
-2. Estiamte sample missingness and exclude terrible samples, those with a missingness >= 0.80 (or 80%) **(derived variables excluded)**
-3. Estimate feature missingness and exclude terrible features, those with a missingness >= 0.80 (or 80%)
+1. If data is from Metabolon, exclude (but retain for step 11) xenobiotic metabolites from anlaysis.
+2. Estimate sample missingness and exclude extreme samples, those with a missingness >= 0.80 (or 80%) **(derived variables excluded)**
+3. Estimate feature missingness and exclude extreme features, those with a missingness >= 0.80 (or 80%)
 4. Re-estimate sample missingness and exclude samples >= user defined threshold (units: 0.2 or 20% missing) **(derived variables excluded)**
 5. Re-estimate feature missingness and exclude features >= user defined threshold (units: 0.2 or 20% missing)
-6. Estimate total peak area (the sum of all values) for complete features only and exclude on those >= user defined threshold (units: +/- SD from mean)  **(derived variables excluded)**
+6. Estimate total peak area (the sum of all values) for each individual using complete features only and exclude samples >= user defined threshold (units: +/- SD from mean)  **(derived variables excluded)**
 	* To ignore this step set to NA in parameter file
 8. Build feature:feature correlation matrix on QC-data derived from steps 1-6 above **(derived variables excluded)**
+	* To be included a feature must have a minimun of 50 observations, or N*0.8 observations if data set includes less than 50 individuals.
 9. Identify "independent" features using data from step 8 and user defined tree cut height.
 	* we retain the feature with the least missingness within a cluster, otherwise we select the first feature in the list. 	
-10. Estimate principal components using indpendent features from step 9, and exclude on those >= user defined threshold (units: +/- SD from the mean)
+10. Estimate principal components using indpendent features from step 9, and exclude on samples >= user defined threshold (units: +/- SD from the mean)
 11. If the data is from Metabolon we place the xenobiotic metabolites back into the QC'd data set. 
 
 
