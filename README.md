@@ -86,8 +86,9 @@ date: June 3rd 2019
 
 ### (B) Summary Statistic Estimation
 1. Sample Summary Statistics
-	* sample missingness **(xenobiotics and derived variables excluded)**
+	* sample missingness
 		+ all features
+		+ to the exclusion of xenobiotic and\or derived variables
 	* sample total peak area (TPA) **(derived variables excluded)**
 		+ with all features 
 		+ with complete features only (no missingness) 
