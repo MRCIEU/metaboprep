@@ -665,8 +665,8 @@ PCs_outliers = pc.and.outliers(metabolitedata =  qcdata$metabolitedata,
                                indfeature_names = indf)
 
 cat( paste0("\t\t The number of informative principle components:\n") )
-cat( paste0("\t\t\t 1. Cattel's Scree Test - acceleration factor = ", PCs_outliers$accelerationfactor ,"\n") )
-cat( paste0("\t\t\t 1. Parrallel Analysis = ", PCs_outliers$accelerationfactor ,"\n") )
+cat( paste0("\t\t\t 1. Cattel's Scree Test : acceleration factor = ", PCs_outliers$accelerationfactor ,"\n") )
+cat( paste0("\t\t\t 1. Parrallel Analysis = ", PCs_outliers$nsig_parrallel ,"\n") )
 
 ### write sample sum stats to file
 cat( paste0("\tf. Re-Writing QC sample summary statistics to file to include PCs.\n") )
@@ -731,7 +731,7 @@ save(feature_tree, file = n)
 # 
 
 
-cat( paste0("VI. Generate Data Description pdf report.\n") )
+cat( paste0("VII. Generate Data Description pdf report.\n") )
 
 ## write data need by Rmarkdown to an Rdata object
 metdata = mydata$metabolitedata
