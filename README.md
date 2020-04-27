@@ -4,7 +4,7 @@ by: David Hughes and Laura Corbin
 date: June 3rd 2019
 
 ## This package
-1. Reads in an process (un)targeted metabolite data, saving datasets in tab-delimited format for use elsewhere
+1. Reads in and processes (un)targeted metabolite data, saving datasets in tab-delimited format for use elsewhere
 2. Provides useful summary data in the form of tab-delmited text file and a PDF report.
 3. Performs QC on the data using a standard pipeline and according to user-defined thresholds.
 
