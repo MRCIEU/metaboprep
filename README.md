@@ -11,31 +11,36 @@ date: June 3rd 2019
 ## Install MetaboQC
 1. To install do the following
 	
-	 i. quick install
-	
-		a. start an R session
-		b. install the MetaboQC package with
-
-			> devtools::install_github("MRCIEU/MetaboQC")
-
-		c. from this repo download a copy of the following files
+	 1. quick install
+		1. start an R session
+		2. install the MetaboQC package with
+			
+			```R
+			devtools::install_github("MRCIEU/MetaboQC")
+			```
+			
+		3. from this repo download a copy of the following files
 			1. run_MetaboQC_pipeline.R
 			2. parameter_file.txt
 			3. QC_Report.Rmd
 			
 			* You can also download or clone the entire repo with
-				> git clone https://github.com/MRCIEU/MetaboQC.git
-
-	ii. alternatively you can download the package manually
-
-		a. download a copy of the depository
-		b. unzip/pack the download
-		c. place the directory somewhere sensible
-		d. start an R session
-		e. set your working directory to the parent directory of the repo
-		f. install R package with: 
-			> devtools::install("MetaboQC")
-
+				
+				```R
+				git clone https://github.com/MRCIEU/MetaboQC.git
+				```
+				
+	2. alternatively you can download the package manually
+		1. download a copy of the depository
+		2. unzip/pack the download
+		3. place the directory somewhere sensible
+		4. start an R session
+		5. set your working directory to the parent directory of the repo
+		6. install R package with: 
+			
+			```R
+			devtools::install("MetaboQC")
+			```
 
 ## To run MetaboQC
 
@@ -48,9 +53,11 @@ date: June 3rd 2019
 3. Make sure that R is in your environment - an often necessary step if working on an HPC.
 	1. for example: module add languages/R-3.5-ATLAS-gcc-7.1.0
 4. Run the MetaboQC pipeline on a terminal command line as follows:
-		
-		> Rscript run_MetaboQC_pipeline.R /FULL/PATH/TO/paramater_file.txt
-
+	
+	```R	
+	Rscript run_MetaboQC_pipeline.R /FULL/PATH/TO/paramater_file.txt
+	```
+	
 5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
 	1. move to your newly generated MetaboQC project directory. 
 		* it will take the form of "../MetaboQC_release_TODAYSDATE/"
@@ -58,11 +65,12 @@ date: June 3rd 2019
 	3. Open an R session
 	4. produce report with
 		
-			> full_path_to_QCReport_md = "FULL/PATH/TO/MetaboQC/QC_Report.Rmd"
-			> full_path_to_OUTPUT_dir = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/"
-			> full_path_to_Rdatafile = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/ReportData.Rdata"
-			> rmarkdown::render(full_path_to_QCReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
-
+		```R
+		full_path_to_QCReport_md = "FULL/PATH/TO/MetaboQC/QC_Report.Rmd"
+		full_path_to_OUTPUT_dir = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/"
+		full_path_to_Rdatafile = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/ReportData.Rdata"
+		rmarkdown::render(full_path_to_QCReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
+		```
 
 ## QC steps in brief
 
@@ -92,14 +100,13 @@ date: June 3rd 2019
 	* sample total peak area (TPA) **(derived variables excluded)**
 		+ with all features 
 		+ with complete features only (no missingness) 
-	* sample outlying features count
-		+ count of outlying features. 
-			+ each feature analyzed within its own sample distribution
-			+ outliers determined as those +/- 5 SD of the mean.
+	* count of how many times a sample is an outlier across all feature
+		+ each feature analyzed within its own sample distribution
+		+ outliers determined as those +/- 5 SD of the mean.
 2. Feature Summary Statistics
 	* feature missingness
 		+ all samples
-		+ to the exclusion of sample(s) with extreme missingness (> 50%)
+		+ to the exclusion of sample(s) with extreme missingness (>= 50%)
 	* distribution statistics
 		+ shaprio's W-statistic of normality on raw distribution
 		+ shaprio's W-statistic of normality on log10 distribution

@@ -38,3 +38,8 @@ PC_outlier_SD=5
 ##				- tree_cut_height = 1-absolute(spearman's rho)
 ##				- such that a tree_cut_height of 0.2 would indicate a intra-cluster similarity of >0.8. 
 tree_cut_height=0.5
+## (12) Nightingale derived variable exclusion
+##				- derived variables in Nightingale are all variables derived from two or more variables already present
+##				- ... in the data set. In this instance it represents all ratios that Nightingale supply in their data releaases.
+##				- binary choice of TRUE or FALSE
+derived_var_exclusion=TRUE

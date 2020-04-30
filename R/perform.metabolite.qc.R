@@ -60,7 +60,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   cat( paste0("\t\t- QCstep: RE-estimate sample missingness.\n") )
   samplemis = sample.missingness(wdata)
   
-  ## 6) exclude samples defined by user ( smis > 0.2 (default) )
+  ## 6) exclude samples defined by user ( smis >= 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those sample with missingness >= ", smis*100,"%.\n") )
   r = which(samplemis[,1] >= smis )
   if( length(r) > 0) { 
@@ -103,7 +103,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     }
   } else {
     cat( paste0("\t\t\tYou have chosen NOT to apply a QC-filter on individuals total peak area.\n") )
-    cat( paste0("\t\t\total_peak_area_SD in the parameter file was set to NA.\n") )
+    cat( paste0("\t\t\ttotal_peak_area_SD in the parameter file was set to NA.\n") )
   }
   
   ### 10) re-identify feature independence and PC outliers

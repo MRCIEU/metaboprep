@@ -18,7 +18,7 @@ feature.sum.stats = function( wdata, sammis = NA, tch = 0.5){
   ### identify independent features
       #indf = feature.tree.independence(wdata)
   if(50 < nrow(wdata)*0.8 ){
-    MSS = nrow(wdata) * 0.8
+    MSS = nrow(wdata) * 0.8  ## this allows 20% missingness on data sets with less than 50 individuals
   } else {
     MSS = 50  
   }

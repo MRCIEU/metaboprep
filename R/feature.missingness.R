@@ -11,7 +11,7 @@ feature.missingness <- function(wdata, samplemissingness){
   ## identify any sample that performed VERY poorly. 
   ## if there are any, remove these sample prior to 
   ## estimating feature missingness
-  w = which(samplemissingness > 0.5)
+  w = which(samplemissingness >= 0.5)
   if(length(w)>0){
     out = apply(wdata[-w, ], 2, function(x){ 
       o = sum(is.na(x)) / length(x)

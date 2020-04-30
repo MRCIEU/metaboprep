@@ -167,6 +167,10 @@ cat(paste0("\t- Sample filtering: Your declared principal component (PC1 and PC2
 tree_cut_height = as.numeric( pfile[11,2] )
 cat(paste0("\t- Metabolite independence: Your declared tree cut height is: ", tree_cut_height, "\n\n"))
 
+## Nightingale derived variable exclusions
+## when evaluting SAMPLE quality for QC
+derived_var_exclusion = pfile[12,2] 
+
 #######################################
 ##
 ## VI) Reading in the data
