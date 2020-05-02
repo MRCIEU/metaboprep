@@ -372,16 +372,25 @@ cat( paste0("IV. Estimating Summary Statistics On Raw Data Set.\n") )
 ##################################
 cat( paste0("\ta. Estimating summary statistics for samples\n") )
 
-## Is this metabolon data??
+## Is this Metabolon data??
 ##  -- is the column SUPER_PATHWAY present in the feature data
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
   w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
   xeno_names = rownames(mydata$featuredata)[w]
-  samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, features_names_2_exclude = xeno_names )
+  samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names )
 } else {
-  samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata)
-}
+  ## Is this Nightingale data??
+  ##  -- is the column derived_features present in the feature data
+  ##  -- if yes, exclude derived variables from one of the missingness estimate
+  if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+    w = which( mydata$featuredata$derived_features == "yes") 
+    derivedfeature_names = as.character( mydata$featuredata$feature_names[w] )
+    samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
+  } else {
+      samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata)
+    }
+  }
 
 ### write sample sum stats to file
 cat( paste0("\t\t- Writing sample summary statistics to file.\n") )
@@ -419,15 +428,31 @@ if( "sampledata" %in% names(mydata) ){
 ##################################
 cat( paste0("\tb. Estimating summary statistics for features.\n") )
 
-if( length(samplesumstats$sample_missingness_w_exclusions) > 0){
-  featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness_w_exclusions, 
-                                       tch = tree_cut_height)
+### sample missingness
+if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
+  sammis = samplesumstats$sample_missingness_w_exclusions
+  } else {
+    sammis = samplesumstats$sample_missingness
+  }
+
+### features to exclude
+if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
+  w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+  fn2e = as.character( rownames(mydata$featuredata)[w] )
 } else {
-  featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness, 
-                                       tch = tree_cut_height)
-}
+    if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+      w = which( mydata$featuredata$derived_features == "yes") 
+      fn2e = as.character( mydata$featuredata$feature_names[w] )
+    } else {
+        fn2e = NA
+      }
+    }
+
+### RUN feature summary stats funtion
+featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
+                                      sammis = sammis, 
+                                      tree_cut_height = tree_cut_height,
+                                      feature_names_2_exclude = fn2e )
 
 
 ### write feature sum stats to file
