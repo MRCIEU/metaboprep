@@ -4,7 +4,8 @@
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @param fmis defaulted at 0.2, this defines the feature missingness cutoff
 #' @param smis defaulted at 0.2, this defines the sample missingness cutoff
-#' @param feature_colnames_2_exclude names of columns to be excluded from this analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.
+#' @param feature_colnames_2_exclude names of columns to be excluded from all analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.
+#' @param derived_colnames_2_exclude names of columns to exclude from all sample QC steps, including independnet feature identification, which is used to generate the sample PCA.
 #' @param tpa_out_SD defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for total peak area. Pass NA to this paramater to exclude this step.
 #' @param PC_out_SD defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for principle components. NA is NOT an excepted paramater.
 #' @param tree_cut_height The height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.
@@ -13,7 +14,8 @@
 #' @examples
 #' perform.metabolite.qc()
 perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2, 
-                                 feature_colnames_2_exclude = NA, 
+                                 feature_colnames_2_exclude = NA,
+                                 derived_colnames_2_exclude = NA, 
                                  tpa_out_SD = 5, 
                                  PC_out_SD = 5,
                                  tree_cut_height = 0.5 ){
@@ -30,11 +32,21 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ## 1) estimate inital sample missingness
   cat( paste0("\t\t- QCstep: estimate initial sample missingness.\n") )
-  samplemis = sample.missingness(wdata)
+  if( !is.na(derived_colnames_2_exclude[1]) ){
+    samplemis = sample.missingness(wdata, excludethesefeatures = derived_colnames_2_exclude)
+    } else {
+      samplemis = sample.missingness(wdata, excludethesefeatures = NA)
+    }
+  
   
   ## 2) exclude terrible samples (smis > 0.8)
   cat( paste0("\t\t- QCstep: exclude those sample with missingness >= 80%.\n") )
-  r = which(samplemis[,1] >= 0.8)
+  if( ncol(samplemis) == 2){
+    r = which(samplemis[,2] >= 0.8)
+    } else {
+      r = which(samplemis[,1] >= 0.8)    
+    }
+  ###
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for extreme missingness.\n") )
     wdata = wdata[ -r, ]; samplemis = samplemis[-r] 
@@ -44,7 +56,12 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ## 3) estimate inital feature missingness
   cat( paste0("\t\t- QCstep: estimate initial feature missingness.\n") )
-  featuremis = feature.missingness(wdata = wdata, samplemissingness = samplemis)
+  if( ncol(samplemis) == 2){
+    SM = samplemis[,2]
+    } else {
+      SM = samplemis[,1]
+    }
+  featuremis = feature.missingness(wdata = wdata, samplemissingness = SM)
   
   ## 4) exclude terrible features (fmis > 0.8)
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= 80%.\n") )
@@ -58,11 +75,20 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ## 5) re-estimate sample missingness
   cat( paste0("\t\t- QCstep: RE-estimate sample missingness.\n") )
-  samplemis = sample.missingness(wdata)
+  if( !is.na(derived_colnames_2_exclude[1]) ){
+    samplemis = sample.missingness(wdata, excludethesefeatures = derived_colnames_2_exclude)
+    } else {
+      samplemis = sample.missingness(wdata, excludethesefeatures = NA)
+    }
   
   ## 6) exclude samples defined by user ( smis >= 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those sample with missingness >= ", smis*100,"%.\n") )
-  r = which(samplemis[,1] >= smis )
+  if( ncol(samplemis) == 2){
+    r = which(samplemis[,2] >= 0.8)
+    } else {
+      r = which(samplemis[,1] >= 0.8)    
+    }
+  ##
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for user defined missingness.\n") )
     wdata = wdata[ -r, ]
@@ -73,7 +99,12 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ## 7) re-estimate feature missingness
   cat( paste0("\t\t- QCstep: RE-estimate feature missingness.\n") )
-  featuremis = feature.missingness(wdata = wdata, samplemissingness = samplemis)
+  if( ncol(samplemis) == 2){
+    SM = samplemis[,2]
+    } else {
+      SM = samplemis[,1]
+    }
+  featuremis = feature.missingness(wdata = wdata, samplemissingness = SM)
   
   ## exclude features based on user defined feature missingness ( fmis > 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= ", fmis*100,"%.\n") )
@@ -87,7 +118,12 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ### 9) total peak area
   cat( paste0("\t\t- QCstep: estimate total peak area.\n") )
-  tpa = total.peak.area(wdata)
+  if( !is.na(derived_colnames_2_exclude[1]) ){
+    tpa = total.peak.area(wdata, feature_names_2_exclude = derived_colnames_2_exclude)
+    } else {
+      tpa = total.peak.area(wdata, feature_names_2_exclude = NA)    
+    }
+  
   
   ## if you want to filter on TPA
   if( is.na(tpa_out_SD) == FALSE){
@@ -111,7 +147,11 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   cat( paste0("\t\t\t- using currently QCd data.\n") )
   
   ## re-estimate independent features using the qc-data to this point
-  featuresumstats = feature.sum.stats( wdata = wdata, sammis = samplemis, tch = tree_cut_height)
+  if( !is.na(derived_colnames_2_exclude[1]) ){
+    featuresumstats = feature.sum.stats( wdata = wdata, sammis = samplemis, tree_cut_height = tree_cut_height, feature_names_2_exclude = derived_colnames_2_exclude)
+    } else {
+      featuresumstats = feature.sum.stats( wdata = wdata, sammis = samplemis, tree_cut_height = tree_cut_height, feature_names_2_exclude = NA)
+    }
   
   ## extract independent feature list
   w = which(featuresumstats$table$independent_features_binary == 1)

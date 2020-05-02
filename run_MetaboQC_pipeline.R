@@ -536,10 +536,22 @@ system(cmd)
 ### xenobiotics to exclude
 w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics" ) 
 xeno_names = rownames( mydata$featuredata )[w]
+if( length(xeno_names) == 0){xeno_names = NA}
+
+### derived variables to exclude
+w = which( mydata$featuredata$derived_features == "yes" ) 
+derived_names = as.character( mydata$featuredata$feature_names[w] )
+if(length(derived_names) == 0){derived_names = NA}
+if(derived_var_exclusion != "TRUE"){derived_names = NA}
 
 ## independent features
 q = which(featuresumstats$table$independent_features_binary == 1)
-ind = rownames(featuresumstats$table)[q]
+if(length(q) > 0){
+  ind = rownames(featuresumstats$table)[q]  
+} else {
+  ind = NA
+}
+
 
 ### execute super funciton
 cat( paste0("\ta. Performing QC on data.\n") )
@@ -547,8 +559,9 @@ cat( paste0("\ta. Performing QC on data.\n") )
 qcdata = perform.metabolite.qc(wdata = mydata$metabolitedata,
                                fmis = feature_missingness, 
                                smis = sample_missingness, 
-                               feature_colnames_2_exclude = xeno_names, 
-                               tpa_out_SD = total_peak_area_SD, 
+                               feature_colnames_2_exclude = xeno_names,
+                               derived_colnames_2_exclude = derived_names,
+                               tpa_out_SD = total_peak_area_SD,
                                PC_out_SD = PC_outlier_SD,
                                tree_cut_height = tree_cut_height )
 
@@ -613,7 +626,16 @@ if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
   xeno_names = rownames(qcdata$featuredata)[w]
   samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, features_names_2_exclude = xeno_names )
 } else {
-  samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata)
+  ## Is this Nightingale data??
+  ##  -- is the column derived_features present in the feature data
+  ##  -- if yes, exclude derived variables from one of the missingness estimate
+  if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+    w = which( mydata$featuredata$derived_features == "yes") 
+    derivedfeature_names = as.character( mydata$featuredata$feature_names[w] )
+    samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
+  } else {
+      samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata)
+    }
 }
 
 ### A.2. Write sample sum stats to file
@@ -650,13 +672,32 @@ if( "sampledata" %in% names(qcdata) ){
 ##################################
 cat( paste0("\tc. Estimating summary statistics for QC'd features.\n") )
 
-if( length(samplesumstats$sample_missingness_w_exclusions) > 0){
-  featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness_w_exclusions, tch = tree_cut_height)
+### sample missingness
+if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
+  sammis = samplesumstats$sample_missingness_w_exclusions
+  } else {
+    sammis = samplesumstats$sample_missingness
+  }
+
+### features to exclude
+if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
+  w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+  fn2e = as.character( rownames(mydata$featuredata)[w] )
 } else {
-  featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
-                                       sammis = samplesumstats$sample_missingness, tch = tree_cut_height)
-}
+    if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+      w = which( mydata$featuredata$derived_features == "yes") 
+      fn2e = as.character( mydata$featuredata$feature_names[w] )
+    } else {
+        fn2e = NA
+      }
+    }
+
+### RUN feature summary stats funtion
+featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
+                                      sammis = sammis, 
+                                      tree_cut_height = tree_cut_height,
+                                      feature_names_2_exclude = fn2e )
+
 
 ## count of independent features
 icount = sum(featuresumstats$table$independent_features_binary)
