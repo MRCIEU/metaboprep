@@ -72,8 +72,14 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     ## Identify Sample FLAGS
     #########################
     ## ARE THERE FLAG COLUMNS at the start of the sheet ???
-    count = apply(d, 2, function(x){sum(is.na(x))})
-    r = which(count > nrow(d)*0.5)
+    countNAs = apply(d, 2, function(x){sum(is.na(x))})
+    w_NAs = which(countNAs > nrow(d)*0.5)
+    ##
+    countX = apply(d, 2, function(x){ sum( x == "X", na.rm = TRUE) })
+    w_X = which( countX > 1 )
+    ##
+    r = w_X[w_X %in% w_NAs]
+    ##
     if(length(r) > 0){
       flags = data.frame( d[ , r] )
       flagnames = as.character( flags[1, ] )
@@ -151,9 +157,11 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     #########################
     ### is there a metadata excel sheet in the directory ??
     fnames = list.files(data_dir)
-    metadatafile2process = c( gsub("Results", "Metadata", file2process) )
+    w = grep("metadata", tolower( fnames ) )
+    # metadatafile2process = c( gsub("Results", "Metadata", file2process) )
+    metadatafile2process = fnames[w]
 
-    ## if the meatadata file exists, read in and process
+    ## if the metadata file exists, read in and process
     if(metadatafile2process %in% fnames){
       n = paste0(data_dir, metadatafile2process)
       metadata = as.data.frame( readxl::read_excel( n , sheet = 1, na = c("NA","NDEF", "TAG") ) )
