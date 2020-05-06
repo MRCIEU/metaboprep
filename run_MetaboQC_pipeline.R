@@ -618,7 +618,7 @@ cat( paste0("VI. Estimating Summary Statistics on QC'd Data Set.\n") )
 cat( paste0("\ta. Estimating summary statistics for QC'd samples\n") )
 
 ## A.1. Estiamte sum stats
-## Is this metabolon data??
+## Is this metabolon data?? 
 ##  -- is the column SUPER_PATHWAY present in the feature data
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
@@ -629,12 +629,12 @@ if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
   ## Is this Nightingale data??
   ##  -- is the column derived_features present in the feature data
   ##  -- if yes, exclude derived variables from one of the missingness estimate
-  if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
-    w = which( mydata$featuredata$derived_features == "yes") 
-    derivedfeature_names = as.character( mydata$featuredata$feature_names[w] )
-    samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
+  if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+    w = which( qcdata$featuredata$derived_features == "yes") 
+    derivedfeature_names = as.character( qcdata$featuredata$feature_names[w] )
+    samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
   } else {
-      samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata)
+      samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata)
     }
 }
 
@@ -680,20 +680,20 @@ if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
   }
 
 ### features to exclude
-if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
-  w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-  fn2e = as.character( rownames(mydata$featuredata)[w] )
+if(  length(qcdata$featuredata$SUPER_PATHWAY) > 0 ){
+  w = which( qcdata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+  fn2e = as.character( rownames(qcdata$featuredata)[w] )
 } else {
-    if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
-      w = which( mydata$featuredata$derived_features == "yes") 
-      fn2e = as.character( mydata$featuredata$feature_names[w] )
+    if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+      w = which( qcdata$featuredata$derived_features == "yes") 
+      fn2e = as.character( qcdata$featuredata$feature_names[w] )
     } else {
         fn2e = NA
       }
     }
 
 ### RUN feature summary stats funtion
-featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
+featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
                                       sammis = sammis, 
                                       tree_cut_height = tree_cut_height,
                                       feature_names_2_exclude = fn2e )

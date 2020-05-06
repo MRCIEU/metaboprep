@@ -12,6 +12,8 @@ make.tree = function(wdata, cor_method = "spearman", hclust_method = "complete")
   
   cat(paste0("\t\t\t- Generating Correlation Matrix.\n"))
   cor_matrix <- cor(wdata, method=cor_method, use = "pairwise.complete.obs")
+  #cor_matrix <- rcorr(wdata, type=cor_method)
+
 
   cat(paste0("\t\t\t- Generating Distance Matrix.\n"))
   dist_matrix <- as.dist(1-abs(cor_matrix))

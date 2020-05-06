@@ -32,15 +32,36 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
     cat(paste0("\t\t\t- ", length(rowvar0) ," features excluded from analysis for 0 variance.\n"))
     wdata = wdata[, -rowvar0] 
   }
-  ## missingness filter  based on N, sample size
+  #######################
+  ## missingness filter  
+  ## based on N, sample size
+  #######################
     #fmis = apply(wdata, 2, function(x){ sum(is.na(x))/length(x) })
     #f_remove = which(fmis > allowed_missingness )
   N = apply(wdata, 2, function(x){ sum(!is.na(x)) }) 
-  f_remove = which(N < minimum_samplesize )
-  if(length(f_remove) > 0){  wdata = wdata[, -f_remove] }
-  ###########
+  f_remove = which( N < minimum_samplesize )
+  if(length(f_remove) > 0){  
+    cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for n smaller than ", minimum_samplesize ,".\n"))
+    wdata = wdata[, -f_remove] 
+  }
+  #######################
+  ## Feature filtering
+  ## Pairwise sample size (n)
+  ## evaluation. 
+  ## Each pair of comparisons
+  ## must have a complete observation
+  ## 'n' >= minimum_samplesize
+  ## Greedy sampling
+  #######################
+  f_remove = greedy.pairwise.n.filter(wdata = wdata, minN = minimum_samplesize)
+  if(length(f_remove) > 0){
+    w = which(colnames(wdata) %in% f_remove)
+    cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for n smaller than ", minimum_samplesize ," in pairwise evaluations.\n"))
+    wdata = wdata[, -w] 
+  }
+  #######################
   # make tree
-  ###########
+  #######################
   stree <- make.tree(wdata=wdata, 
                      cor_method="spearman",
                      hclust_method="complete")
