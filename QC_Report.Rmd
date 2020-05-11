@@ -45,14 +45,14 @@ out_dir = params$out_dir
 ```{r data_2_tibble, include = FALSE, quote=F, comment=NA, warning=FALSE, message=FALSE, error=FALSE }
 ## RAW DATA
 raw_data$metabolite_data = tibble::as_tibble(raw_data$metabolite_data)
-raw_data$sample_data = tibble::as_tibble(raw_data$sample_data); colnames(raw_data$sample_data) = "SamID"
-raw_data$feature_data = tibble::as_tibble(raw_data$feature_data); colnames(raw_data$feature_data) = "FeatureID"
+raw_data$sample_data = tibble::as_tibble(raw_data$sample_data); colnames(raw_data$sample_data)[1] = "SamID"
+raw_data$feature_data = tibble::as_tibble(raw_data$feature_data); colnames(raw_data$feature_data)[1] = "FeatureID"
 raw_data$varexp = raw_data$varexp[,1]
 
 ## QC Data
 qc_data$metabolite_data = tibble::as_tibble(qc_data$metabolite_data)
-qc_data$sample_data = tibble::as_tibble(qc_data$sample_data); colnames(qc_data$sample_data) = "SamID"
-qc_data$feature_data = tibble::as_tibble(qc_data$feature_data); colnames(qc_data$feature_data) = "FeatureID"
+qc_data$sample_data = tibble::as_tibble(qc_data$sample_data); colnames(qc_data$sample_data)[1] = "SamID"
+qc_data$feature_data = tibble::as_tibble(qc_data$feature_data); colnames(qc_data$feature_data)[1] = "FeatureID"
 qc_data$varexp = qc_data$varexp[,1]
 ```
 
@@ -76,7 +76,7 @@ text-align: justify
 </style>
 <!--- --->
 
-Report relates to:
+MetaboQC report relates to:
 
   * Project: `r project`  
   * Platform: `r platform`
@@ -86,9 +86,11 @@ The `MetaboQC` `R` package performs two operations:
 1. it provides an assessment of the raw metabolomics data  
 2. then performs quality control on this data
 
-This report provides descriptive information for raw and quality controlled metabolomics data for the project `r project`. The quality control pipeline is as follows (in order):
+This report provides descriptive information for raw and quality controlled metabolomics data for the project `r project`. 
 
-```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='50%'}
+The quality control workflow is as follows:
+
+```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='40%'}
 knitr::include_graphics("images/MetaboQC_workflow.png")
 ```
 
@@ -99,60 +101,73 @@ knitr::include_graphics("images/MetaboQC_workflow.png")
 > `MetaboQC`: an `R` package for metabolomics quality control across analytical platforms.......................
 
 ***
-
 \pagebreak
 
-# Raw data
-  
-## N  
-  * Number of samples in data = `r nrow(metdata)`  
-  * Number of features in data = `r ncol(metdata)`  
+# Sample size of `r project` data set
 
-## Power
-**Exploration for case/control and continuous outcome data:**
+```{r, echo=F, quote=F, comment=NA, fig.width=5, fig.height=3, warning=FALSE, message=FALSE, error=FALSE }
+tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
+rownames(tout) = c("Number of samples","Number of features")
+###
+kableExtra::kable(tout, align = 'c', booktabs = TRUE) %>%
+  kable_styling(font_size = 16) %>%
+  kable_styling(latex_options = "scale_down") %>%
+  row_spec(1:2, bold = TRUE, color = 'black')
+# 
+# tout = data.frame("Data_Set" = c("Number of samples","Number of features"),  raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
+# p = ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
 
-Analytical power analysis for both case/control (50%/50%) and continuous variable analysis. Estimated power is given for the max sample size (N) and smaller N's in the instance of variabitiy in missingness among features. The case control power analysis assumes that cases and controls are split evenly in your dataset, and the N on the x-axis is the total N. 
 
-```{r power_exploration, echo=F, quote=F, comment=NA, fig.width=8, fig.height=5, warning=FALSE, message=FALSE, error=FALSE }
-####################################   
-# Run power analysis and generate plot
-####################################
-#( run.power.make.plot(mydata = metdata ) )
-
-(run.cont.power.make.plot.R(mydata = raw_data$metabolite_data))
 ```
 
-## Missingness
-Missingness is evaluated across samples and features using the original/raw scaled data set. 
+***
+\pagebreak
 
-### Summary of missingness 
+# Missingness
+Missingness is evaluated across samples and features using the original/raw and quality controlled data sets. 
+
+## Summary of sample and feature missingness 
 Figures give the sample and feature missingness distributions. The median point estimates are indicated by the red vertical line. 
 
 The table gives an estimate of the proportion of missingness for quintiles of the sample and feature missingness data distribution. 
 
-```{r run.missingness, echo = FALSE, fig.width = 10, fig.height = 3.5, warning=FALSE, message=FALSE, error=FALSE}
-mis = missingness.sum(mydata = metdata)
+```{r run.missingness, echo = FALSE, fig.width = 15, fig.height = 6.5, warning=FALSE, message=FALSE, error=FALSE}
+r_mis = missingness.sum(mydata = raw_data$metabolite_data)
+q_mis = missingness.sum(mydata = qc_data$metabolite_data)
 
 ## print missingness table
-gridExtra::grid.arrange( gridExtra::arrangeGrob ( mis[[4]][[1]] , 
-                                                  mis[[4]][[2]] , 
-                                                  mis[[4]][[3]] ,
-                                                  ncol = 3, 
-                                                  top = "-- Estimates of missingness for samples and features --") )
- 
+# gridExtra::grid.arrange( gridExtra::arrangeGrob ( mis[[4]][[1]] , 
+#                                                   mis[[4]][[2]] , 
+#                                                   mis[[4]][[3]] ,
+#                                                   ncol = 3, 
+#                                                   top = "-- Estimates of missingness for samples and features --") )
+###
+p = ggpubr::ggarrange(  r_mis[[4]][[1]] ,
+                    r_mis[[4]][[2]] , 
+                    r_mis[[4]][[3]] ,
+                    r_mis[[4]][[4]] ,
+                    q_mis[[4]][[1]] ,
+                    q_mis[[4]][[2]] , 
+                    q_mis[[4]][[3]] ,
+                    q_mis[[4]][[4]] ,
+                    ncol = 4, nrow = 2,
+                    labels = c("a", "b", "c", "d", "e", "f", "g", "h") )
+p = ggpubr::annotate_figure(p,top = paste0("-- Estimates of missingness for samples and features --\n"), 
+                            left = ggpubr::text_grob (paste0("QC'd Data                   Raw Data"), color = "blue", rot = 90) )
+p
+
 
 ```
-  
-    
-### Feature missingnes: sample size
-Given the study sample size, the table below provides the sample size for features at various levels of missingness.
 
-```{r samplesize.withmissingness, echo = FALSE, fig.width = 5, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
-mis[[4]][[4]]
-```
+\begin{center}
+**Figure Legend:** Sample and feature missingness for raw and quality controlled data sets. Raw data is presented in plots a-d, and QC'd data is presented in plots e-h. The distribution and mean sample missingness estimate is presented in figures a and e. The distribution and mean feature missingness estimate is presented in figures b and f. Missingness distribution percentiles for samples and features are tabled in plots c and g. Table plots d and h estimate the sample size (n) for features with percent (%) missingness at 10, 20, 30, 40, and 50%. 
+\end{center}
 
-### Feature missingness: influenced by possible explanatory variables 
-Feature missingness may be influenced by the metabolites|features biology or pathway calssification, or the mass spec methodology. The figure provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
+
+
+## QC'd data feature missingness: influenced by possible explanatory variables 
+
+Feature missingness may be influenced by the metabolites|features biology or pathway calssification, or the mass spec methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
 
 ```{r featurebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ## possible batch variables that have been observed in 
@@ -160,23 +175,24 @@ Feature missingness may be influenced by the metabolites|features biology or pat
 possible_batch_variables = c("SUPER_PATHWAY","PLATFORM", "class", "subclass")
 
 ## matching variables
-w = which(possible_batch_variables %in% colnames(fdata))
+w = which(possible_batch_variables %in% colnames(qc_data$feature_data) )
 matched_variables = possible_batch_variables[w]
 
 ## batch variables, that are variable in the sample
-w = which( apply(fdata[,matched_variables], 2, function(x){length(table(x))}) > 1 )
+w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){length(table(x))}) > 1 )
 class_variables = matched_variables[w]
 
 ```
 
-```{r featuremissingnessPLOT,  echo=F, fig.width = 12, fig.height = 8, warning=FALSE, message=FALSE, error=FALSE}
+
+```{r featuremissingnessPLOT,  echo=F, fig.width = 15, fig.height = 10, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
 ## Iterate over each batch variable
 ###################################
 ClassMisPlots = lapply( class_variables , function(x){
-  out = variable.by.factor( dep = fdata$feature_missingness , 
-                           indep = unlist( fdata[,x] ), 
+  out = variable.by.factor( dep = qc_data$feature_data$feature_missingness , 
+                           indep = unlist( qc_data$feature_data[,x] ), 
                            dep_name = "feature missingness", 
                            indep_name = x, orderfactor = TRUE, violin = FALSE )
   return(out)
@@ -188,27 +204,31 @@ gridExtra::grid.arrange( grobs = ClassMisPlots, ncol = 1)
 
 ```
 
-### Sample missingness: batch effects/variables
+## QC'd data sample missingness: batch effects/variables
 
-#### Univariate evaluation: batch effects
+### Univariate evaluation: batch effects
 The figure provides an illustrative evaluation of the proportion of *sample missigness* as a product of sample batch variables provided by your supplier. This is the univariate influence of batch effects on *sample missingness*.
    
 ```{r samplebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ## possible batch variables that have been observed in 
 ## METABOLON and NIGHTINGALE sample-annotation-batch-data
 possible_batch_variables = c("BOX_ID","BOX_WELL","RUN_DAY", 
-                             "Internal_Box_ID", "Sample_Type", 
-                             "NMR_Spectrometer", "Sample_prep_date_time",
-                             "Buffer_ID", 
-                             "ControlB_TMSP_LMWM_Linewidth_at_half_height_(0.3Hz_line_broadening)")
+                             "Internal_Box_ID", 
+                             "Sample_Type", "SampleType" ,
+                             "NMRSpectrometer", "NMR_Spectrometer", 
+                             "Sample_prep_date_time", "Sampleprepdatetime",
+                             "Buffer_ID", "BufferID",
+                             "No.ofrepeatsofLIPOLMWM",
+                             "ControlB_TMSP_LMWM_Linewidth_at_half_height_(0.3Hz_line_broadening)",
+                             "ControlBTMSPLMWMLinewidthathalfheight0.3Hzlinebroadening")
 
 ## matching variables
-w = which( possible_batch_variables  %in%  colnames(sdata)  )
+w = which( possible_batch_variables  %in%  colnames(qc_data$sample_data)  )
 if( length(w) > 0 ){
   matched_variables = possible_batch_variables[w]
   
   ## batch variables, that are variable in the sample
-  w = which( apply( sdata[,matched_variables], 2, function(x){ length( table(x) ) } ) > 1 )
+  w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){ length( table(x) ) } ) > 1 )
   batch_variables = matched_variables[w]
 } else {
   batch_variables = NA
@@ -226,8 +246,8 @@ if(length(batch_variables) == 0){ batch_variables = NA }
 ###################################
 if( !is.na(batch_variables[1]) ) {
   BatchMisPlots = lapply( batch_variables , function(x){
-    out = variable.by.factor( dep = sdata$sample_missingness , 
-                              indep = unlist( sdata[,x] ), 
+    out = variable.by.factor( dep = qc_data$sample_data$sample_missingness , 
+                              indep = unlist( qc_data$sample_data[,x] ), 
                               dep_name = "sample missingness", 
                               orderfactor = FALSE, 
                               indep_name = x, violin = TRUE)
@@ -249,7 +269,7 @@ TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the propor
 
 ```{r sample_missingness_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 2, warning=FALSE, message=FALSE, error=FALSE}
 if( !is.na(batch_variables[1]) ) {
-  ( multivariate.anova(dep = sdata$sample_missingness, indep_df = sdata[ ,batch_variables ] ) )
+  ( multivariate.anova(dep = qc_data$sample_data$sample_missingness, indep_df = qc_data$sample_data[ ,batch_variables ] ) )
 } else {
   paste0(" -- No sample level batch variables were provided or all were invariable -- ")
   }
@@ -529,6 +549,34 @@ pcapairs_bymoose( mypca[, 1:x ], varexp)
 
 
 ```
+
+***
+
+\pagebreak
+
+## Power analysis of QC'd data set
+**Exploration for case/control and continuous outcome data:**
+
+Analytical power analysis for both continuous and imbalanced presence/absence correlation analysis.
+
+```{r power_exploration, echo=F, quote=F, comment=NA, fig.width=15, fig.height=5, warning=FALSE, message=FALSE, error=FALSE }
+####################################   
+# Run power analysis and generate plot
+####################################
+#( run.power.make.plot(mydata = metdata ) )
+
+p1 = run.cont.power.make.plot( mydata = qc_data$metabolite_data ) 
+p2 = run.pa.imbalanced.power.make.plot(  mydata = qc_data$metabolite_data )
+
+# gridExtra::grid.arrange(p1, p2, nrow = 1)
+
+ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
+
+```
+\begin{center}
+**Figure Legend:** Simulated effect sizes are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axix. The total sample size is set to `r nrow(qc_data$metabolite_data)` and the x-axis depicts the number of individuals present (or absent) for the trait. 
+\end{center}
+
 
 ***
 

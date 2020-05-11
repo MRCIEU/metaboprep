@@ -39,7 +39,7 @@ variable.by.factor = function( dep , indep ,
   plotA = wdat  %>% ggplot( aes(x = indep, y = dep)) +
     geom_violin( aes(fill = as.factor(indep) ), color = NA ) +
     #geom_dotplot(aes(color = as.factor(indep) ), 
-    geom_dotplot(fill = "white" , color = NA, 
+    geom_dotplot(fill = "grey" , color = NA, 
                  binaxis='y', stackdir='center', 
                  dotsize=0.35, alpha= 1,
                  binwidth = 0.006) +

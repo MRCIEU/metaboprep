@@ -29,10 +29,11 @@ run.cont.power.make.plot = function(mydata){
   # calculate power for continuous outcome
   ####################################
   con_power <- lapply(1:nrow(run_parameters), function(x){
-    eval.power.cont(N= run_parameters[x,1], 
-                    n_coeff = run_parameters[x,2], 
+    eval.power.cont(N = run_parameters[x,1], 
+                    n_coeff = run_parameters[x,2] , 
                     effect = run_parameters[x,3], 
-                    alpha = run_parameters[x,4])
+                    alpha = run_parameters[x,4]
+                    )
   })
   
   
@@ -50,7 +51,7 @@ run.cont.power.make.plot = function(mydata){
   # plot results
   ####################################
   pwrdata = tibble::as_tibble(pwrdata)
-  s = seq(100, N, by = 100)
+  s = seq(0, N, by = 200)
   ###
   plotout = pwrdata %>% ggplot( aes(x=N, y=power) ) +
     geom_line(aes(color = effect), alpha = 0.8, size = 1.5) +
@@ -59,9 +60,9 @@ run.cont.power.make.plot = function(mydata){
     geom_hline(yintercept=0.8, color = "grey50", size = 1) +
     scale_color_brewer(palette="Spectral") +
     labs(y = "power", x = "total sample size",
-         title = "Estimated power across a range of effect sizes",
+         title = "Estimated power for continuous traits",
          color = "effect\nsize") +
-    geom_vline(xintercept = s, linetype="dotted", color = "grey80", size=1.5) 
+    geom_vline(xintercept = s, linetype="dotted", color = "grey20", size=0.25) 
   
   ####################################
   # return

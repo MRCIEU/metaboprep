@@ -75,7 +75,7 @@ run.pa.imbalanced.power.make.plot = function(mydata){
   ####################################
   # plot results
   ####################################
-  s = seq(100, half, by = 100)
+  s = seq(0, half, by = 200)
   pwrdata = tibble::as_tibble(pwrdata)
   ###
   plotout = pwrdata %>% ggplot( aes(x=N_case, y=power) ) +
@@ -85,10 +85,10 @@ run.pa.imbalanced.power.make.plot = function(mydata){
     geom_hline(yintercept=0.8, color = "grey50", size = 1) +
     scale_color_brewer(palette="Spectral") +
     labs(y = "power", x = paste0("sample size of N-cases out of a total N of ", N),
-         title = "Estimated power across a range of effect sizes",
+         title = "Estimated power for presence/absence imbalanced traits",
          color = "effect\nsize",  
          caption = "     ") +
-    geom_vline(xintercept = s, linetype="dotted", color = "grey80", size=1.5)
+    geom_vline(xintercept = s, linetype="dotted", color = "grey20", size=0.25)
   ##################################
   # return
   ####################################

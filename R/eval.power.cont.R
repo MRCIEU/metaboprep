@@ -10,7 +10,7 @@
 #' @examples
 #' eval.power.cont()
 eval.power.cont = function(N, n_coeff, effect, alpha) {
-  power_calc = pwr::pwr.f2.test(u = n_coeff, v = N-n_coeff-1, f2 = effect, sig.level = alpha, power = NULL)
+  power_calc = pwr::pwr.f2.test(u = n_coeff, v = (N - n_coeff - 1) , f2 = effect, sig.level = alpha, power = NULL)
   power <- round(power_calc$power, d=3)
   tmp <- cbind(N, effect, alpha, power, n_coeff)
   return(tmp)
