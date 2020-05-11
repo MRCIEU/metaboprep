@@ -4,8 +4,12 @@
 \alias{pca.factor.analysis}
 \title{A Function to perform a PCA factor analysis.}
 \usage{
-pca.factor.analysis(metabolitedata, pcloadings, sigthreshold = 0.3,
-  feature_anno = feature_data$SUPER_PATHWAY)
+pca.factor.analysis(
+  metabolitedata,
+  pcloadings,
+  sigthreshold = 0.3,
+  feature_anno = feature_data$SUPER_PATHWAY
+)
 }
 \arguments{
 \item{metabolitedata}{data frame of metabolite data}

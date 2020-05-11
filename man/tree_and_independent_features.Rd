@@ -4,15 +4,21 @@
 \alias{tree_and_independent_features}
 \title{A Function to identify independent features}
 \usage{
-tree_and_independent_features(wdata, minimum_samplesize = 50,
-  treecutheight = 0.2)
+tree_and_independent_features(
+  wdata,
+  minimum_samplesize = 50,
+  tree_cut_height = 0.5,
+  feature_names_2_exclude = NA
+)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
 \item{minimum_samplesize}{the metabolite data matrix. samples in row, metabolites in columns}
 
-\item{treecutheight}{the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.}
+\item{tree_cut_height}{the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.}
+
+\item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from this analysis. This might be feature heavily present|absent like Xenobiotics or variables derived from two or more variable already in the dataset.}
 }
 \description{
 This function allows you to identify independent features using Spearman's Rho, and a dendrogram tree cut step.

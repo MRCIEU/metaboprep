@@ -4,9 +4,16 @@
 \alias{perform.metabolite.qc}
 \title{A Super Function to perform all of your metabolomics QC}
 \usage{
-perform.metabolite.qc(wdata, fmis = 0.2, smis = 0.2,
-  feature_colnames_2_exclude = NA, tpa_out_SD = 5, PC_out_SD = 5,
-  ind_feature_names = NA)
+perform.metabolite.qc(
+  wdata,
+  fmis = 0.2,
+  smis = 0.2,
+  feature_colnames_2_exclude = NA,
+  derived_colnames_2_exclude = NA,
+  tpa_out_SD = 5,
+  PC_out_SD = 5,
+  tree_cut_height = 0.5
+)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
@@ -15,13 +22,15 @@ perform.metabolite.qc(wdata, fmis = 0.2, smis = 0.2,
 
 \item{smis}{defaulted at 0.2, this defines the sample missingness cutoff}
 
-\item{feature_colnames_2_exclude}{names of columns to be excluded from this analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.}
+\item{feature_colnames_2_exclude}{names of columns to be excluded from all analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.}
+
+\item{derived_colnames_2_exclude}{names of columns to exclude from all sample QC steps, including independnet feature identification, which is used to generate the sample PCA.}
 
 \item{tpa_out_SD}{defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for total peak area. Pass NA to this paramater to exclude this step.}
 
 \item{PC_out_SD}{defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for principle components. NA is NOT an excepted paramater.}
 
-\item{ind_feature_names}{If you have previously identified independent features in your data set they can be provided here a vector of column names. Pass NA to this paramater to have the function estimate indpendence for you.}
+\item{tree_cut_height}{The height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.}
 }
 \description{
 This function allows you perform the key quality controls steps on a metabolomics data set

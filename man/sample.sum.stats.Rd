@@ -4,12 +4,12 @@
 \alias{sample.sum.stats}
 \title{A Function to estimate numerous summary statistics for your samples}
 \usage{
-sample.sum.stats(wdata, features_names_2_exclude = NA)
+sample.sum.stats(wdata, feature_names_2_exclude = NA)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
-\item{features_names_2_exclude}{a vector of feature|column names to exclude from missingness estimates}
+\item{feature_names_2_exclude}{a vector of feature|column names to exclude from missingness estimates}
 }
 \description{
 This function estiamtes summary statistics for samples in a matrix of metabolite features. This includes missingness, total peak area, a count of the number of outlying features for a sample.

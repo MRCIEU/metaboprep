@@ -4,12 +4,21 @@
 \alias{feature.sum.stats}
 \title{A Function to estimate numerous feature summary statistics for your samples}
 \usage{
-feature.sum.stats(wdata, sammis = NA)
+feature.sum.stats(
+  wdata,
+  sammis = NA,
+  tree_cut_height = 0.5,
+  feature_names_2_exclude = NA
+)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
 \item{sammis}{a vector of sample missingness estimates, that is ordered to match the samples in the rows of your data matrix.}
+
+\item{tree_cut_height}{tree cut height is the height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.}
+
+\item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.}
 }
 \description{
 This function estiamtes feature statistics for samples in a matrix of metabolite features.

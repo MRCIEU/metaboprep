@@ -8,7 +8,7 @@ Depends: R (>= 3.4.0)
 License: CC0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 7.0.2
 Imports:
     car,
     corrplot,
@@ -34,9 +34,3 @@ Imports:
     tibble,
     tidyr,
     tidyverse
-    
-    
-    
-    
-    
-    

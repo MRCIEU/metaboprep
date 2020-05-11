@@ -20,8 +20,17 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
   }
 
   ## Make a new sub directory
+  dd = data_dir
+  dd = gsub(" ","\\\\ ", dd)
+  data_dir = dd
+  ###
   cmd = paste0("mkdir -p ", data_dir, "MetaboQC_release_", today)
   system(cmd)
+
+  ###  Raw data directory
+  cmd = paste0("mkdir -p ", data_dir,  "MetaboQC_release_", today, "/", "raw_data")
+  system(cmd)
+
 
   
   ### Is the data file an excel sheet or a flat text file ??
@@ -78,7 +87,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     samplesheet = samplesheet[-1,]
     
     ## write table to file
-    sampledata_out_name = paste0(data_dir, "MetaboQC_release_", today, "/", project, "_", today,  "_Metabolon_sampledata.txt")
+    sampledata_out_name = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project, "_", today,  "_Metabolon_sampledata.txt")
     write.table(samplesheet, file = sampledata_out_name, row.names = FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
     
     #########################
@@ -104,7 +113,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     rownames(featuresheet) = paste0("compid_",featuresheet$COMP_ID)
 
     ## write table to file
-    featuredata_out_name = paste0(data_dir, "MetaboQC_release_", today, "/", project, "_",today, "_Metabolon_featuredata.txt")
+    featuredata_out_name = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project, "_",today, "_Metabolon_featuredata.txt")
     write.table(featuresheet, file = featuredata_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
     
     #########################
@@ -130,7 +139,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     colnames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
     
     ## write table to file
-    metabo_out_name = paste0(data_dir, "MetaboQC_release_", today, "/", project,"_", today, "_", sheetnames[2], "_Metabolon_metabolitedata.txt")
+    metabo_out_name = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[2], "_Metabolon_metabolitedata.txt")
     write.table(metabolitedata, file = metabo_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
     
     ## save primary raw metabolite data to a new element
@@ -160,7 +169,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
       metabolitedata = t(metabolitedata)
       
       ## write table to file
-      outname = paste0(data_dir, "MetaboQC_release_", today, "/", project,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
+      outname = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
       write.table(metabolitedata, file = outname, row.names = TRUE, col.names = TRUE, sep = "\t", quote = FALSE)
     }
     

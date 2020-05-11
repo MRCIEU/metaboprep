@@ -4,10 +4,12 @@
 \alias{total.peak.area}
 \title{A Function estiamtes total peak area for each sample of a metabolite matrix}
 \usage{
-total.peak.area(wdata)
+total.peak.area(wdata, feature_names_2_exclude = NA)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
+
+\item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.}
 }
 \description{
 This function estimates total peak area for all features and all features with complete data.

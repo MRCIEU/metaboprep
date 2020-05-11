@@ -32,8 +32,9 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   
   ## impute missingness as medians
   pcadata = median_impute(wdata = pcadata)
-  
+  rownames(pcadata) = rownames(metabolitedata)
   ## estimate PCs
+  ## z-transformation
   pcadata = apply(pcadata, 2, function(x){
     ( x - mean(x,na.rm = TRUE) ) / sd(x, na.rm = TRUE)
   })
@@ -68,6 +69,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
     PCout = mypca$x[,1:10]
   }
   
+
   dataout = list(pcs = PCout, varexp = varexp, accelerationfactor = accelerationfactor, nsig_parrallel = nsig_parrallel  )
   
   # detach("package:MASS", unload=TRUE)

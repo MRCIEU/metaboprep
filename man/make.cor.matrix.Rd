@@ -4,8 +4,7 @@
 \alias{make.cor.matrix}
 \title{A fully bespoke function to generate a correaltion matrix of either correlation estimates or the pvalues}
 \usage{
-make.cor.matrix(wdata, cor_method = "kendall", minN = 50,
-  var2return = "cor")
+make.cor.matrix(wdata, cor_method = "kendall", minN = 50, var2return = "cor")
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}

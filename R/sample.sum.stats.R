@@ -20,6 +20,10 @@ sample.sum.stats = function( wdata, feature_names_2_exclude = NA){
   sout = sample.outliers(wdata)
   ### data out
   out = cbind(samplemis, tpa, sout )
+  ###
+  sample_id = rownames(out)
+  out = cbind(sample_id, out)
+  ##
   return(out)
   }
 

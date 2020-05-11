@@ -26,6 +26,10 @@ feature.sum.stats = function( wdata, sammis = NA, tree_cut_height = 0.5, feature
   indf = tree_and_independent_features(wdata, minimum_samplesize = MSS, tree_cut_height = tree_cut_height, feature_names_2_exclude = feature_names_2_exclude )
   ### data out
   out = cbind(featuremis, foutlier, description, indf[[3]][, -1] )
+  ###
+  feature_name = rownames(out)
+  out = cbind(feature_name, out)
+  ###
   return(  list( table = out, tree = indf[[1]] ) )
 }
 

@@ -170,15 +170,21 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
       colnames(metadata) = gsub("-" , "_", colnames(metadata))
       colnames(metadata) = gsub("__" , "_", colnames(metadata))
       colnames(metadata) = gsub("__" , "_", colnames(metadata))
-      
+      ### THIS IS A HUGE ASSUMPTION !!! 
+      ### ASSUMING THAT THE SAMPLE IDs ARE
+      ### IN COLUMN 1
+      ### ** Problem: ids names can be Sample_ID, SampleID, Client_ID or ClientID
+      rownames(metadata) = metadata[,1]
+      ###
       ## order the metadata to match the metabolite and flag data
-      if(length(metadata$Sample_ID) > 0){
-        m = match(rownames(metabolite_data), metadata$Sample_ID)
-      } else {
-        m = match(rownames(metabolite_data), metadata$Client_ID)
-      }
+      # if(length(metadata$Sample_ID) > 0){
+      #   m = match(rownames(metabolite_data), metadata$Sample_ID)
+      # } else {
+      #   m = match(rownames(metabolite_data), metadata$Client_ID)
+      # }
+      m = match(rownames(metabolite_data), rownames(metadata) )
       metadata = metadata[m, ]
-      rownames(metadata) = rownames(metabolite_data)
+      # rownames(metadata) = rownames(metabolite_data)
       cat( paste0("\t- Your data contains ", ncol(metadata), " metadata points that you should be aware of.\n") )
     }
 
@@ -204,9 +210,15 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     ## TASK 8
     ## write data to file
     #########################
+    dd = data_dir
+    dd = gsub(" ","\\\\ ", dd)
+    ###
+    cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "raw_data")
+    system(cmd)
+
     ## (1) Write abundance data to file
     #metabo_out_name = paste0(data_dir, projectname, "_", today, "_Nightingale_metabolitedata.txt")
-    metabo_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/", projectname, "_", today, "_Nightingale_metabolitedata.txt")
+    metabo_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname, "_", today, "_Nightingale_metabolitedata.txt")
 
     cat( paste0("\t- Writing your metabolite data set to the tab-delmited text file ", metabo_out_name,  "\n") )
     write.table(metabolite_data, file = metabo_out_name, row.names = TRUE,
@@ -217,7 +229,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
       cat( paste0("\t- Your data contains a metadata excel file.\n") )
       ##
       #sampledata_out_name = paste0(data_dir, projectname, "_",today,"_Nightingale_sampledata.txt")
-      sampledata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/", projectname, "_",today,"_Nightingale_sampledata.txt")
+      sampledata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname, "_",today,"_Nightingale_sampledata.txt")
       ##
       cat( paste0("\t- Writing your metadata to the tab-delmited text file ", sampledata_out_name,  "\n") )
       write.table(metadata, file = sampledata_out_name, row.names = FALSE,
@@ -235,7 +247,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     cat( paste0("\t- A feature annotation file is being generated.\n") )
     ##
     #featuredata_out_name = paste0(data_dir, projectname,"_",today, "_Nightingale_featuredata.txt")
-    featuredata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/", projectname,"_",today, "_Nightingale_featuredata.txt")
+    featuredata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname,"_",today, "_Nightingale_featuredata.txt")
     
     
     cat( paste0("\t- Writing your feature annotation to the tab-delmited text file ", featuredata_out_name,  "\n") )

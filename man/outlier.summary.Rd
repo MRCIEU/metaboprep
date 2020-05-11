@@ -4,8 +4,7 @@
 \alias{outlier.summary}
 \title{A Function to describe, plot the distribution of and identifiy outliers for every metabolite (column) in a data frame.}
 \usage{
-outlier.summary(dtst, pdf_filename = "./feature_distributions.pdf",
-  nsd = 5)
+outlier.summary(dtst, pdf_filename = "./feature_distributions.pdf", nsd = 5)
 }
 \arguments{
 \item{dtst}{metabolite data frame}

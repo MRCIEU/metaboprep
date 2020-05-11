@@ -4,8 +4,14 @@
 \alias{variable.by.factor}
 \title{A Function to perform univariate analysis over a dependent and an independent variable}
 \usage{
-variable.by.factor(dep, indep, dep_name = "dependent",
-  indep_name = "independent", orderfactor = TRUE, violin = TRUE)
+variable.by.factor(
+  dep,
+  indep,
+  dep_name = "dependent",
+  indep_name = "independent",
+  orderfactor = TRUE,
+  violin = TRUE
+)
 }
 \arguments{
 \item{dep}{a vector of the dependent variable}
