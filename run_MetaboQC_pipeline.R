@@ -558,13 +558,13 @@ derived_names = as.character( mydata$featuredata$feature_names[w] )
 if(length(derived_names) == 0){derived_names = NA}
 if(derived_var_exclusion != "TRUE"){derived_names = NA}
 
-## independent features
-q = which(featuresumstats$table$independent_features_binary == 1)
-if(length(q) > 0){
-  ind = rownames(featuresumstats$table)[q]  
-} else {
-  ind = NA
-}
+# ## independent features
+# q = which(featuresumstats$table$independent_features_binary == 1)
+# if(length(q) > 0){
+#   ind = rownames(featuresumstats$table)[q]  
+# } else {
+#   ind = NA
+# }
 
 
 ### execute super function
@@ -584,19 +584,36 @@ qcdata = perform.metabolite.qc(wdata = mydata$metabolitedata,
 #################################
 cat( paste0("\tb. Writing QC data to file.\n\n") )
 
+
+#############################
+##
+## B.1. Make a QCing the data set object
+##
+#############################
+qcing_data = list(metabolite_data = qcdata$wdata,
+  exclusion_data = qcdata$exclusion_data,
+  feature_sumstats = qcdata$featuresumstats$table,
+  feature_tree = qcdata$featuresumstats$tree,
+  pcs = qcdata$pca$pcs,
+  varexp = qcdata$pca$varexp,
+  accelerationfactor = qcdata$pca$accelerationfactor,
+  nparallel = qcdata$pca$nsig_parrallel
+  )
+
+
 ##################################
-## B.1. Add sample and feature data to qcdata
+## B.2. Add sample and feature data to qcdata
 ##################################
-temp = qcdata
+temp = qcdata$wdata
 m = match( rownames(temp) , mydata$sampledata[,1] )
 n = match( colnames(temp) , mydata$featuredata[,1] )
-qcdata = list(metabolitedata = qcdata, 
+qcdata = list(metabolitedata = temp, 
   sampledata = mydata$sampledata[m,], 
   featuredata = mydata$featuredata[n,] )
 rm(temp)
 
 ##################################
-## B.2. Write to file
+## B.3. Write to file
 ##################################
 ## qc metabolite data
 n = paste0(data_dir, "MetaboQC_release_", today, "/qc_data/", project, "_", today, "_QCd_metabolite_data.txt")
@@ -688,17 +705,17 @@ if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
   }
 
 ### features to exclude
-if(  length(qcdata$featuredata$SUPER_PATHWAY) > 0 ){
-  w = which( qcdata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-  fn2e = as.character( rownames(qcdata$featuredata)[w] )
-} else {
+# if(  length(qcdata$featuredata$SUPER_PATHWAY) > 0 ){
+#   w = which( qcdata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+#   fn2e = as.character( rownames(qcdata$featuredata)[w] )
+# } else {
     if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
       w = which( qcdata$featuredata$derived_features == "yes") 
       fn2e = as.character( qcdata$featuredata$feature_names[w] )
     } else {
         fn2e = NA
       }
-    }
+   # }
 
 ### RUN feature summary stats funtion
 featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
@@ -798,7 +815,8 @@ data_dir = data_dir   # paste0(data_dir, "MetaboQC_release_", today, "/sumstats/
 
 ############
 n = paste0(data_dir, "MetaboQC_release_", today, "/ReportData.Rdata")
-save(raw_data, qc_data, project, platform, data_dir, file = n)
+save(raw_data, qcing_data, qc_data, project, platform, data_dir, 
+  feature_missingness, sample_missingness, total_peak_area_SD, PC_outlier_SD,  tree_cut_height, file = n)
 ############
 
 ## stop writing to log file.
