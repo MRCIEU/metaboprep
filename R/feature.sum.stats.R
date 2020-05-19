@@ -17,12 +17,15 @@ feature.sum.stats = function( wdata, sammis = NA, tree_cut_height = 0.5, feature
   ### count of sample outliers per feature
   foutlier = feature.outliers(wdata)
   ### identify independent features
-      #indf = feature.tree.independence(wdata)
-  if(50 > nrow(wdata)*0.8 ){
-    MSS = nrow(wdata) * 0.8  ## this allows 20% missingness on data sets with less than 50 individuals
-  } else {
-    MSS = 50  
-  }
+  # if(50 > nrow(wdata)*0.8 ){
+  #   MSS = nrow(wdata) * 0.8  ## this allows 20% missingness on data sets with less than 50 individuals
+  # } else {
+  #   MSS = 50  
+  # }
+  ## ** ALL FEATURES THAT DO INTO THE DENDROGRAM AND CAN BE REPRESENTITIVE
+  ##    FEATURES MUST HAVE > 80% Presence or <= 20% missing
+  MSS = floor( nrow(wdata) * 0.8 )
+  ##
   indf = tree_and_independent_features(wdata, minimum_samplesize = MSS, tree_cut_height = tree_cut_height, feature_names_2_exclude = feature_names_2_exclude )
   ### data out
   out = cbind(featuremis, foutlier, description, indf[[3]][, -1] )

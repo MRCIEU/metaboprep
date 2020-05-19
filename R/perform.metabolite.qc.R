@@ -30,6 +30,9 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     }
   }
   
+  ## Record of exclusions made
+  exclusion_data = matrix(NA, nrow = 6, ncol = 1, dimnames = list( c("Extreme_sample_missingness","Extreme_feature_missingness","User_defined_sample_missingness","User_defined_feature_missingness","User_defined_sample_totalpeakarea","User_defined_sample_PCA_outliers"),c("count") ) )
+
   ## 1) estimate inital sample missingness
   cat( paste0("\t\t- QCstep: estimate initial sample missingness.\n") )
   if( !is.na(derived_colnames_2_exclude[1]) ){
@@ -46,6 +49,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     } else {
       r = which(samplemis[,1] >= 0.8)    
     }
+  exclusion_data[1,1] = length(r)
   ###
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for extreme missingness.\n") )
@@ -66,6 +70,8 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   ## 4) exclude terrible features (fmis > 0.8)
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= 80%.\n") )
   r = which(featuremis >= 0.8)
+  exclusion_data[2,1] = length(r)
+  ##
   if( length(r) > 0) {  
     cat( paste0("\t\t\t* ", length(r), " feature(s) excluded for extreme missingness.\n") )
     wdata = wdata[ , -r ]  
@@ -88,6 +94,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     } else {
       r = which(samplemis[,1] >= 0.8)    
     }
+  exclusion_data[3,1] = length(r)
   ##
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for user defined missingness.\n") )
@@ -109,6 +116,8 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   ## exclude features based on user defined feature missingness ( fmis > 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= ", fmis*100,"%.\n") )
   r = which(featuremis >= fmis)
+  exclusion_data[4,1] = length(r)
+  ##
   if( length(r) > 0) {  
     cat( paste0("\t\t\t* ", length(r), " feature(s) excluded for user defined missingness.\n") )
     wdata = wdata[ , -r ]  
@@ -131,6 +140,9 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     s = sd( tpa[,1] ); m = mean( tpa[,1] )
     sdout = m + (tpa_out_SD * s)
     w = which(tpa[,1] >= sdout | tpa[,1] <= -sdout )
+
+    exclusion_data[5,1] = length(w)
+
     if( length(w) > 0 ){
       cat( paste0("\t\t\t* ", length(w), " sample(s) excluded for user defined TPA SD from the mean.\n") )
       wdata = wdata[ -w, ]
@@ -171,6 +183,9 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     outliers = outlier.matrix(pcs, nsd = PC_out_SD)
     outliers = apply(outliers, 1, sum)
     w = which(outliers>0)
+
+    exclusion_data[6,1] = length(w)
+
     if(length(w)>0){
       cat( paste0("\t\t\t* ", length(w), " samples excluded as PC outliers.\n") )
       wdata = wdata[-w, ]
@@ -191,7 +206,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   }
   
   ##
-  return(wdata)
+  return( list( wdata = wdata, featuresumstats = featuresumstats, pca = PCs_outliers, exclusion_data = exclusion_data) )
 }
 
 

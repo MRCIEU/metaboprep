@@ -32,6 +32,7 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
     cat(paste0("\t\t\t- ", length(rowvar0) ," features excluded from analysis for 0 variance.\n"))
     wdata = wdata[, -rowvar0] 
   }
+
   #######################
   ## missingness filter  
   ## based on N, sample size
@@ -41,9 +42,10 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
   N = apply(wdata, 2, function(x){ sum(!is.na(x)) }) 
   f_remove = which( N < minimum_samplesize )
   if(length(f_remove) > 0){  
-    cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for n smaller than ", minimum_samplesize ,".\n"))
+    cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for (>20% missingness) n smaller than ", minimum_samplesize ,".\n"))
     wdata = wdata[, -f_remove] 
   }
+
   #######################
   ## Feature filtering
   ## Pairwise sample size (n)
@@ -53,12 +55,15 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
   ## 'n' >= minimum_samplesize
   ## Greedy sampling
   #######################
-  f_remove = greedy.pairwise.n.filter(wdata = wdata, minN = minimum_samplesize)
-  if(length(f_remove) > 0){
-    w = which(colnames(wdata) %in% f_remove)
-    cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for n smaller than ", minimum_samplesize ," in pairwise evaluations.\n"))
-    wdata = wdata[, -w] 
-  }
+  
+  # f_remove = greedy.pairwise.n.filter(wdata = wdata, minN = minimum_samplesize)
+  # if(length(f_remove) > 0){
+  #   w = which(colnames(wdata) %in% f_remove)
+  #   cat(paste0("\t\t\t- ", length(f_remove) ," features excluded from analysis for n smaller than ", minimum_samplesize ," in pairwise evaluations.\n"))
+  #   wdata = wdata[, -w] 
+  # }
+
+
   #######################
   # make tree
   #######################

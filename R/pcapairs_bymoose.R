@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' pcapairs_bymoose()
-pcapairs_bymoose = function(myloadings, varexp){
+pcapairs_bymoose = function(myloadings, varexp, pcol = "dodgerblue"){
   ## The number of PCs
   npcs = ncol(myloadings)
   ### make a matrix for the plot layout
@@ -33,7 +33,7 @@ pcapairs_bymoose = function(myloadings, varexp){
         outliersH5 = unlist( outliers(myloadings[,i],5)[2:3] )
         
         ## perform plot
-        plot(myloadings[,j], myloadings[,i], pch = 21, bg = "dodgerblue",
+        plot(myloadings[,j], myloadings[,i], pch = 21, bg = pcol,
              ylab = paste0("PC",i, " VarExp = ", signif(varexp[i], d = 3)*100, "%"),
              xlab = paste0("PC",j, " VarExp = ", signif(varexp[j], d = 3)*100, "%"))
         abline(v = outliersV, lwd = 1.5, col = "grey")
@@ -46,7 +46,7 @@ pcapairs_bymoose = function(myloadings, varexp){
         abline(h = outliersH5, lwd = 1.5, col = "red")
         
         ## end of plot
-        }
+        } 
       }
     }
   }

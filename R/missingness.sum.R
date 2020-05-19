@@ -40,13 +40,13 @@ missingness.sum = function(mydata){
     geom_histogram( fill = pcol[2] , bins = 25) + 
     #geom_density( size = 2, lwd = 1 ) +
     geom_vline( xintercept = median(s$d), color = pcol[1], size = 1) +
-    labs(title = "samples", x="", y="") +
+    labs(title = "sample missingness", x="", y="") +
     theme_bw() + 
     theme(plot.title = element_text(hjust = 0.5))
   plotB = f %>% ggplot(aes(d)) + 
     geom_histogram( fill = pcol[3], bins = 25 ) + 
     geom_vline(xintercept = median(f$d), color = pcol[1], size = 2) +
-    labs(title = "features", x="", y="") +
+    labs(title = "feature missingness", x="", y="") +
     theme_bw() +
     theme(plot.title = element_text(hjust = 0.5))
   
