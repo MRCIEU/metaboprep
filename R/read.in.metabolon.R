@@ -111,6 +111,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     
     ## add row names to file
     rownames(featuresheet) = paste0("compid_",featuresheet$COMP_ID)
+    featuresheet = cbind(feature_names = rownames(featuresheet), featuresheet)
 
     ## write table to file
     featuredata_out_name = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project, "_",today, "_Metabolon_featuredata.txt")
