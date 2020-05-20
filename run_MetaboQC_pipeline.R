@@ -488,7 +488,7 @@ cat( paste0("\tc. Performing principle component analysis and identifying outlie
 
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
-indf = featuresumstats$table[w,1]
+indf = as.character( featuresumstats$table[w,1])
 
 PCs_outliers = pc.and.outliers(metabolitedata =  mydata$metabolitedata, 
                                indfeature_names = indf)
@@ -791,7 +791,9 @@ qc_data = list(metabolite_data = qcdata$metabolitedata,
   sample_data = samplesumstats,
   feature_data = featuresumstats$table,
   feature_tree = feature_tree,
-  varexp = varexp
+  varexp = varexp,
+  accelerationfactor = PCs_outliers$accelerationfactor,
+  nparallel = PCs_outliers$nsig_parrallel
   )
 
   
@@ -803,15 +805,15 @@ qc_data = list(metabolite_data = qcdata$metabolitedata,
 #########################
 cat( paste0("VII. Generate Data Description pdf report.\n") )
 
-metdata = mydata$metabolitedata
-sdata = mydata$sampledata
-fdata = mydata$featuredata
-qdata = qcdata$metabolitedata
-varexp = raw_varexp
-ftree = raw_feature_tree
-project = project
-platform = platform
-data_dir = data_dir   # paste0(data_dir, "MetaboQC_release_", today, "/sumstats/")
+# metdata = mydata$metabolitedata
+# sdata = mydata$sampledata
+# fdata = mydata$featuredata
+# qdata = qcdata$metabolitedata
+# varexp = raw_varexp
+# ftree = raw_feature_tree
+# project = project
+# platform = platform
+# data_dir = data_dir   # paste0(data_dir, "MetaboQC_release_", today, "/sumstats/")
 
 ############
 n = paste0(data_dir, "MetaboQC_release_", today, "/ReportData.Rdata")

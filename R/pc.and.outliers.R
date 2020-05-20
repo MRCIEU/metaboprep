@@ -1,7 +1,7 @@
 #' A Function to estimate PC and then identify possible outliers
 #'
 #' This function allows you to estiamte PCs and identify outliers in those PCs.
-#' @param wdata the metabolite data matrix. samples in row, metabolites in columns
+#' @param metabolitedata the metabolite data matrix. samples in row, metabolites in columns
 #' @param indfeature_names a vector of independent feature names | column names. 
 #' @param outliers  Defaulted to TRUE, a TRUE|FALSE paramater flagging if you would like outliers identified. 
 #' @keywords metabolomics
@@ -36,7 +36,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   ## estimate PCs
   ## z-transformation
   pcadata = apply(pcadata, 2, function(x){
-    ( x - mean(x,na.rm = TRUE) ) / sd(x, na.rm = TRUE)
+    ( x - mean(x, na.rm = TRUE) ) / sd(x, na.rm = TRUE)
   })
   mypca = stats::prcomp(pcadata, center = FALSE, scale = FALSE)
   varexp = summary(mypca)[[6]][2, ]
