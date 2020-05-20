@@ -377,7 +377,8 @@ cat( paste0("\ta. Estimating summary statistics for samples\n") )
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
   w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-  xeno_names = rownames(mydata$featuredata)[w]
+  # xeno_names = rownames(mydata$featuredata)[w]
+  xeno_names = mydata$featuredata$feature_names[w]
   samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names )
 } else {
   ## Is this Nightingale data??
@@ -463,8 +464,8 @@ cat( paste0("\t\t- Writing feature summary statistics to file.\n") )
 
 if( "featuredata" %in% names(mydata) ){
   # mydata$featuredata = cbind(mydata$featuredata, featuresumstats$table[,-1])
-  featuresumstats$table = cbind(mydata$featuredata, featuresumstats$table[,-1])
-  
+  featuresumstats$table = cbind( mydata$featuredata, featuresumstats$table[,-1])
+   
   n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 }
 
@@ -480,7 +481,7 @@ write.table(featuresumstats$table, file = n,
 #               sep = "\t", quote = TRUE)
 # }
 
-
+ 
 ##################################
 ## C. PC outliers
 ##################################
@@ -488,7 +489,7 @@ cat( paste0("\tc. Performing principle component analysis and identifying outlie
 
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
-indf = as.character( featuresumstats$table[w,1])
+indf = as.character( featuresumstats$table[w,1] )
 
 PCs_outliers = pc.and.outliers(metabolitedata =  mydata$metabolitedata, 
                                indfeature_names = indf)
@@ -549,7 +550,8 @@ system(cmd)
 
 ### xenobiotics to exclude
 w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics" ) 
-xeno_names = rownames( mydata$featuredata )[w]
+# xeno_names = rownames( mydata$featuredata )[w]
+xeno_names = mydata$featuredata$feature_names[w]
 if( length(xeno_names) == 0){xeno_names = NA}
 
 ### derived variables to exclude
@@ -733,7 +735,8 @@ cat( paste0("\td. Writing feature summary statistics to file.\n") )
 
 if( "featuredata" %in% names(qcdata) ){
   ## add feature stats to the feature annotation file
-  featuresumstats$table = cbind(qcdata$featuredata, featuresumstats$table[, -1])
+  # featuresumstats$table = cbind(featuresumstats$table[, 1], qcdata$featuredata, featuresumstats$table[, -1])
+  featuresumstats$table = cbind( qcdata$featuredata, featuresumstats$table[, -1] )
 }
 n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 write.table(featuresumstats$table, file = n,
