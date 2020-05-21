@@ -18,7 +18,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   #}
   
   ## set data
-  w = which(colnames(metabolitedata) %in% indfeature_names)
+  w = which( colnames(metabolitedata) %in% indfeature_names )
   indf = colnames(metabolitedata)[w]
   pcadata = metabolitedata[, indf ]
   

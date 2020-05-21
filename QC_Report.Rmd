@@ -64,26 +64,6 @@ qc_data$varexp = qc_data$varexp[,1]
 
 ```
 
-<!---The <style> code below centers the title and date and justifys all paragraph text --->
-<style type="text/css">
-h1.title {
-  font-size: 38px;
-  text-align: center;
-}
-h4.author { /* Header 4 - and the author and data headers use this too  */
-    font-size: 18px;
-  text-align: center;
-}
-h4.date { /* Header 4 - and the author and data headers use this too  */
-  font-size: 18px;
-  text-align: center;
-}
-body {
-text-align: justify
-}
-</style>
-<!--- --->
-
 MetaboQC report relates to:
 
   * Project: `r project`  
@@ -98,7 +78,7 @@ This report provides descriptive information for raw and quality controlled meta
 
 The quality control workflow is as follows:
 
-```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='40%'}
+```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
 knitr::include_graphics("images/MetaboQC_workflow.png")
 ```
 
@@ -106,53 +86,33 @@ knitr::include_graphics("images/MetaboQC_workflow.png")
 2. Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes](mailto:d.a.hughes@bristol.ac.uk).
 3. `MetaboQC` is published in [Wellcome Open Research]() and can be cited as:
 
-> `MetaboQC`: an `R` package for metabolomics quality control across analytical platforms.......................
 
 ***
 \pagebreak
 
 # Sample size of `r project` data set
 
-```{r, echo=F, quote=F, comment=NA, fig.width=5, fig.height=3, warning=FALSE, message=FALSE, error=FALSE }
-tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
-rownames(tout) = c("Number of samples","Number of features")
+```{r, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE,fig.align="center" }
+# tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
+# rownames(tout) = c("Number of samples","Number of features")
 ###
-kableExtra::kable(tout, align = 'c', booktabs = TRUE) %>%
-  kableExtra::kable_styling(font_size = 16) %>%
-  kableExtra::kable_styling(latex_options = "scale_down") %>%
-  kableExtra::row_spec(1:2, bold = TRUE, color = 'black')
+#kableExtra::kable(tout, align = 'c', booktabs = TRUE) %>%
+#  kableExtra::kable_styling(font_size = 12) %>%
+#  kableExtra::kable_styling(latex_options = "scale_down") %>%
+#  kableExtra::row_spec(1:2, bold = TRUE, color = 'black')
 # 
-# tout = data.frame("Data_Set" = c("Number of samples","Number of features"),  raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
-# p = ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
-
-
+tout = data.frame("Data_Set" = c("Number of samples","Number of features"),  raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
+ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
 ```
 
 ***
-\pagebreak
-
-# Initial, raw data set
-
-
-```{r, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
-## PDF REPORT OF DISTRIBUTIONS
-today = Sys.Date()
-today = gsub("-","_",today)
-###
-outlier_filename <- paste0( out_dir, project, "_outlier_detection_pre_filtering.pdf")
-## feauture outlier summary
-outlier_summary = outlier.summary(dtst = raw_data$metabolite_data, 
-                           pdf_filename = outlier_filename, 
-                           nsd = 5)
-```
-
 
 ## Missingness
 Missingness is evaluated across samples and features using the original/raw data set. 
 
 ### Visual structure of missingness in your raw data set.
 
-```{r MissingnessMatrix, fig.width = 20, fig.height = 12}
+```{r MissingnessMatrix, fig.width = 20, fig.height = 12,  echo = FALSE,warning=FALSE, message=FALSE, error=FALSE}
 namat = qc_data$metabolite_data
 namat[!is.na(namat)] = 1
 namat[is.na(namat)] = 0
@@ -163,15 +123,18 @@ namat = as.matrix(namat)
 namat = reshape::melt(namat)
 colnames(namat) = c("individuals","metabolites","missingness")
 ##
+#pcol = wesanderson::wes_palette("FantasticFox1", n = 5)[c(2,3)]
+pcol = RColorBrewer::brewer.pal(n = 8, name = 'Dark2')
 ggplot(namat, aes(metabolites, individuals, fill = missingness)) + 
   geom_tile() + 
-  scale_fill_gradient(low="snow", high="slategray4") +
+  #scale_fill_gradient(low="snow", high="slategray3") +
+  scale_fill_gradient(low= "white", high=pcol[5]) +
   theme(legend.position = "none", axis.text.x = element_blank() )
 
 ```
 
 \begin{center}
-**Figure Legend:** Missingness structure across your raw data table. White cells depict missing data. Individuals are in row, metabolites are in columns. 
+\textbf{Figure Legend:} Missingness structure across the raw data table. White cells depict missing data. Individuals are in row, metabolites are in columns. 
 \end{center}
 
 ### Summary of sample and feature missingness 
@@ -194,7 +157,7 @@ ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of mi
 ```
 
 \begin{center}
-**Figure Legend:** Raw dat -  (a) Distribution of sample missingness with sample mean illustrated by the red vertical line. (b) Distribution of feature missingness sample mean illustrated by the red vertical line. (c) Table of sample and feature missingness percentiles. A tabled version of plot a and b.  (d) Estiamtes of study samples sizes under various levels of feature missingness. 
+\textbf{Figure Legend:} Raw data - (a) Distribution of sample missingness with sample mean illustrated by the red vertical line. (b) Distribution of feature missingness sample mean illustrated by the red vertical line. (c) Table of sample and feature missingness percentiles. A tabled version of plot a and b.  (d) Estiamtes of study samples sizes under various levels of feature missingness. 
 \end{center}
 
 ## Quality control 
@@ -207,11 +170,12 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 ```
 
 \begin{center}
-**Table Legend:** Six primary quality control exclusion steps were made during the QC of the data. (1) Samples with missingness >=80% were excluded, (2) features with missingness >=80% were excluded (xenobiotics are not included in this step), (3) sample exclusions based on the user defined threshold were excluded, (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step), (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded, and (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
+\textbf{Table Legend}: Six primary quality control exclusion steps were made during the QC of the data.
+(1) Samples with missingness >=80% were excluded. (2) features with missingness >=80% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
 \end{center}
 
 
-### metabolite or feature reduction and principal components
+### Metabolite or feature reduction and principal components
 
 A data reduction was carried out to identify a list of representitive features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to insure that the principal components are not driven by groups of correlated features.
 
@@ -270,7 +234,7 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 ```
 
 \begin{center}
-**Figure Legend:** The data reduction table presents the number of metabolites at each phase of the data reduction (Spearman's correlation distance tree cutting) analysis. Principal components 1 and 2 are plotted on the right for all individuals, using the representitve features identified in the data reduction analysis. The red vertical and horizontal lines indicate the cutoffs for identifying individual outliers. The number of standard deviations from the mean to define these cuttoffs were provided by the user. 
+\textbf{Figure Legend:} The data reduction table on the left presents the number of metabolites at each phase of the data reduction (Spearman's correlation distance tree cutting) analysis. On the right principal components 1 and 2 are plotted for all individuals, using the representitve features identified in the data reduction analysis. The red vertical and horizontal lines indicate the standard deviation (SD) cutoffs for identifying individual outliers, which are plotted in red. Thestandard deviations cuttoff were provided by the user. 
 \end{center}
 
 ***
@@ -285,7 +249,7 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 ## Relative to the raw data
   * `r nrow(raw_data$metabolite_data) - nrow(qc_data$metabolite_data)` samples were QC'd out, given the user's criteria.
   * `r ncol(raw_data$metabolite_data) - ncol(qc_data$metabolite_data)` features were QC'd out, given the user's criteria.
-  * Please review details about and your log file for the number of features and samples excluded and why. 
+  * Please review details above and your log file for the number of features and samples excluded and why. 
   
 ## Summary of QC data
 
@@ -370,7 +334,7 @@ screeplot = ve %>% ggplot(aes(x = PC, y = VarExp)) +
   geom_point(shape = 21, fill = pcol[2], size = 2) +
   labs(title = "Scree plot") +
   geom_vline(xintercept = qc_data$accelerationfactor, color = pcol[1]) +
-  geom_vline(xintercept = qc_data$nparallel, color = pcol[3])
+  geom_vline(xintercept = unlist( qc_data$nparallel ), color = pcol[3])
 
 ##############
 ## PC Plot
@@ -391,6 +355,7 @@ pcplot = pcs %>% ggplot( aes(x = PC1, y = PC2) ) +
 ## Plot the data
 #######################
 m = matrix(c(1,2,3,4,4,4,5,7,7, 6,7,7), nrow = 4, byrow = TRUE)
+
 gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plot, ptable, screeplot, pcplot), 
                          layout_matrix = m,
                          heights = c(1,1,1,1) ) 
@@ -400,13 +365,11 @@ gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plo
 
 
 \begin{center}
-**Figure Legend:** QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red) and Parrallel Analysis in green. Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of major axis of variation in the sample population(s).
+\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red) and Parrallel Analysis in green. Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of major axis of variation in the sample population(s).
 \end{center}
 
 
 ## Structure among samples: top 5 PCs
-
-A matrix plot of the top 5 principal components. Included in the plot are the 3rd (grey), 4th (orange), and 5th (red) SD from the mean, which are each possible cuttoffs for outlier filtering. 
 
 ```{r PCApairsplot, echo = FALSE, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
 plotcolors = pcol[pcs$cluster_k]
@@ -414,13 +377,12 @@ pcapairs_bymoose( as.matrix(pcs[, 1:5]) , qc_data$varexp, pcol = plotcolors)
 ```
 
 \begin{center}
-**Figure Legend:** A matrix plot of the top five principal componets including demarcations of the 3rd (grey), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs. 
+\textbf{Figure Legend:} A matrix plot of the top five principal componets including demarcations of the 3rd (grey), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs. 
 \end{center}
 
 ## Feature Distributions
 
-### Normality
-**How many feature distributions may be considered normal distributions?**
+### Estiamtes of normality: W-statistics for raw and log transformed data
 
 ```{r ,echo=F, warning=FALSE, message=FALSE, error=FALSE}
 wstat = apply(qc_data$metabolite_data, 2, function(x){
@@ -443,9 +405,6 @@ normalcount = sum(wstat >= 0.9, na.rm = TRUE)
 
 ```
 
-Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or to few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
- 
-### W-statistics for raw and log transformed data
 
 ```{r shpiroW, echo = FALSE, fig.width = 10, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 W = wstat
@@ -490,12 +449,15 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 ```
 
 \begin{center}
-**Figure Legend:** Histogram plots of Shapiro W-statistics for raw (left) and log transformed (right) data distributions. A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Please not that log transformation of the data *may not* improve the normality of your data.
+\textbf{Figure Legend:} Histogram plots of Shapiro W-statistics for raw (left) and log transformed (right) data distributions. A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Please not that log transformation of the data *may not* improve the normality of your data.
 \end{center}
 
+\begin{center}
+\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or to few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
+\end{center} 
 
 ### Distributions
-A pdf report is being written to `r paste0( out_dir, project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
+A pdf report is being written to `r paste0( "\n", out_dir, project, "_outlier_detection_pre_filtering.pdf\n")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
 
 ## Outliers
 **Evaluation of the number of samples and features that are outliers across the data.**
@@ -517,11 +479,10 @@ outlier_summary = outlier.summary(dtst = qc_data$metabolite_data,
 outlier_summary[[2]]
 ```
 \begin{center}
-**Table Legend:** The table reports the number of point estimates for the minimum (0%), median (50%), and maximum (100%) number of outlying features across samples and the number of outlying samples across features. 
+\textbf{Table Legend:} The table reports the number of point estimates for the minimum (0%) median (50%) and maximum (100%) number of outlying features across samples and the number of outlying samples across features. 
 \end{center}
 
-## Notes
-### Outlying samples at each metabolite|feature
+### Notes on outlying samples at each metabolite|feature
 
 There may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to:
 
@@ -554,7 +515,15 @@ matched_variables = colnames(qc_data$feature_data)[w]
 
 ## batch variables, that are variable in the sample
 w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){length(table(x))}) > 1 )
-class_variables = matched_variables[w]
+matched_variables = matched_variables[w]
+## insure group sizes are larger than 1
+w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) >= 0.25 )
+matched_variables = matched_variables[w]
+## insure the number of variables is not larger than 96
+w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){  length(table(x)) }) < 97 )
+matched_variables = matched_variables[w]
+
+class_variables = matched_variables
 
 ```
 
@@ -579,7 +548,7 @@ gridExtra::grid.arrange( grobs = ClassMisPlots, ncol = 1)
 ```
 
 \begin{center}
-**Figure Legend:** Box plot illustration(s) of the relationship that available batch and biological variables have with feature missingness.
+\textbf{Figure Legend:} Box plot illustration(s) of the relationship that available batch and biological variables have with feature missingness.
 \end{center}
 
 
@@ -613,6 +582,14 @@ if( length(w) > 0 ){
   
   ## batch variables, that are variable in the sample
   w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){ length( table(x) ) } ) > 1 )
+  matched_variables = matched_variables[w]
+  ## insure group sizes are larger than 1
+  w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) >= 0.25 )
+  matched_variables = matched_variables[w]
+  ## insure the number of variables is not larger than 96
+  w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){  length(table(x)) }) < 97 )
+  matched_variables = matched_variables[w]
+  
   batch_variables = matched_variables[w]
 } else {
   batch_variables = NA
@@ -649,7 +626,7 @@ if( !is.na(batch_variables[1]) ) {
 ```
 
 \begin{center}
-**Figure Legend:** Box plot illustration(s) of the relationship that available batch variables have with sample missingness.
+\textbf{Figure Legend:} Box plot illustration(s) of the relationship that available batch variables have with sample missingness.
 \end{center}
 
 ## Multivariate evaluation: batch variables
@@ -662,16 +639,14 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 \begin{center}
-**Table Legend:** TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*.
+\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*.
 \end{center}
 
 # Sample Total Peak|Abundance Area (TPA):
 Total peak|abundance area (TPA) is simply the sum of the abundances measured across all features. TPA is one measure that can be used to identify unusual samples given their entire profile. However, the level of missingness in a sample may influence TPA. To account for this we:  
 
 1. Evaluate the correlation between TPA estimates across all features with TPA measured using only those features with complete data (no missingness).  
-2. Evaluate the relationship between sample missingness on TPA, using only complete feature data. 
-    * Note: it is expected, and has been observed, that TPA using all features (not accounting for missingness) will exhibit a stronger relationship with sample missingness, but that is not explicitly evaluated here.
-3. Determine if the batch effects have a measurable impact on TPA.
+2. Determine if the batch effects have a measurable impact on TPA.
 
 ## Relationship with missingness
 Correlation between total peak area (at complete features) and missingness
@@ -692,7 +667,7 @@ a = cor.test( qc_data$sample_data$sample_missingness, qc_data$sample_data$TPA_co
 ```
 
 \begin{center}
-**Figure Legend:** Relationship between total peak area at complete features (x-axis) and sample missingness (y-axis).
+\textbf{Figure Legend:} Relationship between total peak area at complete features (x-axis) and sample missingness (y-axis).
 \end{center}
 
 
@@ -721,7 +696,7 @@ if( !is.na(batch_variables[1]) ) {
 
 ```
 \begin{center}
-**Figure Legend:** Violin plot illustration(s) of the relationship between total peak area (TPA) and sample batch variables that are available in your data.
+\textbf{Figure Legend:} Violin plot illustration(s) of the relationship between total peak area (TPA) and sample batch variables that are available in your data.
 \end{center}
 
 
@@ -736,15 +711,16 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 \begin{center}
-**Table Legend:** TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on thçe proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *total peak|abundance area* at complete features.
+\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on thçe proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *total peak|abundance area* at complete features.
 \end{center}
 
 
 ***
 \pagebreak
 
-## Power analysis of QC'd data set
-**Exploration for case/control and continuous outcome data:**
+# Power analysis
+
+**Exploration for case/control and continuous outcome data using the QC'd data set**
 
 Analytical power analysis for both continuous and imbalanced presence/absence correlation analysis.
 
@@ -763,7 +739,7 @@ ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
 
 ```
 \begin{center}
-**Figure Legend:** Simulated effect sizes are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axix. The total sample size is set to `r nrow(qc_data$metabolite_data)` and the x-axis depicts the number of individuals present (or absent) for the trait. 
+\textbf{Figure Legend:} Simulated effect sizes are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axix. The total sample size is set to `r nrow(qc_data$metabolite_data)` and the x-axis depicts the number of individuals present (or absent) for the trait. 
 \end{center}
 
 
