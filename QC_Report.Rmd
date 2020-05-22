@@ -329,6 +329,7 @@ ptable = ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mGreen"
 #############
 # plot(qc_data$varexp, pch = 21, bg = pcol[2], cex = 2, type = "b", xlab = "PC number", ylab = "variance explained | eigenvalue")
 ve = tibble::tibble( data.frame(PC= 1:length(qc_data$varexp), VarExp = qc_data$varexp) )
+
 screeplot = ve %>% ggplot(aes(x = PC, y = VarExp)) +
   geom_line(color = "grey") +
   geom_point(shape = 21, fill = pcol[2], size = 2) +
@@ -359,7 +360,6 @@ m = matrix(c(1,2,3,4,4,4,5,7,7, 6,7,7), nrow = 4, byrow = TRUE)
 gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plot, ptable, screeplot, pcplot), 
                          layout_matrix = m,
                          heights = c(1,1,1,1) ) 
-
 
 ```
 
