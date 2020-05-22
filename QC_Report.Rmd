@@ -43,6 +43,7 @@ out_dir = params$out_dir
 
 ```
 
+
 ```{r data_2_tibble, include = FALSE, quote=F, comment=NA, warning=FALSE, message=FALSE, error=FALSE }
 ## RAW DATA
 raw_data$metabolite_data = tibble::as_tibble(raw_data$metabolite_data)
@@ -78,8 +79,10 @@ This report provides descriptive information for raw and quality controlled meta
 
 The quality control workflow is as follows:
 
-```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
-knitr::include_graphics("images/MetaboQC_workflow.png")
+
+```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='40%'}
+# knitr::include_graphics("images/MetaboQC_workflow.png")
+knitr::include_graphics("https://raw.githubusercontent.com/MRCIEU/MetaboQC/master/images/MetaboQC_workflow.png")
 ```
 
 1. Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). 
