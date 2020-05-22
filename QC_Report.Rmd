@@ -295,7 +295,7 @@ dend = dend %>%
   set("branches_k_color",  value = bcol)
 dend <- as.ggdend(dend)
 ## plot the dendrogram
-tree_plot = dend %>% ggplot() + geom_hline(yintercept = tree_cut_height, color = "coral2", width = 1)
+tree_plot = dend %>% ggplot() + geom_hline(yintercept = tree_cut_height, color = "coral2")
 
 ### OLD TREE PLOT
 # tree = as.dendrogram( qc_data$feature_tree )
