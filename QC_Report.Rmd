@@ -3,7 +3,6 @@ title: "Metabolomics QC Report"
 date: "`r Sys.Date()`"
 output: 
   pdf_document:
-    pandoc_args: ["--extract-media", "."]
     number_sections: true
     toc: false
     toc_depth: 2
@@ -80,14 +79,10 @@ This report provides descriptive information for raw and quality controlled meta
 
 The quality control workflow is as follows:
 
-
-```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='40%'}
-# knitr::include_graphics("images/MetaboQC_workflow.png")
-# knitr::include_graphics("https://raw.githubusercontent.com/MRCIEU/MetaboQC/master/images/MetaboQC_workflow.png")
-#![]("https://raw.githubusercontent.com/MRCIEU/MetaboQC/master/images/MetaboQC_workflow.png")
-#<a href=“my_link”>my text</a>
+```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
+# workflow_fig = knitr::include_graphics("images/MetaboQC_workflow.png")
+workflow_fig
 ```
-![]("https://raw.githubusercontent.com/MRCIEU/MetaboQC/master/images/MetaboQC_workflow.png")
 
 1. Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). 
 2. Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes](mailto:d.a.hughes@bristol.ac.uk).
