@@ -842,4 +842,15 @@ rmarkdown::render(paste0("QC_Report.Rmd"),
   output_file = "Project_Data_Report.pdf" , params = list(Rdatafile = n, out_dir = output_dir_path)
   )
 )
-  
+
+## Future alternative when QC_Report.Rmd is in the pacakge release
+## inst/rmd/
+# rmarkdown::render( input = system.file("rmd/QC_Report.Rmd", package="MetaboQC"),
+#   output_dir = output_dir_path,
+#   output_file = "Project_Data_Report.pdf" , 
+#   params = list(Rdatafile = n, out_dir = output_dir_path) )
+
+
+
+
+
