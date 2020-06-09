@@ -70,10 +70,11 @@ MetaboQC report relates to:
   * Project: `r project`  
   * Platform: `r platform`
 
-The `MetaboQC` `R` package performs two operations: 
+The `MetaboQC` `R` package performs three operations: 
 
-1. it provides an assessment of the raw metabolomics data  
-2. then performs quality control on this data
+1. Provides an assessment and summary statistics of the raw metabolomics data.
+2. Performs quality control on the metabolomics data.
+3. Provides an assessment and summary statistics of the quality controled metabolomics data, particularly in the context of batch variables when available.
 
 This report provides descriptive information for raw and quality controlled metabolomics data for the project `r project`. 
 
@@ -85,8 +86,8 @@ workflow_fig
 ```
 
 1. Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). 
-2. Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes](mailto:d.a.hughes@bristol.ac.uk).
-3. `MetaboQC` is published in [Wellcome Open Research]() and can be cited as:
+2. Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes: d.a.hughes@bristol.ac.uk](mailto:d.a.hughes@bristol.ac.uk).
+3. `MetaboQC` is published in [Journal to be determined]() and can be cited as:
 
 
 ***
@@ -136,7 +137,7 @@ ggplot(namat, aes(metabolites, individuals, fill = missingness)) +
 ```
 
 \begin{center}
-\textbf{Figure Legend:} Missingness structure across the raw data table. White cells depict missing data. Individuals are in row, metabolites are in columns. 
+\textbf{Figure Legend:} Missingness structure across the raw data table. White cells depict missing data. Individuals are in rows, metabolites are in columns. 
 \end{center}
 
 ### Summary of sample and feature missingness 
@@ -173,13 +174,13 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 \begin{center}
 \textbf{Table Legend}: Six primary quality control exclusion steps were made during the QC of the data.
-(1) Samples with missingness >=80% were excluded. (2) features with missingness >=80% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
+(1) Samples with missingness >=80\% were excluded. (2) features with missingness >=80\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
 \end{center}
 
 
 ### Metabolite or feature reduction and principal components
 
-A data reduction was carried out to identify a list of representitive features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to insure that the principal components are not driven by groups of correlated features.
+A data reduction was carried out to identify a list of representitive features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to ensure that the principal components are not driven by groups of correlated features.
 
 ```{r , echo = FALSE, fig.width = 12, fig.height = 6, warning=FALSE, message=FALSE, error=FALSE}
 #################
@@ -236,7 +237,7 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 ```
 
 \begin{center}
-\textbf{Figure Legend:} The data reduction table on the left presents the number of metabolites at each phase of the data reduction (Spearman's correlation distance tree cutting) analysis. On the right principal components 1 and 2 are plotted for all individuals, using the representitve features identified in the data reduction analysis. The red vertical and horizontal lines indicate the standard deviation (SD) cutoffs for identifying individual outliers, which are plotted in red. Thestandard deviations cuttoff were provided by the user. 
+\textbf{Figure Legend:} The data reduction table on the left presents the number of metabolites at each phase of the data reduction (Spearman's correlation distance tree cutting) analysis. On the right principal components 1 and 2 are plotted for all individuals, using the representitve features identified in the data reduction analysis. The red vertical and horizontal lines indicate the standard deviation (SD) cutoffs for identifying individual outliers, which are plotted in red. The standard deviations cuttoff were defined by the user. 
 \end{center}
 
 ***
@@ -245,8 +246,8 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 # QC data
 
 ## N 
-  * Number of samples in data = `r nrow(qc_data$metabolite_data)`  
-  * Number of features in data = `r ncol(qc_data$metabolite_data)`  
+  * The number of samples in data = `r nrow(qc_data$metabolite_data)`  
+  * The number of features in data = `r ncol(qc_data$metabolite_data)`  
 
 ## Relative to the raw data
   * `r nrow(raw_data$metabolite_data) - nrow(qc_data$metabolite_data)` samples were QC'd out, given the user's criteria.
@@ -367,7 +368,7 @@ gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plo
 
 
 \begin{center}
-\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red) and Parrallel Analysis in green. Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of major axis of variation in the sample population(s).
+\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red) and Parrallel Analysis in green. Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
 \end{center}
 
 
@@ -432,7 +433,7 @@ hist(W, col = pcol[2],
      ylab = "Frequency",
      cex.main = 0.75)
 abline(v = 0.95, col = pcol[1])
-normcount = sum(W >= 0.95)
+normcount = sum( na.omit(W) >= 0.95)
 ##
 mtext( paste0(normcount,
               " of the metabolites exhibit distributions\nthat may declared normal, given a W-stat >= 0.95"), 
@@ -451,15 +452,15 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 ```
 
 \begin{center}
-\textbf{Figure Legend:} Histogram plots of Shapiro W-statistics for raw (left) and log transformed (right) data distributions. A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Please not that log transformation of the data *may not* improve the normality of your data.
+\textbf{Figure Legend:} Histogram plots of Shapiro W-statistics for raw (left) and log transformed (right) data distributions. A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Please note that log transformation of the data *may not* improve the normality of your data.
 \end{center}
 
 \begin{center}
-\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or to few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
+\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
 \end{center} 
 
 ### Distributions
-A pdf report is being written to `r paste0( "\n", out_dir, project, "_outlier_detection_pre_filtering.pdf\n")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
+A pdf report is being written to `r paste0( project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
 
 ## Outliers
 **Evaluation of the number of samples and features that are outliers across the data.**
@@ -481,17 +482,17 @@ outlier_summary = outlier.summary(dtst = qc_data$metabolite_data,
 outlier_summary[[2]]
 ```
 \begin{center}
-\textbf{Table Legend:} The table reports the number of point estimates for the minimum (0%) median (50%) and maximum (100%) number of outlying features across samples and the number of outlying samples across features. 
+\textbf{Table Legend:} The table reports the number of point estimates for the minimum (0%\) median (50\%) and maximum (100\%) number of outlying features across samples and the number of outlying samples across features. 
 \end{center}
 
 ### Notes on outlying samples at each metabolite|feature
 
 There may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to:
 
-1. turn these observations into NAs
-2. windsorize the data to some maximum value
-3. rank normalize the data which will place those outliers into the top of the ranked standard normal distribution
-4. turn these observations into NAs and then impute them along with other missing data in your data set. 
+1. Turn these observations into NAs.
+2. Windsorize the data to some maximum value.
+3. Rank normalize the data which will place those outliers into the top of the ranked standard normal distribution.
+4. Turn these observations into NAs and then impute them along with other missing data in your data set. 
 
 
 ***
