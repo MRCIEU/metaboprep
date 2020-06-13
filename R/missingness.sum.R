@@ -77,8 +77,8 @@ missingness.sum = function(mydata){
     nrow(mydata)*(1-x)
   })
   
-  fmiss_samplesize = data.frame(Perc_Missing =  paste0(s*100, "% feature missingness"), 
-                                Sample_Size = fmiss_samplesize)
+  fmiss_samplesize = data.frame(percent.missing =  paste0(s*100, "% feature missingness"), 
+                                sample.size = fmiss_samplesize)
   
   miss_samplesize_table <- ggpubr::ggtexttable(fmiss_samplesize, rows = NULL, 
                                        theme = ggpubr::ttheme("mBlue"))

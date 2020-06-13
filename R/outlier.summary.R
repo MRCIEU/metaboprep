@@ -94,8 +94,8 @@ outlier.summary = function(dtst, pdf_filename = "./feature_distributions.pdf", n
   fbys = quantile( apply(outlier_results, 1, function(x){  sum(x, na.rm = TRUE)}) )
   sbyf = quantile( apply(outlier_results, 2, function(x){  sum(x, na.rm = TRUE)}) )
   outtable = data.frame( percentile = c("0%","25%","50%","75%","100%"), 
-                         outlying_features_by_sample = fbys,
-                         outlying_samples_by_feature = sbyf)
+                         outlying.features.by.sample = fbys,
+                         outlying.samples.by.feature = sbyf)
   
   outtable <- ggpubr::ggtexttable(outtable, rows = NULL, 
                           theme = ggpubr::ttheme("mBlue"))

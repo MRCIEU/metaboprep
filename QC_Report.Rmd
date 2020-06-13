@@ -76,7 +76,7 @@ The `MetaboQC` `R` package performs three operations:
 2. Performs quality control on the metabolomics data.
 3. Provides an assessment and summary statistics of the quality controled metabolomics data, particularly in the context of batch variables when available.
 
-This report provides descriptive information for raw and quality controlled metabolomics data for the project `r project`. 
+This report provides descriptive information for raw and quality controled metabolomics data for the project `r project`. 
 
 The quality control workflow is as follows:
 
@@ -104,7 +104,7 @@ workflow_fig
 #  kableExtra::kable_styling(latex_options = "scale_down") %>%
 #  kableExtra::row_spec(1:2, bold = TRUE, color = 'black')
 # 
-tout = data.frame("Data_Set" = c("Number of samples","Number of features"),  raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
+tout = data.frame("data.set" = c("number of samples","number of features"),  "raw.data" = dim(raw_data$metabolite_data), "qc.data" = dim(qc_data$metabolite_data))
 ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
 ```
 
@@ -160,7 +160,7 @@ ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of mi
 ```
 
 \begin{center}
-\textbf{Figure Legend:} Raw data - (a) Distribution of sample missingness with sample mean illustrated by the red vertical line. (b) Distribution of feature missingness sample mean illustrated by the red vertical line. (c) Table of sample and feature missingness percentiles. A tabled version of plot a and b.  (d) Estiamtes of study samples sizes under various levels of feature missingness. 
+\textbf{Figure Legend:} Raw data - (a) Distribution of sample missingness with sample mean illustrated by the red vertical line. (b) Distribution of feature missingness sample mean illustrated by the red vertical line. (c) Table of sample and feature missingness percentiles. A tabled version of plot a and b.  (d) Estimates of study samples sizes under various levels of feature missingness. 
 \end{center}
 
 ## Quality control 
@@ -168,7 +168,7 @@ ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of mi
 ### Exclusion summary
 
 ```{r exclusion table, echo = FALSE , fig.width = 5, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
-temp = data.frame(exclustion = rownames(qcing_data$exclusion_data), count = qcing_data$exclusion_data[,1])
+temp = data.frame(exclusions = rownames(qcing_data$exclusion_data), count = qcing_data$exclusion_data[,1])
 ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 ```
 
@@ -193,8 +193,8 @@ features_included_in_data_reduction = length( na.omit(qcing_data$feature_sumstat
 cluster_count = length( unique(qcing_data$feature_sumstats$k) )
 number_of_rep_meatbolites = sum( qcing_data$feature_sumstats$independent_features_binary == 1 )
 
-temp = data.frame( data_reduction = c("total metabolite count","metabolites inculded in data reduction","number of metabolite clusters","number of representitive metabolites"),
-                   count = c(feature_count,features_included_in_data_reduction, cluster_count, number_of_rep_meatbolites  )  )
+temp = data.frame( data.reduction = c("total metabolite count","metabolites included in data reduction","number of metabolite clusters","number of representative metabolites"),
+                   count = c(feature_count, features_included_in_data_reduction, cluster_count, number_of_rep_meatbolites  )  )
 ptable = ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 #################
@@ -324,7 +324,7 @@ features_included_in_data_reduction = length( na.omit(qc_data$feature_data$k) )
 cluster_count = length( unique(qc_data$feature_data$k) )
 number_of_rep_meatbolites = sum( qc_data$feature_data$independent_features_binary == 1 )
 
-temp = data.frame( data_reduction = c("total metabolite count","metabolites inculded in data reduction","number of metabolite clusters","number of representitive metabolites"),
+temp = data.frame( data.reduction = c("total metabolite count","metabolites inculded in data reduction","number of metabolite clusters","number of representitive metabolites"),
                    count = c(feature_count,features_included_in_data_reduction, cluster_count, number_of_rep_meatbolites  )  )
 ptable = ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mGreen"))
 #############
@@ -456,7 +456,7 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 \end{center}
 
 \begin{center}
-\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statstic >= 0.9.
+\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statistic >= 0.9.
 \end{center} 
 
 ### Distributions
@@ -482,7 +482,7 @@ outlier_summary = outlier.summary(dtst = qc_data$metabolite_data,
 outlier_summary[[2]]
 ```
 \begin{center}
-\textbf{Table Legend:} The table reports the number of point estimates for the minimum (0%\) median (50\%) and maximum (100\%) number of outlying features across samples and the number of outlying samples across features. 
+\textbf{Table Legend:} The table reports the number of point estimates for the minimum (0\%) median (50\%) and maximum (100\%) number of outlying features across samples and the number of outlying samples across features. 
 \end{center}
 
 ### Notes on outlying samples at each metabolite|feature
@@ -490,7 +490,7 @@ outlier_summary[[2]]
 There may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to:
 
 1. Turn these observations into NAs.
-2. Windsorize the data to some maximum value.
+2. Winsorize the data to some maximum value.
 3. Rank normalize the data which will place those outliers into the top of the ranked standard normal distribution.
 4. Turn these observations into NAs and then impute them along with other missing data in your data set. 
 
@@ -502,7 +502,7 @@ There may be extreme outlying observations at individual metabolites|features th
 
 ## QC'd data *feature* missingness: influenced by possible explanatory variables 
 
-Feature missingness may be influenced by the metabolites|features biology or pathway calssification, or your technologies methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
+Feature missingness may be influenced by the metabolites (or features) biology or pathway classification, or your technologies methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
 
 ```{r featurebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 ## possible batch variables that have been observed in 

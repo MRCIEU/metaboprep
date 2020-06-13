@@ -23,8 +23,13 @@ multivariate.anova = function(dep, indep_df){
   ## Make an reporting table
   outtable = tibble::as_tibble( matrix( c(eta, pval), ncol = 2, byrow = FALSE, 
                                 dimnames = list( c(rownames(a)), 
-                                                 c("etasq_VarExp","pvalue")  ) ) )
-  outtable = outtable %>% mutate(Batch_Variable = rownames(a) ) %>% dplyr::select(Batch_Variable, everything())
+                                                 c("etasq.var.exp","pvalue")  ) ) )
+  ##
+  outtable = outtable %>% mutate( batch.variable = rownames(a) ) %>% dplyr::select( batch.variable, everything())
+  ##
+  outtable[,1] = tolower( outtable[,1])
+  outtable[,1] = gsub("_",".", outtable[,1])
+  
   ## make the table a ggplot like figure
   outtable <- ggpubr::ggtexttable(outtable, rows = NULL, 
                           theme = ggpubr::ttheme("mBlue"))
