@@ -290,7 +290,7 @@ if( !is.na(SampleAnno_file2process) ){
   if(editrownames == 1){
     cat(paste0("\t\t- Assuming sample IDs are in column 1 and redefining rownames\n"))
     rownames(sampledata) = as.character(sampledata[,1])
-    sampledata = sampledata[,-1]
+    #sampledata = sampledata[,-1]
   }
 }
 
