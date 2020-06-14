@@ -4,7 +4,7 @@
 \alias{pcapairs_bymoose}
 \title{A Function to plot PCs in a matrix}
 \usage{
-pcapairs_bymoose(myloadings, varexp)
+pcapairs_bymoose(myloadings, varexp, pcol = "dodgerblue")
 }
 \arguments{
 \item{myloadings}{PC loadings}

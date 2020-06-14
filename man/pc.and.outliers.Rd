@@ -7,11 +7,11 @@
 pc.and.outliers(metabolitedata, indfeature_names, outliers = TRUE)
 }
 \arguments{
+\item{metabolitedata}{the metabolite data matrix. samples in row, metabolites in columns}
+
 \item{indfeature_names}{a vector of independent feature names | column names.}
 
 \item{outliers}{Defaulted to TRUE, a TRUE|FALSE paramater flagging if you would like outliers identified.}
-
-\item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 }
 \description{
 This function allows you to estiamte PCs and identify outliers in those PCs.
