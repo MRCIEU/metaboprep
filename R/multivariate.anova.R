@@ -27,8 +27,8 @@ multivariate.anova = function(dep, indep_df){
   ##
   outtable = outtable %>% mutate( batch.variable = rownames(a) ) %>% dplyr::select( batch.variable, everything())
   ##
-  outtable[,1] = tolower( outtable[,1])
-  outtable[,1] = gsub("_",".", outtable[,1])
+  outtable[,1] = tolower( unlist( outtable[,1]) )
+  outtable[,1] = gsub("_",".", unlist(outtable[,1]) )
   
   ## make the table a ggplot like figure
   outtable <- ggpubr::ggtexttable(outtable, rows = NULL, 
