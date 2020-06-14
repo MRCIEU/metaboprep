@@ -82,7 +82,11 @@ The quality control workflow is as follows:
 
 ```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
 # workflow_fig = knitr::include_graphics("images/MetaboQC_workflow.png")
-workflow_fig
+#workflow_fig
+###
+f = paste0( .libPaths(), "/MetaboQC/help/figures/MetaboQC_workflow.png" )
+knitr::include_graphics( f )
+
 ```
 
 1. Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). 
