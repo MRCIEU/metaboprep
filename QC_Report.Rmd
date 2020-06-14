@@ -372,7 +372,7 @@ gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plo
 
 
 \begin{center}
-\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red) and Parrallel Analysis in green. Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
+\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r qc_data$accelerationfactor`) and Parrallel Analysis (green, n = `r unlist( qc_data$nparallel )`). Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
 \end{center}
 
 
@@ -419,7 +419,7 @@ pcol = RColorBrewer::brewer.pal(9, "Set1")
 ###
 W_log10 = apply(qc_data$metabolite_data, 2, function(x){
   x = na.omit( unlist(x) )
-  x = log10(x+1)
+  x = na.omit( log10(x+1) )
   if(length(x) > 5000){ x = sample(x, 5000) }
   if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
       out = shapiro.test(unlist(x))$statistic  
@@ -531,6 +531,12 @@ w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){  len
 matched_variables = matched_variables[w]
 
 class_variables = matched_variables
+
+if( "SUB_PATHWAY" %in% class_variables ){
+  w = which(class_variables %in% "SUB_PATHWAY")
+  class_variables = class_variables[-w]
+  }
+
 
 ```
 
