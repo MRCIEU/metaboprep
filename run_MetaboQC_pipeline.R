@@ -440,17 +440,17 @@ if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
   }
 
 ### features to exclude
-if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
-  w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-  fn2e = as.character( rownames(mydata$featuredata)[w] )
-} else {
+# if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
+#   w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+#   fn2e = as.character( rownames(mydata$featuredata)[w] )
+# } else {
     if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
       w = which( mydata$featuredata$derived_features == "yes") 
       fn2e = as.character( mydata$featuredata$feature_names[w] )
     } else {
         fn2e = NA
       }
-    }
+#    }
 
 ### RUN feature summary stats funtion
 featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
