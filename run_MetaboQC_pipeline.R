@@ -300,11 +300,11 @@ if( !is.na(SampleAnno_file2process) ){
 ##################################
 if(isflat > 0){
   if( !exists( x = "sampledata" ) ){
-    sampledata = data.frame(SAMPLE_NAMES = rownames(metabolitedata))
+    sampledata = data.frame(SampleID = rownames(metabolitedata))
   }
   ####
   if( !exists( x = "featuredata" ) ){
-    featuredata = data.frame(FEATURE_NAMES = colnames(metabolitedata))
+    featuredata = data.frame(feature_names = colnames(metabolitedata))
     rownames(featuredata) = as.character( featuredata[,1] )
   }
   ## add Nightingale feature annotation data
