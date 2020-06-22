@@ -28,7 +28,12 @@ feature.describe = function(wdata){
         W_raw = NA; W_log = NA
       } else {
       W_raw = shapiro.test(x)$stat
-      W_log = shapiro.test( log10( x + 1 ) )$stat
+      ## accounting for 0's
+      # a = x[x != 0]
+      a = log10(x)
+      w = which(a == "-Inf")
+      a[w] = min(a[-w], na.rm = TRUE)
+      W_log = shapiro.test(  a  )$stat
       }
     
     ## data to return
