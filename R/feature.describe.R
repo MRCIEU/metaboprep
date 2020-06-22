@@ -34,7 +34,9 @@ feature.describe = function(wdata){
           # a = x[x != 0]
       a = log10(x)
       w = which(a == "-Inf")
-      a[w] = min(a[-w], na.rm = TRUE)/2
+      if(length(w)>0){
+        a[w] = min(a[-w], na.rm = TRUE)/2  
+      }
       W_log = shapiro.test(  a  )$stat
       }
     

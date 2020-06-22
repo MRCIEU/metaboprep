@@ -119,7 +119,7 @@ Missingness is evaluated across samples and features using the original/raw data
 
 ### Visual structure of missingness in your raw data set.
 
-```{r MissingnessMatrix, fig.width = 20, fig.height = 12,  echo = FALSE,warning=FALSE, message=FALSE, error=FALSE}
+```{r MissingnessMatrix, fig.width = 20, fig.height = 12,  echo = FALSE,warning=FALSE, message=FALSE, error=FALSE, dev = "png"}
 namat = qc_data$metabolite_data
 namat[!is.na(namat)] = 1
 namat[is.na(namat)] = 0
@@ -178,7 +178,7 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 \begin{center}
 \textbf{Table Legend}: Six primary quality control exclusion steps were made during the QC of the data.
-(1) Samples with missingness >=80\% were excluded. (2) features with missingness >=80\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
+(1) Samples with missingness >=20\% were excluded. (2) features with missingness >=20\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
 \end{center}
 
 
@@ -389,26 +389,28 @@ pcapairs_bymoose( as.matrix(pcs[, 1:5]) , qc_data$varexp, pcol = plotcolors)
 
 ## Feature Distributions
 
-### Estiamtes of normality: W-statistics for raw and log transformed data
+### Estimates of normality: W-statistics for raw and log transformed data
 
 ```{r ,echo=F, warning=FALSE, message=FALSE, error=FALSE}
-wstat = apply(qc_data$metabolite_data, 2, function(x){
-  x = na.omit( unlist(x) )
-  if(length(x)> 5000){ x = sample(x, 5000)}
-  if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
-      out = shapiro.test(unlist(x))$statistic  
-  } else {
-    out = NA  
-    }
-  return(out)
-  })
+# wstat = apply(qc_data$metabolite_data, 2, function(x){
+#   x = na.omit( unlist(x) )
+#   if(length(x)> 5000){ x = sample(x, 5000)}
+#   if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
+#       out = shapiro.test(unlist(x))$statistic  
+#   } else {
+#     out = NA  
+#     }
+#   return(out)
+#   })
+
+wstat = qc_data$feature_data$W_stat_rawdata
 
 ## how many stats were estimated
 count = length(wstat)
 nacount = sum(is.na(wstat))
 remain_count = count - nacount
 # wstat = na.omit(wstat)
-normalcount = sum(wstat >= 0.9, na.rm = TRUE)
+normcount = sum(wstat >= 0.95, na.rm = TRUE)
 
 ```
 
@@ -417,17 +419,26 @@ normalcount = sum(wstat >= 0.9, na.rm = TRUE)
 W = wstat
 pcol = RColorBrewer::brewer.pal(9, "Set1")
 ###
-W_log10 = apply(qc_data$metabolite_data, 2, function(x){
-  x = na.omit( unlist(x) )
-  x = na.omit( log10(x+1) )
-  if(length(x) > 5000){ x = sample(x, 5000) }
-  if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
-      out = shapiro.test(unlist(x))$statistic  
-  } else {
-    out = NA  
-    }
-  return(out)
-  })
+# W_log10 = apply(qc_data$metabolite_data, 2, function(x){
+#   x = na.omit( unlist(x) )
+#   # x = na.omit( log10(x+1) )
+#   ##
+#   x = log10(x)
+#   w = which(x == "-Inf")
+#   if(length(w)>0){
+#     x[w] = min(x[-w], na.rm = TRUE)/2
+#   }
+#   ##
+#   if(length(x) > 5000){ x = sample(x, 5000) }
+#   if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
+#       out = shapiro.test(unlist(x))$statistic  
+#   } else {
+#     out = NA  
+#     }
+#   return(out)
+#   })
+
+W_log10 = qc_data$feature_data$W_stat_log10data
 
 ## Plot
 par(mfrow = c(1,2), oma = c(2,1,1,1))
@@ -437,7 +448,6 @@ hist(W, col = pcol[2],
      ylab = "Frequency",
      cex.main = 0.75)
 abline(v = 0.95, col = pcol[1])
-normcount = sum( na.omit(W) >= 0.95)
 ##
 mtext( paste0(normcount,
               " of the metabolites exhibit distributions\nthat may declared normal, given a W-stat >= 0.95"), 
@@ -460,7 +470,7 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 \end{center}
 
 \begin{center}
-\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normalcount` may be considered normally distributed given a Shapiro W-statistic >= 0.9.
+\textbf{Analysis details:} Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normcount` may be considered normally distributed given a Shapiro W-statistic >= 0.95.
 \end{center} 
 
 ### Distributions
