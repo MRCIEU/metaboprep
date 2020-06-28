@@ -4,7 +4,7 @@ Version: 0.0.1
 Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
     person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")) )
 Description: Reads in raw Metabolon and Nightingale xls sheets and aids in quality control of all metabolomics data sets.
-Depends: R (>= 3.4.0)
+Depends: R (>= 3.5.0)
 License: CC0
 Encoding: UTF-8
 LazyData: true
