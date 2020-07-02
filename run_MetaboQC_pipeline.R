@@ -185,12 +185,12 @@ n = paste0(data_dir, METABO_file2process)
 if(isflat > 0){
   if( length(grep(".csv", n )) > 0 ){
     cat(paste0("\t- Reading in your csv metabolite file\n"))
-    metabolitedata = read.csv(n, header = TRUE, as.is = TRUE, na.strings = c("NA","NDEF", "TAG") )
+    metabolitedata = read.csv(n, header = TRUE, as.is = TRUE, na.strings = c("NA","NDEF", "TAG", -1, -9), row.names = 1 )
   }
   ####
   if( length( c( grep(".txt", n ), grep(".tsv", n )  ) )  > 0 ){
     cat(paste0("\t- Reading in your txt|tsv metabolite file\n"))
-    metabolitedata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t", na.strings = c("NA","NDEF", "TAG") )
+    metabolitedata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t", na.strings = c("NA","NDEF", "TAG", -1, -9), row.names = 1 )
   }
   ## remove any possible commas
   metabolitedata = apply(metabolitedata, 2, function(x){
