@@ -103,6 +103,7 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
   ## k cluster ids
   m = match(fids, names(k))
   k = k[m]
+  names(k) = fids
   ## list of independent features (0|1, 1 = yes)
   w = which(fids %in% independent_features)
   independent_features_binary = rep(0, length(fids))
