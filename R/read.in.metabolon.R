@@ -79,7 +79,10 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     blankcols = which( is.na(d[1,]) ) ## how many columns have no data in the excel sheet
     
     ## filter the blankrows that happen to be NA but are among the first rows in the sheet
-    blankrows = blankrows[ 1:(which( (blankrows[-1] - blankrows[-length(blankrows)]) > 1 )) ] ## only the early rows are to be kept
+    w = which( ( blankrows[-1] - blankrows[-length(blankrows)]) > 1 )
+    if(length(w)>0){
+      blankrows = blankrows[ 1:w ]  ## only the early rows are to be kept
+    }
 
     a = blankrows  ## rows containing sample and batch data
     b = (blankcols[length(blankcols)] + 1):ncol(d) ## the first column containing data
