@@ -238,12 +238,12 @@ if( !is.na(FeatureAnno_file2process) ){
   ##
   if( length(grep(".csv", n )) > 0 ){
     cat(paste0("\t- Reading in you csv feature annotation file\n"))
-    featuredata = read.csv(n, header = TRUE, as.is = TRUE, fill = TRUE)
+    featuredata = read.csv(n, header = TRUE, as.is = TRUE, quote = "", fill = TRUE)
   }
   ####
   if( length( c( grep(".txt", n ), grep(".tsv", n )  ) ) > 0 ){
     cat(paste0("\t- Reading in you txt feature annotation file\n"))
-    featuredata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t", fill = TRUE)
+    featuredata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t",quote = "", fill = TRUE)
   } 
   ## format featuredata data
   editrownames = sum( rownames(featuredata) == 1:nrow(featuredata) ) /nrow(featuredata)
@@ -278,12 +278,12 @@ if( !is.na(SampleAnno_file2process) ){
   ##
   if( length(grep(".csv", n )) > 0 ){
     cat(paste0("\t- Reading in you csv sample annotation file\n"))
-    sampledata = read.csv(n, header = TRUE, as.is = TRUE)
+    sampledata = read.csv(n, header = TRUE, quote = "", as.is = TRUE)
   }
   ####
   if(length( c( grep(".txt", n ), grep(".tsv", n )  ) ) > 0 ){
     cat(paste0("\t- Reading in you txt sample annotation file\n"))
-    sampledata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t")
+    sampledata = read.table(n, header = TRUE, quote = "", as.is = TRUE, sep = "\t")
   } 
   ## format sampledata data
   editrownames = sum( rownames(sampledata) == 1:nrow(sampledata) ) /nrow(sampledata)
@@ -412,8 +412,8 @@ system(cmd)
 if( "sampledata" %in% names(mydata) ){
   # mydata$sampledata = cbind(mydata$sampledata, samplesumstats)
   samplesumstats = cbind(mydata$sampledata, samplesumstats)
-  n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 }
+n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 # write.table(mydata$sampledata, file = n,
 write.table( samplesumstats, file = n,
            row.names = FALSE, col.names = TRUE, 
@@ -465,10 +465,8 @@ cat( paste0("\t\t- Writing feature summary statistics to file.\n") )
 if( "featuredata" %in% names(mydata) ){
   # mydata$featuredata = cbind(mydata$featuredata, featuresumstats$table[,-1])
   featuresumstats$table = cbind( mydata$featuredata, featuresumstats$table[,-1])
-   
-  n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 }
-
+n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 # write.table(mydata$featuredata, file = n,
 write.table(featuresumstats$table, file = n,
             row.names = FALSE, col.names = TRUE, 
