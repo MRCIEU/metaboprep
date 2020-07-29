@@ -163,6 +163,19 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
       
       d = readxl::read_excel( n , sheet = i, na = c("NA","NDEF", "TAG") )
       d = as.data.frame(d)
+      ###############################################
+      ### re-estimate the number of blank rows
+      ### in case it varies from sheet 1
+      ###############July 29th addition##############
+      blankrows = which( is.na(d[,2]) )  ## how many rows have no data in the excel sheet
+      blankcols = which( is.na(d[1,]) ) ## how many columns have no data in the excel sheet
+      
+      ## filter the blankrows that happen to be NA but are among the first rows in the sheet
+      w = which( ( blankrows[-1] - blankrows[-length(blankrows)]) > 1 )
+      if(length(w)>0){
+        blankrows = blankrows[ 1:w ]  ## only the early rows are to be kept
+      }
+      ###########End of July 29th addition###############
       ####
       a = (blankrows[length(blankrows)] + 2):nrow(d)
       b = (blankcols[length(blankcols)] + 2):ncol(d)
@@ -172,8 +185,11 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
       for(j in 1:ncol(metabolitedata)){
         metabolitedata[,j] = as.numeric( sapply(metabolitedata[,j], function(x){ gsub(",","",x) }) )
       }
-      rownames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
+      ## Transpose and redefine column (metabolite) names to COMPIDs
       metabolitedata = t(metabolitedata)
+      colnames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
+      #rownames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
+      #metabolitedata = t(metabolitedata)
       
       ## write table to file
       outname = paste0(data_dir, "MetaboQC_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
