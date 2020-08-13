@@ -1,0 +1,44 @@
+############################################################
+## Paramater file for Nightingale & Metabolon QC Processing
+## 			by: Laura Corbin and David Hughes
+## 			date: May 15th 2019
+############################################################
+## (1) Name of your project
+projectname=EX
+## (2) Full path to the directory holding your data file(s)
+datadirectory=/FULLPATH/MetaboQC/example_data/excel/
+## (3) The name of the raw EXCEL sheet from Metabolon or Nightingale. 
+## 		Or a flat text file (csv or txt) with metabolites in columns, samples in rows
+rawdata_EXCEL_or_Flat_testFile=ex_metabolon.xlsx
+## (4) feature (metabolite) annotation file
+## 				- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 				- features in row, annotation in columns
+## 				- NOTE: Metabolon QC requires a "SUPER_PATHWAY" column header to identify Xenobiotics
+feature_annotation_file=NA
+## (5) sample annotation file (batch variables)
+## 				- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 				- samples in rows, annotation in columns
+sample_annotation_file=NA
+## (6) Is your dataset from Metabolon, Nightingale, or Other
+Nightingale_OR_Metabolon=Metabolon
+## (7) FEATURE QC: Proportion of missinginess on features used as a QC threshold. 
+feature_missingness=0.2
+## (8) SAMPLE QC: Proportion of missinginess on samples used as a QC threshold. 
+sample_missingness=0.2
+## (9) SAMPLE QC: The number of standard deviation (SD) units from the mean to perform a sample QC based on total peak area
+##				- If you would like to exclude total peak area as a QC parameter set the value to NA.
+##				- Setting to NA may be appropriate for NMR data set like Nightingale
+total_peak_area_SD=5
+## (10) SAMPLE QC: The number fo standard deviation (SD) units from the mean to perform a sample QC based on principal components
+##				- If you would like to exclude PC exclusions as a QC parameter set the value to NA.
+##				- Setting to NA may be advisable if you expect significant structure among individuals for example your data is derived from differnt tissues, different geographies/ecologies/environments
+PC_outlier_SD=5
+## (11) Feature|metabolite independence:
+##				- to identify "independent" features in your data set, how similar should clustered|grouped features be?
+##				- tree_cut_height = 1-absolute(spearman's rho)
+##				- such that a tree_cut_height of 0.2 would indicate a intra-cluster similarity of >0.8. 
+tree_cut_height=0.5
+## (12) Nightingale derived variable exclusion
+##				- derived variables in Nightingale are all variables derived from two or more variables already present
+##				- ... in the data set. In this instance it represents all ratios that Nightingale supply in their data releaases.
+derived_var_exclusion=TRUE
