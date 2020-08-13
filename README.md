@@ -55,7 +55,7 @@ date: June 3rd 2019
 4. Run the MetaboQC pipeline on a terminal command line as follows:
 	
 	```R	
-	Rscript run_MetaboQC_pipeline.R /FULL/PATH/TO/paramater_file.txt
+	Rscript run_MetaboQC_pipeline.R /FULL/PATH/TO/example_data/excel/paramater_file.txt
 	```
 	
 5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
@@ -157,6 +157,8 @@ date: June 3rd 2019
 **NOTE: Derived variable are those that are ratios or percentanges of two or more features already present in a data set, such as those found in Nightingale data.**
 
 ## PDF Report includes
+
+*---example figures provided for illustration---*
 
 1. General information on study
 2. Raw data summary
