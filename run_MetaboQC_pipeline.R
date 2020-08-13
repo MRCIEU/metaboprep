@@ -20,6 +20,9 @@
 #######################################
 library(MetaboQC)
 
+## define nightingale object
+ng_anno = MetaboQC:::ng_anno
+
 #########################################
 ##
 ## II) Read in arguments from command line
