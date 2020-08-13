@@ -1,6 +1,6 @@
 #' A copy of the rntransform function from the GenAbel package, edited for the option of spliting tied values.
 #'
-#' This function allows you to rank normal transform a vector of data.
+#' This function rank-normal transform a vector of data, and by default splits tied values randomly
 #' @param formula 
 #' @param data your vector of numerical values to rank normal transform 
 #' @param family Defaulted to gaussian. Do not suggest editing 

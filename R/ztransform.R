@@ -1,6 +1,6 @@
 #' A copy of the ztransform function from the GenAbel package
 #'
-#' This function allows you to z  transform a vector of data.
+#' This function z-transforms a vector of data.
 #' @param formula 
 #' @param data your vector of numerical values to rank normal transform 
 #' @param family Defaulted to gaussian. Do not suggest editing 

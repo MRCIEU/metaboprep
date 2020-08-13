@@ -3,6 +3,7 @@
 #' This function to plot PCs in a matrix
 #' @param myloadings PC loadings
 #' @param varexp the variance explained by each PC in a vector.
+#' @param pcol plot colors for the dots background
 #' @keywords metabolomics
 #' @export
 #' @examples
@@ -34,8 +35,8 @@ pcapairs_bymoose = function(myloadings, varexp, pcol = "dodgerblue"){
         
         ## perform plot
         plot(myloadings[,j], myloadings[,i], pch = 21, bg = pcol,
-             ylab = paste0("PC",i, " VarExp = ", signif(varexp[i], d = 3)*100, "%"),
-             xlab = paste0("PC",j, " VarExp = ", signif(varexp[j], d = 3)*100, "%"))
+             ylab = paste0("PC",i, " VarExp = ", signif(varexp[i], digits = 3)*100, "%"),
+             xlab = paste0("PC",j, " VarExp = ", signif(varexp[j], digits = 3)*100, "%"))
         abline(v = outliersV, lwd = 1.5, col = "grey")
         abline(h = outliersH, lwd = 1.5, col = "grey")
         ## 4SD

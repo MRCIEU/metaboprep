@@ -74,6 +74,8 @@ date: June 3rd 2019
 
 ## QC steps in brief
 
+![](images/MetaboQC_workflow.png)
+
 ### -- a detailed synopsis can be found on this git repository's wiki --
 
 ### (A) General Outline of MetaboQC
@@ -154,25 +156,47 @@ date: June 3rd 2019
 
 **NOTE: Derived variable are those that are ratios or percentanges of two or more features already present in a data set, such as those found in Nightingale data.**
 
-## PDF Report
+## PDF Report includes
 
-1. Power Analysis
-	* case control (N = 50/50) 
-	* continuous
-2. Metabolon data
+1. General information on study
+2. Raw data summary
+	* sample size
+	* missingness
+![](images/missingness_matrix.png)
+![](images/missingness_hist.png)
+	* table of quanlity control exclusions
+	* figure of PCA oulier exclusions
+![](images/outlier_pca.png)
+3. Summary of quality controled data
+	* sample size
+	* summary figures
+		+ missingness distributions
+		+ feature dendrogram
+		+ PCA
+![](images/summary_of_qc_data.png)
+	* distribtion of Shapiro W-statistics
+![](images/wstats.png)
+	* outlier summary
+4. Batch effects
 	* feature missingness
 		+ as influenced by:
 			+ feature SUPER_PATHWAY (categorical function)
 			+ MS method
 				+ LC/MS Polar, Pos Late, Pos Early, Neg
+![](images/f_missingness_by_batch.png)
 	* sample missingness
 		+ as influenced by:
 			+ BOX_ID, storage box
 			+ RUN_DAY, day the samples were processed on tech
+![](images/missingness_by_batch.png)
 		+ multivariate analysis of both BOX_ID and RUN_DAY on missingness
-	* sample total peak area (TPA)
+	* sample total peak|abundance area
 		+ as influenced by:
 			+ BOX_ID, storage box
 			+ RUN_DAY, day the samples were processed on tech
+![](images/tsa_by_batch.png)
 		+ multivariate analysis of both BOX_ID and RUN_DAY on missingness
-	
+5. Power Analysis
+	* presence -vs- absence
+	* continuous
+![](images/power.png)
