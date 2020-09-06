@@ -12,10 +12,12 @@ run.pa.imbalanced.power.make.plot = function(mydata){
   # set N equal to no. in sample
   ####################################
   N = nrow(mydata)       
-  half = N/2
-  ncases = seq(100, half, 100)
+  #half = N/2
+  #ncases = seq(100, half, 100)
+  ncases = seq(10, N-10, 10)
   ncontrol = N - ncases
-    
+  
+  effect_sizes = find.PA.effect.sizes.2.sim(mydata = mydata)
   ####################################
   # simulation paramaters
   ####################################
@@ -24,7 +26,8 @@ run.pa.imbalanced.power.make.plot = function(mydata){
                                 Ncontrol = ncontrol,
                                 n_coeff = 1,
                                 #effect = c(0.01,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2),
-                                effect = seq(0.1, 0.2, by = 0.01),
+                                #effect = seq(0.1, 0.2, by = 0.01),
+                                effect = effect_sizes,
                                 alpha = 0.05)
   #################
   ## filter
@@ -40,7 +43,8 @@ run.pa.imbalanced.power.make.plot = function(mydata){
     }
 
   ##### 
-  ef =seq(0.1, 0.2, by = 0.01)
+  #ef = seq(0.1, 0.2, by = 0.01)
+  ef = effect_sizes
   k = sapply(ef, function(x){  
     w = which(run_parameters$effect == x)
     return(w[o])
@@ -75,7 +79,8 @@ run.pa.imbalanced.power.make.plot = function(mydata){
   ####################################
   # plot results
   ####################################
-  s = seq(0, half, by = 200)
+  #s = seq(0, half, by = 200)
+  s = seq(0, N, by = 200)
   pwrdata = tibble::as_tibble(pwrdata)
   ###
   plotout = pwrdata %>% ggplot( aes(x=N_case, y=power) ) +
