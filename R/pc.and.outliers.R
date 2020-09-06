@@ -21,6 +21,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   w = which( colnames(metabolitedata) %in% indfeature_names )
   indf = colnames(metabolitedata)[w]
   pcadata = metabolitedata[, indf ]
+  prob_pcadata = metabolitedata[, indf ]
   
   ## filter on missingness
   # mis = apply(pcadata, 2, function(x){ sum(is.na(x))  }) 
@@ -29,19 +30,36 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   #   pcadata = pcadata[, -r]
   # }
   # 
-  
+  ##############################
   ## impute missingness as medians
+  ##############################
   pcadata = median_impute(wdata = pcadata)
   rownames(pcadata) = rownames(metabolitedata)
-  ## estimate PCs
+  
+  ##############################
   ## z-transformation
+  ##############################
   pcadata = apply(pcadata, 2, function(x){
     ( x - mean(x, na.rm = TRUE) ) / sd(x, na.rm = TRUE)
   })
+  ##############################
+  ## perform PCA
+  ##############################
   mypca = stats::prcomp(pcadata, center = FALSE, scale = FALSE)
   varexp = summary(mypca)[[6]][2, ]
   
+  ###############################
+  ## perform probablisitic PCA
+  ###############################
+  prob_pcadata = apply(prob_pcadata, 2, function(x){
+    ( x - mean(x, na.rm = TRUE) ) / sd(x, na.rm = TRUE)
+  })
+  ######
+  prob_mypca = ppca(prob_pcadata, method="ppca", nPcs = 10, seed = 1234 , maxIterations = 1000)
+
+  ##############################
   ## find number of sig PCs
+  ##############################
   ev <- eigen(cor(pcadata)) # get eigenvalues
   ap <- nFactors::parallel(subject=nrow(pcadata),var=ncol(pcadata),
                  rep=100,cent=.05)
@@ -70,7 +88,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
   }
   
 
-  dataout = list(pcs = PCout, varexp = varexp, accelerationfactor = accelerationfactor, nsig_parrallel = nsig_parrallel  )
+  dataout = list(pcs = PCout, varexp = varexp, accelerationfactor = accelerationfactor, nsig_parrallel = nsig_parrallel, prob_pca = prob_mypca@scores  )
   
   # detach("package:MASS", unload=TRUE)
 
