@@ -611,9 +611,12 @@ temp = qcdata$wdata
 m = match( rownames(temp) , mydata$sampledata[,1] )
 n = match( colnames(temp) , mydata$featuredata[,1] )
 qcdata = list(metabolitedata = temp, 
-  sampledata = mydata$sampledata[m,], 
-  featuredata = mydata$featuredata[n,] )
+  sampledata = as.data.frame( mydata$sampledata[m,] ), 
+  featuredata = as.data.frame( mydata$featuredata[n,] ) )
 rm(temp)
+
+if( colnames(qcdata$sampledata) == "mydata$sampledata[m, ]" ){ colnames(qcdata$sampledata) = "SampleID" }
+if( colnames(qcdata$featuredata) == "mydata$featuredata[n, ]" ){ colnames(qcdata$featuredata) = "feature_names" }
 
 ##################################
 ## B.3. Write to file
