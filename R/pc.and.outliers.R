@@ -55,7 +55,7 @@ pc.and.outliers = function(metabolitedata, indfeature_names, outliers = TRUE ){
     ( x - mean(x, na.rm = TRUE) ) / sd(x, na.rm = TRUE)
   })
   ######
-  prob_mypca = ppca(prob_pcadata, method="ppca", nPcs = 10, seed = 1234 , maxIterations = 1000)
+  prob_mypca = pcaMethods::ppca(prob_pcadata, method="ppca", nPcs = 10, seed = 1234 , maxIterations = 1000)
 
   ##############################
   ## find number of sig PCs
