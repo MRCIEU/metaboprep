@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r args_2_variables, include = FALSE, warning=FALSE, message=FALSE, error=FALSE}
 library(MetaboQC)
 library(tidyverse)
-library(dendextend)
+suppressPackageStartupMessages(library(dendextend))
 
 ###########################
 # Read in R object with Rdata 
@@ -99,7 +99,7 @@ knitr::include_graphics( f )
 
 # Sample size of `r project` data set
 
-```{r, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE,fig.align="center" }
+```{r, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE, fig.align="center" }
 # tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
 # rownames(tout) = c("Number of samples","Number of features")
 ###
@@ -522,7 +522,7 @@ Feature missingness may be influenced by the metabolites (or features) biology o
 ## possible batch variables that have been observed in 
 ## METABOLON and NIGHTINGALE sample-annotation-batch-data
 # possible_batch_variables = c("SUPER_PATHWAY","PLATFORM", "class", "subclass")
-possible_batch_variables = c("path","platform", "class")
+possible_batch_variables = c("path","platform", "class", "batch")
 
 ## matching variables
 # w = which(possible_batch_variables %in% colnames(qc_data$feature_data) )
@@ -556,7 +556,8 @@ if( "SUB_PATHWAY" %in% class_variables ){
 ###################################
 ## Iterate over each batch variable
 ###################################
-ClassMisPlots = lapply( class_variables , function(x){
+if(length(class_variables)>0){
+  ClassMisPlots = lapply( class_variables , function(x){
   out = variable.by.factor( dep = qc_data$feature_data$feature_missingness , 
                            indep = unlist( qc_data$feature_data[,x] ), 
                            dep_name = "feature missingness", 
@@ -565,8 +566,12 @@ ClassMisPlots = lapply( class_variables , function(x){
   })
 
 
-## plot the output
-gridExtra::grid.arrange( grobs = ClassMisPlots, ncol = 1)
+  ## plot the output
+  gridExtra::grid.arrange( grobs = ClassMisPlots, ncol = 1)
+
+} else { 
+  paste0(" -- No feature level batch variables identified or all were invariable -- ") 
+  }
 
 ```
 
