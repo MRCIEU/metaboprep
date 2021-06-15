@@ -2,7 +2,7 @@
 title: "metaboprep meteabolomics data preparation report"
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  pdf_document:
     keep_md: true
     number_sections: true
     toc: false
@@ -99,7 +99,7 @@ knitr::include_graphics( f )
 
 # Sample size of `r project` data set
 
-```{r, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE, fig.align="center" }
+```{r Sample_size, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE, fig.align="center" }
 # tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
 # rownames(tout) = c("Number of samples","Number of features")
 ###
@@ -171,7 +171,7 @@ ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of mi
 
 ### Exclusion summary
 
-```{r exclusion table, echo = FALSE , fig.width = 5, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
+```{r exclusion_table, echo = FALSE , fig.width = 5, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
 temp = data.frame(exclusions = rownames(qcing_data$exclusion_data), count = qcing_data$exclusion_data[,1])
 ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 ```
@@ -186,7 +186,7 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 A data reduction was carried out to identify a list of representitive features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to ensure that the principal components are not driven by groups of correlated features.
 
-```{r , echo = FALSE, fig.width = 12, fig.height = 6, warning=FALSE, message=FALSE, error=FALSE}
+```{r PCA_1_2, echo = FALSE, fig.width = 12, fig.height = 6, warning=FALSE, message=FALSE, error=FALSE}
 #################
 ## data reduction 
 ## info
@@ -261,7 +261,7 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 ## Summary of QC data
 
 
-```{r , echo = FALSE, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
+```{r sample_overview, echo = FALSE, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
 pcol = RColorBrewer::brewer.pal(9, "Set1")
 ##############
 ## Missingness
@@ -391,7 +391,7 @@ pcapairs_bymoose( as.matrix(pcs[, 1:5]) , qc_data$varexp, pcol = plotcolors)
 
 ### Estimates of normality: W-statistics for raw and log transformed data
 
-```{r ,echo=F, warning=FALSE, message=FALSE, error=FALSE}
+```{r, echo=F, warning=FALSE, message=FALSE, error=FALSE}
 # wstat = apply(qc_data$metabolite_data, 2, function(x){
 #   x = na.omit( unlist(x) )
 #   if(length(x)> 5000){ x = sample(x, 5000)}
@@ -551,7 +551,7 @@ if( "SUB_PATHWAY" %in% class_variables ){
 ```
 
 
-```{r featuremissingnessPLOT,  echo=F, fig.width = 15, fig.height = 10, warning=FALSE, message=FALSE, error=FALSE}
+```{r featuremissingness,  echo=F, fig.width = 15, fig.height = 10, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
 ## Iterate over each batch variable
@@ -628,7 +628,7 @@ if(length(batch_variables) == 0){ batch_variables = NA }
 
 ```
 
-```{r Sam_missingnessPLOT,  echo=F, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
+```{r sample_missingness,  echo=F, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
 ## Iterate over each batch variable
@@ -679,7 +679,7 @@ Total peak|abundance area (TPA) is simply the sum of the abundances measured acr
 ## Relationship with missingness
 Correlation between total peak area (at complete features) and missingness
 
-```{r, echo=F, fig.width = 7, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
+```{r TPA_missingness, echo=F, fig.width = 7, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 a = cor.test( qc_data$sample_data$sample_missingness, qc_data$sample_data$TPA_completefeature)
 ###
 ( 
