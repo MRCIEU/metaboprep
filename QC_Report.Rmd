@@ -2,7 +2,8 @@
 title: "metaboprep meteabolomics data preparation report"
 date: "`r Sys.Date()`"
 output: 
-  pdf_document:
+  html_document:
+    keep_md: true
     number_sections: true
     toc: false
     toc_depth: 2
@@ -80,8 +81,8 @@ This report provides descriptive information for raw and quality controled metab
 The quality control workflow is as follows:
 
 ```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
+## workflow_fig
 # workflow_fig = knitr::include_graphics("images/metaboprep_workflow.png")
-#workflow_fig
 ###
 f = paste0( .libPaths(), "/metaboprep/help/figures/metaboprep_workflow.png" )
 knitr::include_graphics( f )
