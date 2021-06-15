@@ -1,5 +1,5 @@
-Package: MetaboQC
-Title: Metabolomics processing and quality control
+Package: metaboprep
+Title: Metabolomics data preparation and processing pipeline
 Version: 0.0.1
 Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
     person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")) )
@@ -24,6 +24,7 @@ Imports:
     knitr,
     MASS,
     nFactors,
+    pcaMethods,
     psych,
     purrr,
     pwr,
