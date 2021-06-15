@@ -1,4 +1,4 @@
-# Metabolite QC pipeline - beta version 0.0.1
+# Metabolite data preparation pipeline - version 1.0
 
 by: David Hughes and Laura Corbin	
 date: June 3rd 2019
