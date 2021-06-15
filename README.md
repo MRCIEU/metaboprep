@@ -8,26 +8,26 @@ date: June 3rd 2019
 2. Provides useful summary data in the form of tab-delimited text file and a PDF report.
 3. Performs QC on the data using a standard pipeline and according to user-defined thresholds.
 
-## Install MetaboQC
+## Install metaboprep
 1. To install do the following
 	
 	 1. quick install
 		1. start an R session
-		2. install the MetaboQC package with
+		2. install the metaboprep package with
 			
 			```R
-			devtools::install_github("MRCIEU/MetaboQC")
+			devtools::install_github("MRCIEU/metaboprep")
 			```
 			
 		3. from this repo download a copy of the following files
-			1. run_MetaboQC_pipeline.R
+			1. run_metaboprep_pipeline.R
 			2. parameter_file.txt
 			3. QC_Report.Rmd
 			
 			* You can also download or clone the entire repo with
 				
 				```R
-				git clone https://github.com/MRCIEU/MetaboQC.git
+				git clone https://github.com/MRCIEU/metaboprep.git
 				```
 				
 	2. alternatively you can download the package manually
@@ -39,46 +39,46 @@ date: June 3rd 2019
 		6. install R package with: 
 			
 			```R
-			devtools::install("MetaboQC")
+			devtools::install("metaboprep")
 			```
 
-## To run MetaboQC
+## To run metaboprep
 
 1. Edit the paramater (parameter_file.txt) file
 	1.	do not add any spaces before or after the "=" sign in the paramater file.
 	2. the paramater file can be located anywhere
 2. Move to the, or a, directory containing both:
-	1. run_MetaboQC_pipeline.R
+	1. run_metaboprep_pipeline.R
 	2. QC_Report.Rmd
 3. Make sure that R is in your environment - an often necessary step if working on an HPC.
 	1. for example: module add languages/R-3.5-ATLAS-gcc-7.1.0
-4. Run the MetaboQC pipeline on a terminal command line as follows:
+4. Run the metaboprep pipeline on a terminal command line as follows:
 	
 	```R	
-	Rscript run_MetaboQC_pipeline.R /FULL/PATH/TO/example_data/excel/paramater_file.txt
+	Rscript run_metaboprep_pipeline.R /FULL/PATH/TO/example_data/excel/paramater_file.txt
 	```
 	
 5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
-	1. move to your newly generated MetaboQC project directory. 
-		* it will take the form of "../MetaboQC_release_TODAYSDATE/"
+	1. move to your newly generated metaboprep project directory. 
+		* it will take the form of "../metaboprep_release_TODAYSDATE/"
 	2. You should find an R data object called "ReportData.Rdata". Save a copy locally.
 	3. Open an R session
 	4. produce report with
 		
 		```R
-		full_path_to_QCReport_md = "FULL/PATH/TO/MetaboQC/QC_Report.Rmd"
-		full_path_to_OUTPUT_dir = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/"
-		full_path_to_Rdatafile = "FULL/PATH/TO/MetaboQC_release_YEAR_MO_DA/ReportData.Rdata"
+		full_path_to_QCReport_md = "FULL/PATH/TO/metaboprep/QC_Report.Rmd"
+		full_path_to_OUTPUT_dir = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/"
+		full_path_to_Rdatafile = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/ReportData.Rdata"
 		rmarkdown::render(full_path_to_QCReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
 		```
 
-## QC steps in brief
+## Data Preparation steps in brief
 
-![](images/MetaboQC_workflow.png)
+![](images/metaboprep_workflow.png)
 
 ### -- a detailed synopsis can be found on this git repository's wiki --
 
-### (A) General Outline of MetaboQC
+### (A) General Outline of metaboprep
 1. Read in the paramater file
 2. Read in the data  -  *(typically from a commercially provided excel file)*
 	* metabolite abundance
