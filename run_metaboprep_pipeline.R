@@ -1,6 +1,5 @@
 ###########################################
-## Read in Metabolon Data from their
-## excel sheets.
+## metaboprep pipeline
 ## 
 ##  by: Laura Corbin & David Hughes 
 ##	date: May 14th 2019
@@ -9,19 +8,19 @@
 ######################################
 ## RUN DIRECTIONS:
 ## - run the script by running the line
-## > Rscript process_raw_data_files.R paramater_file.txt 
+## > Rscript run_metaboprep_pipeline.R paramater_file.txt 
 ######################################
 
 
 #######################################
 ##
-## I) Load the MetaboQC R package
+## I) Load the metaboprep R package
 ##
 #######################################
-library(MetaboQC)
+library(metaboprep)
 
 ## define nightingale object
-ng_anno = MetaboQC:::ng_anno
+ng_anno = metaboprep:::ng_anno
 
 #########################################
 ##
@@ -35,7 +34,7 @@ args = commandArgs(trailingOnly=TRUE)
 ## Check that you passed an argument to the script
 if(length(args) != 1){
   stop( 
-    paste0("You must provide a single argument, the paramater file, when you call the script.\n\tEXAMPLE:$ Rscript --vanilla run_MetaboQC_pipeline.R parameter_file.txt.\n"),
+    paste0("You must provide a single argument, the paramater file, when you call the script.\n\tEXAMPLE:$ Rscript --vanilla run_metaboprep_pipeline.R parameter_file.txt.\n"),
     call.=FALSE)
 } 
 
@@ -77,8 +76,7 @@ if(substring(data_dir, nchar(data_dir)) != "/"){
 ## check for spaces in fle paths
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
-#cmd = paste0("mkdir -p ", data_dir, "MetaboQC_release_", today)
-cmd = paste0("mkdir -p ", dd, "MetaboQC_release_", today)
+cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today)
 system(cmd)
 
 #######################################
@@ -86,7 +84,7 @@ system(cmd)
 ## V) Start writing a log file
 ##
 #######################################
-logfilename = paste0(data_dir, "MetaboQC_release_", today, "/", project, "_", today,  "_logfile.txt")
+logfilename = paste0(data_dir, "metaboprep_release_", today, "/", project, "_", today,  "_logfile.txt")
 sink(file = logfilename , split = TRUE  )
 
 cat(paste0("I. Setting up your pipeline\n"))
@@ -214,7 +212,7 @@ if(isflat > 0){
   }
   ## if platform is Nightingale edit metabolite names
   if( platform == "Nightingale"){
-    cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t so editing metabolite names in an attempt to match the MetaboQC annotation file.\n"))
+    cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t so editing metabolite names in an attempt to match the metaboprep annotation file.\n"))
     ## edit column metabolite names
     colnames(metabolitedata) = gsub("_.", "pct", colnames(metabolitedata))
     colnames(metabolitedata) = gsub("%", "pct", colnames(metabolitedata))
@@ -259,7 +257,7 @@ if( !is.na(FeatureAnno_file2process) ){
     }
   }
   if( platform == "Nightingale"){
-    cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t  so editing metabolite names in an attempt to match the MetaboQC annotation file.\n"))
+    cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t  so editing metabolite names in an attempt to match the metaboprep annotation file.\n"))
     ## edit column metabolite names
     rownames(featuredata) = gsub("_.", "pct", rownames(metabolitedata))
     rownames(featuredata) = gsub("%", "pct", rownames(featuredata))
@@ -404,10 +402,10 @@ cat( paste0("\t\t- Writing sample summary statistics to file.\n") )
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
 ###
-cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "sumstats")
+cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "sumstats")
 system(cmd)
 ## make a raw_dataset directory inside the sumstats folder
-cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "sumstats/raw_dataset")
+cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "sumstats/raw_dataset")
 system(cmd)
 
 
@@ -416,14 +414,14 @@ if( "sampledata" %in% names(mydata) ){
   # mydata$sampledata = cbind(mydata$sampledata, samplesumstats)
   samplesumstats = cbind(mydata$sampledata, samplesumstats)
 }
-n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 # write.table(mydata$sampledata, file = n,
 write.table( samplesumstats, file = n,
            row.names = FALSE, col.names = TRUE, 
            sep = "\t", quote = FALSE)
 
 # } else {
-#   n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_sumstats.txt")
+#   n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_sumstats.txt")
 #   write.table(samplesumstats, file = n,
 #               row.names = FALSE, col.names = TRUE, 
 #               sep = "\t", quote = FALSE)
@@ -469,14 +467,14 @@ if( "featuredata" %in% names(mydata) ){
   # mydata$featuredata = cbind(mydata$featuredata, featuresumstats$table[,-1])
   featuresumstats$table = cbind( mydata$featuredata, featuresumstats$table[,-1])
 }
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 # write.table(mydata$featuredata, file = n,
 write.table(featuresumstats$table, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = TRUE)
 
 # } else {
-#   n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_sumstats.txt")
+#   n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_sumstats.txt")
 #   write.table(featuresumstats$table, file = n,
 #               row.names = TRUE, col.names = TRUE, 
 #               sep = "\t", quote = TRUE)
@@ -500,7 +498,7 @@ cat( paste0("\t\t- Re-Writing sample summary statistics to file to include PCs.\
 
 ### SAMPLES
 samplesumstats = cbind( samplesumstats, PCs_outliers[[1]])
-n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")  
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")  
 write.table( samplesumstats, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
@@ -510,12 +508,12 @@ write.table( samplesumstats, file = n,
 cat( paste0("\t\t- Writing PC statistics to file.\n\n") )
 
 varexp = data.frame(VarExp = PCs_outliers[[2]])
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_pc_varexp.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_pc_varexp.txt")
 write.table(varexp, file = n,
             row.names = TRUE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_featuretree.Rdata")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_featuretree.Rdata")
 feature_tree = featuresumstats[[2]]
 save(feature_tree, file = n)
 
@@ -546,7 +544,7 @@ cat( paste0("V. Performing data quality control.\n") )
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
 ##
-cmd = paste0("mkdir -p ", dd, "MetaboQC_release_", today, "/", "qc_data")
+cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "qc_data")
 system(cmd)
 
 ### xenobiotics to exclude
@@ -622,19 +620,19 @@ if( colnames(qcdata$featuredata) == "mydata$featuredata[n, ]" ){ colnames(qcdata
 ## B.3. Write to file
 ##################################
 ## qc metabolite data
-n = paste0(data_dir, "MetaboQC_release_", today, "/qc_data/", project, "_", today, "_QCd_metabolite_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_metabolite_data.txt")
 write.table(qcdata$metabolitedata, file = n,
             row.names = TRUE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
 ## qc sample data
-n = paste0(data_dir, "MetaboQC_release_", today, "/qc_data/", project, "_", today, "_QCd_sample_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_sample_data.txt")
 write.table(qcdata$sampledata, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
 ## qc metabolite data
-n = paste0(data_dir, "MetaboQC_release_", today, "/qc_data/", project, "_", today, "_QCd_feature_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_feature_data.txt")
 write.table(qcdata$featuredata, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
@@ -683,7 +681,7 @@ cat( paste0("\tb. Writing QC'd sample summary statistics to file.\n") )
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
 ## system command
-cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "sumstats/qc_dataset")
+cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "sumstats/qc_dataset")
 system(cmd)
 
 
@@ -692,7 +690,7 @@ if( "sampledata" %in% names(qcdata) ){
   ## add sample stats to the sample annotation file
   samplesumstats = cbind(qcdata$sampledata, samplesumstats[,-1])
 }  
-n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt") 
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt") 
 write.table(samplesumstats, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
@@ -742,7 +740,7 @@ if( "featuredata" %in% names(qcdata) ){
   # featuresumstats$table = cbind(featuresumstats$table[, 1], qcdata$featuredata, featuresumstats$table[, -1])
   featuresumstats$table = cbind( qcdata$featuredata, featuresumstats$table[, -1] )
 }
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 write.table(featuresumstats$table, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = TRUE)
@@ -769,7 +767,7 @@ cat( paste0("\tf. Re-Writing QC sample summary statistics to file to include PCs
 
 ### SAMPLES
 samplesumstats = cbind(samplesumstats, PCs_outliers[[1]][, 1:10] )
-n = paste0(data_dir,  "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 write.table(samplesumstats, file = n,
               row.names = FALSE, col.names = TRUE, 
               sep = "\t", quote = FALSE)
@@ -779,12 +777,12 @@ cat( paste0("\tg. Writing PC statistics to file.\n\n") )
 
 ##
 varexp = data.frame(VarExp = PCs_outliers[[2]])
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_pc_varexp.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_pc_varexp.txt")
 write.table(varexp, file = n,
             row.names = TRUE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
-n = paste0(data_dir, "MetaboQC_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_featuretree.Rdata")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_featuretree.Rdata")
 
 feature_tree = featuresumstats[[2]]
 save(feature_tree, file = n)
@@ -820,10 +818,10 @@ cat( paste0("VII. Generate Data Description pdf report.\n") )
 # ftree = raw_feature_tree
 # project = project
 # platform = platform
-# data_dir = data_dir   # paste0(data_dir, "MetaboQC_release_", today, "/sumstats/")
+# data_dir = data_dir   # paste0(data_dir, "metaboprep_release_", today, "/sumstats/")
 
 ############
-n = paste0(data_dir, "MetaboQC_release_", today, "/ReportData.Rdata")
+n = paste0(data_dir, "metaboprep_release_", today, "/ReportData.Rdata")
 save(raw_data, qcing_data, qc_data, project, platform, data_dir, 
   feature_missingness, sample_missingness, total_peak_area_SD, PC_outlier_SD,  tree_cut_height, file = n)
 ############
@@ -838,7 +836,7 @@ sink()
 ##
 #########################
 ## where to print report
-output_dir_path = paste0(data_dir, "MetaboQC_release_", today, "/")
+output_dir_path = paste0(data_dir, "metaboprep_release_", today, "/")
 ##
 invisible( 
 rmarkdown::render(paste0("QC_Report.Rmd"), 
@@ -849,7 +847,7 @@ rmarkdown::render(paste0("QC_Report.Rmd"),
 
 ## Future alternative when QC_Report.Rmd is in the pacakge release
 ## inst/rmd/
-# rmarkdown::render( input = system.file("rmd/QC_Report.Rmd", package="MetaboQC"),
+# rmarkdown::render( input = system.file("rmd/QC_Report.Rmd", package="metaboprep"),
 #   output_dir = output_dir_path,
 #   output_file = "Project_Data_Report.pdf" , 
 #   params = list(Rdatafile = n, out_dir = output_dir_path) )

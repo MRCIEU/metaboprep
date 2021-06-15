@@ -1,5 +1,5 @@
 ---
-title: "Metabolomics QC Report"
+title: "metaboprep meteabolomics data preparation report"
 date: "`r Sys.Date()`"
 output: 
   pdf_document:
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r args_2_variables, include = FALSE, warning=FALSE, message=FALSE, error=FALSE}
-library(MetaboQC)
+library(metaboprep)
 library(tidyverse)
 suppressPackageStartupMessages(library(dendextend))
 
@@ -37,7 +37,6 @@ suppressPackageStartupMessages(library(dendextend))
 ## 6) project
 ## 7) platform
 
-#n = paste0(data_dir, "MetaboQC_release_", today, "/ReportData.Rdata")
 load(params$Rdatafile)
 out_dir = params$out_dir
 
@@ -65,12 +64,12 @@ qc_data$varexp = qc_data$varexp[,1]
 
 ```
 
-MetaboQC report relates to:
+metaboprep report relates to:
 
   * Project: `r project`  
   * Platform: `r platform`
 
-The `MetaboQC` `R` package performs three operations: 
+The `metaboprep` `R` package performs three operations: 
 
 1. Provides an assessment and summary statistics of the raw metabolomics data.
 2. Performs quality control on the metabolomics data.
@@ -81,17 +80,17 @@ This report provides descriptive information for raw and quality controled metab
 The quality control workflow is as follows:
 
 ```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
-# workflow_fig = knitr::include_graphics("images/MetaboQC_workflow.png")
+# workflow_fig = knitr::include_graphics("images/metaboprep_workflow.png")
 #workflow_fig
 ###
-f = paste0( .libPaths(), "/MetaboQC/help/figures/MetaboQC_workflow.png" )
+f = paste0( .libPaths(), "/metaboprep/help/figures/metaboprep_workflow.png" )
 knitr::include_graphics( f )
 
 ```
 
-1. Issues can be raised on [GitHub](https://github.com/MRCIEU/MetaboQC/issues). 
-2. Questions relating to the `MetaboQC` pipeline can be directed to [David Hughes: d.a.hughes@bristol.ac.uk](mailto:d.a.hughes@bristol.ac.uk).
-3. `MetaboQC` is published in [Journal to be determined]() and can be cited as:
+1. Issues can be raised on [GitHub](https://github.com/MRCIEU/metaboprep/issues). 
+2. Questions relating to the `metaboprep` pipeline can be directed to [David Hughes: d.a.hughes@bristol.ac.uk](mailto:d.a.hughes@bristol.ac.uk).
+3. `metaboprep` is published in [Journal to be determined]() and can be cited as:
 
 
 ***
