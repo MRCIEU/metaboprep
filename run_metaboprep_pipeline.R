@@ -361,6 +361,39 @@ cat( paste0("\t-Your data has ", nrow(mydata$metabolitedata), " individuals and 
 cat( paste0("\t-There are also ", ncol(mydata$sampledata), " sample annotation|batch variables.\n\n") )
 cat( paste0("\t-There are also ", ncol(mydata$featuredata), " feature annotation|batch variables.\n\n") )
 
+############################
+## (VI.I) 
+##  Write Raw Data to file
+############################
+## Make a  raw data directory
+dd = data_dir
+dd = gsub(" ","\\\\ ", dd)
+##
+cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "raw_data")
+system(cmd)
+
+## raw metabolite data
+n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_metabolite_data.txt")
+write.table(mydata$metabolitedata, file = n,
+            row.names = TRUE, col.names = TRUE, 
+            sep = "\t", quote = FALSE)
+
+## raw sample data
+n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_sample_data.txt")
+write.table(mydata$sampledata, file = n,
+            row.names = FALSE, col.names = TRUE, 
+            sep = "\t", quote = FALSE)
+
+## raw metabolite feature data
+n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_feature_data.txt")
+write.table(mydata$featuredata, file = n,
+            row.names = FALSE, col.names = TRUE, 
+            sep = "\t", quote = FALSE)
+
+
+
+
+
 #########################
 ##
 ## (VII)	Estimate  Summary Statistics
@@ -539,12 +572,12 @@ raw_data = list(metabolite_data = mydata$metabolitedata,
 ##################################
 ## A. Perform QC
 ##################################
-cat( paste0("V. Performing data quality control.\n") )
+cat( paste0("V. Performing data filtering.\n") )
 
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
 ##
-cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "qc_data")
+cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "filtered_data")
 system(cmd)
 
 ### xenobiotics to exclude
@@ -569,7 +602,7 @@ if(derived_var_exclusion != "TRUE"){derived_names = NA}
 
 
 ### execute super function
-cat( paste0("\ta. Performing QC on data.\n") )
+cat( paste0("\ta. Performing data filtering.\n") )
 
 qcdata = perform.metabolite.qc(wdata = mydata$metabolitedata,
                                fmis = feature_missingness, 
@@ -620,19 +653,19 @@ if( colnames(qcdata$featuredata) == "mydata$featuredata[n, ]" ){ colnames(qcdata
 ## B.3. Write to file
 ##################################
 ## qc metabolite data
-n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_metabolite_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/filtered_data/", project, "_", today, "_Filtered_metabolite_data.txt")
 write.table(qcdata$metabolitedata, file = n,
             row.names = TRUE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
 ## qc sample data
-n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_sample_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/filtered_data/", project, "_", today, "_Filtered_sample_data.txt")
 write.table(qcdata$sampledata, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
 ## qc metabolite data
-n = paste0(data_dir, "metaboprep_release_", today, "/qc_data/", project, "_", today, "_QCd_feature_data.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/filtered_data/", project, "_", today, "_Filtered_feature_data.txt")
 write.table(qcdata$featuredata, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
@@ -645,12 +678,12 @@ write.table(qcdata$featuredata, file = n,
 ##        on the QC'd Data Set
 ##
 #####################################
-cat( paste0("VI. Estimating Summary Statistics on QC'd Data Set.\n") )
+cat( paste0("VI. Estimating Summary Statistics on Filtered Data Set.\n") )
 
 ##################################
 ## A. Summary Statistics for samples
 ##################################
-cat( paste0("\ta. Estimating summary statistics for QC'd samples\n") )
+cat( paste0("\ta. Estimating summary statistics for Filtered samples\n") )
 
 ## A.1. Estiamte sum stats
 ## Is this metabolon data?? 
@@ -674,14 +707,14 @@ if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
 }
 
 ### A.2. Write sample sum stats to file
-cat( paste0("\tb. Writing QC'd sample summary statistics to file.\n") )
+cat( paste0("\tb. Writing filtered sample summary statistics to file.\n") )
 
-## make a qc_dataset directory inside the sumstats directory in data_dir
+## make a filtered_dataset directory inside the sumstats directory in data_dir
 ## evaluate and account for spaces in file paths
 dd = data_dir
 dd = gsub(" ","\\\\ ", dd)
 ## system command
-cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "sumstats/qc_dataset")
+cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "sumstats/filtered_dataset")
 system(cmd)
 
 
@@ -690,7 +723,7 @@ if( "sampledata" %in% names(qcdata) ){
   ## add sample stats to the sample annotation file
   samplesumstats = cbind(qcdata$sampledata, samplesumstats[,-1])
 }  
-n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt") 
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/filtered_dataset/", project, "_", today, "_sample_anno_sumstats.txt") 
 write.table(samplesumstats, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
@@ -699,7 +732,7 @@ write.table(samplesumstats, file = n,
 ##################################
 ## B. Summary Statistics for features
 ##################################
-cat( paste0("\tc. Estimating summary statistics for QC'd features.\n") )
+cat( paste0("\tc. Estimating summary statistics for filtered features.\n") )
 
 ### sample missingness
 if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
@@ -730,7 +763,7 @@ featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
 
 ## count of independent features
 icount = sum(featuresumstats$table$independent_features_binary)
-cat(paste0("\t\t\t- A total of ", icount ," independent features were identified in the total QC'd data set.\n"))
+cat(paste0("\t\t\t- A total of ", icount ," independent features were identified in the total filtered data set.\n"))
 
 ### write feature sum stats to file
 cat( paste0("\td. Writing feature summary statistics to file.\n") )
@@ -740,7 +773,7 @@ if( "featuredata" %in% names(qcdata) ){
   # featuresumstats$table = cbind(featuresumstats$table[, 1], qcdata$featuredata, featuresumstats$table[, -1])
   featuresumstats$table = cbind( qcdata$featuredata, featuresumstats$table[, -1] )
 }
-n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/filtered_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
 write.table(featuresumstats$table, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = TRUE)
@@ -749,7 +782,7 @@ write.table(featuresumstats$table, file = n,
 ##################################
 ## C. Generation of PCs
 ##################################
-cat( paste0("\te. Performing principle component analysis on final QC data set.\n") )
+cat( paste0("\te. Performing principle component analysis on final filtered data set.\n") )
 
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
@@ -763,11 +796,11 @@ cat( paste0("\t\t\t 1. Cattel's Scree Test : acceleration factor = ", PCs_outlie
 cat( paste0("\t\t\t 1. Parrallel Analysis = ", PCs_outliers$nsig_parrallel ,"\n") )
 
 ### write sample sum stats to file
-cat( paste0("\tf. Re-Writing QC sample summary statistics to file to include PCs.\n") )
+cat( paste0("\tf. Re-Writing filtered sample summary statistics to file to include PCs.\n") )
 
 ### SAMPLES
 samplesumstats = cbind(samplesumstats, PCs_outliers[[1]][, 1:10] )
-n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
+n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/filtered_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 write.table(samplesumstats, file = n,
               row.names = FALSE, col.names = TRUE, 
               sep = "\t", quote = FALSE)
@@ -777,19 +810,19 @@ cat( paste0("\tg. Writing PC statistics to file.\n\n") )
 
 ##
 varexp = data.frame(VarExp = PCs_outliers[[2]])
-n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_pc_varexp.txt")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/filtered_dataset/", project, "_", today, "_pc_varexp.txt")
 write.table(varexp, file = n,
             row.names = TRUE, col.names = TRUE, 
             sep = "\t", quote = FALSE)
 
-n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/qc_dataset/", project, "_", today, "_featuretree.Rdata")
+n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/filtered_dataset/", project, "_", today, "_featuretree.Rdata")
 
 feature_tree = featuresumstats[[2]]
 save(feature_tree, file = n)
 
 #############################
 ##
-## Make a QC data set object
+## Make a FILTERED data set object
 ##
 #############################
 qc_data = list(metabolite_data = qcdata$metabolitedata,
@@ -839,15 +872,15 @@ sink()
 output_dir_path = paste0(data_dir, "metaboprep_release_", today, "/")
 ##
 invisible( 
-rmarkdown::render(paste0("QC_Report.Rmd"), 
+rmarkdown::render(paste0("metaboprep_Report.Rmd"), 
   output_dir = output_dir_path, 
   output_file = "Project_Data_Report.pdf" , params = list(Rdatafile = n, out_dir = output_dir_path)
   )
 )
 
-## Future alternative when QC_Report.Rmd is in the pacakge release
+## Future alternative when metaboprep_Report.Rmd is in the pacakge release
 ## inst/rmd/
-# rmarkdown::render( input = system.file("rmd/QC_Report.Rmd", package="metaboprep"),
+# rmarkdown::render( input = system.file("rmd/metaboprep_Report.Rmd", package="metaboprep"),
 #   output_dir = output_dir_path,
 #   output_file = "Project_Data_Report.pdf" , 
 #   params = list(Rdatafile = n, out_dir = output_dir_path) )

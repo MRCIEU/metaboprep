@@ -33,7 +33,7 @@ suppressPackageStartupMessages(library(dendextend))
 ## 1) not QC'd metabolite
 ## 2) sample data
 ## 3) feature data
-## 4) QC'd metabolite data
+## 4) DF'd metabolite data
 ## 5) data/out directory path
 ## 6) project
 ## 7) platform
@@ -73,12 +73,12 @@ metaboprep report relates to:
 The `metaboprep` `R` package performs three operations: 
 
 1. Provides an assessment and summary statistics of the raw metabolomics data.
-2. Performs quality control on the metabolomics data.
-3. Provides an assessment and summary statistics of the quality controled metabolomics data, particularly in the context of batch variables when available.
+2. Performs data filtering on the metabolomics data.
+3. Provides an assessment and summary statistics of the filtered metabolomics data, particularly in the context of batch variables when available.
 
-This report provides descriptive information for raw and quality controled metabolomics data for the project `r project`. 
+This report provides descriptive information for raw and filtered metabolomics data for the project `r project`. 
 
-The quality control workflow is as follows:
+The data filtering workflow is as follows:
 
 ```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
 ## workflow_fig
@@ -167,7 +167,7 @@ ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of mi
 \textbf{Figure Legend:} Raw data - (a) Distribution of sample missingness with sample mean illustrated by the red vertical line. (b) Distribution of feature missingness sample mean illustrated by the red vertical line. (c) Table of sample and feature missingness percentiles. A tabled version of plot a and b.  (d) Estimates of study samples sizes under various levels of feature missingness. 
 \end{center}
 
-## Quality control 
+## Data Filtering 
 
 ### Exclusion summary
 
@@ -177,7 +177,7 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 ```
 
 \begin{center}
-\textbf{Table Legend}: Six primary quality control exclusion steps were made during the QC of the data.
+\textbf{Table Legend}: Six primary data filtering exclusion steps were made during the preparation of the data.
 (1) Samples with missingness >=20\% were excluded. (2) features with missingness >=20\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
 \end{center}
 
@@ -247,18 +247,18 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 ***
 \pagebreak
 
-# QC data
+# Filtered data
 
 ## N 
   * The number of samples in data = `r nrow(qc_data$metabolite_data)`  
   * The number of features in data = `r ncol(qc_data$metabolite_data)`  
 
 ## Relative to the raw data
-  * `r nrow(raw_data$metabolite_data) - nrow(qc_data$metabolite_data)` samples were QC'd out, given the user's criteria.
-  * `r ncol(raw_data$metabolite_data) - ncol(qc_data$metabolite_data)` features were QC'd out, given the user's criteria.
+  * `r nrow(raw_data$metabolite_data) - nrow(qc_data$metabolite_data)` samples were filtered out, given the user's criteria.
+  * `r ncol(raw_data$metabolite_data) - ncol(qc_data$metabolite_data)` features were filtered out, given the user's criteria.
   * Please review details above and your log file for the number of features and samples excluded and why. 
   
-## Summary of QC data
+## Summary of filtered data
 
 
 ```{r sample_overview, echo = FALSE, fig.width = 15, fig.height = 15, warning=FALSE, message=FALSE, error=FALSE}
@@ -372,7 +372,7 @@ gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plo
 
 
 \begin{center}
-\textbf{Figure Legend:} QC'd data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r qc_data$accelerationfactor`) and Parrallel Analysis (green, n = `r unlist( qc_data$nparallel )`). Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
+\textbf{Figure Legend:} Filtered data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r qc_data$accelerationfactor`) and Parrallel Analysis (green, n = `r unlist( qc_data$nparallel )`). Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
 \end{center}
 
 
@@ -512,9 +512,9 @@ There may be extreme outlying observations at individual metabolites|features th
 ***
 \pagebreak
 
-# Influence of batch variables on QC'd data
+# Influence of batch variables on filtered data
 
-## QC'd data *feature* missingness: influenced by possible explanatory variables 
+## Filtered data *feature* missingness: influenced by possible explanatory variables 
 
 Feature missingness may be influenced by the metabolites (or features) biology or pathway classification, or your technologies methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
 
@@ -580,7 +580,7 @@ if(length(class_variables)>0){
 \end{center}
 
 
-## QC'd data *sample* missingness: influenced by possible explanatory variables 
+## Filtered data *sample* missingness: influenced by possible explanatory variables 
 
 The figure provides an illustrative evaluation of the proportion of *sample missigness* as a product of sample batch variables provided by your supplier. This is the univariate influence of batch effects on *sample missingness*.
    
@@ -748,7 +748,7 @@ if( !is.na(batch_variables[1]) ) {
 
 # Power analysis
 
-**Exploration for case/control and continuous outcome data using the QC'd data set**
+**Exploration for case/control and continuous outcome data using the filtered data set**
 
 Analytical power analysis for both continuous and imbalanced presence/absence correlation analysis.
 
