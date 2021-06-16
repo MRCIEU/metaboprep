@@ -6,7 +6,7 @@ date: June 3rd 2019
 ## This package
 1. Reads in and processes (un)targeted metabolite data, saving datasets in tab-delimited format for use elsewhere
 2. Provides useful summary data in the form of tab-delimited text file and a PDF report.
-3. Performs QC on the data using a standard pipeline and according to user-defined thresholds.
+3. Performs data filtering on the data set using a standard pipeline and according to user-defined thresholds.
 
 ## Install metaboprep
 1. To install do the following
@@ -22,7 +22,7 @@ date: June 3rd 2019
 		3. from this repo download a copy of the following files
 			1. run_metaboprep_pipeline.R
 			2. parameter_file.txt
-			3. QC_Report.Rmd
+			3. metaboprep_Report.Rmd
 			
 			* You can also download or clone the entire repo with
 				
@@ -49,7 +49,7 @@ date: June 3rd 2019
 	2. the paramater file can be located anywhere
 2. Move to the, or a, directory containing both:
 	1. run_metaboprep_pipeline.R
-	2. QC_Report.Rmd
+	2. metaboprep_Report.Rmd
 3. Make sure that R is in your environment - an often necessary step if working on an HPC.
 	1. for example: module add languages/R-3.5-ATLAS-gcc-7.1.0
 4. Run the metaboprep pipeline on a terminal command line as follows:
@@ -66,10 +66,10 @@ date: June 3rd 2019
 	4. produce report with
 		
 		```R
-		full_path_to_QCReport_md = "FULL/PATH/TO/metaboprep/QC_Report.Rmd"
+		full_path_to_metaboprepReport_md = "FULL/PATH/TO/metaboprep/metaboprep_Report.Rmd"
 		full_path_to_OUTPUT_dir = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/"
 		full_path_to_Rdatafile = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/ReportData.Rdata"
-		rmarkdown::render(full_path_to_QCReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
+		rmarkdown::render(full_path_to_metaboprepReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
 		```
 
 ## Data Preparation steps in brief
@@ -87,10 +87,10 @@ date: June 3rd 2019
 3. Write metabolite data, sample annotation and feature annotation to flat text file.
 4. Estimate summary statistics on the raw data set **(step B below)**
 	* write summary stats to file
-5. Perfom the quality control **(step C below)**
+5. Perfom the data filtering **(step C below)**
 	* using parameters passed in the parameter file 
-	* write QC data set to file
-6. Estimate sumary statistics on the QC'd data set **(step B below)**
+	* write data filtering (metaboprep) data set to file
+6. Estimate sumary statistics on the filtered data set **(step B below)**
 	* write summary stats to file
 7. Generate PDF report
 
@@ -138,7 +138,7 @@ date: June 3rd 2019
 			* identify PC outliers
 				* +/- 3,4,5 SD of mean for all significant PCs
 
-### (C) Quality Control Steps
+### (C) Data Filtering Steps
 1. If data is from Metabolon, exclude (but retain for step 11) xenobiotic metabolites from anlaysis.
 2. Estimate sample missingness and exclude extreme samples, those with a missingness >= 0.80 (or 80%) **(derived variables excluded)**
 3. Estimate feature missingness and exclude extreme features, those with a missingness >= 0.80 (or 80%)
@@ -146,12 +146,12 @@ date: June 3rd 2019
 5. Re-estimate feature missingness and exclude features >= user defined threshold (units: 0.2 or 20% missing)
 6. Estimate total peak area (the sum of all values) for each individual using complete features only and exclude samples >= user defined threshold (units: +/- SD from mean)  **(derived variables excluded)**
 	* To ignore this step set to NA in parameter file
-8. Build feature:feature correlation matrix on QC-data derived from steps 1-6 above **(derived variables excluded)**
+8. Build feature:feature correlation matrix on filtered data derived from steps 1-6 above **(derived variables excluded)**
 	* To be included a feature must have a minimun of 50 observations, or N*0.8 observations if data set includes less than 50 individuals.
 9. Identify "independent" features using data from step 8 and user defined tree cut height.
 	* we retain the feature with the least missingness within a cluster, otherwise we select the first feature in the list. 	
 10. Estimate principal components using indpendent features from step 9, and exclude on samples >= user defined threshold (units: +/- SD from the mean)
-11. If the data is from Metabolon we place the xenobiotic metabolites back into the QC'd data set. 
+11. If the data is from Metabolon we place the xenobiotic metabolites back into the filtered data set. 
 
 
 **NOTE: Derived variable are those that are ratios or percentanges of two or more features already present in a data set, such as those found in Nightingale data.**
@@ -166,10 +166,10 @@ date: June 3rd 2019
 	* missingness
 ![](images/missingness_matrix.png)
 ![](images/missingness_hist.png)
-	* table of quanlity control exclusions
+	* table of data filtered exclusions
 	* figure of PCA oulier exclusions
 ![](images/outlier_pca.png)
-3. Summary of quality controled data
+3. Summary of data filtered data
 	* sample size
 	* summary figures
 		+ missingness distributions
