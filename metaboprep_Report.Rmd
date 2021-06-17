@@ -184,7 +184,7 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 ### Metabolite or feature reduction and principal components
 
-A data reduction was carried out to identify a list of representitive features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to ensure that the principal components are not driven by groups of correlated features.
+A data reduction was carried out to identify a list of representative features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to ensure that the principal components are not driven by groups of correlated features.
 
 ```{r PCA_1_2, echo = FALSE, fig.width = 12, fig.height = 6, warning=FALSE, message=FALSE, error=FALSE}
 #################
@@ -231,7 +231,7 @@ pcplot = pcs %>% ggplot( aes(x = PC1, y = PC2) ) +
   geom_vline(xintercept = c(cutoffs[1], -cutoffs[1]), color = pcol[1] ) +
   geom_hline(yintercept = c(cutoffs[2], -cutoffs[2]), color = pcol[1] ) +
   theme(legend.position="bottom") +
-  labs(title = paste0("Principal components 1-&-2 using ",number_of_rep_meatbolites ," representitive metabolites"),
+  labs(title = paste0("Principal components 1-&-2 using ",number_of_rep_meatbolites ," representative metabolites"),
        subtitle  = paste0(" - Outliers are those ", PC_outlier_SD , " SD from the mean of PCs 1 to", accelerationfactor ))
 ##
 # ggpubr::ggarrange( ptable,  pcplot, ncol = 2, nrow = 1, labels = c("a", "b") )
@@ -328,7 +328,7 @@ features_included_in_data_reduction = length( na.omit(qc_data$feature_data$k) )
 cluster_count = length( unique(qc_data$feature_data$k) )
 number_of_rep_meatbolites = sum( qc_data$feature_data$independent_features_binary == 1 )
 
-temp = data.frame( data.reduction = c("total metabolite count","metabolites inculded in data reduction","number of metabolite clusters","number of representitive metabolites"),
+temp = data.frame( data.reduction = c("total metabolite count","metabolites included in data reduction","number of metabolite clusters","number of representative metabolites"),
                    count = c(feature_count,features_included_in_data_reduction, cluster_count, number_of_rep_meatbolites  )  )
 ptable = ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mGreen"))
 #############
@@ -355,7 +355,7 @@ pcol = RColorBrewer::brewer.pal(9, "Set1")
 pcplot = pcs %>% ggplot( aes(x = PC1, y = PC2) ) +
   geom_point( size = 2.5, shape = 21, aes(fill = cluster_k) ) +
   scale_fill_manual(values = pcol[1:4]) +
-  labs( title = paste0("Principal components 1-&-2 using ", number_of_rep_meatbolites ," representitive metabolites"),
+  labs( title = paste0("Principal components 1-&-2 using ", number_of_rep_meatbolites ," representative metabolites"),
         x = paste0("PC1  VarExp = ", signif(qc_data$varexp[1], d = 4)*100, "%" ),
         y = paste0("PC2  VarExp = ", signif(qc_data$varexp[2], d = 4)*100 , "%"),
         fill = paste0("kmeans\ncluster k"))
@@ -372,7 +372,7 @@ gridExtra::grid.arrange( grobs = list(s_mis_plot, f_mis_plot, tpa_plot, tree_plo
 
 
 \begin{center}
-\textbf{Figure Legend:} Filtered data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r qc_data$accelerationfactor`) and Parrallel Analysis (green, n = `r unlist( qc_data$nparallel )`). Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
+\textbf{Figure Legend:} Filtered data summary. Distributions for sample missingness, feature missingness, and total abundance of samples. Row two of the figure provides a Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line. Row three provides a summary of the metabolite data reduction in the table, a Scree plot of the variance explained by each PC and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r qc_data$accelerationfactor`) and Parallel Analysis (green, n = `r unlist( qc_data$nparallel )`). Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
 \end{center}
 
 
@@ -384,7 +384,7 @@ pcapairs_bymoose( as.matrix(pcs[, 1:5]) , qc_data$varexp, pcol = plotcolors)
 ```
 
 \begin{center}
-\textbf{Figure Legend:} A matrix plot of the top five principal componets including demarcations of the 3rd (grey), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs. 
+\textbf{Figure Legend:} A matrix plot of the top five principal components including demarcations of the 3rd (grey), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs. 
 \end{center}
 
 ## Feature Distributions
@@ -474,7 +474,7 @@ mtext( paste0("In ", LogMakesDistributionWorse[1],
 \end{center} 
 
 ### Distributions
-A pdf report is being written to `r paste0( project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visially inspect all your metabolites feature data distributions.
+A pdf report is being written to `r paste0( project, "_outlier_detection_pre_filtering.pdf")` that contains dotplot, histogram and distribution summary statistics for each metabolite in your data set, providing an opportunity to visually inspect all your metabolites feature data distributions.
 
 ## Outliers
 **Evaluation of the number of samples and features that are outliers across the data.**
