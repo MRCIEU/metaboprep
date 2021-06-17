@@ -20,7 +20,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
   }
 
   ## Make a new sub directory
-  cmd = paste0("mkdir -p ", data_dir, "MetaboQC_release_", today)
+  cmd = paste0("mkdir -p ", data_dir, "metaboprep_release_", today)
   system(cmd)
 
   
@@ -213,12 +213,12 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     dd = data_dir
     dd = gsub(" ","\\\\ ", dd)
     ###
-    cmd = paste0("mkdir -p ", dd,  "MetaboQC_release_", today, "/", "raw_data")
+    cmd = paste0("mkdir -p ", dd,  "metaboprep_release_", today, "/", "raw_data")
     system(cmd)
 
     ## (1) Write abundance data to file
     #metabo_out_name = paste0(data_dir, projectname, "_", today, "_Nightingale_metabolitedata.txt")
-    metabo_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname, "_", today, "_Nightingale_metabolitedata.txt")
+    metabo_out_name = paste0(data_dir,  "metaboprep_release_", today, "/raw_data/", projectname, "_", today, "_Nightingale_metabolitedata.txt")
 
     cat( paste0("\t- Writing your metabolite data set to the tab-delmited text file ", metabo_out_name,  "\n") )
     write.table(metabolite_data, file = metabo_out_name, row.names = TRUE,
@@ -229,7 +229,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
       cat( paste0("\t- Your data contains a metadata excel file.\n") )
       ##
       #sampledata_out_name = paste0(data_dir, projectname, "_",today,"_Nightingale_sampledata.txt")
-      sampledata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname, "_",today,"_Nightingale_sampledata.txt")
+      sampledata_out_name = paste0(data_dir,  "metaboprep_release_", today, "/raw_data/", projectname, "_",today,"_Nightingale_sampledata.txt")
       ##
       cat( paste0("\t- Writing your metadata to the tab-delmited text file ", sampledata_out_name,  "\n") )
       write.table(metadata, file = sampledata_out_name, row.names = FALSE,
@@ -247,7 +247,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     cat( paste0("\t- A feature annotation file is being generated.\n") )
     ##
     #featuredata_out_name = paste0(data_dir, projectname,"_",today, "_Nightingale_featuredata.txt")
-    featuredata_out_name = paste0(data_dir,  "MetaboQC_release_", today, "/raw_data/", projectname,"_",today, "_Nightingale_featuredata.txt")
+    featuredata_out_name = paste0(data_dir,  "metaboprep_release_", today, "/raw_data/", projectname,"_",today, "_Nightingale_featuredata.txt")
     
     
     cat( paste0("\t- Writing your feature annotation to the tab-delmited text file ", featuredata_out_name,  "\n") )

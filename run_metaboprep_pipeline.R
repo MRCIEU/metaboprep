@@ -361,39 +361,6 @@ cat( paste0("\t-Your data has ", nrow(mydata$metabolitedata), " individuals and 
 cat( paste0("\t-There are also ", ncol(mydata$sampledata), " sample annotation|batch variables.\n\n") )
 cat( paste0("\t-There are also ", ncol(mydata$featuredata), " feature annotation|batch variables.\n\n") )
 
-############################
-## (VI.I) 
-##  Write Raw Data to file
-############################
-## Make a  raw data directory
-dd = data_dir
-dd = gsub(" ","\\\\ ", dd)
-##
-cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "raw_data")
-system(cmd)
-
-## raw metabolite data
-n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_metabolite_data.txt")
-write.table(mydata$metabolitedata, file = n,
-            row.names = TRUE, col.names = TRUE, 
-            sep = "\t", quote = FALSE)
-
-## raw sample data
-n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_sample_data.txt")
-write.table(mydata$sampledata, file = n,
-            row.names = FALSE, col.names = TRUE, 
-            sep = "\t", quote = FALSE)
-
-## raw metabolite feature data
-n = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today, "_raw_feature_data.txt")
-write.table(mydata$featuredata, file = n,
-            row.names = FALSE, col.names = TRUE, 
-            sep = "\t", quote = FALSE)
-
-
-
-
-
 #########################
 ##
 ## (VII)	Estimate  Summary Statistics
