@@ -95,7 +95,7 @@ knitr::include_graphics( f )
 
 
 ***
-\pagebreak
+
 
 # Sample size of `r project` data set
 
@@ -245,7 +245,7 @@ gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 
 \end{center}
 
 ***
-\pagebreak
+
 
 # Filtered data
 
@@ -510,7 +510,6 @@ There may be extreme outlying observations at individual metabolites|features th
 
 
 ***
-\pagebreak
 
 # Influence of batch variables on filtered data
 
@@ -744,7 +743,6 @@ if( !is.na(batch_variables[1]) ) {
 
 
 ***
-\pagebreak
 
 # Power analysis
 
