@@ -1,5 +1,5 @@
 ---
-title: "metaboprep meteabolomics data preparation report"
+title: "metaboprep metabolomics data preparation report"
 date: "`r Sys.Date()`"
 output: 
   pdf_document:
@@ -108,7 +108,7 @@ knitr::include_graphics( f )
 #  kableExtra::kable_styling(latex_options = "scale_down") %>%
 #  kableExtra::row_spec(1:2, bold = TRUE, color = 'black')
 # 
-tout = data.frame("data.set" = c("number of samples","number of features"),  "raw.data" = dim(raw_data$metabolite_data), "qc.data" = dim(qc_data$metabolite_data))
+tout = data.frame("data.set" = c("number of samples","number of features"),  "raw.data" = dim(raw_data$metabolite_data), "filtered.data" = dim(qc_data$metabolite_data))
 ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
 ```
 
@@ -178,7 +178,7 @@ ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mBlue"))
 
 \begin{center}
 \textbf{Table Legend}: Six primary data filtering exclusion steps were made during the preparation of the data.
-(1) Samples with missingness >=20\% were excluded. (2) features with missingness >=20\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
+(1) Samples with missingness >=80\% were excluded. (2) features with missingness >=80\% were excluded (xenobiotics are not included in this step). (3) sample exclusions based on the user defined threshold were excluded. (4) feature exclusions based on user defined threshold were excluded (xenobiotics are not included in this step). (5) samples with a total-peak-area or total-sum-abundance that is >= N standard deviations from the mean, where N was defined by the user, were excluded. (6) samples that are >= N standard deviations from the mean on principal component axis 1 and 2, where N was defined by the user, were excluded. 
 \end{center}
 
 
@@ -667,7 +667,7 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 \begin{center}
-\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*.
+\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the percent of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*.
 \end{center}
 
 # Sample Total Peak|Abundance Area (TPA):
@@ -739,7 +739,7 @@ if( !is.na(batch_variables[1]) ) {
   }
 ```
 \begin{center}
-\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on thçe proportion of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *total peak|abundance area* at complete features.
+\textbf{Table Legend:} TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the percent of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *total peak|abundance area* at complete features.
 \end{center}
 
 
@@ -767,7 +767,7 @@ ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
 
 ```
 \begin{center}
-\textbf{Figure Legend:} Simulated effect sizes are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axix. The total sample size is set to `r nrow(qc_data$metabolite_data)` and the x-axis depicts the number of individuals present (or absent) for the trait. 
+\textbf{Figure Legend:} Simulated effect sizes are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axix. The total sample size is set to `r nrow(qc_data$metabolite_data)` and the x-axis depicts the number of individuals present (or absent) for the trait. The effects sizes illustrated here were chosen by running an initial set of simulations which identified effects sizes that would span a broad range of power estimates given the sample population's sample size. 
 \end{center}
 
 
