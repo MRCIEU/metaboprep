@@ -415,7 +415,7 @@ normcount = sum(wstat >= 0.95, na.rm = TRUE)
 ```
 
 
-```{r shpiroW, echo = FALSE, fig.width = 10, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
+```{r shapiroW, echo = FALSE, fig.width = 10, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 W = wstat
 pcol = RColorBrewer::brewer.pal(9, "Set1")
 ###
@@ -479,7 +479,7 @@ A pdf report is being written to `r paste0( project, "_outlier_detection_pre_fil
 ## Outliers
 **Evaluation of the number of samples and features that are outliers across the data.**
 
-```{r, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
+```{r outliers, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 today = Sys.Date()
 today = gsub("-","_",today)
   
@@ -492,7 +492,7 @@ outlier_summary = outlier.summary(dtst = qc_data$metabolite_data,
                            nsd = 5)
 ```
 
-```{r, echo = FALSE, fig.width = 8, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
+```{r outlier_summary, echo = FALSE, fig.width = 8, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 outlier_summary[[2]]
 ```
 \begin{center}
@@ -527,24 +527,34 @@ possible_batch_variables = c("path","platform", "class", "batch")
 # w = which(possible_batch_variables %in% colnames(qc_data$feature_data) )
 # matched_variables = possible_batch_variables[w]
 w = unique( unlist( sapply(possible_batch_variables, function(x){ grep(x, tolower( colnames(qc_data$feature_data)  )  ) }) ) )
-matched_variables = colnames(qc_data$feature_data)[w]
-
-## batch variables, that are variable in the sample
-w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){length(table(x))}) > 1 )
-matched_variables = matched_variables[w]
-## insure group sizes are larger than 1
-w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) >= 0.25 )
-matched_variables = matched_variables[w]
-## insure the number of variables is not larger than 96
-w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){  length(table(x)) }) < 97 )
-matched_variables = matched_variables[w]
-
-class_variables = matched_variables
-
-if( "SUB_PATHWAY" %in% class_variables ){
-  w = which(class_variables %in% "SUB_PATHWAY")
-  class_variables = class_variables[-w]
+if(length(w)>0){
+  matched_variables = colnames(qc_data$feature_data)[w]
+  
+  ## remove batch variables, that are invariable in the sample
+  w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ length(table(x)) }) <= 1 )
+  if(length(w)>0){
+    matched_variables = matched_variables[-w]  
   }
+  ## insure group sizes are larger than 1
+  w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) < 0.25 )
+  if(length(w)>0){
+    matched_variables = matched_variables[-w]  
+  }
+  ## insure the number of variables is not larger than 96
+  w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){  length(table(x)) }) > 96 )
+  if(length(w)>0){
+    matched_variables = matched_variables[-w]  
+  }
+  
+  ## define the class_variables
+  class_variables = matched_variables
+  
+  if( "SUB_PATHWAY" %in% class_variables ){
+    w = which(class_variables %in% "SUB_PATHWAY")
+    class_variables = class_variables[-w]
+  }
+
+}
 
 
 ```
