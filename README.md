@@ -41,6 +41,15 @@ date: June 3rd 2019
 			```R
 			devtools::install("metaboprep")
 			```
+			
+	3. A common installation error is produced by installation errors of dependent packages. If you experience this, install those dependent packages manually with BiocManager, and then attempt the installation of metaboprep again. You might have to repeat this step more than once. 
+
+		```R
+		if (!requireNamespace("BiocManager", quietly = TRUE))
+	   install.packages("BiocManager")
+		BiocManager::install()
+		```
+
 
 ## To run metaboprep
 
@@ -201,4 +210,4 @@ date: June 3rd 2019
 5. Power Analysis
 	* presence -vs- absence
 	* continuous
-![](images/power.png)
+![](images/power_v2.png)
