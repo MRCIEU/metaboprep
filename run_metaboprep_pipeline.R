@@ -588,7 +588,7 @@ cat( paste0("\tb. Writing QC data to file.\n\n") )
 
 #############################
 ##
-## B.1. Make a QCing the data set object
+## B.1. Make a QCing data set object
 ##
 #############################
 qcing_data = list(metabolite_data = qcdata$wdata,

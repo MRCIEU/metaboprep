@@ -175,10 +175,16 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   cat( paste0("\t\t- QCstep: Perform Principle Componenet Analysis of currently QC'd data.\n") )
   PCs_outliers = pc.and.outliers(metabolitedata =  wdata, 
                                  indfeature_names = ind_feature_names )
-  pcs = PCs_outliers[[1]][, 1:2]
-
-  ## perform exclusion on PC outliers
-  cat( paste0("\t\t- QCstep: Identify PC 1-&-2 outliers >= +/-", PC_out_SD , "SD of the mean.\n") )
+  ## extract PCs 1-2 or 1-number of Acceleration factor PCs 
+  af = as.numeric( PCs_outliers[[3]] )
+  if(af<2){
+    pcs = PCs_outliers[[1]][, 1:2]  
+  } else {
+    pcs = PCs_outliers[[1]][, 1:af]  
+  }
+  
+  ## perform exclusion on top PCs to ID outliers
+  cat( paste0("\t\t- QCstep: Identify PC 1-&-",af," outliers >= +/-", PC_out_SD , "SD of the mean.\n") )
   if( is.na(PC_out_SD) == FALSE){
     outliers = outlier.matrix(pcs, nsd = PC_out_SD)
     outliers = apply(outliers, 1, sum)
