@@ -184,7 +184,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   }
   
   ## perform exclusion on top PCs to ID outliers
-  cat( paste0("\t\t- QCstep: Identify PC 1-&-",af," outliers >= +/-", PC_out_SD , "SD of the mean.\n") )
+  cat( paste0("\t\t- QCstep: Identify PC 1-",af," outliers >= +/-", PC_out_SD , "SD of the mean.\n") )
   if( is.na(PC_out_SD) == FALSE){
     outliers = outlier.matrix(pcs, nsd = PC_out_SD)
     outliers = apply(outliers, 1, sum)
