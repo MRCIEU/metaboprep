@@ -47,13 +47,14 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   if( ncol(samplemis) == 2){
     r = which(samplemis[,2] >= 0.8)
     } else {
+      samplemis$sample_missingness_w_exclusions = samplemis$sample_missingness
       r = which(samplemis[,1] >= 0.8)    
     }
   exclusion_data[1,1] = length(r)
   ###
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for extreme missingness.\n") )
-    wdata = wdata[ -r, ]; samplemis = samplemis[-r] 
+    wdata = wdata[ -r, ]; samplemis = samplemis[-r,] 
   } else {
     cat( paste0("\t\t\t* 0 samples excluded for extreme missingness.\n") )
   }
@@ -90,16 +91,17 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   ## 6) exclude samples defined by user ( smis >= 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those sample with missingness >= ", smis*100,"%.\n") )
   if( ncol(samplemis) == 2){
-    r = which(samplemis[,2] >= 0.8)
+    r = which(samplemis[,2] >= smis)
     } else {
-      r = which(samplemis[,1] >= 0.8)    
+      samplemis$sample_missingness_w_exclusions = samplemis$sample_missingness
+      r = which(samplemis[,1] >= smis)    
     }
   exclusion_data[3,1] = length(r)
   ##
   if( length(r) > 0) { 
     cat( paste0("\t\t\t* ", length(r), " sample(s) excluded for user defined missingness.\n") )
     wdata = wdata[ -r, ]
-    samplemis = samplemis[-r] 
+    samplemis = samplemis[-r,] 
   } else {
     cat( paste0("\t\t\t* 0 samples excluded for user defined missingness.\n") )
   }
@@ -115,7 +117,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
   
   ## exclude features based on user defined feature missingness ( fmis > 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= ", fmis*100,"%.\n") )
-  r = which(featuremis >= fmis)
+  r = which(featuremis[,1] >= fmis)
   exclusion_data[4,1] = length(r)
   ##
   if( length(r) > 0) {  
