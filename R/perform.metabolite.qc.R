@@ -66,7 +66,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     } else {
       SM = samplemis[,1]
     }
-  featuremis = feature.missingness(wdata = wdata, samplemissingness = SM)
+  featuremis = feature.missingness(wdata = wdata, samplemissingness = NA)
   
   ## 4) exclude terrible features (fmis > 0.8)
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= 80%.\n") )
@@ -113,7 +113,7 @@ perform.metabolite.qc = function(wdata, fmis = 0.2, smis = 0.2,
     } else {
       SM = samplemis[,1]
     }
-  featuremis = feature.missingness(wdata = wdata, samplemissingness = SM)
+  featuremis = feature.missingness(wdata = wdata, samplemissingness = NA)
   
   ## exclude features based on user defined feature missingness ( fmis > 0.2 (default) )
   cat( paste0("\t\t- QCstep: exclude those features with missingness >= ", fmis*100,"%.\n") )
