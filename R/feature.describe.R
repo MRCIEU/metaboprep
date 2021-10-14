@@ -28,15 +28,22 @@ feature.describe = function(wdata){
         W_raw = NA; W_log = NA
       } else {
       W_raw = shapiro.test(x)$stat
-      ## accounting for 0's
-      ## seting the 0 values (-Inf) to 
-      ## 1/2 of the minimum value
-          # a = x[x != 0]
-      a = log10(x)
-      w = which(a == "-Inf")
-      if(length(w)>0){
+      
+      ## normalized data may have negative values
+      ## we must account for this possibility
+      ## before log transformation
+      a = x
+      if( sum(a<0,na.rm = TRUE)>0 ){ a = a-min(a, na.rm = TRUE) }
+
+      ## if there are any 0 values in the data
+      ## we shall set the to 1/2 of the obs min
+      if( sum(a==0,na.rm = TRUE)>0 ){ 
+        w = which(a==0)
         a[w] = min(a[-w], na.rm = TRUE)/2  
-      }
+       }
+      ## log transform    
+      a = log10(a)
+      ## shapiro test of log data
       W_log = shapiro.test(  a  )$stat
       }
     
