@@ -1,6 +1,6 @@
 Package: metaboprep
 Title: Metabolomics data preparation and processing pipeline
-Version: 0.0.1
+Version: 1.0
 Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
     person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")) )
 Description: Reads in raw Metabolon and Nightingale xls sheets and aids in data preparation of all metabolomics data sets.
@@ -8,7 +8,7 @@ Depends: R (>= 3.5.0)
 License: CC0
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
 Imports:
     car,
     corrplot,
