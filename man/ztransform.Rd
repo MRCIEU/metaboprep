@@ -14,7 +14,7 @@ ztransform(formula, data, family = gaussian)
 \item{family}{Defaulted to gaussian. Do not suggest editing}
 }
 \description{
-This function allows you to z  transform a vector of data.
+This function z-transforms a vector of data.
 }
 \examples{
 rntransform()

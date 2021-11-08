@@ -16,7 +16,7 @@ rntransform(formula, data, family = gaussian, split_ties = FALSE)
 \item{split_ties}{Defualted to FALSE. If TRUE is provided all tied values will be randomly ranked in the function rank()}
 }
 \description{
-This function allows you to rank normal transform a vector of data.
+This function rank-normal transform a vector of data, and by default splits tied values randomly
 }
 \examples{
 rntransform()

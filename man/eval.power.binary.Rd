@@ -19,4 +19,6 @@ This function allows you estimate power for a binary variable given the sample s
 \examples{
 eval.power.binary()
 }
-\keyword{metabolomics}
+\keyword{binary}
+\keyword{estimator}
+\keyword{power}

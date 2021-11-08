@@ -60,7 +60,7 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     
     #########################
     ## TASK 1
-    ## read in the data
+    ## read in the first data sheet
     #########################
     ## Progress Statement
     cat( paste0("\t- Reading in sheet 2\n") )
@@ -151,9 +151,15 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     
     ## save primary raw metabolite data to a new element
     primary_metabolitedata = metabolitedata
-    
+    rm(metabolitedata)
     #########################
     ## TASK 5
+    ##  Define mydata
+    #########################
+    mydata = list(metabolitedata = primary_metabolitedata, sampledata = samplesheet, featuredata = featuresheet )
+    
+    #########################
+    ## TASK 6
     ##  Process Metabolite Data
     ##  on all other tabs
     #########################
@@ -188,16 +194,19 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
       ## Transpose and redefine column (metabolite) names to COMPIDs
       metabolitedata = t(metabolitedata)
       colnames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
-      #rownames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
-      #metabolitedata = t(metabolitedata)
       
+      ## add data to mydata
+      mydata[[sheetnames[i]]] = metabolitedata
+
       ## write table to file
       outname = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
       write.table(metabolitedata, file = outname, row.names = TRUE, col.names = TRUE, sep = "\t", quote = FALSE)
     }
     
-    ### return data to user
-    mydata = list(metabolitedata = primary_metabolitedata, sampledata = samplesheet, featuredata = featuresheet )
+    #########################
+    ## TASK 7
+    ## return data to user
+    ######################### 
     return(mydata)
     
   }  ### END OF ELSE STATAMENT, yes you passed the function an excel sheet

@@ -10,6 +10,8 @@ pcapairs_bymoose(myloadings, varexp, pcol = "dodgerblue")
 \item{myloadings}{PC loadings}
 
 \item{varexp}{the variance explained by each PC in a vector.}
+
+\item{pcol}{plot colors for the dots background}
 }
 \description{
 This function to plot PCs in a matrix
