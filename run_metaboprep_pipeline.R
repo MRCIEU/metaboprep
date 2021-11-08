@@ -20,7 +20,7 @@
 library(metaboprep)
 
 ## define nightingale object
-ng_anno = metaboprep:::ng_anno
+# ng_anno = metaboprep:::ng_anno
 
 #########################################
 ##
@@ -360,6 +360,69 @@ cat( paste0("III. Your data has been read in.\n\n") )
 cat( paste0("\t-Your data has ", nrow(mydata$metabolitedata), " individuals and ", ncol(mydata$metabolitedata), " metabolites.\n\n") )
 cat( paste0("\t-There are also ", ncol(mydata$sampledata), " sample annotation|batch variables.\n\n") )
 cat( paste0("\t-There are also ", ncol(mydata$featuredata), " feature annotation|batch variables.\n\n") )
+if(length(mydata)>3){
+  for(i in 4:length(mydata)){
+    cat( paste0("\t-Your data also has an additional metabolite data tab named ", names(mydata)[i] ," with ", nrow(mydata[[i]]), " individuals and ", ncol(mydata[[i]]), " metabolites.\n\n") )
+  }  
+}
+
+#########################
+##
+## (VII)  Normalize MS data
+##        - such as Metabolon
+#########################
+if(platform == "Metabolon"){
+  cat( paste0("   Performing normilization on Metabolon Data.\n\n") )
+  ##################################################
+  ## look for run mode information in feature data
+  ##################################################
+  w = which(colnames(mydata$featuredata) %in% c("PLATFORM","platform"))
+  if(length(w) == 1){
+    runmode = unlist( mydata$featuredata[w] )
+    ## remove "LC/MS " if present
+    runmode = gsub("LC\\/MS\\ ","",runmode)
+    ## remove spaces 
+    runmode = gsub(" ","",runmode)
+    ## make lower case
+    runmode = tolower(runmode)
+
+    batchrunmodes = unique(runmode)
+  } else {
+    cat(paste0(" -- NOTE: Unable to identify a column header called 
+            'PLATFORM' or 'platform' in the feature data sheet.
+            This is necessary to perform batch normalization\n\n") )
+
+  }
+  ##################################################
+  ## look batch info in the sample sheet
+  ##################################################
+  n = tolower( colnames(mydata$sampledata) )
+  ## remove spaces 
+  n = gsub(" ","",n)
+  ## remove underscore 
+  n = gsub("_","",n)
+  ## remove dots 
+  n = gsub("\\.","",n)
+  ##
+  w = which(n %in% runmode)
+  if(length(w) == length(batchrunmodes) ){
+    ## perfom normalization
+
+  } else {
+    cat(paste0(" -- NOTE: Unable to identify a column headers in sample sheet 
+               that match the platform run modes found in the feature data sheet.
+              This should be something like neg, polar, pos early, pos late.") )
+
+    cat( paste0("\n -- NOTE: We will take the ScaledImpData data and remove 
+                the imputed data to extract the normalized data.\n\n") )
+    
+    ndata = mydata$ScaledImpData
+    ndata[is.na(mydata$metabolitedata)] = NA
+    mydata[["raw_metabolitedata"]] = mydata$metabolitedata
+    mydata$metabolitedata = ndata
+    rm(ndata)
+  }
+}
 
 #########################
 ##
@@ -559,19 +622,10 @@ derived_names = as.character( mydata$featuredata$feature_names[w] )
 if(length(derived_names) == 0){derived_names = NA}
 if(derived_var_exclusion != "TRUE"){derived_names = NA}
 
-# ## independent features
-# q = which(featuresumstats$table$independent_features_binary == 1)
-# if(length(q) > 0){
-#   ind = rownames(featuresumstats$table)[q]  
-# } else {
-#   ind = NA
-# }
-
-
 ### execute super function
 cat( paste0("\ta. Performing data filtering.\n") )
 
-qcdata = perform.metabolite.qc(wdata = mydata$metabolitedata,
+dataQC = perform.metabolite.qc(wdata = mydata$metabolitedata,
                                fmis = feature_missingness, 
                                smis = sample_missingness, 
                                feature_colnames_2_exclude = xeno_names,
@@ -591,21 +645,21 @@ cat( paste0("\tb. Writing QC data to file.\n\n") )
 ## B.1. Make a QCing data set object
 ##
 #############################
-qcing_data = list(metabolite_data = qcdata$wdata,
-  exclusion_data = qcdata$exclusion_data,
-  feature_sumstats = qcdata$featuresumstats$table,
-  feature_tree = qcdata$featuresumstats$tree,
-  pcs = qcdata$pca$pcs,
-  varexp = qcdata$pca$varexp,
-  accelerationfactor = qcdata$pca$accelerationfactor,
-  nparallel = qcdata$pca$nsig_parrallel
+qcing_data = list(metabolite_data = dataQC$wdata,
+  exclusion_data = dataQC$exclusion_data,
+  feature_sumstats = dataQC$featuresumstats$table,
+  feature_tree = dataQC$featuresumstats$tree,
+  pcs = dataQC$pca$pcs,
+  varexp = dataQC$pca$varexp,
+  accelerationfactor = dataQC$pca$accelerationfactor,
+  nparallel = dataQC$pca$nsig_parrallel
   )
 
 
 ##################################
 ## B.2. Add sample and feature data to qcdata
 ##################################
-temp = qcdata$wdata
+temp = dataQC$wdata
 m = match( rownames(temp) , mydata$sampledata[,1] )
 n = match( colnames(temp) , mydata$featuredata[,1] )
 qcdata = list(metabolitedata = temp, 
@@ -838,20 +892,15 @@ sink()
 ## where to print report
 output_dir_path = paste0(data_dir, "metaboprep_release_", today, "/")
 ##
-invisible( 
-rmarkdown::render(paste0("metaboprep_Report.Rmd"), 
-  output_dir = output_dir_path, 
-  output_file = "Project_Data_Report.pdf" , params = list(Rdatafile = n, out_dir = output_dir_path)
-  )
-)
-
-## Future alternative when metaboprep_Report.Rmd is in the pacakge release
-## inst/rmd/
-# rmarkdown::render( input = system.file("rmd/metaboprep_Report.Rmd", package="metaboprep"),
-#   output_dir = output_dir_path,
-#   output_file = "Project_Data_Report.pdf" , 
-#   params = list(Rdatafile = n, out_dir = output_dir_path) )
-
+# invisible( 
+# rmarkdown::render(paste0("metaboprep_Report.Rmd"), 
+#   output_dir = output_dir_path, 
+#   output_file = "Project_Data_Report.pdf" , params = list(Rdatafile = n, out_dir = output_dir_path)
+#   )
+# )
+####
+rdfile = paste0(output_dir_path, "ReportData.Rdata")
+generate_report(full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
 
 
 
