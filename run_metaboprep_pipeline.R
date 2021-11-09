@@ -11,7 +11,6 @@
 ## > Rscript run_metaboprep_pipeline.R paramater_file.txt 
 ######################################
 
-
 #######################################
 ##
 ## I) Load the metaboprep R package
@@ -64,9 +63,6 @@ data_dir <- as.character( pfile[2,2] )
 if(substring(data_dir, nchar(data_dir)) != "/"){
   data_dir = paste0(data_dir,"/")
 }
-# cat(paste0("I. Setting up your pipeline\n"))
-# cat(paste0("\t-Your data directory is: ", data_dir, "\n"))
-
 
 #######################################
 ##
@@ -104,10 +100,10 @@ METABO_file2process = as.character( pfile[3,2] )
 ## identify the file type
 xl_ftype = c(".xls",".xlsx", ".XLS", ".XLSX")
 isexcel = sum(unlist( sapply(xl_ftype, function(x){ grep(x, METABO_file2process) } ) ) )
-##
+
 flat_ftype = c(".csv",".txt", ".tsv", ".TXT", ".CSV", ".TSV")
 isflat = sum(unlist( sapply(flat_ftype, function(x){ grep(x, METABO_file2process) } ) ) )
-#file2process = as.character( pfile[3,2] )
+
 cat(paste0("\t- Your metabolite data file is: ", METABO_file2process, "\n"))
 if(isexcel > 0){
   cat(paste0("\t\tYour metabolite data file was identified as an excel sheet\n\t\tand will be processed as a commercial source file.\n"))  
@@ -416,11 +412,23 @@ if(platform == "Metabolon"){
     cat( paste0("\n -- NOTE: We will take the ScaledImpData data and remove 
                 the imputed data to extract the normalized data.\n\n") )
     
-    ndata = mydata$ScaledImpData
-    ndata[is.na(mydata$metabolitedata)] = NA
-    mydata[["raw_metabolitedata"]] = mydata$metabolitedata
-    mydata$metabolitedata = ndata
-    rm(ndata)
+    scaled_imputed_data_tab = grep("ScaledImp", names(mydata))
+    if(length(scaled_imputed_data_tab) == 1){
+      ndata = mydata[[scaled_imputed_data_tab]]
+      
+      if(sum(is.na(mydata$metabolitedata))>0){
+        ndata[is.na(mydata$metabolitedata)] = NA  
+      }
+      
+      mydata[["raw_metabolitedata"]] = mydata$metabolitedata
+      mydata$metabolitedata = ndata 
+      rm(ndata) 
+    } else {
+      cat( paste0("\n -- NOTE: Unable to identify a 'ScaledImp' data tab 
+                in the excel file. No normalization possible.\n\n") )
+    }
+    
+    
   }
 }
 
@@ -441,7 +449,6 @@ cat( paste0("\ta. Estimating summary statistics for samples\n") )
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
   w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-  # xeno_names = rownames(mydata$featuredata)[w]
   xeno_names = mydata$featuredata$feature_names[w]
   samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names )
 } else {
@@ -483,14 +490,6 @@ write.table( samplesumstats, file = n,
            row.names = FALSE, col.names = TRUE, 
            sep = "\t", quote = FALSE)
 
-# } else {
-#   n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_sumstats.txt")
-#   write.table(samplesumstats, file = n,
-#               row.names = FALSE, col.names = TRUE, 
-#               sep = "\t", quote = FALSE)
-# }
-
-
 ##################################
 ## B. Summary Statistics for features
 ##################################
@@ -503,18 +502,14 @@ if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
     sammis = samplesumstats$sample_missingness
   }
 
-### features to exclude
-# if(  length(mydata$featuredata$SUPER_PATHWAY) > 0 ){
-#   w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-#   fn2e = as.character( rownames(mydata$featuredata)[w] )
-# } else {
-    if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
-      w = which( mydata$featuredata$derived_features == "yes") 
-      fn2e = as.character( mydata$featuredata$feature_names[w] )
-    } else {
-        fn2e = NA
-      }
-#    }
+### feature names to exclude
+if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+  w = which( mydata$featuredata$derived_features == "yes") 
+  fn2e = as.character( mydata$featuredata$feature_names[w] )
+} else {
+    fn2e = NA
+  }
+
 
 ### RUN feature summary stats funtion
 featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
@@ -527,22 +522,12 @@ featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
 cat( paste0("\t\t- Writing feature summary statistics to file.\n") )
 
 if( "featuredata" %in% names(mydata) ){
-  # mydata$featuredata = cbind(mydata$featuredata, featuresumstats$table[,-1])
   featuresumstats$table = cbind( mydata$featuredata, featuresumstats$table[,-1])
 }
 n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_anno_sumstats.txt")
-# write.table(mydata$featuredata, file = n,
 write.table(featuresumstats$table, file = n,
             row.names = FALSE, col.names = TRUE, 
             sep = "\t", quote = TRUE)
-
-# } else {
-#   n = paste0(data_dir, "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_feature_sumstats.txt")
-#   write.table(featuresumstats$table, file = n,
-#               row.names = TRUE, col.names = TRUE, 
-#               sep = "\t", quote = TRUE)
-# }
-
  
 ##################################
 ## C. PC outliers
@@ -612,7 +597,6 @@ system(cmd)
 
 ### xenobiotics to exclude
 w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics" ) 
-# xeno_names = rownames( mydata$featuredata )[w]
 xeno_names = mydata$featuredata$feature_names[w]
 if( length(xeno_names) == 0){xeno_names = NA}
 
@@ -667,8 +651,8 @@ qcdata = list(metabolitedata = temp,
   featuredata = as.data.frame( mydata$featuredata[n,] ) )
 rm(temp)
 
-if( colnames(qcdata$sampledata) == "mydata$sampledata[m, ]" ){ colnames(qcdata$sampledata) = "SampleID" }
-if( colnames(qcdata$featuredata) == "mydata$featuredata[n, ]" ){ colnames(qcdata$featuredata) = "feature_names" }
+if( colnames(qcdata$sampledata)[1] == "mydata$sampledata[m, ]" ){ colnames(qcdata$sampledata)[1] = "SampleID" }
+if( colnames(qcdata$featuredata)[1] == "mydata$featuredata[n, ]" ){ colnames(qcdata$featuredata)[1] = "feature_names" }
 
 ##################################
 ## B.3. Write to file
@@ -762,18 +746,13 @@ if( length(samplesumstats$sample_missingness_w_exclusions) > 0 ){
     sammis = samplesumstats$sample_missingness
   }
 
-### features to exclude
-# if(  length(qcdata$featuredata$SUPER_PATHWAY) > 0 ){
-#   w = which( qcdata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
-#   fn2e = as.character( rownames(qcdata$featuredata)[w] )
-# } else {
-    if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
-      w = which( qcdata$featuredata$derived_features == "yes") 
-      fn2e = as.character( qcdata$featuredata$feature_names[w] )
-    } else {
-        fn2e = NA
-      }
-   # }
+### feature names to exclude
+if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
+  w = which( qcdata$featuredata$derived_features == "yes") 
+  fn2e = as.character( qcdata$featuredata$feature_names[w] )
+} else {
+    fn2e = NA
+  }
 
 ### RUN feature summary stats funtion
 featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
@@ -855,24 +834,12 @@ qc_data = list(metabolite_data = qcdata$metabolitedata,
   nparallel = PCs_outliers$nsig_parrallel
   )
 
-  
-
 #########################
 ##
 ## (IX) Save Data
 ##
 #########################
-cat( paste0("VII. Generate Data Description pdf report.\n") )
-
-# metdata = mydata$metabolitedata
-# sdata = mydata$sampledata
-# fdata = mydata$featuredata
-# qdata = qcdata$metabolitedata
-# varexp = raw_varexp
-# ftree = raw_feature_tree
-# project = project
-# platform = platform
-# data_dir = data_dir   # paste0(data_dir, "metaboprep_release_", today, "/sumstats/")
+cat( paste0("VII. Generate Data Description html report.\n") )
 
 ############
 n = paste0(data_dir, "metaboprep_release_", today, "/ReportData.Rdata")
@@ -891,14 +858,6 @@ sink()
 #########################
 ## where to print report
 output_dir_path = paste0(data_dir, "metaboprep_release_", today, "/")
-##
-# invisible( 
-# rmarkdown::render(paste0("metaboprep_Report.Rmd"), 
-#   output_dir = output_dir_path, 
-#   output_file = "Project_Data_Report.pdf" , params = list(Rdatafile = n, out_dir = output_dir_path)
-#   )
-# )
-####
 rdfile = paste0(output_dir_path, "ReportData.Rdata")
 generate_report(full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
 
