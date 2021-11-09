@@ -167,6 +167,20 @@ cat(paste0("\t- Metabolite independence: Your declared tree cut height is: ", tr
 ## Nightingale derived variable exclusions
 ## when evaluting SAMPLE quality for QC
 derived_var_exclusion = pfile[12,2] 
+if(platform == "Nightingale"){
+  if(derived_var_exclusion == TRUE){
+  cat(paste0("\t- You have declared that Nightingale derived variables should be excluded from data filtering steps.\n\n"))
+}
+
+## Mass Spec Run Mode for each metabolite.
+## This variable defines the column name, in the feature_annotation_file, indexing the run mode string(s).
+## There should in turn be column name(s) in the sample_annotation_file that match the run mode string(s)
+##    and hold the batch IDs for each sample, in that run mode. 
+feat_anno_run_mode_col = pfile[13,2] 
+if( !is.na(feat_anno_run_mode_col)){
+  cat(paste0("\t- You have declared that the column name in the feature annotation file holding the run mode variables is: ", feat_anno_run_mode_col, "\n"))  
+} 
+
 
 #######################################
 ##
@@ -364,8 +378,8 @@ if(length(mydata)>3){
 
 #########################
 ##
-## (VII)  Normalize MS data
-##        - such as Metabolon
+## (VII)  Normalize Metabolon Data
+##
 #########################
 if(platform == "Metabolon"){
   cat( paste0("   Performing normilization on Metabolon Data.\n\n") )
@@ -430,6 +444,32 @@ if(platform == "Metabolon"){
     
     
   }
+}
+
+
+#########################
+##
+## (VII)  Normalize Other MS Data
+##
+#########################
+if(feat_anno_run_mode_col != NA){
+  cat( paste0("   Performing normilization on data given feature annotation column '",feat_anno_run_mode_col,"'.\n\n") )
+
+  norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
+      feature_data_sheet =  mydata$featuredata, 
+      sample_data_sheet = mydata$sampledata, 
+      feature_runmode_col = feat_anno_run_mode_col, 
+      batch_ids = NULL  )
+
+  ## save the raw data as another object in the list
+  mydata$raw_metabolitedata = mydata$metabolitedata
+
+  ## redefine the working metabolitedata object
+  mydata$metabolitedata = norm_metabolite_data
+
+  ## remove the unnecessary data frame
+  rm(norm_metabolite_data)
+
 }
 
 #########################

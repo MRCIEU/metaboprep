@@ -11,12 +11,6 @@
 #' @examples
 #' batch_normalization()
 batch_normalization = function( wdata, feature_data_sheet = NULL, sample_data_sheet = NULL, feature_runmode_col = NULL, batch_ids = NULL  ){
-  #wdata = mydata[["Peak Area Data"]]
-  #feature_data_sheet = mydata$`Chemical Annotation`
-  #sample_data_sheet = mydata$`Sample Meta Data`
-  #feature_runmode_col = "PLATFORM"
-  
-  
   ##
   if( length(batch_ids) == 0 ){
     ## extract platform assignment for each feature (meatbolite of protein)
