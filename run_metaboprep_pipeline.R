@@ -170,6 +170,7 @@ derived_var_exclusion = pfile[12,2]
 if(platform == "Nightingale"){
   if(derived_var_exclusion == TRUE){
   cat(paste0("\t- You have declared that Nightingale derived variables should be excluded from data filtering steps.\n\n"))
+  }
 }
 
 ## Mass Spec Run Mode for each metabolite.
@@ -382,67 +383,115 @@ if(length(mydata)>3){
 ##
 #########################
 if(platform == "Metabolon"){
-  cat( paste0("   Performing normilization on Metabolon Data.\n\n") )
-  ##################################################
-  ## look for run mode information in feature data
-  ##################################################
-  w = which(colnames(mydata$featuredata) %in% c("PLATFORM","platform"))
-  if(length(w) == 1){
-    runmode = unlist( mydata$featuredata[w] )
-    ## remove "LC/MS " if present
-    runmode = gsub("LC\\/MS\\ ","",runmode)
-    ## remove spaces 
-    runmode = gsub(" ","",runmode)
-    ## make lower case
-    runmode = tolower(runmode)
+  cat( paste0("Normalization. Performing normalization on Metabolon Data.\n\n") )
+  if(!is.na(feat_anno_run_mode_col)){
+      cat( paste0("        - Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
 
-    batchrunmodes = unique(runmode)
-  } else {
-    cat(paste0(" -- NOTE: Unable to identify a column header called 
-            'PLATFORM' or 'platform' in the feature data sheet.
-            This is necessary to perform batch normalization\n\n") )
+    norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
+        feature_data_sheet =  mydata$featuredata, 
+        sample_data_sheet = mydata$sampledata, 
+        feature_runmode_col = feat_anno_run_mode_col, 
+        batch_ids = NULL  )
 
-  }
-  ##################################################
-  ## look batch info in the sample sheet
-  ##################################################
-  n = tolower( colnames(mydata$sampledata) )
-  ## remove spaces 
-  n = gsub(" ","",n)
-  ## remove underscore 
-  n = gsub("_","",n)
-  ## remove dots 
-  n = gsub("\\.","",n)
-  ##
-  w = which(n %in% runmode)
-  if(length(w) == length(batchrunmodes) ){
-    ## perfom normalization
+    ## save the raw data as another object in the list
+    mydata$raw_metabolitedata = mydata$metabolitedata
 
-  } else {
-    cat(paste0(" -- NOTE: Unable to identify a column headers in sample sheet 
-               that match the platform run modes found in the feature data sheet.
-              This should be something like neg, polar, pos early, pos late.") )
+    ## redefine the working metabolitedata object
+    mydata$metabolitedata = norm_metabolite_data
 
-    cat( paste0("\n -- NOTE: We will take the ScaledImpData data and remove 
-                the imputed data to extract the normalized data.\n\n") )
-    
-    scaled_imputed_data_tab = grep("ScaledImp", names(mydata))
-    if(length(scaled_imputed_data_tab) == 1){
-      ndata = mydata[[scaled_imputed_data_tab]]
-      
-      if(sum(is.na(mydata$metabolitedata))>0){
-        ndata[is.na(mydata$metabolitedata)] = NA  
-      }
-      
-      mydata[["raw_metabolitedata"]] = mydata$metabolitedata
-      mydata$metabolitedata = ndata 
-      rm(ndata) 
+    ## remove the unnecessary data frame
+    rm(norm_metabolite_data)
+    cat( paste0("        - Normalization completed.\n\n") )
     } else {
-      cat( paste0("\n -- NOTE: Unable to identify a 'ScaledImp' data tab 
-                in the excel file. No normalization possible.\n\n") )
+      ##################################################
+      ## look for run mode information in feature data
+      ##################################################
+      cat( paste0("        - Looking for run mode information automatically given Metabolon standard data release formatting.\n") )
+      fanno_col_number = which(colnames(mydata$featuredata) %in% c("PLATFORM","platform"))
+      if(length(fanno_col_number) == 1){
+        runmode = unlist( mydata$featuredata[,fanno_col_number] )
+        ## remove "LC/MS " if present
+        runmode = gsub("LC\\/MS\\ ","",runmode)
+        ## remove spaces 
+        runmode = gsub(" ","",runmode)
+        ## make lower case
+        runmode = tolower(runmode)
+
+        ## redefine runmode string in feature data file
+        mydata$featuredata[,fanno_col_number] = runmode
+
+        batchrunmodes = unique(runmode)
+      } else {
+        cat(paste0("        - NOTE: Unable to identify a column header called 
+            'PLATFORM' or 'platform' in the feature data sheet.
+             This is necessary to perform batch normalization\n\n") )
+
+      }
+      ##################################################
+      ## look for batch info in the sample sheet
+      ##################################################
+      n = tolower( colnames(mydata$sampledata) )
+      ## remove spaces 
+      n = gsub(" ","",n)
+      ## remove underscore 
+      n = gsub("_","",n)
+      ## remove dots 
+      n = gsub("\\.","",n)
+
+      ## redefine column names
+      k = which(n %in% runmode)
+      colnames(mydata$sampledata)[k] = n[k]
+
+      if(length(k) == length(batchrunmodes) ){
+        ## perfom normalization
+        cat( paste0("        - Performing normalization with automatically identified Metabolon standard data release formatting column '",colnames(mydata$featuredata)[fanno_col_number],"'.\n") )
+
+        norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
+            feature_data_sheet =  mydata$featuredata, 
+            sample_data_sheet = mydata$sampledata, 
+            feature_runmode_col = fanno_col_number, 
+            batch_ids = NULL  )
+
+        ## save the raw data as another object in the list
+        mydata$raw_metabolitedata = mydata$metabolitedata
+
+        ## redefine the working metabolitedata object
+        mydata$metabolitedata = norm_metabolite_data
+
+        ## remove the unnecessary data frame
+        rm(norm_metabolite_data)
+        cat( paste0("        - Normalization completed.\n\n") )
+
+      } else {
+        cat(paste0("        - NOTE: Unable to identify a column headers in sample sheet
+            that match the platform run modes found in the feature data sheet.
+            This should be something like neg, polar, pos early, pos late.") )
+
+        cat( paste0("       - NOTE: We will take the ScaledImpData data and remove
+            the imputed data to extract the normalized data.\n\n") )
+        
+        scaled_imputed_data_tab = grep("ScaledImp", names(mydata))
+        if(length(scaled_imputed_data_tab) == 1){
+          ndata = mydata[[scaled_imputed_data_tab]]
+          
+          if(sum(is.na(mydata$metabolitedata))>0){
+            ndata[is.na(mydata$metabolitedata)] = NA  
+          }
+          ## save the raw data as another object in the list
+          mydata[["raw_metabolitedata"]] = mydata$metabolitedata
+
+          ## redefine the working metabolitedata object
+          mydata$metabolitedata = ndata 
+          
+          ## remove the unnecessary data frame
+          rm(ndata) 
+          cat( paste0("        - Normalization completed.\n\n") )
+
+        } else {
+          cat( paste0("        - NOTE: Unable to identify a 'ScaledImp' data tab in the excel file.
+            No normalization carried out.\n\n") )
+        }    
     }
-    
-    
   }
 }
 
@@ -452,8 +501,8 @@ if(platform == "Metabolon"){
 ## (VII)  Normalize Other MS Data
 ##
 #########################
-if(feat_anno_run_mode_col != NA){
-  cat( paste0("   Performing normilization on data given feature annotation column '",feat_anno_run_mode_col,"'.\n\n") )
+if( !is.na(feat_anno_run_mode_col) & platform == "Other" ){
+  cat( paste0("Normalization. Performing normalization parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
 
   norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
       feature_data_sheet =  mydata$featuredata, 
@@ -469,6 +518,8 @@ if(feat_anno_run_mode_col != NA){
 
   ## remove the unnecessary data frame
   rm(norm_metabolite_data)
+
+  cat( paste0("        - Normalization completed.\n\n") )
 
 }
 
@@ -488,7 +539,7 @@ cat( paste0("\ta. Estimating summary statistics for samples\n") )
 ##  -- is the column SUPER_PATHWAY present in the feature data
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
-  w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+  w = which( mydata$featuredata$SUPER_PATHWAY %in% c("xenobiotics", "Xenobiotics") )
   xeno_names = mydata$featuredata$feature_names[w]
   samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names )
 } else {
@@ -636,7 +687,7 @@ cmd = paste0("mkdir -p ", dd, "metaboprep_release_", today, "/", "filtered_data"
 system(cmd)
 
 ### xenobiotics to exclude
-w = which( mydata$featuredata$SUPER_PATHWAY == "Xenobiotics" ) 
+w = which( mydata$featuredata$SUPER_PATHWAY  %in% c("xenobiotics", "Xenobiotics") ) 
 xeno_names = mydata$featuredata$feature_names[w]
 if( length(xeno_names) == 0){xeno_names = NA}
 
@@ -735,7 +786,7 @@ cat( paste0("\ta. Estimating summary statistics for Filtered samples\n") )
 ##  -- is the column SUPER_PATHWAY present in the feature data
 ##  -- if yes, exclude Xenobiotics from one of the missingness estimate
 if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
-  w = which( qcdata$featuredata$SUPER_PATHWAY == "Xenobiotics") 
+  w = which( qcdata$featuredata$SUPER_PATHWAY  %in% c("xenobiotics", "Xenobiotics") ) 
   xeno_names = rownames(qcdata$featuredata)[w]
   samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = xeno_names )
 } else {

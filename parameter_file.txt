@@ -7,16 +7,19 @@
 projectname=MYPROJECTNAME
 ## (2) Full path to the directory holding your data file(s)
 datadirectory=/FULL/PATH/TO/DATA/DIRECTORY/
-## (3) The name of the raw EXCEL sheet from Metabolon or Nightingale. 
-## 		Or a flat text file (csv or txt) with metabolites in columns, samples in rows
-rawdata_EXCEL_or_Flat_testFile=TheNameOfMyComercial_Metabolon_ExcelSheet.xls
+## (3) Metabolite or Protien data file name
+##				- Could be:
+##				  1. Commercially provided excel sheet from Metabolon or Nightingale. 
+## 				  2. Or a flat text file (csv or txt) with metabolites in columns, samples in rows
+##              	- With metabolite names on the first row and sample names on the first column.
+metabolite_data_file=TheNameOfMyComercial_Metabolon_ExcelSheet.xls
 ## (4) feature (metabolite) annotation file
-## 				- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 				- ** NOT ** necessary if reading in excel file provided by Metabolon or Nightingale
 ## 				- features in row, annotation in columns
 ## 				- NOTE: Metabolon QC requires a "SUPER_PATHWAY" column header to identify Xenobiotics
 feature_annotation_file=NA
 ## (5) sample annotation file (batch variables)
-## 				- **NOT** Necessary if reading in excel file provided by Metabolon or Nightingale
+## 				- ** NOT ** necessary if reading in excel file provided by Metabolon or Nightingale
 ## 				- samples in rows, annotation in columns
 sample_annotation_file=NA
 ## (6) Is your dataset from Metabolon, Nightingale, or Other
@@ -43,3 +46,9 @@ tree_cut_height=0.5
 ##				- ... in the data set. In this instance it represents all ratios that Nightingale supply in their data releaases.
 ##				- binary choice of TRUE or FALSE
 derived_var_exclusion=TRUE
+## (13) 'Feature Annotation File' column name holding the run mode identifier for each metabolite.
+##              - The string(s) in this column should match a column name in the 
+##              - 'Sample Annotation File' that hold the batch IDs for that run mode. 
+##              - This is commonly needed data for MS data.
+##				- NA, should be given if run mode column name not known, or unavailable, or inapprorpriate.
+feat_anno_run_mode_col=NA
