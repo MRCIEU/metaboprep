@@ -3,6 +3,7 @@
 #' This function allows you to 'describe' metabolite features using the describe() function from the psych package, as well as estimate variance, a dispersion index, the coeficent of variation, and shapiro's W-statistic.
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @keywords metabolomics
+#' @importFrom psych describe
 #' @export
 #' @examples
 #' feature.describe()
@@ -10,6 +11,10 @@ feature.describe = function(wdata){
   d = psych::describe(wdata)[, -c(1,6,7)]
   ####
   e = t( apply(wdata, 2, function(x){
+    ## missing
+    missing_count = sum(is.na(x))
+
+    ## variance
     v = var(x, na.rm = TRUE); if(is.na(v)){v = 0}
     
     ## dispersion index
@@ -48,8 +53,8 @@ feature.describe = function(wdata){
       }
     
     ## data to return
-    o = c(v, dispersionindex, coefvar, W_raw, W_log)
-    names(o) = c("var","disp_index","coef_variance","W_stat_rawdata","W_stat_log10data")
+    o = c(missing_count, v, dispersionindex, coefvar, W_raw, W_log)
+    names(o) = c("missing","var","disp_index","coef_variance","W","log10_W")
     return(o)
 
     }) )
