@@ -182,6 +182,13 @@ if( !is.na(feat_anno_run_mode_col)){
   cat(paste0("\t- You have declared that the column name in the feature annotation file holding the run mode variables is: ", feat_anno_run_mode_col, "\n"))  
 } 
 
+## Should a scatter plot, histogram, and table of summary statsitics be
+## written to PDF for visual inspection? TRUE or FALSE?
+plot_feature_distributions = pfile[14,2] 
+if(plot_feature_distributions==TRUE){
+  cat(paste0("\t- You have declared that a scatter plot, histogram, and table of summary statsitic for each feature in the data set should be written to pdf.\n"))    
+}
+
 
 #######################################
 ##
@@ -952,6 +959,15 @@ output_dir_path = paste0(data_dir, "metaboprep_release_", today, "/")
 rdfile = paste0(output_dir_path, "ReportData.Rdata")
 generate_report(full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
 
+#########################
+##
+## (XI) Write feature distributions
+##      to pdf
+#########################
+if(plot_feature_distributions == TRUE){
+  cat( paste0("VIII. Plot feature distributions and summary statistics to pdf.\n") )
+  feature_plots(raw_data$metabolite_data, outdir = output_dir_path)
+  f = paste0(output_dir_path, "feature_distribution.pdf")
+  cat( paste0("          - plots for each figure written to the pdf ", f,".\n") )
 
-
-
+}

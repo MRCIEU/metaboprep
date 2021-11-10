@@ -52,3 +52,5 @@ derived_var_exclusion=TRUE
 ##				- This is commonly needed data for MS data.
 ##				- NA, should be given if run mode column name not known, or unavailable, or inapprorpriate.
 feat_anno_run_mode_col=NA
+## (14) Plot feature distributions and summary statistics, for each metabolite | protein in the data set to a pdf.
+plot_feature_distributions=TRUE
