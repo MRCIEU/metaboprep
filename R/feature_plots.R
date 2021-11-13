@@ -66,7 +66,7 @@ feature_plots <- function(wdata, outdir=NULL, nsd = 5){
     
     ## histogram
     p2 = df %>% ggplot(aes(x = level)) +
-      geom_histogram( fill = pcol[3], alpha = 0.9, color = "white") +
+      geom_histogram( fill = pcol[3], alpha = 0.9, color = "white", bins=30) +
       labs(x = "frequency", x = "feature level", title = trait ) +
       geom_vline(xintercept = extreme_line, color = pcol[1], size = 1.5) +
       theme_bw()
