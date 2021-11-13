@@ -2,7 +2,7 @@
 % Please edit documentation in R/sam.missingness.exclusion.R
 \name{sam.missingness.exclusion}
 \alias{sam.missingness.exclusion}
-\title{A Function to identify samples to exclude}
+\title{sample exlusions on missingness and total peak area}
 \usage{
 sam.missingness.exclusion(mydata, sdata, fdata)
 }
@@ -13,10 +13,14 @@ sam.missingness.exclusion(mydata, sdata, fdata)
 
 \item{fdata}{feature data}
 }
+\value{
+a data frame of missingness and TPA exclusions
+}
 \description{
-This function allows you to
+This function provides missingnes and tpa estiamtes along with exlcusion at 3,4,and 5sd from the mean.
 }
 \examples{
 sam.missingness.exclusion()
+
 }
 \keyword{metabolomics}

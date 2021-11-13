@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.in.nightingale.R
 \name{read.in.nightingale}
 \alias{read.in.nightingale}
-\title{A Function to read in Nightingale excel sheets}
+\title{read in Nightingale Health metabolomics data}
 \usage{
 read.in.nightingale(file2process, data_dir, projectname)
 }
@@ -13,10 +13,18 @@ read.in.nightingale(file2process, data_dir, projectname)
 
 \item{projectname}{a name for your project}
 }
+\value{
+a list object of (1) metabolite, (2) sample annotation, and (3) feature annotation data
+}
 \description{
-This function allows you to read in Nightingale raw data and push out flat text files
+This function reads in a Nightingale raw data excel file, writes the (1) metabolite, (2) sample annotation, and (3) feature annotation data to flat text files. It also returns a list object of the same data.
 }
 \examples{
-read.in.nightingale()
+read.in.nightingale(file2process = "NH_data_release.xls", 
+ data_dir = "/File/sits/here/", 
+ projectname = "My Amazing Project")
+
 }
-\keyword{nigtingale}
+\keyword{Health}
+\keyword{Nigtingale}
+\keyword{meatbolomics}

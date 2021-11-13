@@ -2,7 +2,7 @@
 % Please edit documentation in R/tree_and_independent_features.R
 \name{tree_and_independent_features}
 \alias{tree_and_independent_features}
-\title{A Function to identify independent features}
+\title{identify independent features in a numeric matrix}
 \usage{
 tree_and_independent_features(
   wdata,
@@ -18,12 +18,33 @@ tree_and_independent_features(
 
 \item{tree_cut_height}{the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.}
 
-\item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from this analysis. This might be feature heavily present|absent like Xenobiotics or variables derived from two or more variable already in the dataset.}
+\item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from this analysis. This might be features heavily present|absent like Xenobiotics or variables derived from two or more variable already in the dataset.}
+}
+\value{
+a list object of (1) an hclust object, (2) independent features, (3) a data frame of feature ids, k-cluster identifiers, and a binary identifier of independent features
 }
 \description{
-This function allows you to identify independent features using Spearman's Rho, and a dendrogram tree cut step.
+This function identifies independent features using Spearman's rho correlation distances, and a dendrogram tree cut step.
 }
 \examples{
-tree_and_independent_features()
+## define a covariance matrix
+cmat = matrix(1, 4, 4 )
+cmat[1,] = c(1, 0.7, 0.4, 0.2)
+cmat[2,] = c(0.7, 1, 0.2, 0.05)
+cmat[3,] = c(0.4, 0.2, 1, 0.375)
+cmat[4,] = c(0.2, 0.05, 0.375,1)
+
+## simulate the data (multivariable random normal)
+set.seed(1110)
+ex_data = MASS::mvrnorm(n = 500, mu = c(5, 45, 25, 15), Sigma = cmat )
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+
+## run function to identify independent variables at a tree cut height
+## of 0.5 which is equivalent to clustering variables with a Spearman's
+## rho > 0.5 or (1 - tree_cut_height)
+ind = tree_and_independent_features(ex_data, tree_cut_height = 0.5)
+
 }
-\keyword{metabolomics}
+\keyword{features}
+\keyword{independent}

@@ -1,13 +1,24 @@
-#' A Function to read in Nightingale excel sheets
+#' read in Nightingale Health metabolomics data
 #'
-#' This function allows you to read in Nightingale raw data and push out flat text files
+#' This function reads in a Nightingale raw data excel file, writes the (1) metabolite, (2) sample annotation, and (3) feature annotation data to flat text files. It also returns a list object of the same data.
+#'
 #' @param file2process the name of the xls file to process
 #' @param data_dir the full path to the directory holding your Nightingale excel file
 #' @param projectname a name for your project
-#' @keywords nigtingale
+#'
+#' @keywords Nigtingale Health meatbolomics
+#' 
+#' @importFrom utils write.table
+#' 
+#' @return a list object of (1) metabolite, (2) sample annotation, and (3) feature annotation data
+#'
 #' @export
+#'
 #' @examples
-#' read.in.nightingale()
+#' read.in.nightingale(file2process = "NH_data_release.xls", 
+#'  data_dir = "/File/sits/here/", 
+#'  projectname = "My Amazing Project")
+#'
 read.in.nightingale = function( file2process, data_dir, projectname ){
 
   ## Grab current data
@@ -221,7 +232,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     metabo_out_name = paste0(data_dir,  "metaboprep_release_", today, "/raw_data/", projectname, "_", today, "_Nightingale_metabolitedata.txt")
 
     cat( paste0("\t- Writing your metabolite data set to the tab-delmited text file ", metabo_out_name,  "\n") )
-    write.table(metabolite_data, file = metabo_out_name, row.names = TRUE,
+    utils::write.table(metabolite_data, file = metabo_out_name, row.names = TRUE,
                 col.names = TRUE, sep = "\t", quote = FALSE)
 
     ## (2) Write Meta Data to file
@@ -232,7 +243,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
       sampledata_out_name = paste0(data_dir,  "metaboprep_release_", today, "/raw_data/", projectname, "_",today,"_Nightingale_sampledata.txt")
       ##
       cat( paste0("\t- Writing your metadata to the tab-delmited text file ", sampledata_out_name,  "\n") )
-      write.table(metadata, file = sampledata_out_name, row.names = FALSE,
+      utils::write.table(metadata, file = sampledata_out_name, row.names = FALSE,
                   col.names = TRUE, sep = "\t", quote = TRUE)
     }
 
@@ -251,7 +262,7 @@ read.in.nightingale = function( file2process, data_dir, projectname ){
     
     
     cat( paste0("\t- Writing your feature annotation to the tab-delmited text file ", featuredata_out_name,  "\n") )
-    write.table(featuresheet, file = featuredata_out_name, row.names = FALSE,
+    utils::write.table(featuresheet, file = featuredata_out_name, row.names = FALSE,
                 col.names = TRUE, sep = "\t", quote = TRUE)
     
 

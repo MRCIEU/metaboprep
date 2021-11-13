@@ -2,19 +2,32 @@
 % Please edit documentation in R/sample.missingness.R
 \name{sample.missingness}
 \alias{sample.missingness}
-\title{A Function to estimate sample missingness}
+\title{estimate sample missingness}
 \usage{
 sample.missingness(wdata, excludethesefeatures = NA)
 }
 \arguments{
-\item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
+\item{wdata}{a numeric matrix with samples in row and features in columns}
 
 \item{excludethesefeatures}{a vector of feature names (i.e. column names) to exclude from missingness estimates}
 }
+\value{
+A data frame of missingness estimates for each sample. If a vector of feature names was also passed to the function a second column of missingness estimates will also be returned providing missingness estimates for each sample to the exclusion of those features provided.
+}
 \description{
-This function allows estiamte sample missingness in a matrix of data and provides an option to exclude certain columns or metabolite features from the analysis, such as xenobiotics
+This function estimates sample missingness in a matrix of data and provides an option to exclude certain columns or features from the analysis, such as xenobiotics (with high missingness rates) in metabolomics data sets.
 }
 \examples{
-sample.missingness()
+## simulate some data
+set.seed(1110)
+ex_data = sapply(1:5, function(x){ rnorm(10, 40, 5) })
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+## add some missingness to the data
+ex_data[ sample(1:50, 10) ] = NA
+## estimate missingness
+mis_est = sample.missingness(ex_data)
+mis_est_v2 = sample.missingness(ex_data, excludethesefeatures = "var5")
+
 }
-\keyword{metabolomics}
+\keyword{missingness}

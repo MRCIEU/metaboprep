@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch_normalization.R
 \name{batch_normalization}
 \alias{batch_normalization}
-\title{A function to median normalize data sets by batch}
+\title{median batch normalization}
 \usage{
 batch_normalization(
   wdata,
@@ -23,11 +23,27 @@ batch_normalization(
 
 \item{batch_ids}{a string vector, with a length equal to the number of samples in the data set that identifies what batch each sample belongs to.}
 }
+\value{
+returns the wdata object passed to the function median normalized given the batch information provided.
+}
 \description{
-This function median normalizes multivariable data such as metabolomic and proteomic data sets
+This function median normalizes multivariable data often processed in batches, such as metabolomic and proteomic data sets.
 }
 \examples{
-batch_normalization()
+####################################
+## with a vector of batch variables
+####################################
+## define the data set
+d1 = sapply(1:10, function(x){ rnorm(25, 40, 2) })
+d2 = sapply(1:10, function(x){ rnorm(25, 35, 2) })
+ex_data = rbind(d1,d2)
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+## define the batch
+batch = c( rep("A", 25), rep("B", 25)  )
+## normalize by batch
+norm_wdata = batch_normalization(wdata = ex_data, batch_ids = batch )
+
 }
 \keyword{batch}
 \keyword{metabolomics}

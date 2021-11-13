@@ -2,22 +2,26 @@
 % Please edit documentation in R/eval.power.binary.R
 \name{eval.power.binary}
 \alias{eval.power.binary}
-\title{A Function to estimate power for a binary variable}
+\title{Estimate power for a binary variable}
 \usage{
 eval.power.binary(N, effect, alpha)
 }
 \arguments{
-\item{N}{Sample size}
+\item{N}{a numeric vector of total study sample size, cases and controls will both be defined as N/2.}
 
-\item{effect}{effect size}
+\item{effect}{a numeric vector of effect size}
 
-\item{alpha}{significance level (Type 1 error)}
+\item{alpha}{a numeric vector of significance thresholds}
+}
+\value{
+a matrix of parameter inputs and an estimate(s) of power are returned as a matrix
 }
 \description{
-This function allows you estimate power for a binary variable given the sample size, effect size, TypeI error. Useful for QC Rmd Report.
+This function allows you estimate power for a binary variable given the sample size, effect size, significance threshold.
 }
 \examples{
-eval.power.binary()
+eval.power.binary(N = 1000, effect = seq(0.01, 0.3, by = 0.01), alpha = 0.05)
+
 }
 \keyword{binary}
 \keyword{estimator}

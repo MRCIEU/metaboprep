@@ -2,19 +2,33 @@
 % Please edit documentation in R/feature.missingness.R
 \name{feature.missingness}
 \alias{feature.missingness}
-\title{A Function to estiamte missingness on samples,}
+\title{estimate feature missingness}
 \usage{
-feature.missingness(wdata, samplemissingness)
+feature.missingness(
+  wdata,
+  samplemissingness = NULL,
+  extreme_sample_mis_threshold = 0.5
+)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
 \item{samplemissingness}{a vector of sample missingness for each sample}
+
+\item{extreme_sample_mis_threshold}{a numeric value above which individuals with sample missingness should be excluded from the feature missingess estimator. Default is 0.5.}
+}
+\value{
+a data frame of percent missingness for each feature
 }
 \description{
-This function allows you to estimate feature missingess, with a step to exclude poor samples identified as those with a sample missingness greater than 50%.
+This function estimates feature missingess, with a step to exclude poor samples identified as those with a sample missingness greater than 50%.
 }
 \examples{
-feature.missingness()
+ex_data = sapply(1:5, function(x){rnorm(10, 45, 2)})
+ex_data[ sample(1:length(ex_data), 15) ] = NA
+smis = apply(ex_data, 1, function(x){ sum(is.na(x))/length(x) })
+feature.missingness(wdata = ex_data, samplemissingness = smis)
+
 }
-\keyword{metabolomics}
+\keyword{feature}
+\keyword{missingness}

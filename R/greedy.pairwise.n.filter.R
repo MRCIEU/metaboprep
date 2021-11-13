@@ -1,12 +1,32 @@
-#' A Function to identify features that have less than a minimum number of complete pairwise observations and remove one of them, in a greedy fashion.
+#' greedy selection
 #'
-#' This function allows you to generate a dendrogram of feautres based on correlation coefficeint of your choice, and a clustering method of choice
+#' This function identifies features that have less than a minimum number of complete pairwise observations and removes one of them, in a greedy fashion.
+#' The need for this function is in instances where missingness is extreme between two features the number of paired observation between them may be to
+#' to be informative. Thus one, but not both should be removed from the analysis to avoid analytical error based on sample sizes.
+#'
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @param minN the minimum sample size (n) for pairwise comparisons
+#'
 #' @keywords feature selection
+#' 
+#' @return a vector of feature names
+#'
 #' @export
+#'
 #' @examples
-#' greedy.pairwise.n.filter()
+#' set.seed(123)
+#' ex_data = sapply(1:10, function(x){ rnorm(250, 40, 5) })
+#' ## define the data set
+#' rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+#' colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+#' ## add in some missingness
+#' ex_data[ sample(1:250, 200) ,1] = NA
+#' ex_data[ sample(1:250, 200) ,2] = NA
+#' ex_data[ sample(1:250, 200) ,3] = NA
+#' ## Estimate missingness and generate plots
+#' greedy.pairwise.n.filter(ex_data)
+#' 
+#'
 greedy.pairwise.n.filter = function(wdata, minN = 50){
 	## feature names
 	fids = colnames(wdata)
@@ -23,7 +43,7 @@ greedy.pairwise.n.filter = function(wdata, minN = 50){
   		}
   	}
 
-  	cat(paste0("\t\t\t- Greedy removal of one feature in a pair of feautres with minimum n < ", minN ,".\n"))
+  	cat(paste0("\t\t\t- Greedy removal of one feature in a pair of features with minimum n < ", minN ,".\n"))
   	## are there any comparisons smaller than minN
   	min_count = apply(Nmat, 2, function(x){ sum( x < minN ) })
   	

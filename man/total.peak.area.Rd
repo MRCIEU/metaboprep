@@ -2,7 +2,7 @@
 % Please edit documentation in R/total.peak.area.R
 \name{total.peak.area}
 \alias{total.peak.area}
-\title{A Function estiamtes total peak area for each sample of a metabolite matrix}
+\title{estimates total peak abundance}
 \usage{
 total.peak.area(wdata, feature_names_2_exclude = NA)
 }
@@ -11,10 +11,22 @@ total.peak.area(wdata, feature_names_2_exclude = NA)
 
 \item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.}
 }
+\value{
+a data frame of estimates for (1) total peak abundance and (2) total peak abundance at complete features for each samples
+}
 \description{
-This function estimates total peak area for all features and all features with complete data.
+This function estimates total peak abundance|area for numeric data in a matrix, for (1) all features and (2) all features with complete data.
 }
 \examples{
-total.peak.area()
+set.seed(1110)
+ex_data = sapply(1:5, function(x){ rnorm(10, 40, 5) })
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+ex_data[ sample(1:50, 4) ] = NA
+tpa_est = total.peak.area(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{abundance}
+\keyword{area}
+\keyword{level}
+\keyword{peak}
+\keyword{total}

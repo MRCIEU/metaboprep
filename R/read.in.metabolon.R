@@ -1,13 +1,24 @@
-#' A Function to read in Metabolon excel sheets
+#' read in Metabolon (v1) metabolomics data
 #'
-#' This function allows you to read in Metabolon raw data and push out flat text files
+#' This function reads in a Metabolon (v1 format) raw data excel file, writes the (1) metabolite, (2) sample annotation, and (3) feature annotation data to flat text files. It also returns a list object of the same data.
+#'
 #' @param file2process the name of the xls file to process
 #' @param data_dir the full path to the directory holding your Metabolon excel file
 #' @param projectname a name for your project
-#' @keywords metabolon
+#'
+#' @keywords Metabolon metabolomics
+#' 
+#' @importFrom utils write.table
+#'
+#' @return  a list object of (1) metabolite, (2) sample annotation, and (3) feature annotation data
+#'
 #' @export
+#'
 #' @examples
-#' read.in.metabolon()
+#' read.in.metabolon(file2process = "Metabolon_data_release.xls", 
+#'  data_dir = "/File/sits/here/", 
+#'  projectname = "My Amazing Project")
+#'
 read.in.metabolon = function( file2process, data_dir, projectname ){
   
   ## Grab current data
@@ -93,8 +104,8 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     samplesheet = samplesheet[-1,]
     
     ## write table to file
-    sampledata_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_", today,  "_Metabolon_sampledata.txt")
-    write.table(samplesheet, file = sampledata_out_name, row.names = FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
+    sampledata_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", projectname, "_", today,  "_Metabolon_sampledata.txt")
+    utils::write.table(samplesheet, file = sampledata_out_name, row.names = FALSE, col.names = TRUE, sep = "\t", quote = FALSE)
     
     #########################
     ## TASK 3
@@ -120,8 +131,8 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     featuresheet = cbind(feature_names = rownames(featuresheet), featuresheet)
 
     ## write table to file
-    featuredata_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project, "_",today, "_Metabolon_featuredata.txt")
-    write.table(featuresheet, file = featuredata_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
+    featuredata_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", projectname, "_",today, "_Metabolon_featuredata.txt")
+    utils::write.table(featuresheet, file = featuredata_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
     
     #########################
     ## TASK 4
@@ -146,8 +157,8 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
     colnames(metabolitedata) = paste0("compid_",featuresheet$COMP_ID)
     
     ## write table to file
-    metabo_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[2], "_Metabolon_metabolitedata.txt")
-    write.table(metabolitedata, file = metabo_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
+    metabo_out_name = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", projectname,"_", today, "_", sheetnames[2], "_Metabolon_metabolitedata.txt")
+    utils::write.table(metabolitedata, file = metabo_out_name, row.names = TRUE, col.names = TRUE, sep = "\t", quote = TRUE)
     
     ## save primary raw metabolite data to a new element
     primary_metabolitedata = metabolitedata
@@ -199,8 +210,8 @@ read.in.metabolon = function( file2process, data_dir, projectname ){
       mydata[[sheetnames[i]]] = metabolitedata
 
       ## write table to file
-      outname = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", project,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
-      write.table(metabolitedata, file = outname, row.names = TRUE, col.names = TRUE, sep = "\t", quote = FALSE)
+      outname = paste0(data_dir, "metaboprep_release_", today, "/raw_data/", projectname,"_", today, "_", sheetnames[i], "_Metabolon_metabolitedata.txt")
+      utils::write.table(metabolitedata, file = outname, row.names = TRUE, col.names = TRUE, sep = "\t", quote = FALSE)
     }
     
     #########################

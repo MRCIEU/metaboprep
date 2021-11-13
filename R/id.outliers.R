@@ -1,12 +1,20 @@
-#' A Function to identify SD outliers in a vector of data
+#' identify outliers
 #'
-#' given a vector of data, identify those positions that are standard deviation outliers in that vector of data
+#' given a vector of data, identify those positions that are 'nsd' standard deviation units from the mean
+#'
 #' @param x a vector of numerical values
 #' @param nsd the number of standard deviation from the mean outliers are identified at. Default value is 5.
-#' @keywords metabolomics
+#'
+#' @keywords outliers
+#' 
+#' @return a vector indexing which samples are outliers
+#'
 #' @export
+#'
 #' @examples
-#' id.outliers()
+#' ex_data = rnbinom(500, mu = 40, size = 5)
+#' id.outliers(ex_data, nsd = 2)
+#'
 id.outliers = function(x, nsd = 5){
   msd = c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE))
   cutoff = msd[1] + (msd[2]*nsd)

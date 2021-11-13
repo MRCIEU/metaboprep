@@ -2,17 +2,34 @@
 % Please edit documentation in R/feature.tree.independence.R
 \name{feature.tree.independence}
 \alias{feature.tree.independence}
-\title{A Function to identify independent features}
+\title{identify independent features}
 \usage{
 feature.tree.independence(wdata)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 }
+\value{
+a data frame of 'k' cluster or group ids, and a 0/1 binary identifying if a feature was identified as and independent ('1') feature or not ('0').
+}
 \description{
-This function allows you to identify independent features using Spearman's Rho, and a dendrogram tree cut step.
+This function identifies independent features using Spearman's Rho, and a dendrogram tree cut step. The feature returned as 'independent' within is k-cluster is the feature with the least missingness or chosen at random in case of missingness ties.
 }
 \examples{
-feature.tree.independence()
+cmat = matrix(1, 4, 4 )
+cmat[1,] = c(1, 0.9, 0.9, 0.8)
+cmat[2,] = c(0.9, 1, 0.7, 0.6)
+cmat[3,] = c(0.9, 0.7, 1, 0.8)
+cmat[4,] = c(0.8, 0.6, 0.8,1)
+## simulate some correlated data (multivariable random normal)
+set.seed(1110)
+ex_data = MASS::mvrnorm(n = 250, mu = c(5, 45, 25, 15), Sigma = cmat )
+## define the data set
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+## run the function
+df = feature.tree.independence(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{feature}
+\keyword{independece}

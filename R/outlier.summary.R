@@ -1,15 +1,53 @@
-#' A Function to describe, plot the distribution of and identifiy outliers for every metabolite (column) in a data frame.
+#' feature summary plots
 #'
-#' This function allows you to 
-#' @param dtst metabolite data frame
+#' This function plots the distribution of and identifiy outliers for every metabolite (column) in a data frame.
+#'
+#' @param dtst numeric data frame
 #' @param pdf_filename name of the pdf out file 
 #' @param nsd number of SD to consider as outliers, 5 is default 
-#' @keywords metabolomics
+#'
+#' @keywords metabolomics feature summary plots
+#'
+#' @importFrom psych describe
+#' @importFrom ggpubr ggtexttable ttheme
+#' @importFrom grDevices pdf dev.off
+#' @importFrom graphics par abline text hist lines
+#' @importFrom stats quantile density
+#' 
+#' @return print summary figures for each column of data in the data frame to a pdf file.
+#'
 #' @export
+#'
 #' @examples
-#' outlier.summary()
+#' ## define a covariance matrix
+#' cmat = matrix(1, 4, 4 )
+#' cmat[1,] = c(1, 0.8, 0.6, 0.2)
+#' cmat[2,] = c(0.8, 1, 0.7, 0.5)
+#' cmat[3,] = c(0.6, 0.7, 1, 0.6)
+#' cmat[4,] = c(0.2, 0.5, 0.6,1)
+#' ## simulate some correlated data (multivariable random normal)
+#' set.seed(1110)
+#' d1 = MASS::mvrnorm(n = 250, mu = c(5, 45, 25, 15), Sigma = cmat )
+#' set.seed(1010)
+#' d2 = MASS::mvrnorm(n = 250, mu = c(5, 45, 25, 15), Sigma = cmat )
+#' ## simulate some random data
+#' d3 = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+#' ## define the data set
+#' ex_data = cbind(d1,d2,d3)
+#' rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+#' colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+#' ## run the function
+#' outlier.summary(ex_data)
+#'
 outlier.summary = function(dtst, pdf_filename = "./feature_distributions.pdf", nsd = 5){
-  
+  ## package check
+  pkgs = c("psych", "ggpubr")
+  for(pkg in pkgs){
+    if (!requireNamespace( pkg, quietly = TRUE)) {
+        stop(paste0("Package \"", pkg,"\" needed for outlier.summary() function to work. Please install it."),call. = FALSE)
+      }
+  }
+
   ## transform dataset
   # data_t <- as.data.frame(t(dtst))
   data_t = dtst
@@ -60,12 +98,12 @@ outlier.summary = function(dtst, pdf_filename = "./feature_distributions.pdf", n
       N<- nrow(data_t) - sum(is.na(data_t[,i]))
       missingness <- (sum(is.na(data_t[,i]))/nrow(data_t))*100
       
-      a<-density(data_t[,i], na.rm=T)
+      a<-stats::density(data_t[,i], na.rm=T)
       thresholdx<-(maxvar+(maxvar/100))
       thresholdy<-min(a$y)+(max(a$y)/4)
       
       hist(data_t[,i], col="red",main=(names(data_t)[i]),prob=TRUE,xlab="peak area") 
-      lines(density(data_t[,i], na.rm = TRUE),col="blue", lwd=2)
+      lines(stats::density(data_t[,i], na.rm = TRUE),col="blue", lwd=2)
       text(thresholdx,thresholdy, cex=0.6, 
            paste("N=", N, "\npercent missing=", 
                  signif(missingness, 3), "\nmin=", 
@@ -91,8 +129,8 @@ outlier.summary = function(dtst, pdf_filename = "./feature_distributions.pdf", n
   row.names(outlier_results) <- row.names(data_t)
   
   ## table figure
-  fbys = quantile( apply(outlier_results, 1, function(x){  sum(x, na.rm = TRUE)}) )
-  sbyf = quantile( apply(outlier_results, 2, function(x){  sum(x, na.rm = TRUE)}) )
+  fbys = stats::quantile( apply(outlier_results, 1, function(x){  sum(x, na.rm = TRUE)}) )
+  sbyf = stats::quantile( apply(outlier_results, 2, function(x){  sum(x, na.rm = TRUE)}) )
   outtable = data.frame( percentile = c("0%","25%","50%","75%","100%"), 
                          outlying.features.by.sample = fbys,
                          outlying.samples.by.feature = sbyf)

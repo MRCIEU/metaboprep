@@ -2,7 +2,7 @@
 % Please edit documentation in R/eval.power.cont.R
 \name{eval.power.cont}
 \alias{eval.power.cont}
-\title{A Function to estimate power for a continuous variable}
+\title{estimate power for continuous variable}
 \usage{
 eval.power.cont(N, n_coeff, effect, alpha)
 }
@@ -16,9 +16,11 @@ eval.power.cont(N, n_coeff, effect, alpha)
 \item{alpha}{significance level (Type 1 error)}
 }
 \description{
-This function allows you estimate power for a continuous variable given the sample size, effect size, TypeI error, and the degrees of freedom. Useful for QC Rmd Report.
+This function estimates power for a continuous variable given the sample size, effect size, significance threshold, and the degrees of freedom.
 }
 \examples{
-eval.power.cont()
+eval.power.cont(N = 1000, n_coeff = 1, effect = 0.0025, alpha = 0.05)
+
 }
-\keyword{metabolomics}
+\keyword{continuous}
+\keyword{power}

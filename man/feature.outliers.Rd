@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature.outliers.R
 \name{feature.outliers}
 \alias{feature.outliers}
-\title{A Function to provide a count of the number outlying samples for a feature}
+\title{outlier sample count for a features}
 \usage{
 feature.outliers(wdata, nsd = 5)
 }
@@ -11,10 +11,19 @@ feature.outliers(wdata, nsd = 5)
 
 \item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
 }
+\value{
+a data frame out sample outlier counts for each feature (column) in the matrix
+}
 \description{
-This function takes a matrix of metaboite data (samples in rows, features in columns) and counts the number of outlying samples each feature has.
+This function takes a matrix of data (samples in rows, features in columns) and counts the number of outlying samples each feature has.
 }
 \examples{
-feature.outliers()
+ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+s = sample(1:length(ex_data), 200)
+ex_data[s] = ex_data[s] + 40
+## run the function
+fout = feature.outliers(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{feature}
+\keyword{outliers}

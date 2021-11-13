@@ -2,23 +2,28 @@
 % Please edit documentation in R/rntransform.R
 \name{rntransform}
 \alias{rntransform}
-\title{A copy of the rntransform function from the GenAbel package, edited for the option of spliting tied values.}
+\title{rank normal tranformation}
 \usage{
-rntransform(formula, data, family = gaussian, split_ties = FALSE)
+rntransform(y, split_ties = TRUE)
 }
 \arguments{
-\item{formula}{}
+\item{y}{a numeric vector which will be rank normal transformed}
 
-\item{data}{your vector of numerical values to rank normal transform}
-
-\item{family}{Defaulted to gaussian. Do not suggest editing}
-
-\item{split_ties}{Defualted to FALSE. If TRUE is provided all tied values will be randomly ranked in the function rank()}
+\item{split_ties}{a binary string of TRUE (default) or FALSE indicating if tied values, of the same rank, should be randomly split giving them unique ranks.}
+}
+\value{
+returns a numeric vector, with the same length as y, of rank normal transformed values
 }
 \description{
-This function rank-normal transform a vector of data, and by default splits tied values randomly
+This function rank normal transforms a vector of data. The procedure is built off of that provided in the GenABEL pacakge.
 }
 \examples{
-rntransform()
+## simulate a negative binomial distribution of values
+nb_data = rnbinom(500, mu = 40, size = 100)
+## rank normal transform those values
+rnt_data = rntransform( nb_data , split_ties = TRUE )
+
 }
-\keyword{nigtingale}
+\keyword{normal}
+\keyword{rank}
+\keyword{transformation}

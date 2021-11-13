@@ -1,17 +1,32 @@
-#' A Function to evaluate the effect of a laboratory batch variable on all metabolite feautures in a data matrix
+#' batch effect on numeric matrix
 #'
-#' This function allows you to estimate effects of laboratory batch variable on metabolite features.
-#' @param wdata the metabolite data matrix. samples in row, metabolites in columns
+#' This function estimates the effects of a categorical (batch) variable on a matrix of features in univariate linear models.
+#'
+#' @param wdata the numeric data matrix with samples in row, features in columns
 #' @param batch a single vector containing a vector based batch variable
-#' @keywords metabolomics
+#'
+#' @keywords metabolomics univariate linear models
+#' 
+#' @importFrom stats anova p.adjust
+#' 
+#' @return a list object of length two with (1) a data frame of summary statistics on (a) the number of tested features ,(b) the mean batch effect across all features ,(c)  the mean batch effect across all associated (BH FDR<0.05) features ,(d) the number of associated (BH FDR<0.05) features.
+#'
 #' @export
+#'
 #' @examples
-#' met2batch()
+#' d1 = sapply(1:10, function(x){ rnorm(50, 30, 5) })
+#' d2 = sapply(1:10, function(x){ rnorm(50, 40, 5) })
+#' ex_data = rbind(d1, d2)
+#' d3 = sapply(1:10, function(x){ rnorm(100, 40, 5) })
+#' ex_data = cbind(ex_data, d3)
+#' lot = c( rep("A",50), rep("B",50) )
+#' ex = met2batch(wdata = ex_data, batch = lot)
+#'
 met2batch = function(wdata, batch){
   batch = as.factor(batch)
   ##
   batch_eta = t( apply( wdata, 2, function(x){
-    ## estatimate variance
+    ## estimate variance
     v = var(x, na.rm = TRUE)
     ## insure that any featuere with no variation, is NA for any reason, or
     ## has less than 20 observations is not analyzed
@@ -23,7 +38,7 @@ met2batch = function(wdata, batch){
       z = rntransform(x)
       fit = lm( z ~ batch )
       ## perform an Type I ANOVA
-      a = anova(fit)
+      a = stats::anova(fit)
       ## estimate variance explained Eta-Sq
       eta = a[1,2] / sum(a[,2])
       p = a[1,5]
@@ -32,7 +47,7 @@ met2batch = function(wdata, batch){
   }) )
   
   ## estimate FDR
-  padj = p.adjust(batch_eta[,2], method = "BH")
+  padj = stats::p.adjust(batch_eta[,2], method = "BH")
   batch_eta = cbind(batch_eta, padj)
   colnames(batch_eta) = c("eta","pval","padj")
   ##

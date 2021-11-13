@@ -1,13 +1,46 @@
-#' A Function to sumarize sample and feature missingness 
+#' missingness summary plots
 #'
-#' This function sumarizes sample and feature missingness in tables and in a summary plot. Useful for QC Rmd Report.
+#' This function sumarizes sample and feature missingness in tables and in a summary plot.
+#'
 #' @param mydata metabolite data matrix, with samples in rows and metabolite features in columns. 
-#' @keywords metabolomics
+#'
+#' @keywords metabolomics missingness summary plots
+#'
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom magrittr %>%
+#' @importFrom tibble as_tibble
+#' @importFrom ggpubr ggtexttable ttheme
+#' @importFrom ggplot2 aes geom_histogram geom_vline labs theme_bw theme element_text
+#' @importFrom stats quantile
+#' 
+#' @return a list object of length four with (1) a vector of sample missingess,(2) a vector of feature missingness ,(3) a table summarizing missingness ,(4) a list of ggplot2 plots for sample and feature histogram distribution and summary tables
+#'
 #' @export
+#'
 #' @examples
-#' missingness.sum()
+#' ex_data = sapply(1:100, function(x){ rnorm(250, 40, 5) })
+#' ## define the data set
+#' rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+#' colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+#' ## add in some missingness
+#' ex_data[sample(1:length(ex_data), 500)] = NA
+#' ## Estimate missingness and generate plots
+#' ms = missingness.sum(ex_data)
+#' ## plots
+#' ggpubr::ggarrange(plotlist = ms$plotsout, ncol = 2, nrow = 2)
+#' 
+#'
 missingness.sum = function(mydata){
-  
+  ## define local variable
+  d <- NULL
+  ## package check
+  pkgs = c("RColorBrewer", "magrittr", "tibble", "ggpubr", "ggplot2")
+  for(pkg in pkgs){
+    if (!requireNamespace( pkg, quietly = TRUE)) {
+        stop(paste0("Package \"", pkg,"\" needed for missingness.sum() function to work. Please install it."),call. = FALSE)
+      }
+  }
+
   ## set color scheme
   pcol = RColorBrewer::brewer.pal(9, "Set1")
 
@@ -19,8 +52,8 @@ missingness.sum = function(mydata){
   
   # quantile distribution of missingness
   missingness_table = tibble::as_tibble( data.frame( percentile = seq(0, 1, 0.25), 
-                               samples = round( quantile(sample_missing) , d = 4),
-                               features = round(  quantile(feature_missing), d = 4 ) ) )
+                               samples = round( stats::quantile(sample_missing) , digits = 4),
+                               features = round(  stats::quantile(feature_missing), digits = 4 ) ) )
   # a summary table figure
   sumtable <- ggpubr::ggtexttable(missingness_table, rows = NULL, 
                           theme = ggpubr::ttheme("mBlue"))
@@ -52,7 +85,7 @@ missingness.sum = function(mydata){
   
   
   #############################
-  ##  Estiamtes of sample size 
+  ##  Estimates of sample size 
   ##  given various levels of 
   ##  missingness
   #############################
@@ -88,9 +121,6 @@ missingness.sum = function(mydata){
   ## to user
   #######################
   plotsout = list(plotA= plotA, plotB = plotB, sumtable = sumtable, miss_samplesize_table = miss_samplesize_table)
-  
-  
-  
   
   ## return data, tables, and figure to user
   out = list(sample_missing = sample_missing, feature_missing = feature_missing, 

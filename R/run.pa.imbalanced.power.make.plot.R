@@ -1,23 +1,47 @@
-#' A Function to simulate power for a spectrum of effect sizes, and generate plots, assuming a presence absence binary trait in an imbalanced design
+#' binary trait imbalanced design power analysis plot
 #'
-#' This function allows simulate power for numberous effect estimates for both binary and continuous variables and generate summary plots. Useful for QC Rmd Report.
-#' @param mydata Your metabolite data matrix, with samples in rows
-#' @keywords metabolomics
+#' This function (1) estimates an informative distribution of effect and power estimates given your datas total sample size, over a distribution of imbalanced sample sizes and (2) returns a summary plot.
+#'
+#' @param mydata a numeric data matrix with samples in rows and features in columns
+#'
+#' @keywords binary trait power analysis plot
+#'
+#' @importFrom ggplot2 aes geom_line scale_linetype_manual theme_bw geom_hline scale_color_brewer labs geom_vline
+#' @importFrom magrittr %>%
+#' 
+#' @return a ggplot2 object
+#'
 #' @export
+#'
 #' @examples
-#' run.pa.imbalanced.power.make.plot()
+#' ex_data = matrix(NA, 1000, 2)
+#' run.pa.imbalanced.power.make.plot( ex_data )
+#'
 run.pa.imbalanced.power.make.plot = function(mydata){
-  
+  ## define local variables
+  power <- effect <- N_case <- N_control <- alpha <- NULL
+  ## package check
+  pkgs = c("magrittr", "ggplot2")
+  for(pkg in pkgs){
+    if (!requireNamespace( pkg, quietly = TRUE)) {
+        stop(paste0("Package \"", pkg,"\" needed for run.pa.imbalanced.power.make.plot() function to work. Please install it."),call. = FALSE)
+      }
+  }
+
+
   ####################################   
   # set N equal to no. in sample
   ####################################
   N = nrow(mydata)       
-  #half = N/2
-  #ncases = seq(100, half, 100)
   ncases = seq(10, N-10, 10)
   ncontrol = N - ncases
   
+  ####################################
+  ## identify an informative distribution 
+  ## of effect sizes given the sample sizes
+  ####################################
   effect_sizes = find.PA.effect.sizes.2.sim(mydata = mydata)
+  
   ####################################
   # simulation paramaters
   ####################################
@@ -25,8 +49,6 @@ run.pa.imbalanced.power.make.plot = function(mydata){
   run_parameters <- expand.grid(Ncases = ncases,
                                 Ncontrol = ncontrol,
                                 n_coeff = 1,
-                                #effect = c(0.01,0.025,0.05,0.075,0.1,0.125,0.15,0.175,0.2),
-                                #effect = seq(0.1, 0.2, by = 0.01),
                                 effect = effect_sizes,
                                 alpha = 0.05)
   #################
@@ -73,8 +95,6 @@ run.pa.imbalanced.power.make.plot = function(mydata){
   ## merge simulations
   ####################################
   pwrdata = bin_power
-  # pwrdata = bin_power[, c(1,4,5,6,7)]
-  #pwrdata$type = as.factor(pwrdata$type)
   
   ####################################
   # plot results
@@ -94,6 +114,7 @@ run.pa.imbalanced.power.make.plot = function(mydata){
          color = "effect\nsize",  
          caption = "     ") +
     geom_vline(xintercept = s, linetype="dotted", color = "grey20", size=0.25)
+
   ##################################
   # return
   ####################################

@@ -1,22 +1,48 @@
-#' A Function to perform univariate analysis over a dependent and an independent variable
+#' ggplot2 violin plot
 #'
-#' This function performs univariate analysis over a dependent and an independent variable
+#' This function performs univariate linear analysis of a dependent and an independent variable and generates a viloin or box plot to illustrate the associated structure.
+#'
 #' @param dep a vector of the dependent variable
 #' @param indep a vector of the independent variable
 #' @param dep_name name of the dependent variable
 #' @param indep_name name of the independent variable
 #' @param orderfactor order factors alphebetically
 #' @param violin box plot or violin plot. violin = TRUE is default
-#' @keywords metabolomics
+#'
+#' @keywords metabolomics ggplot
+#'
+#' @importFrom tibble as_tibble
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by summarise arrange
+#' @importFrom ggplot2 aes geom_violin geom_boxplot theme labs
+#' 
+#' @return a ggplot2 object
+#'
 #' @export
+#'
 #' @examples
-#' variable.by.factor()
+#' x = c( rnorm(20, 10, 2), rnorm(20, 20, 2) )
+#' y = as.factor( c( rep("A", 20), rep("B", 20)  ) )
+#' variable.by.factor(dep = x , indep = y, dep_name = "expression", indep_name = "species" )
+#'
 variable.by.factor = function( dep , indep , 
                                dep_name = "dependent", 
                                indep_name = "independent", 
                                orderfactor = TRUE,
                                violin = TRUE){
-  ####
+  ## define local variables
+  m <- CI_L <- CI_H <- NULL
+  ## package check
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package \"ggplot2\" needed for variable.by.factor() function to work. Please install it.",
+      call. = FALSE)
+  }
+  ## package check
+  if (!requireNamespace("tibble", quietly = TRUE)) {
+    stop("Package \"tibble\" needed for variable.by.factor() function to work. Please install it.",
+      call. = FALSE)
+  }
+
   wdat = as_tibble( data.frame(dep = dep, indep = as.factor(indep)) )
   ####
   if(orderfactor == 1){
@@ -32,17 +58,12 @@ variable.by.factor = function( dep , indep ,
   ### FIT to linear MODEL
   fit = lm(dep ~ indep, data = wdat)
   a = anova(fit)
-  eta = signif( (a[1,2]/sum(a[,2])*100 ), d = 2 )
-  pval = signif( a[1, 5], d = 3 )
+  eta = signif( (a[1,2]/sum(a[,2])*100 ), digits = 2 )
+  pval = signif( a[1, 5], digits = 3 )
   ###
   if(violin == 1){
   plotA = wdat  %>% ggplot( aes(x = indep, y = dep)) +
     geom_violin( aes(fill = as.factor(indep) ), color = NA ) +
-    #geom_dotplot(aes(color = as.factor(indep) ), 
-    # geom_dotplot(fill = "grey" , color = NA, 
-    #              binaxis='y', stackdir='center', 
-    #              dotsize=0.35, alpha= 1,
-    #              binwidth = 0.006) +
     theme( axis.text.x = element_text(angle = 45, size = 6, hjust = 1)) +
     labs(title = paste0( dep_name, " by ", indep_name), 
          subtitle = paste0( "   ---  " ,  

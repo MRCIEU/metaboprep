@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.in.metabolon.R
 \name{read.in.metabolon}
 \alias{read.in.metabolon}
-\title{A Function to read in Metabolon excel sheets}
+\title{read in Metabolon (v1) metabolomics data}
 \usage{
 read.in.metabolon(file2process, data_dir, projectname)
 }
@@ -13,10 +13,17 @@ read.in.metabolon(file2process, data_dir, projectname)
 
 \item{projectname}{a name for your project}
 }
+\value{
+a list object of (1) metabolite, (2) sample annotation, and (3) feature annotation data
+}
 \description{
-This function allows you to read in Metabolon raw data and push out flat text files
+This function reads in a Metabolon (v1 format) raw data excel file, writes the (1) metabolite, (2) sample annotation, and (3) feature annotation data to flat text files. It also returns a list object of the same data.
 }
 \examples{
-read.in.metabolon()
+read.in.metabolon(file2process = "Metabolon_data_release.xls", 
+ data_dir = "/File/sits/here/", 
+ projectname = "My Amazing Project")
+
 }
-\keyword{metabolon}
+\keyword{Metabolon}
+\keyword{metabolomics}

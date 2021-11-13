@@ -2,23 +2,39 @@
 % Please edit documentation in R/make.cor.matrix.R
 \name{make.cor.matrix}
 \alias{make.cor.matrix}
-\title{A fully bespoke function to generate a correaltion matrix of either correlation estimates or the pvalues}
+\title{correlation matrix}
 \usage{
 make.cor.matrix(wdata, cor_method = "kendall", minN = 50, var2return = "cor")
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
-\item{cor_method}{Defaulted to "kendall" this is the correlation method to use in the function cor.test()}
+\item{cor_method}{defaulted to "kendall" this is the correlation method to use in the function cor.test()}
 
-\item{minN}{Defaulted to 50, this is the minimum number of observations that must be available in pairs to perform analysis}
+\item{minN}{sefaulted to 50, this is the minimum number of observations that must be available in pairs to perform analysis}
 
-\item{var2return}{Defaulted to "cor", other option is "pvalue" is a the flag indicating which estimate to return from the function.}
+\item{var2return}{sefaulted to "cor", other option is "pvalue" is a the flag indicating which estimate to return from the function.}
+}
+\value{
+a matrix of correlation estimates or p-values
 }
 \description{
-This function allows estiamte sample missingness in a matrix of data and provides an option to exclude certain columns or metabolite features from the analysis, such as xenobiotics
+This function estimates a correlation matrix returning wither the correlation estimates or their p-values
 }
 \examples{
-make.cor.matrix()
+cmat = matrix(1, 4, 4 )
+cmat[1,] = c(1, 0.8, 0.6, 0.2)
+cmat[2,] = c(0.8, 1, 0.7, 0.5)
+cmat[3,] = c(0.6, 0.7, 1, 0.6)
+cmat[4,] = c(0.2, 0.5, 0.6,1)
+## simulate some correlated data (multivariable random normal)
+set.seed(1110)
+ex_data = MASS::mvrnorm(n = 250, mu = c(5, 45, 25, 15), Sigma = cmat )
+## return correlation estimates
+cor_mat = make.cor.matrix(ex_data, var2return = "cor")
+## return p-values
+cor_mat = make.cor.matrix(ex_data, var2return = "pvalue")
+
 }
-\keyword{nigtingale}
+\keyword{correlation}
+\keyword{matrix}

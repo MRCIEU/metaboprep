@@ -2,19 +2,25 @@
 % Please edit documentation in R/sample.outliers.R
 \name{sample.outliers}
 \alias{sample.outliers}
-\title{A Function to provide a count of the number outlying features for a sample}
+\title{outlier features count for samples}
 \usage{
 sample.outliers(wdata, nsd = 5)
 }
 \arguments{
-\item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
+\item{wdata}{a metabolite data matrix with samples in row, metabolites in columns}
 
-\item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
+\item{nsd}{the number of standard deviation from the mean outliers are identified at. The default value is 5.}
+}
+\value{
+a data frame of outiler counts for each sample
 }
 \description{
-This function takes a matrix of metaboite data (samples in rows, features in columns) and counts the number of outlying features each sample has.
+This function takes a matrix of numeric data and counts the number of outlying features each sample has.
 }
 \examples{
-sample.outliers()
+d = sapply(1:5, function(x){ rnorm(50, 50, 15) })
+sample.outliers(d, nsd = 2)
+
 }
 \keyword{metabolomics}
+\keyword{outliers}

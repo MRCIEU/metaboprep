@@ -57,12 +57,6 @@ qc_data$sample_data = tibble::as_tibble(qc_data$sample_data); colnames(qc_data$s
 qc_data$feature_data = tibble::as_tibble(qc_data$feature_data); colnames(qc_data$feature_data)[1] = "FeatureID"
 qc_data$varexp = qc_data$varexp[,1]
 
-# feature_missingness = 0.2
-# sample_missingness = 0.2
-# total_peak_area_SD = 5
-# PC_outlier_SD = 5
-
-
 ```
 
 metaboprep report relates to:
@@ -81,9 +75,7 @@ This report provides descriptive information for raw and filtered metabolomics d
 The data filtering workflow is as follows:
 
 ```{r QC-pipeline-flowdiagram, echo=FALSE, out.width='65%'}
-## workflow_fig
-# workflow_fig = knitr::include_graphics("images/metaboprep_workflow.png")
-###
+
 f = paste0( .libPaths(), "/metaboprep/help/figures/metaboprep_workflow.png" )
 knitr::include_graphics( f )
 
@@ -100,16 +92,11 @@ knitr::include_graphics( f )
 # Sample size of `r project` data set
 
 ```{r Sample_size, echo=F, quote=F, comment=NA, fig.width=4, fig.height=1.5, warning=FALSE, message=FALSE, error=FALSE, fig.align="center" }
-# tout = data.frame(raw_data = dim(raw_data$metabolite_data), qc_data = dim(qc_data$metabolite_data))
-# rownames(tout) = c("Number of samples","Number of features")
-###
-#kableExtra::kable(tout, align = 'c', booktabs = TRUE) %>%
-#  kableExtra::kable_styling(font_size = 12) %>%
-#  kableExtra::kable_styling(latex_options = "scale_down") %>%
-#  kableExtra::row_spec(1:2, bold = TRUE, color = 'black')
-# 
+
 tout = data.frame("data.set" = c("number of samples","number of features"),  "raw.data" = dim(raw_data$metabolite_data), "filtered.data" = dim(qc_data$metabolite_data))
+
 ggpubr::ggtexttable(tout, rows = NULL, theme = ggpubr::ttheme("mBlue") )
+
 ```
 
 ***
@@ -124,17 +111,14 @@ namat = qc_data$metabolite_data
 namat[!is.na(namat)] = 1
 namat[is.na(namat)] = 0
 namat = as.matrix(namat)
-#namat = matrix(sample(c(0,1), 25, replace = TRUE), 5, 5)
-#rownames(namat) = paste0("ind", 1:5)
-#colnames(namat) = paste0("metabo", 1:5)
+
 namat = reshape::melt(namat)
 colnames(namat) = c("individuals","metabolites","missingness")
-##
-#pcol = wesanderson::wes_palette("FantasticFox1", n = 5)[c(2,3)]
+
 pcol = RColorBrewer::brewer.pal(n = 8, name = 'Dark2')
+
 ggplot(namat, aes(metabolites, individuals, fill = missingness)) + 
   geom_tile() + 
-  #scale_fill_gradient(low="snow", high="slategray3") +
   scale_fill_gradient(low= "white", high=pcol[5]) +
   theme(legend.position = "none", axis.text.x = element_blank() )
 
@@ -156,10 +140,6 @@ p = ggpubr::ggarrange(  r_mis[[4]][[1]] ,
                     ncol = 2, nrow = 2,
                     labels = c("a", "b", "c", "d") )
 ggpubr::annotate_figure(p,top = paste0("-- Initial raw data set: Estimates of missingness for samples and features --\n") )
-
-
-# gridExtra::grid.arrange( grobs = r_mis[[4]], nrow = 2)
-
 
 ```
 
@@ -234,8 +214,6 @@ pcplot = pcs %>% ggplot( aes(x = PC1, y = PC2) ) +
   labs(title = paste0("Principal components 1-&-2 using ",number_of_rep_meatbolites ," representative metabolites"),
        subtitle  = paste0(" - Outliers are those ", PC_outlier_SD , " SD from the mean of PCs 1 to", accelerationfactor ))
 ##
-# ggpubr::ggarrange( ptable,  pcplot, ncol = 2, nrow = 1, labels = c("a", "b") )
-
 gridExtra::grid.arrange( grobs = list(ptable, pcplot), widths = c(2, 3), ncol = 2) 
 
 ```
@@ -304,21 +282,6 @@ dend <- as.ggdend(dend)
 ## plot the dendrogram
 tree_plot = dend %>% ggplot() + geom_hline(yintercept = tree_cut_height, color = "coral2")
 
-### OLD TREE PLOT
-# tree = as.dendrogram( qc_data$feature_tree )
-# ## plot paramaters
-# nodePar <- list(lab.cex = 0.6, pch = c(NA, 19), 
-#                 cex = 0.7, col = "cornflowerblue")
-# ## PLOT
-# plot(tree, nodePar = nodePar, leaflab = "none", edgePar = list(col = c("grey30","grey80"), lwd = 2:1) )
-# #rect.hclust( Stree[[1]] , h = 0.20, border="skyblue")
-# if(exists("tree_cut_height")){
-#   tree_cut_height = tree_cut_height
-# } else {
-#   tree_cut_height = 0.5  
-#   }
-# abline(h = tree_cut_height, col = "coral2", lwd = 2)
-
 ##############
 ## Data Reduce
 ## Table
@@ -331,10 +294,10 @@ number_of_rep_meatbolites = sum( qc_data$feature_data$independent_features_binar
 temp = data.frame( data.reduction = c("total metabolite count","metabolites included in data reduction","number of metabolite clusters","number of representative metabolites"),
                    count = c(feature_count,features_included_in_data_reduction, cluster_count, number_of_rep_meatbolites  )  )
 ptable = ggpubr::ggtexttable( temp, rows = NULL, theme = ggpubr::ttheme("mGreen"))
+
 #############
 ## scree plot
 #############
-# plot(qc_data$varexp, pch = 21, bg = pcol[2], cex = 2, type = "b", xlab = "PC number", ylab = "variance explained | eigenvalue")
 ve = tibble::tibble( data.frame(PC= 1:length(qc_data$varexp), VarExp = qc_data$varexp) )
 
 screeplot = ve %>% ggplot(aes(x = PC, y = VarExp)) +
@@ -392,17 +355,6 @@ pcapairs_bymoose( as.matrix(pcs[, 1:5]) , qc_data$varexp, pcol = plotcolors)
 ### Estimates of normality: W-statistics for raw and log transformed data
 
 ```{r, echo=F, warning=FALSE, message=FALSE, error=FALSE}
-# wstat = apply(qc_data$metabolite_data, 2, function(x){
-#   x = na.omit( unlist(x) )
-#   if(length(x)> 5000){ x = sample(x, 5000)}
-#   if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
-#       out = shapiro.test(unlist(x))$statistic  
-#   } else {
-#     out = NA  
-#     }
-#   return(out)
-#   })
-
 wstat = qc_data$feature_data$W_stat_rawdata
 
 ## how many stats were estimated
@@ -418,25 +370,6 @@ normcount = sum(wstat >= 0.95, na.rm = TRUE)
 ```{r shapiroW, echo = FALSE, fig.width = 10, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 W = wstat
 pcol = RColorBrewer::brewer.pal(9, "Set1")
-###
-# W_log10 = apply(qc_data$metabolite_data, 2, function(x){
-#   x = na.omit( unlist(x) )
-#   # x = na.omit( log10(x+1) )
-#   ##
-#   x = log10(x)
-#   w = which(x == "-Inf")
-#   if(length(w)>0){
-#     x[w] = min(x[-w], na.rm = TRUE)/2
-#   }
-#   ##
-#   if(length(x) > 5000){ x = sample(x, 5000) }
-#   if( ( var(x) != 0 & length(x) >= 40 ) == TRUE ){
-#       out = shapiro.test(unlist(x))$statistic  
-#   } else {
-#     out = NA  
-#     }
-#   return(out)
-#   })
 
 W_log10 = qc_data$feature_data$W_stat_log10data
 
@@ -482,8 +415,7 @@ A pdf report is being written to `r paste0( project, "_outlier_detection_pre_fil
 ```{r outliers, echo = FALSE, fig.width = 6, fig.height = 2.5, warning=FALSE, message=FALSE, error=FALSE}
 today = Sys.Date()
 today = gsub("-","_",today)
-  
-  
+
 outlier_filename <- paste0( out_dir, project, "_outlier_detection_pre_filtering.pdf")
 
 ## feauture outlier summary
@@ -518,14 +450,9 @@ There may be extreme outlying observations at individual metabolites|features th
 Feature missingness may be influenced by the metabolites (or features) biology or pathway classification, or your technologies methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files. 
 
 ```{r featurebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
-## possible batch variables that have been observed in 
-## METABOLON and NIGHTINGALE sample-annotation-batch-data
-# possible_batch_variables = c("SUPER_PATHWAY","PLATFORM", "class", "subclass")
 possible_batch_variables = c("path","platform", "class", "batch")
 
 ## matching variables
-# w = which(possible_batch_variables %in% colnames(qc_data$feature_data) )
-# matched_variables = possible_batch_variables[w]
 w = unique( unlist( sapply(possible_batch_variables, function(x){ grep(x, tolower( colnames(qc_data$feature_data)  )  ) }) ) )
 if(length(w)>0){
   matched_variables = colnames(qc_data$feature_data)[w]
@@ -594,21 +521,8 @@ if(length(class_variables)>0){
 The figure provides an illustrative evaluation of the proportion of *sample missigness* as a product of sample batch variables provided by your supplier. This is the univariate influence of batch effects on *sample missingness*.
    
 ```{r samplebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
-## possible batch variables that have been observed in 
-## METABOLON and NIGHTINGALE sample-annotation-batch-data
-# possible_batch_variables = c("BOX_ID","BOX_WELL","RUN_DAY", 
-#                              "Internal_Box_ID", 
-#                              "Sample_Type", "SampleType" ,
-#                              "NMRSpectrometer", "NMR_Spectrometer", 
-#                              "Sample_prep_date_time", "Sampleprepdatetime",
-#                              "Buffer_ID", "BufferID",
-#                              "No.ofrepeatsofLIPOLMWM",
-#                              "ControlB_TMSP_LMWM_Linewidth_at_half_height_(0.3Hz_line_broadening)",
-#                              "ControlBTMSPLMWMLinewidthathalfheight0.3Hzlinebroadening")
-
 possible_batch_variables = c("box", "day", "prep", "date", "time", "type", "nmr", "buffer", "lmwm")
   
-
 ## matching variables
 # w = which( possible_batch_variables  %in%  colnames(qc_data$sample_data)  )
 w = unique( unlist( sapply(possible_batch_variables, function(x){ grep(x, tolower( colnames(qc_data$sample_data)  )  ) }) ) )

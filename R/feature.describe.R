@@ -1,13 +1,31 @@
-#' A Function to describe each feature of a matrix of metabolite data. 
+#' summary statistics for features 
 #'
 #' This function allows you to 'describe' metabolite features using the describe() function from the psych package, as well as estimate variance, a dispersion index, the coeficent of variation, and shapiro's W-statistic.
+#'
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
-#' @keywords metabolomics
+#'
+#' @keywords feature summary statistics
+#'
 #' @importFrom psych describe
+#' @importFrom stats var sd na.omit shapiro.test
+#' 
+#' @return a data frame of summary statistics for features (columns) of a matrix
+#'
 #' @export
+#'
 #' @examples
-#' feature.describe()
+#' ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+#' feature.describe(ex_data)
+#'
 feature.describe = function(wdata){
+  ## package check
+  pkgs = c("psych")
+  for(pkg in pkgs){
+    if (!requireNamespace( pkg, quietly = TRUE)) {
+        stop(paste0("Package \"", pkg,"\" needed for feature.describe() function to work. Please install it."),call. = FALSE)
+      }
+  }
+
   d = psych::describe(wdata)[, -c(1,6,7)]
   ####
   e = t( apply(wdata, 2, function(x){
@@ -15,24 +33,24 @@ feature.describe = function(wdata){
     missing_count = sum(is.na(x))
 
     ## variance
-    v = var(x, na.rm = TRUE); if(is.na(v)){v = 0}
+    v = stats::var(x, na.rm = TRUE); if(is.na(v)){v = 0}
     
     ## dispersion index
     dispersionindex = v / mean(x, na.rm = T)
     if(v == 0){dispersionindex = NA}
     
     ## coef of var
-    coefvar = sd(x, na.rm = T) / mean(x, na.rm = T)
+    coefvar = stats::sd(x, na.rm = T) / mean(x, na.rm = T)
     
     ## shapiro test for normality
     ## it can only have 5000 observation
     if(length(x) > 5000 ){
       x = sample(x, 5000, replace = FALSE)
     }
-    if(v == 0 | length(na.omit(x)) < 5 ){
+    if(v == 0 | length(stats::na.omit(x)) < 5 ){
         W_raw = NA; W_log = NA
       } else {
-      W_raw = shapiro.test(x)$stat
+      W_raw = stats::shapiro.test(x)$stat
       
       ## normalized data may have negative values
       ## we must account for this possibility

@@ -2,17 +2,23 @@
 % Please edit documentation in R/find.cont.effect.sizes.2.sim.R
 \name{find.cont.effect.sizes.2.sim}
 \alias{find.cont.effect.sizes.2.sim}
-\title{A Function to estiamte an appropriate distribution of effect sizes to simulate in a power analysis.}
+\title{identify continuos trait effect sizes}
 \usage{
 find.cont.effect.sizes.2.sim(mydata)
 }
 \arguments{
 \item{mydata}{Your metabolite data matrix, with samples in rows}
 }
+\value{
+a vector of effect sizes
+}
 \description{
-This function estiamtes an appropriate distribution of effect sizes to simulate in a power analysis.
+This function estimates an appropriate distribution of effect sizes to simulate in a continuous trait power analysis.
 }
 \examples{
-find.cont.effect.sizes.2.sim()
+ex_data = sapply(1:10, function(x){ rnorm(250, 40, 5) })
+find.cont.effect.sizes.2.sim(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{analysis}
+\keyword{power}

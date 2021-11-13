@@ -2,19 +2,32 @@
 % Please edit documentation in R/met2batch.R
 \name{met2batch}
 \alias{met2batch}
-\title{A Function to evaluate the effect of a laboratory batch variable on all metabolite feautures in a data matrix}
+\title{batch effect on numeric matrix}
 \usage{
 met2batch(wdata, batch)
 }
 \arguments{
-\item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
+\item{wdata}{the numeric data matrix with samples in row, features in columns}
 
 \item{batch}{a single vector containing a vector based batch variable}
 }
+\value{
+a list object of length two with (1) a data frame of summary statistics on (a) the number of tested features ,(b) the mean batch effect across all features ,(c)  the mean batch effect across all associated (BH FDR<0.05) features ,(d) the number of associated (BH FDR<0.05) features.
+}
 \description{
-This function allows you to estimate effects of laboratory batch variable on metabolite features.
+This function estimates the effects of a categorical (batch) variable on a matrix of features in univariate linear models.
 }
 \examples{
-met2batch()
+d1 = sapply(1:10, function(x){ rnorm(50, 30, 5) })
+d2 = sapply(1:10, function(x){ rnorm(50, 40, 5) })
+ex_data = rbind(d1, d2)
+d3 = sapply(1:10, function(x){ rnorm(100, 40, 5) })
+ex_data = cbind(ex_data, d3)
+lot = c( rep("A",50), rep("B",50) )
+ex = met2batch(wdata = ex_data, batch = lot)
+
 }
+\keyword{linear}
 \keyword{metabolomics}
+\keyword{models}
+\keyword{univariate}

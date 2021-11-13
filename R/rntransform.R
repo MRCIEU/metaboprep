@@ -1,34 +1,59 @@
-#' A copy of the rntransform function from the GenAbel package, edited for the option of spliting tied values.
+#' rank normal tranformation
 #'
-#' This function rank-normal transform a vector of data, and by default splits tied values randomly
-#' @param formula 
-#' @param data your vector of numerical values to rank normal transform 
-#' @param family Defaulted to gaussian. Do not suggest editing 
-#' @param split_ties Defualted to FALSE. If TRUE is provided all tied values will be randomly ranked in the function rank() 
-#' @keywords nigtingale
+#' This function rank normal transforms a vector of data. The procedure is built off of that provided in the GenABEL pacakge.
+#'
+#' @param y a numeric vector which will be rank normal transformed
+#' @param split_ties a binary string of TRUE (default) or FALSE indicating if tied values, of the same rank, should be randomly split giving them unique ranks.
+#'
+#' @keywords rank normal transformation
+#'
+#' @importFrom stats qnorm
+#'
+#' @return returns a numeric vector, with the same length as y, of rank normal transformed values
+#'
 #' @export
+#'
 #' @examples
-#' rntransform()
-rntransform = function (formula, data, family = gaussian, split_ties = FALSE) 
-{
-  if (is(try(formula, silent = TRUE), "try-error")) {
-    if (is(data, "gwaa.data")) 
-      data1 <- phdata(data)
-    else if (is(data, "data.frame")) 
-      data1 <- data
-    else stop("'data' must have 'gwaa.data' or 'data.frame' class")
-    formula <- data1[[as(match.call()[["formula"]], "character")]]
-  }
-  var <- ztransform(formula, data, family)
-  if(split_ties == TRUE){
-    out <- rank(var, ties.method = "random") - 0.5
-  } else {
-    out <- rank(var) - 0.5
-  }
-  out[is.na(var)] <- NA
-  mP <- 0.5/max(out, na.rm = T)
-  out <- out/(max(out, na.rm = T) + 0.5)
-  out <- qnorm(out)
-  out
-}
+#' ## simulate a negative binomial distribution of values
+#' nb_data = rnbinom(500, mu = 40, size = 100)
+#' ## rank normal transform those values
+#' rnt_data = rntransform( nb_data , split_ties = TRUE )
+#'
+rntransform = function( y, split_ties = TRUE ){
+  ## verify that x is a vector.
+  if(is.vector(y) == FALSE){ stop("id_outliers() parameter y is expected to be a vector of data.") }
 
+  ## verify some variablity
+  if (length(unique(y)) == 1){ stop("trait is monomorphic") }
+
+  if (length(unique(y)) == 2){ stop("trait is binary") }
+
+  ## identify and remove the NAs
+  w = (!is.na(y))
+  x <- y[w]
+
+  ## empty vector of Z values
+  z = rep(NA, length(w))
+
+  ## z-transform
+  temp <- (x - mean(x))/sd(x)
+
+  ## define z values for all observations including the NAs
+  z[w] = temp
+
+  ## rank the data
+  if(split_ties == TRUE){
+    rnt <- rank(z, ties.method = "random") - 0.5
+  } else {
+    rnt <- rank(z) - 0.5
+  }
+  ## insure the NAs remain so
+  rnt[is.na(z)] <- NA
+
+  ## inverse
+  rnt <- rnt/(max(rnt, na.rm = T) + 0.5)
+  ## quantile normalize
+  rnt <- stats::qnorm(rnt)
+
+  return(rnt)
+}

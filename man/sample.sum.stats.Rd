@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample.sum.stats.R
 \name{sample.sum.stats}
 \alias{sample.sum.stats}
-\title{A Function to estimate numerous summary statistics for your samples}
+\title{summary statistics for samples}
 \usage{
 sample.sum.stats(wdata, feature_names_2_exclude = NA)
 }
@@ -11,10 +11,16 @@ sample.sum.stats(wdata, feature_names_2_exclude = NA)
 
 \item{feature_names_2_exclude}{a vector of feature|column names to exclude from missingness estimates}
 }
+\value{
+a data frame of summary statistics
+}
 \description{
-This function estiamtes summary statistics for samples in a matrix of metabolite features. This includes missingness, total peak area, a count of the number of outlying features for a sample.
+This function estimates summary statistics for samples in a matrix of numeric features. This includes missingness, total peak area, and a count of the number of outlying features for a sample.
 }
 \examples{
 sample.sum.stats()
+
 }
-\keyword{metabolomics}
+\keyword{sample}
+\keyword{statistics}
+\keyword{summary}

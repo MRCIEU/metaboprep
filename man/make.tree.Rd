@@ -2,7 +2,7 @@
 % Please edit documentation in R/make.tree.R
 \name{make.tree}
 \alias{make.tree}
-\title{A Function to generate a dendrogram of feautres based on correlation distances}
+\title{generate a hclust dendrogram}
 \usage{
 make.tree(wdata, cor_method = "spearman", hclust_method = "complete")
 }
@@ -11,12 +11,28 @@ make.tree(wdata, cor_method = "spearman", hclust_method = "complete")
 
 \item{cor_method}{the correlation method used in the function cor(). Default is "spearman".}
 
-\item{hclust_method}{the dendrogram clustering method used in the construction of the tree. Default is "complete"}
+\item{hclust_method}{the dendrogram clustering method used in the construction of the tree. Default is "complete".}
+}
+\value{
+an hclust object
 }
 \description{
-This function allows you to generate a dendrogram of feautres based on correlation coefficeint of your choice, and a clustering method of choice
+This estimates a dendrogram of feautres based on correlation coefficeint of your choice, and a clustering method of choice
 }
 \examples{
-make.tree()
+cmat = matrix(1, 4, 4 )
+cmat[1,] = c(1, 0.8, 0.6, 0.2)
+cmat[2,] = c(0.8, 1, 0.7, 0.5)
+cmat[3,] = c(0.6, 0.7, 1, 0.6)
+cmat[4,] = c(0.2, 0.5, 0.6,1)
+## simulate some correlated data (multivariable random normal)
+set.seed(1110)
+ex_data = MASS::mvrnorm(n = 250, mu = c(5, 45, 25, 15), Sigma = cmat )
+## estiamte the dendrogram
+tree = make.tree(ex_data)
+## plot the dendrogram
+plot(tree, hang = -1)
+
 }
-\keyword{metabolomics}
+\keyword{dendrogram}
+\keyword{hclust}

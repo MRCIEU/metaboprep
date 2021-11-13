@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_plots.R
 \name{feature_plots}
 \alias{feature_plots}
-\title{A function to plot the distribution and a few summary statistics of each feature in a data frame to a pdf file}
+\title{feature plots to file}
 \usage{
 feature_plots(wdata, outdir = NULL, nsd = 5)
 }
@@ -13,11 +13,17 @@ feature_plots(wdata, outdir = NULL, nsd = 5)
 
 \item{nsd}{number of SD from the mean to plot an outlier line on the scatter plot and histogram}
 }
+\value{
+a ggplot2 object
+}
 \description{
 This function to plots a scatter plot, a histogram, and a few summary statistics of each feature in a data frame to a pdf file
 }
 \examples{
-feature_plots()
+ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+feature_plots(ex_data)
+
 }
 \keyword{metabolomics}
 \keyword{pdf}

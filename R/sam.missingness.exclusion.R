@@ -1,13 +1,20 @@
-#' A Function to identify samples to exclude
+#' sample exlusions on missingness and total peak area
 #'
-#' This function allows you to 
+#' This function provides missingnes and tpa estiamtes along with exlcusion at 3,4,and 5sd from the mean.
+#' 
 #' @param mydata metabolite data
 #' @param sdata sample data
 #' @param fdata feature data
+#'
 #' @keywords metabolomics
+#' 
+#' @return a data frame of missingness and TPA exclusions 
+#'
 #' @export
+#'
 #' @examples
 #' sam.missingness.exclusion()
+#'
 sam.missingness.exclusion = function(mydata, sdata, fdata){
   ## empty sample exclusion data frame
   svector = rep(0, nrow(mydata))
@@ -18,8 +25,9 @@ sam.missingness.exclusion = function(mydata, sdata, fdata){
                           tpa_sd5 = svector)
   
   ## calculate missingness after removing Xenobiotics.
-  xeno = which(fdata$SUPER_PATHWAY == "Xenobiotics")
+  xeno = which(fdata$SUPER_PATHWAY %in% c("Xenobiotics", "xenobiotics", "xeno") )
   sam2remove$sample_missingness_no_xeno = apply(mydata[, -xeno], 1, function(x){ sum(is.na(x))/length(x) })
+  
   ## identify samples with missingness greater than 20%.
   r = which( sam2remove$sample_missingness_no_xeno > 0.2)
   sam2remove$mis20prt[r] = 1

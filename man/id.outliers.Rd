@@ -2,7 +2,7 @@
 % Please edit documentation in R/id.outliers.R
 \name{id.outliers}
 \alias{id.outliers}
-\title{A Function to identify SD outliers in a vector of data}
+\title{identify outliers}
 \usage{
 id.outliers(x, nsd = 5)
 }
@@ -11,10 +11,15 @@ id.outliers(x, nsd = 5)
 
 \item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
 }
+\value{
+a vector indexing which samples are outliers
+}
 \description{
-given a vector of data, identify those positions that are standard deviation outliers in that vector of data
+given a vector of data, identify those positions that are 'nsd' standard deviation units from the mean
 }
 \examples{
-id.outliers()
+ex_data = rnbinom(500, mu = 40, size = 5)
+id.outliers(ex_data, nsd = 2)
+
 }
-\keyword{metabolomics}
+\keyword{outliers}

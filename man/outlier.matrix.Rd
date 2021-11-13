@@ -2,19 +2,34 @@
 % Please edit documentation in R/outlier.matrix.R
 \name{outlier.matrix}
 \alias{outlier.matrix}
-\title{A Function to identify outliers in each column of a matrix}
+\title{identify outlier sample indexes in a matrix}
 \usage{
 outlier.matrix(wdata, nsd = 5)
 }
 \arguments{
-\item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
+\item{wdata}{a matrix of numerical values, samples in row, features in columns}
 
-\item{x}{a vector of numerical values}
+\item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
+}
+\value{
+a matrix of 0 (not a sample outlier) and 1 (outlier)
 }
 \description{
 Given a matrix of data this function returns a matrix of 0|1, of the same structure with 1 values indicating outliers. It is an expansion of the function id.outliers(), applied to columns of a matrix.
 }
 \examples{
-outlier.matrix()
+ex_data = sapply(1:25, function(x){ rnorm(250, 40, 5) })
+## define the data set
+rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+## add in some technical error to two samples
+m = apply(ex_data, 2, function(x){ mean(x, na.rm = TRUE) })
+ex_data[c(1,50), ] = ex_data[1, ] + (m*4) 
+Omat = outlier.matrix(ex_data)
+## how many outliers identified
+sum(Omat)
+
 }
-\keyword{metabolomics}
+\keyword{indexes}
+\keyword{matrix}
+\keyword{outlier}

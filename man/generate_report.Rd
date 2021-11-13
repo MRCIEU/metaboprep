@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_report.R
 \name{generate_report}
 \alias{generate_report}
-\title{A function to generate a metaboprep summary html report}
+\title{generate metaboprep summary html report}
 \usage{
 generate_report(
   full_path_2_Rdatafile = "ReportData.Rdata",
@@ -20,12 +20,15 @@ generate_report(
 }
 \value{
 Writes a html report to file
+
+an html file written to file
 }
 \description{
 This function generates the html report.
 }
 \examples{
 generate_report()
+
 }
 \keyword{html}
 \keyword{knit}

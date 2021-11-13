@@ -2,17 +2,23 @@
 % Please edit documentation in R/find.PA.effect.sizes.2.sim.R
 \name{find.PA.effect.sizes.2.sim}
 \alias{find.PA.effect.sizes.2.sim}
-\title{A Function to estiamte an appropriate distribution of effect sizes to simulate in a power analysis.}
+\title{identify effect sizes}
 \usage{
 find.PA.effect.sizes.2.sim(mydata)
 }
 \arguments{
 \item{mydata}{Your metabolite data matrix, with samples in rows}
 }
+\value{
+a vector of effect sizes
+}
 \description{
-This function estiamtes an appropriate distribution of effect sizes to simulate in a power analysis.
+This function estimates an appropriate distribution of effect sizes to simulate in a power analysis.
 }
 \examples{
-find.PA.effect.sizes.2.sim()
+ex_data = sapply(1:10, function(x){ rnorm(250, 40, 5) })
+find.PA.effect.sizes.2.sim(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{anlysis}
+\keyword{power}

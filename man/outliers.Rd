@@ -2,19 +2,24 @@
 % Please edit documentation in R/outliers.R
 \name{outliers}
 \alias{outliers}
-\title{A Function to identify outliers from a vector of data at SD units from the mean.}
+\title{identify outliers}
 \usage{
 outliers(x, nsd = 3)
 }
 \arguments{
 \item{x}{a numerical vector of data}
 
-\item{nsd}{the Number of SD units from the mean to be used as an outlier cutoff.}
+\item{nsd}{the number of SD units from the mean to be used as an outlier cutoff.}
+}
+\value{
+a list object of length three. (1) a vector of sample indexes indicating the outliers, (2) the lower outlier cuttoff value, (3) the upper outlier cuttoff value.
 }
 \description{
-This function to identify outliers from a vector of data at SD units from the mean.
+This function identifies outliers from a vector of data at SD units from the mean.
 }
 \examples{
-outliers()
+ex_data = rnbinom(500, mu = 40, size = 5)
+outliers(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{outliers}

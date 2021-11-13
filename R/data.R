@@ -1,6 +1,6 @@
 #' Nightingale Health metabolomics annotation data set
 #'
-#' A dataset containing annotation data on Nightingale Health NMR metabolites (lipids)
+#' A dataset containing annotation data on Nightingale Health NMR metabolites (lipids), compiled from public resources with additional annotation made here. 
 #'
 #' @format A data frame with 233 rows and 7 variables:
 #' \describe{

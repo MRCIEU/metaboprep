@@ -1,11 +1,19 @@
-#' A Function to estiamte an appropriate distribution of effect sizes to simulate in a power analysis.
+#' identify continuos trait effect sizes
 #'
-#' This function estiamtes an appropriate distribution of effect sizes to simulate in a power analysis.
+#' This function estimates an appropriate distribution of effect sizes to simulate in a continuous trait power analysis.
+#'
 #' @param mydata Your metabolite data matrix, with samples in rows
-#' @keywords metabolomics
+#'
+#' @keywords power analysis
+#' 
+#' @return a vector of effect sizes
+#'
 #' @export
+#'
 #' @examples
-#' find.cont.effect.sizes.2.sim()
+#' ex_data = sapply(1:10, function(x){ rnorm(250, 40, 5) })
+#' find.cont.effect.sizes.2.sim(ex_data)
+#'
 find.cont.effect.sizes.2.sim = function(mydata){
   ####################################   
   # set N equal to no. in sample
@@ -47,8 +55,8 @@ find.cont.effect.sizes.2.sim = function(mydata){
 
   effect_range = c( as.numeric(as.character( con_power$effect[w_min] ) ) , as.numeric( as.character( con_power$effect[w_max] ) ) )
   delta_effect_range = effect_range[2] - effect_range[1]
-  effect_steps = round( delta_effect_range/11, d = 5 )
+  effect_steps = round( delta_effect_range/11, digits = 5 )
   s = seq(effect_range[1], effect_range[2], effect_steps)
   if(length(s) > 11 ){ s = s[1:11] }
-  return( round(s, d = 6) ) 
+  return( round(s, digits = 6) ) 
 }

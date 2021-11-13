@@ -2,7 +2,7 @@
 % Please edit documentation in R/multivariate.anova.R
 \name{multivariate.anova}
 \alias{multivariate.anova}
-\title{A Function to perform multivariate analysis over a dependent and an independent variable}
+\title{multivariate analysis}
 \usage{
 multivariate.anova(dep, indep_df)
 }
@@ -11,10 +11,24 @@ multivariate.anova(dep, indep_df)
 
 \item{indep_df}{a data frame of the independent variable}
 }
+\value{
+ggplot2 table figure of
+}
 \description{
-This function performs univariate analysis over a dependent and an independent variable
+This function performs a multivariate analysis over a dependent|response and numerous independent|explanatory variable
 }
 \examples{
-multivariate.anova()
+cmat = matrix(1, 3, 3 )
+cmat[1,] = c(1, 0.5, 0.3)
+cmat[2,] = c(0.5, 1, 0.25)
+cmat[3,] = c(0.3, 0.25, 1)
+## simulate some correlated data (multivariable random normal)
+set.seed(1110)
+ex_data = MASS::mvrnorm(n = 250, mu = c(5, 45, 25), Sigma = cmat )
+colnames(ex_data) = c("outcome","age","bmi")
+multivariate.anova(dep = ex_data[,1], indep_df = ex_data[, 2:3])
+
 }
+\keyword{ANOVA}
 \keyword{metabolomics}
+\keyword{multivariate}

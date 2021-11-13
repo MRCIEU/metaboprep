@@ -2,17 +2,24 @@
 % Please edit documentation in R/feature.describe.R
 \name{feature.describe}
 \alias{feature.describe}
-\title{A Function to describe each feature of a matrix of metabolite data.}
+\title{summary statistics for features}
 \usage{
 feature.describe(wdata)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 }
+\value{
+a data frame of summary statistics for features (columns) of a matrix
+}
 \description{
 This function allows you to 'describe' metabolite features using the describe() function from the psych package, as well as estimate variance, a dispersion index, the coeficent of variation, and shapiro's W-statistic.
 }
 \examples{
-feature.describe()
+ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+feature.describe(ex_data)
+
 }
-\keyword{metabolomics}
+\keyword{feature}
+\keyword{statistics}
+\keyword{summary}

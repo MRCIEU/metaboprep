@@ -2,7 +2,7 @@
 % Please edit documentation in R/variable.by.factor.R
 \name{variable.by.factor}
 \alias{variable.by.factor}
-\title{A Function to perform univariate analysis over a dependent and an independent variable}
+\title{ggplot2 violin plot}
 \usage{
 variable.by.factor(
   dep,
@@ -26,10 +26,17 @@ variable.by.factor(
 
 \item{violin}{box plot or violin plot. violin = TRUE is default}
 }
+\value{
+a ggplot2 object
+}
 \description{
-This function performs univariate analysis over a dependent and an independent variable
+This function performs univariate linear analysis of a dependent and an independent variable and generates a viloin or box plot to illustrate the associated structure.
 }
 \examples{
-variable.by.factor()
+x = c( rnorm(20, 10, 2), rnorm(20, 20, 2) )
+y = as.factor( c( rep("A", 20), rep("B", 20)  ) )
+variable.by.factor(dep = x , indep = y, dep_name = "expression", indep_name = "species" )
+
 }
+\keyword{ggplot}
 \keyword{metabolomics}

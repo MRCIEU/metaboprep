@@ -2,17 +2,26 @@
 % Please edit documentation in R/run.pa.imbalanced.power.make.plot.R
 \name{run.pa.imbalanced.power.make.plot}
 \alias{run.pa.imbalanced.power.make.plot}
-\title{A Function to simulate power for a spectrum of effect sizes, and generate plots, assuming a presence absence binary trait in an imbalanced design}
+\title{binary trait imbalanced design power analysis plot}
 \usage{
 run.pa.imbalanced.power.make.plot(mydata)
 }
 \arguments{
-\item{mydata}{Your metabolite data matrix, with samples in rows}
+\item{mydata}{a numeric data matrix with samples in rows and features in columns}
+}
+\value{
+a ggplot2 object
 }
 \description{
-This function allows simulate power for numberous effect estimates for both binary and continuous variables and generate summary plots. Useful for QC Rmd Report.
+This function (1) estimates an informative distribution of effect and power estimates given your datas total sample size, over a distribution of imbalanced sample sizes and (2) returns a summary plot.
 }
 \examples{
-run.pa.imbalanced.power.make.plot()
+ex_data = matrix(NA, 1000, 2)
+run.pa.imbalanced.power.make.plot( ex_data )
+
 }
-\keyword{metabolomics}
+\keyword{analysis}
+\keyword{binary}
+\keyword{plot}
+\keyword{power}
+\keyword{trait}

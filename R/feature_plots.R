@@ -1,18 +1,38 @@
-#' A function to plot the distribution and a few summary statistics of each feature in a data frame to a pdf file
+#' feature plots to file
 #'
 #' This function to plots a scatter plot, a histogram, and a few summary statistics of each feature in a data frame to a pdf file
+#'
 #' @param wdata a data frame of feature (ex: metabolite or protein) abundance levels
 #' @param outdir output directory path
 #' @param nsd number of SD from the mean to plot an outlier line on the scatter plot and histogram
+#'
 #' @keywords metabolomics summary pdf
+#'
 #' @importFrom ggpubr ggarrange ggtexttable ggexport
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom maggistr %>%
-#' @importFrom ggplot2 aes geom_point geom_histogram geom_hline geom_vline theme_bw
+#' @importFrom magrittr %>%
+#' @importFrom ggplot2 ggplot geom_point geom_histogram geom_hline geom_vline theme_bw
+#' 
+#' @return a ggplot2 object
+#'
 #' @export
+#'
 #' @examples
-#' feature_plots()
+#' ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
+#' colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+#' feature_plots(ex_data)
+#'
 feature_plots <- function(wdata, outdir=NULL, nsd = 5){
+  ## define local function variable
+  index <- level <- NULL
+  ## package check
+  pkgs = c("ggpubr", "RColorBrewer", "magrittr", "ggplot2")
+  for(pkg in pkgs){
+    if (!requireNamespace( pkg, quietly = TRUE)) {
+        stop(paste0("Package \"", pkg,"\" needed for feature_plots() function to work. Please install it."),call. = FALSE)
+      }
+  }
+
   ## extract trait names from columns
   traits = sort(colnames(wdata) )
   

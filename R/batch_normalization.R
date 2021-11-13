@@ -1,15 +1,37 @@
-#' A function to median normalize data sets by batch
+#' median batch normalization
 #'
-#' This function median normalizes multivariable data such as metabolomic and proteomic data sets
+#' This function median normalizes multivariable data often processed in batches, such as metabolomic and proteomic data sets.
+#'
+#'
 #' @param wdata the metabolite data frame samples in row, metabolites in columns
 #' @param feature_data_sheet a data frame containing the feature annotation data
 #' @param sample_data_sheet a data frame containing the sample annotation data
 #' @param feature_runmode_col a string identifying the column name in the feature_data_sheet that identifies the run mode for each feature (metabolites of proteins).
 #' @param batch_ids a string vector, with a length equal to the number of samples in the data set that identifies what batch each sample belongs to. 
+#'
 #' @keywords metabolomics proteomics batch normalization
+#'
+#' @return returns the wdata object passed to the function median normalized given the batch information provided.
+#'
+#' @importFrom stats median
+#'
 #' @export
+#'
 #' @examples
-#' batch_normalization()
+#' ####################################
+#' ## with a vector of batch variables
+#' ####################################
+#' ## define the data set
+#' d1 = sapply(1:10, function(x){ rnorm(25, 40, 2) })
+#' d2 = sapply(1:10, function(x){ rnorm(25, 35, 2) })
+#' ex_data = rbind(d1,d2)
+#' rownames(ex_data) = paste0("ind", 1:nrow(ex_data))
+#' colnames(ex_data) = paste0("var", 1:ncol(ex_data))
+#' ## define the batch
+#' batch = c( rep("A", 25), rep("B", 25)  )
+#' ## normalize by batch
+#' norm_wdata = batch_normalization(wdata = ex_data, batch_ids = batch )
+#' 
 batch_normalization = function( wdata, feature_data_sheet = NULL, sample_data_sheet = NULL, feature_runmode_col = NULL, batch_ids = NULL  ){
   ##
   if( length(batch_ids) == 0 ){
@@ -62,7 +84,7 @@ batch_normalization = function( wdata, feature_data_sheet = NULL, sample_data_sh
       ## perform the normalization
       for(bid in batchIDs){
         sample_index = which(batches == bid)
-        m = apply( wdata[sample_index, metabolite_index], 2, function(x){ median(x, na.rm = TRUE) })
+        m = apply( wdata[sample_index, metabolite_index], 2, function(x){ stats::median(x, na.rm = TRUE) })
         for(j in 1:length(m)){
           wdata[ sample_index, metabolite_index[j] ] = wdata[ sample_index, metabolite_index[j] ] / m[j]
         }
