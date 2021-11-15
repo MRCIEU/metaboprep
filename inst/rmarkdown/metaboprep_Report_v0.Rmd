@@ -59,7 +59,7 @@ knitr::include_graphics(pic)
 
 ## Sample size of `r project` data set
 
-```{r Sample_size, fig.width = 8, fig.height = 3 }
+```{r Sample_size, fig.width = 3, fig.height = 2}
 tout = data.frame("data.set" = c("number of samples","number of features"),  
                   "raw.data" = dim(raw_data$metabolite_data), 
                   "filtered.data" = dim(qc_data$metabolite_data))
@@ -93,7 +93,7 @@ Figure Legend: Missingness structure across the raw data table. White cells depi
 
 ### Summary of sample and feature missingness 
 
-```{r run.missingness, echo = FALSE, fig.width = 15, fig.height = 6.5, warning=FALSE, message=FALSE, error=FALSE}
+```{r run.missingness, echo = FALSE, fig.width = 8, fig.height = 6, warning=FALSE, message=FALSE, error=FALSE}
 r_mis = missingness.sum(mydata = raw_data$metabolite_data)
 
 p = ggpubr::ggarrange(  r_mis[[4]][[1]] ,
@@ -303,7 +303,7 @@ Figure Legend: A matrix (pairs) plot of the top five principal components includ
 ### Estimates of normality: W-statistics for raw and log transformed data
 
 ```{r, echo=F, warning=FALSE, message=FALSE, error=FALSE}
-wstat = qc_data$feature_data$W_stat_rawdata
+wstat = qc_data$feature_data$W
 
 ## how many stats were estimated
 count = length(wstat)
@@ -318,7 +318,7 @@ normcount = sum(wstat >= 0.95, na.rm = TRUE)
 ```{r shapiroW, echo = FALSE, fig.width = 10, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 W = wstat
 pcol = RColorBrewer::brewer.pal(9, "Set1")
-W_log10 = qc_data$feature_data$W_stat_log10data
+W_log10 = qc_data$feature_data$log10_W
 
 ## Plot
 par(mfrow = c(1,2), oma = c(2,1,1,1))
