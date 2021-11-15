@@ -1,7 +1,9 @@
 # Metabolite data preparation pipeline - version 1.0
 
 by: David Hughes and Laura Corbin	
-date: June 3rd 2019
+date: June 3rd 2019 
+
+<img src="inst/figures/metaboprep.png" alt="hex" width="150"/> 
 
 ## This package
 1. Reads in and processes (un)targeted metabolite data, saving datasets in tab-delimited format for use elsewhere
