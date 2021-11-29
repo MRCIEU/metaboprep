@@ -234,6 +234,14 @@ if(isflat > 0){
     rownames(metabolitedata) = as.character(metabolitedata[,1])
     metabolitedata = metabolitedata[,-1]
   }
+  ## look to see of column names are just numerics. R will add X to numberic column names
+  editcolnames = sum( substring(colnames(metabolitedata) ,1,1) == "X", na.rm = TRUE ) / ncol(metabolitedata)
+  if(editcolnames == 1){
+    cat(paste0("\t\t- Column names are numeric. Adding 'featID_' prefix to each.\n") )
+    numeric_ids = substring(colnames(metabolitedata) , 2, nchar(colnames(metabolitedata)) ) 
+    new_col_id = paste0("featID_", as.character(numeric_ids))
+    colnames(metabolitedata) = new_col_id
+  }
   ## if platform is Nightingale edit metabolite names
   if( platform == "Nightingale"){
     cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t so editing metabolite names in an attempt to match the metaboprep annotation file.\n"))
@@ -264,11 +272,14 @@ if( !is.na(FeatureAnno_file2process) ){
   if( length(grep(".csv", n )) > 0 ){
     cat(paste0("\t- Reading in you csv feature annotation file\n"))
     featuredata = read.csv(n, header = TRUE, as.is = TRUE, quote = "", fill = TRUE)
+    # featuredata = readr::read_delim(n, show_col_types = FALSE)
   }
   ####
   if( length( c( grep(".txt", n ), grep(".tsv", n )  ) ) > 0 ){
     cat(paste0("\t- Reading in you txt feature annotation file\n"))
-    featuredata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t",quote = "", fill = TRUE)
+    #featuredata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t", quote = "", fill = TRUE)
+    featuredata = readr::read_delim(n, show_col_types = FALSE)
+    featuredata = as.data.frame(featuredata)
   } 
   ## format featuredata data
   editrownames = sum( rownames(featuredata) == 1:nrow(featuredata) ) /nrow(featuredata)
@@ -276,10 +287,24 @@ if( !is.na(FeatureAnno_file2process) ){
     ## redefine only if the number of unique strings is the same as the number of rows
     if( length(unique(featuredata[,1])) == nrow(featuredata) ){
       cat(paste0("\t\t- Assuming feature IDs are in column 1 and redefining rownames\n"))
-      rownames(featuredata) = as.character(featuredata[,1])
-      #featuredata = featuredata[,-1]
+      ## looking to see if column names of metabolite data file were also numeric. If yes then "X" was added by R.
+      ##  this was removed and "featID_" was added as a prefix. So we have to do the same here for name matching
+      ##  during filtering steps later.
+      if(editcolnames == 1){
+      cat(paste0("\t\t- Column were numeric so will also add 'featID_' as a prefix to each row names here.\n") )
+        rownames(featuredata) = paste0( "featID_", as.character( featuredata[,1] ) )
+      } else {
+        rownames(featuredata) = as.character(featuredata[,1])
+        #featuredata = featuredata[,-1]  
+      }
+      
     }
   }
+  
+  ## Make sure there is a "feature_names" and that it has same values as rownames
+  featuredata$feature_names = rownames(featuredata)
+
+  ##
   if( platform == "Nightingale"){
     cat(paste0("\t\t- Your defined platform is Nightingale,\n\t\t  so editing metabolite names in an attempt to match the metaboprep annotation file.\n"))
     ## edit column metabolite names
@@ -392,10 +417,10 @@ if(length(mydata)>3){
 
 #########################
 ##
-## (VII)  Normalize Metabolon Data
+## (VII)  Normalize Metabolon or Other (MS) Data
 ##
 #########################
-if(platform == "Metabolon"){
+if(platform != "Nightingale"){
   cat( paste0("Normalization. Performing normalization on Metabolon Data.\n\n") )
   if(!is.na(feat_anno_run_mode_col)){
       cat( paste0("\t- Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
@@ -642,7 +667,9 @@ cat( paste0("\tc. Performing principle component analysis and identifying outlie
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
 indf = as.character( featuresumstats$table[w,1] )
-
+if( sum( indf %in% colnames(mydata$metabolitedata) ) == 0 ){
+  indf = as.character( featuresumstats$table$feature_names[w] )  
+}
 PCs_outliers = pc.and.outliers(metabolitedata =  mydata$metabolitedata, 
                                indfeature_names = indf)
 
@@ -755,6 +782,9 @@ qcing_data = list(metabolite_data = dataQC$wdata,
 temp = dataQC$wdata
 m = match( rownames(temp) , mydata$sampledata[,1] )
 n = match( colnames(temp) , mydata$featuredata[,1] )
+if( length(n) == sum(is.na(n)) ){
+  n = match( colnames(temp) , mydata$featuredata$feature_names )
+}
 qcdata = list(metabolitedata = temp, 
   sampledata = as.data.frame( mydata$sampledata[m,] ), 
   featuredata = as.data.frame( mydata$featuredata[n,] ) )
@@ -897,7 +927,9 @@ cat( paste0("\te. Performing principle component analysis on final filtered data
 ## identify independent feature names as reported in featuresumstats
 w = which(featuresumstats$table$independent_features_binary == 1)
 indf = featuresumstats$table[w,1]
-
+if( sum( indf %in% colnames(mydata$metabolitedata) ) == 0 ){
+  indf = as.character( featuresumstats$table$feature_names[w] )  
+}
 PCs_outliers = pc.and.outliers(metabolitedata =  qcdata$metabolitedata, 
                                indfeature_names = indf)
 
