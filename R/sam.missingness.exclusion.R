@@ -1,6 +1,6 @@
 #' sample exlusions on missingness and total peak area
 #'
-#' This function provides missingnes and tpa estiamtes along with exlcusion at 3,4,and 5sd from the mean.
+#' This function provides missingnes and tpa estimates along with exlcusion at 3, 4, and 5 SD from the mean.
 #' 
 #' @param mydata metabolite data
 #' @param sdata sample data
@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' sam.missingness.exclusion()
+#' # sam.missingness.exclusion()
 #'
 sam.missingness.exclusion = function(mydata, sdata, fdata){
   ## empty sample exclusion data frame

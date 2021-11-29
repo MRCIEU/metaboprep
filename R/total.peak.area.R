@@ -4,6 +4,7 @@
 #'
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @param feature_names_2_exclude A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.
+#' @param ztransform should the feature data be z-transformed and absolute value minimum, mean shifted prior to summing the feature values. TRUE or FALSE.
 #'
 #' @keywords total peak area abundance level
 #' 
@@ -18,13 +19,25 @@
 #' ex_data[ sample(1:50, 4) ] = NA
 #' tpa_est = total.peak.area(ex_data)
 #'
-total.peak.area <- function(wdata, feature_names_2_exclude = NA){
+total.peak.area <- function(wdata, feature_names_2_exclude = NA, ztransform = TRUE){
   if( !is.na(feature_names_2_exclude[1]) ){
     r = which(colnames(wdata) %in% feature_names_2_exclude)
     if(length(r)>0){
       wdata = wdata[,-r]  
     }
   }
+  
+  ## z-transformed data frame
+  if(ztransform == TRUE){
+    cat(paste0("\t\t\t- z-transformed data for total abundance estimation.\n") )
+    wdata = apply(wdata, 2, function(x){
+      ( x - mean(x, na.rm = TRUE) ) / sd(x, na.rm = TRUE)
+    })
+    ## add absolute(minimum) value to all values
+    cat(paste0("\t\t\t- adding absolute minimum observed value to all values to make all values positive.\n") )
+    wdata = wdata + abs(min(wdata, na.rm = TRUE))
+  }
+  
   ## total peak area
   total_tpa = apply(wdata, 1, function(x){ sum(x, na.rm = TRUE) })
   ### find features with complete data

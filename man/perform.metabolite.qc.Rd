@@ -8,11 +8,14 @@ perform.metabolite.qc(
   wdata,
   fmis = 0.2,
   smis = 0.2,
-  feature_colnames_2_exclude = NA,
-  derived_colnames_2_exclude = NA,
   tpa_out_SD = 5,
+  outlier_udist = 5,
+  outlier_treatment = "leave_be",
+  winsorize_quantile = 1,
+  tree_cut_height = 0.5,
   PC_out_SD = 5,
-  tree_cut_height = 0.5
+  feature_colnames_2_exclude = NA,
+  derived_colnames_2_exclude = NA
 )
 }
 \arguments{
@@ -22,15 +25,21 @@ perform.metabolite.qc(
 
 \item{smis}{defaulted at 0.2, this defines the sample missingness cutoff}
 
-\item{feature_colnames_2_exclude}{names of columns to be excluded from all analysis, such as for Xenobiotics. Pass NA to this paramater to exclude this step.}
+\item{tpa_out_SD}{defaulted at 5, this defines the number of standard deviation from the mean in which samples will be excluded for total peak area. Pass NA to this paramater to exclude this step.}
 
-\item{derived_colnames_2_exclude}{names of columns to exclude from all sample QC steps, including independnet feature identification, which is used to generate the sample PCA.}
+\item{outlier_udist}{defaulted at 5, this defines the number of interquartile range units from the median to define a value as an outlier}
 
-\item{tpa_out_SD}{defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for total peak area. Pass NA to this paramater to exclude this step.}
+\item{outlier_treatment}{defaulted to "leave_be". Choices are "leave_be", "winsorize", or "turn_NA", which defines how to treat outlier values prior to estimating principal components. "leave_be" will do nothing to ourlier values. "turn_NA" will turn outliers into NA and thus be median imputed for the purpose of the PCA. "winsorize" will turn NA values into the "winsorize_quantile" of all remaining (non-outlying) values at a feature.}
+
+\item{winsorize_quantile}{the quantile (0-1) to winzorise outlier values to, if "outlier_treatment" parameter set to "winsorize". Defaulted to 1, or the maximum value of all remaining (non-outlying) values at a feature.}
+
+\item{tree_cut_height}{The height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.}
 
 \item{PC_out_SD}{defaulted at '5', this defines the number of standard deviation from the mean in which samples will be excluded for principle components. NA is NOT an excepted paramater.}
 
-\item{tree_cut_height}{The height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.}
+\item{feature_colnames_2_exclude}{names of columns to be excluded from all analysis, such as for Xenobiotics. Pass NA to this parameter to exclude this step.}
+
+\item{derived_colnames_2_exclude}{names of columns to exclude from all sample QC steps, including independent feature identification, which is used to generate the sample PCA.}
 }
 \value{
 a list object of:
@@ -78,7 +87,7 @@ head( example_qc$featuresumstats$table )
 plot( example_qc$featuresumstats$tree , hang = -1)
 abline(h = 0.5, col = "red", lwd = 1.5)
 ## (median imputed) PCs for all samples can be plotted
-pcol = c("blue","red")[as.factor(example_qc$pca$pcs[, "PC1_5_SD_outlier"])]
+pcol = c("blue","red")[ as.factor( example_qc$pca$pcs[, "PC1_5_SD_outlier"] )]
 plot(example_qc$pca$pcs[,"PC1"], example_qc$pca$pcs[,"PC2"], 
      pch = 21, cex = 1.5, bg = pcol, 
      xlab = paste0( "PC1: Var Exp = " , round(example_qc$pca$varexp[1], d = 4)*100, "\%" ) , 

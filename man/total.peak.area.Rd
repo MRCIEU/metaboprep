@@ -4,12 +4,14 @@
 \alias{total.peak.area}
 \title{estimates total peak abundance}
 \usage{
-total.peak.area(wdata, feature_names_2_exclude = NA)
+total.peak.area(wdata, feature_names_2_exclude = NA, ztransform = TRUE)
 }
 \arguments{
 \item{wdata}{the metabolite data matrix. samples in row, metabolites in columns}
 
 \item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.}
+
+\item{ztransform}{should the feature data be z-transformed and absolute value minimum, mean shifted prior to summing the feature values. TRUE or FALSE.}
 }
 \value{
 a data frame of estimates for (1) total peak abundance and (2) total peak abundance at complete features for each samples

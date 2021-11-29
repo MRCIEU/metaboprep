@@ -17,10 +17,10 @@ sam.missingness.exclusion(mydata, sdata, fdata)
 a data frame of missingness and TPA exclusions
 }
 \description{
-This function provides missingnes and tpa estiamtes along with exlcusion at 3,4,and 5sd from the mean.
+This function provides missingnes and tpa estimates along with exlcusion at 3, 4, and 5 SD from the mean.
 }
 \examples{
-sam.missingness.exclusion()
+# sam.missingness.exclusion()
 
 }
 \keyword{metabolomics}

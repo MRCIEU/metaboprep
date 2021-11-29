@@ -27,7 +27,7 @@ an html file written to file
 This function generates the html report.
 }
 \examples{
-generate_report()
+
 
 }
 \keyword{html}

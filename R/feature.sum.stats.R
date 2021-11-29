@@ -5,6 +5,7 @@
 #' @param wdata the metabolite data matrix. samples in row, metabolites in columns
 #' @param sammis a vector of sample missingness estimates, that is ordered to match the samples in the rows of your data matrix.
 #' @param tree_cut_height tree cut height is the height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.
+#' @param outlier_udist the interquartile range unit distance from the median to call a sample an outlier at a feature.
 #' @param feature_names_2_exclude A vector of feature|metabolite names to exclude from the tree building, independent feature identification process. 
 #'
 #' @keywords metabolomics
@@ -43,13 +44,13 @@
 #' ## plot the dendrogram
 #' plot(fss$tree, hang = -1)
 #'
-feature.sum.stats = function( wdata, sammis = NA, tree_cut_height = 0.5, feature_names_2_exclude = NA){
+feature.sum.stats = function( wdata, sammis = NA, tree_cut_height = 0.5, outlier_udist = 5, feature_names_2_exclude = NA){
   ## feature missingness
-  featuremis = feature.missingness(wdata, samplemissingness = sammis)
+  featuremis = feature.missingness(wdata)
   ### distribution discritions
   description = feature.describe(wdata)
   ### count of sample outliers per feature
-  foutlier = feature.outliers(wdata)
+  foutlier = feature.outliers(wdata, nsd = outlier_udist)
   ### identify independent features
   # if(50 > nrow(wdata)*0.8 ){
   #   MSS = nrow(wdata) * 0.8  ## this allows 20% missingness on data sets with less than 50 individuals

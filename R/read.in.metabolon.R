@@ -15,9 +15,9 @@
 #' @export
 #'
 #' @examples
-#' read.in.metabolon(file2process = "Metabolon_data_release.xls", 
-#'  data_dir = "/File/sits/here/", 
-#'  projectname = "My Amazing Project")
+#' # read.in.metabolon(file2process = "Metabolon_data_release.xls", 
+#' #  data_dir = "/File/sits/here/", 
+#' #  projectname = "My Amazing Project")
 #'
 read.in.metabolon = function( file2process, data_dir, projectname ){
   

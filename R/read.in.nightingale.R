@@ -15,9 +15,9 @@
 #' @export
 #'
 #' @examples
-#' read.in.nightingale(file2process = "NH_data_release.xls", 
-#'  data_dir = "/File/sits/here/", 
-#'  projectname = "My Amazing Project")
+#' # read.in.nightingale(file2process = "NH_data_release.xls", 
+#' #  data_dir = "/File/sits/here/", 
+#' #  projectname = "My Amazing Project")
 #'
 read.in.nightingale = function( file2process, data_dir, projectname ){
 

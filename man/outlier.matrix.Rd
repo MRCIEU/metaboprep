@@ -4,12 +4,14 @@
 \alias{outlier.matrix}
 \title{identify outlier sample indexes in a matrix}
 \usage{
-outlier.matrix(wdata, nsd = 5)
+outlier.matrix(data, nsd = 5, meansd = FALSE)
 }
 \arguments{
-\item{wdata}{a matrix of numerical values, samples in row, features in columns}
+\item{data}{a matrix of numerical values, samples in row, features in columns}
 
-\item{nsd}{the number of standard deviation from the mean outliers are identified at. Default value is 5.}
+\item{nsd}{the unit distance in SD or IQR from the mean or median estimate, respectively outliers are identified at. Default value is 5.}
+
+\item{meansd}{set to TRUE if you would like to estimate outliers using a mean and SD method; set to FALSE if you would like to estimate medians and inter quartile ranges. The default is FALSE.}
 }
 \value{
 a matrix of 0 (not a sample outlier) and 1 (outlier)

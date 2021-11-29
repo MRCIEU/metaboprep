@@ -8,6 +8,7 @@ feature.sum.stats(
   wdata,
   sammis = NA,
   tree_cut_height = 0.5,
+  outlier_udist = 5,
   feature_names_2_exclude = NA
 )
 }
@@ -17,6 +18,8 @@ feature.sum.stats(
 \item{sammis}{a vector of sample missingness estimates, that is ordered to match the samples in the rows of your data matrix.}
 
 \item{tree_cut_height}{tree cut height is the height at which to cut the feature|metabolite dendrogram to identify "independent" features. tree_cut_height is 1-absolute(Spearman's Rho) for intra-cluster correlations.}
+
+\item{outlier_udist}{the interquartile range unit distance from the median to call a sample an outlier at a feature.}
 
 \item{feature_names_2_exclude}{A vector of feature|metabolite names to exclude from the tree building, independent feature identification process.}
 }

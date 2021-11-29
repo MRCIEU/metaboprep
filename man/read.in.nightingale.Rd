@@ -20,9 +20,9 @@ a list object of (1) metabolite, (2) sample annotation, and (3) feature annotati
 This function reads in a Nightingale raw data excel file, writes the (1) metabolite, (2) sample annotation, and (3) feature annotation data to flat text files. It also returns a list object of the same data.
 }
 \examples{
-read.in.nightingale(file2process = "NH_data_release.xls", 
- data_dir = "/File/sits/here/", 
- projectname = "My Amazing Project")
+# read.in.nightingale(file2process = "NH_data_release.xls", 
+#  data_dir = "/File/sits/here/", 
+#  projectname = "My Amazing Project")
 
 }
 \keyword{Health}

@@ -158,15 +158,21 @@ cat(paste0("\t- Sample filtering: Your declared sample missingness level is: ", 
 total_peak_area_SD = as.numeric( pfile[9,2] )
 cat(paste0("\t- Sample filtering: Your declared total peak area filter level, in standard deviations from the mean is: ", total_peak_area_SD, "\n"))
 
-PC_outlier_SD = as.numeric( pfile[10,2] )
-cat(paste0("\t- Sample filtering: Your declared principal component (PC1 and PC2) exclusion, in standard deviations from the mean is: ", PC_outlier_SD, "\n"))
+outlier_udist = as.numeric( pfile[10,2] )
+cat(paste0("\t- Sample outliers at features: Your declared that the interquartile range unit distance from the median of each feature to call a sample an outlier to be: ", outlier_udist, "\n"))
 
-tree_cut_height = as.numeric( pfile[11,2] )
+outlier_treatment = as.character( pfile[11,2] )
+cat(paste0("\t- Sample outliers at features: Your declared that outliers, for the purposes of the PCA & PCA only, should be: ", outlier_treatment, "\n"))
+
+tree_cut_height = as.numeric( pfile[12,2] )
 cat(paste0("\t- Metabolite independence: Your declared tree cut height is: ", tree_cut_height, "\n\n"))
+
+PC_outlier_SD = as.numeric( pfile[13,2] )
+cat(paste0("\t- Sample filtering: Your declared principal component (PC1 and PC2) exclusion, in standard deviations from the mean is: ", PC_outlier_SD, "\n"))
 
 ## Nightingale derived variable exclusions
 ## when evaluting SAMPLE quality for QC
-derived_var_exclusion = pfile[12,2] 
+derived_var_exclusion = pfile[14,2] 
 if(platform == "Nightingale"){
   if(derived_var_exclusion == TRUE){
   cat(paste0("\t- You have declared that Nightingale derived variables should be excluded from data filtering steps.\n\n"))
@@ -177,14 +183,14 @@ if(platform == "Nightingale"){
 ## This variable defines the column name, in the feature_annotation_file, indexing the run mode string(s).
 ## There should in turn be column name(s) in the sample_annotation_file that match the run mode string(s)
 ##    and hold the batch IDs for each sample, in that run mode. 
-feat_anno_run_mode_col = pfile[13,2] 
+feat_anno_run_mode_col = as.character( pfile[15,2] )
 if( !is.na(feat_anno_run_mode_col)){
   cat(paste0("\t- You have declared that the column name in the feature annotation file holding the run mode variables is: ", feat_anno_run_mode_col, "\n"))  
 } 
 
 ## Should a scatter plot, histogram, and table of summary statsitics be
 ## written to PDF for visual inspection? TRUE or FALSE?
-plot_feature_distributions = pfile[14,2] 
+plot_feature_distributions = pfile[16,2] 
 if(plot_feature_distributions==TRUE){
   cat(paste0("\t- You have declared that a scatter plot, histogram, and table of summary statsitic for each feature in the data set should be written to pdf.\n"))    
 }
@@ -392,7 +398,7 @@ if(length(mydata)>3){
 if(platform == "Metabolon"){
   cat( paste0("Normalization. Performing normalization on Metabolon Data.\n\n") )
   if(!is.na(feat_anno_run_mode_col)){
-      cat( paste0("        - Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
+      cat( paste0("\t- Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
 
     norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
         feature_data_sheet =  mydata$featuredata, 
@@ -408,12 +414,12 @@ if(platform == "Metabolon"){
 
     ## remove the unnecessary data frame
     rm(norm_metabolite_data)
-    cat( paste0("        - Normalization completed.\n\n") )
+    cat( paste0("\t- Normalization completed.\n\n") )
     } else {
       ##################################################
       ## look for run mode information in feature data
       ##################################################
-      cat( paste0("        - Looking for run mode information automatically given Metabolon standard data release formatting.\n") )
+      cat( paste0("\t- Looking for run mode information automatically given Metabolon standard data release formatting.\n") )
       fanno_col_number = which(colnames(mydata$featuredata) %in% c("PLATFORM","platform"))
       if(length(fanno_col_number) == 1){
         runmode = unlist( mydata$featuredata[,fanno_col_number] )
@@ -429,7 +435,7 @@ if(platform == "Metabolon"){
 
         batchrunmodes = unique(runmode)
       } else {
-        cat(paste0("        - NOTE: Unable to identify a column header called 
+        cat(paste0("\t- NOTE: Unable to identify a column header called 
             'PLATFORM' or 'platform' in the feature data sheet.
              This is necessary to perform batch normalization\n\n") )
 
@@ -451,7 +457,7 @@ if(platform == "Metabolon"){
 
       if(length(k) == length(batchrunmodes) ){
         ## perfom normalization
-        cat( paste0("        - Performing normalization with automatically identified Metabolon standard data release formatting column '",colnames(mydata$featuredata)[fanno_col_number],"'.\n") )
+        cat( paste0("\t- Performing normalization with automatically identified Metabolon standard data release formatting column '",colnames(mydata$featuredata)[fanno_col_number],"'.\n") )
 
         norm_metabolite_data = batch_normalization( wdata = mydata$metabolitedata, 
             feature_data_sheet =  mydata$featuredata, 
@@ -467,14 +473,14 @@ if(platform == "Metabolon"){
 
         ## remove the unnecessary data frame
         rm(norm_metabolite_data)
-        cat( paste0("        - Normalization completed.\n\n") )
+        cat( paste0("\t- Normalization completed.\n\n") )
 
       } else {
-        cat(paste0("        - NOTE: Unable to identify a column headers in sample sheet
+        cat(paste0("\t- NOTE: Unable to identify a column headers in sample sheet
             that match the platform run modes found in the feature data sheet.
-            This should be something like neg, polar, pos early, pos late.") )
+            This should be something like neg, polar, pos early, pos late.\n") )
 
-        cat( paste0("       - NOTE: We will take the ScaledImpData data and remove
+        cat( paste0("\t- NOTE: We will take the ScaledImpData data and remove
             the imputed data to extract the normalized data.\n\n") )
         
         scaled_imputed_data_tab = grep("ScaledImp", names(mydata))
@@ -492,10 +498,10 @@ if(platform == "Metabolon"){
           
           ## remove the unnecessary data frame
           rm(ndata) 
-          cat( paste0("        - Normalization completed.\n\n") )
+          cat( paste0("\t- Normalization completed.\n\n") )
 
         } else {
-          cat( paste0("        - NOTE: Unable to identify a 'ScaledImp' data tab in the excel file.
+          cat( paste0("\t- NOTE: Unable to identify a 'ScaledImp' data tab in the excel file.
             No normalization carried out.\n\n") )
         }    
     }
@@ -548,7 +554,7 @@ cat( paste0("\ta. Estimating summary statistics for samples\n") )
 if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
   w = which( mydata$featuredata$SUPER_PATHWAY %in% c("xenobiotics", "Xenobiotics") )
   xeno_names = mydata$featuredata$feature_names[w]
-  samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names )
+  samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = xeno_names, outlier_udist = outlier_udist )
 } else {
   ## Is this Nightingale data??
   ##  -- is the column derived_features present in the feature data
@@ -556,9 +562,9 @@ if( length(mydata$featuredata$SUPER_PATHWAY) > 0){
   if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
     w = which( mydata$featuredata$derived_features == "yes") 
     derivedfeature_names = as.character( mydata$featuredata$feature_names[w] )
-    samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
+    samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, feature_names_2_exclude = derivedfeature_names, outlier_udist = outlier_udist )
   } else {
-      samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata)
+      samplesumstats = sample.sum.stats( wdata = mydata$metabolitedata, outlier_udist = outlier_udist)
     }
   }
 
@@ -613,6 +619,7 @@ if( length(mydata$featuredata$derived_features) > 0 & derived_var_exclusion == "
 featuresumstats = feature.sum.stats( wdata = mydata$metabolitedata,
                                       sammis = sammis, 
                                       tree_cut_height = tree_cut_height,
+                                      outlier_udist = outlier_udist,
                                       feature_names_2_exclude = fn2e )
 
 
@@ -710,11 +717,15 @@ cat( paste0("\ta. Performing data filtering.\n") )
 dataQC = perform.metabolite.qc(wdata = mydata$metabolitedata,
                                fmis = feature_missingness, 
                                smis = sample_missingness, 
-                               feature_colnames_2_exclude = xeno_names,
-                               derived_colnames_2_exclude = derived_names,
                                tpa_out_SD = total_peak_area_SD,
+                               outlier_treatment = outlier_treatment, ## options are "leave_be", "turn_NA", "winsorize"
+                               winsorize_quantile = 1,                ## winsorize to what quantile of remaining (not outlier) values
+                               outlier_udist = outlier_udist,
                                PC_out_SD = PC_outlier_SD,
-                               tree_cut_height = tree_cut_height )
+                               tree_cut_height = tree_cut_height,
+                               feature_colnames_2_exclude = xeno_names,
+                               derived_colnames_2_exclude = derived_names
+)
 
 #################################
 ## B. write QC data to file
@@ -795,7 +806,7 @@ cat( paste0("\ta. Estimating summary statistics for Filtered samples\n") )
 if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
   w = which( qcdata$featuredata$SUPER_PATHWAY  %in% c("xenobiotics", "Xenobiotics") ) 
   xeno_names = rownames(qcdata$featuredata)[w]
-  samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = xeno_names )
+  samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = xeno_names, outlier_udist = outlier_udist )
 } else {
   ## Is this Nightingale data?? 
   ##  -- is the column derived_features present in the feature data
@@ -803,9 +814,9 @@ if( length(qcdata$featuredata$SUPER_PATHWAY) > 0){
   if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "TRUE" ){
     w = which( qcdata$featuredata$derived_features == "yes") 
     derivedfeature_names = as.character( qcdata$featuredata$feature_names[w] )
-    samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = derivedfeature_names )
+    samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, feature_names_2_exclude = derivedfeature_names, outlier_udist = outlier_udist )
   } else {
-      samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata)
+      samplesumstats = sample.sum.stats( wdata = qcdata$metabolitedata, outlier_udist = outlier_udist)
     }
 }
 
@@ -856,6 +867,7 @@ if( length(qcdata$featuredata$derived_features) > 0 & derived_var_exclusion == "
 featuresumstats = feature.sum.stats( wdata = qcdata$metabolitedata,
                                       sammis = sammis, 
                                       tree_cut_height = tree_cut_height,
+                                      outlier_udist = outlier_udist,
                                       feature_names_2_exclude = fn2e )
 
 
@@ -966,8 +978,10 @@ generate_report(full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
 #########################
 if(plot_feature_distributions == TRUE){
   cat( paste0("VIII. Plot feature distributions and summary statistics to pdf.\n") )
+  
   feature_plots(raw_data$metabolite_data, outdir = output_dir_path)
+  
   f = paste0(output_dir_path, "feature_distribution.pdf")
-  cat( paste0("          - plots for each figure written to the pdf ", f,".\n") )
+  cat( paste0("\t- plots for each figure written to the pdf ", f,".\n") )
 
 }

@@ -24,6 +24,6 @@ A data frame with 233 rows and 7 variables:
 ng_anno
 }
 \description{
-A dataset containing annotation data on Nightingale Health NMR metabolites (lipids)
+A dataset containing annotation data on Nightingale Health NMR metabolites (lipids), compiled from public resources with additional annotation made here.
 }
 \keyword{datasets}
