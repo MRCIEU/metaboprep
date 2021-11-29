@@ -57,7 +57,7 @@ feature.sum.stats = function( wdata, sammis = NA, tree_cut_height = 0.5, outlier
   # } else {
   #   MSS = 50  
   # }
-  ## ** ALL FEATURES THAT DO INTO THE DENDROGRAM AND CAN BE REPRESENTITIVE
+  ## ** ALL FEATURES THAT GO INTO THE DENDROGRAM AND CAN BE REPRESENTITIVE
   ##    FEATURES MUST HAVE > 80% Presence or <= 20% missing
   MSS = floor( nrow(wdata) * 0.8 )
   ##

@@ -48,9 +48,9 @@ multivariate.anova = function(dep, indep_df){
   
   ## Type I ANOVA
   a = car::Anova(fit, type = "II")
-  eta = round( a[ ,1] / sum(a[,1]), digits = 4 )*100
+  eta = round( a[ ,1] / sum(a[,1], na.rm = TRUE), digits = 4 )*100
   names(eta) = paste0( rownames(a) ,"_eta")
-  pval = c( formatC( a[-nrow(a), 4], format = "e", digits = 2) , "NA")
+  pval = c( formatC( a[-nrow(a), 4], format = "e", digits = 4) , "NA")
   names(pval) = paste0( rownames(a) ,"_pval")
   
   ## Make an reporting table
