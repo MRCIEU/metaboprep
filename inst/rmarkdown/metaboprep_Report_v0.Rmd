@@ -621,7 +621,7 @@ if( length(batch_variables) > 2 & length(batch_variables) <= 4 ) {
 ```
 
 
-```{r sample_missingness_3,  echo=F, fig.width = 15, fig.height = 17, warning=FALSE, message=FALSE, error=FALSE}
+```{r sample_missingness_4,  echo=F, fig.width = 15, fig.height = 17, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
 ## Iterate over each batch variable
@@ -767,7 +767,7 @@ Figure Legend: Violin plot illustration(s) of the relationship between total pea
 ### Multivariate evaluation: batch variables
 
 ```{r sample_tpa_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 2, warnings = FALSE, message=FALSE, error=FALSE}
-if( !is.na(batch_variables[1]) ) {
+if( length(batch_variables)>0 ) {
   ( multivariate.anova(dep = qc_data$sample_data$TPA_completefeature, 
                                 indep_df = qc_data$sample_data[,batch_variables ] ) ) 
 }else {
