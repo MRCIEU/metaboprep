@@ -661,17 +661,17 @@ if( length(batch_variables) > 0 ) {
 Table Legend: TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the percent of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*. Presence of NA's would indicate that the model is inappropriate.
 
 
-# 5. Total peak or abundance area (TPA) of samples:
+# 5. Total peak or abundance area (TA) of samples:
 
-The total peak or abundance area (TPA) is simply the sum of the abundances measured across all features. TPA is one measure that can be used to identify unusual samples given their entire profile. However, the level of missingness in a sample may influence TPA. To account for this we:  
+The total peak or abundance area (TA) is simply the sum of the abundances measured across all features. TA is one measure that can be used to identify unusual samples given their entire profile. However, the level of missingness in a sample may influence TA. To account for this we:  
 
-1. Evaluate the correlation between TPA estimates across all features with TPA measured using only those features with complete data (no missingness).  
-2. Determine if the batch effects have a measurable impact on TPA.
+1. Evaluate the correlation between TA estimates across all features with PA measured using only those features with complete data (no missingness).  
+2. Determine if the batch effects have a measurable impact on TA.
 
 
 ## Relationship with missingness
 
-Correlation between total peak area (at complete features) and missingness
+Correlation between total abundance (TA; at complete features) and missingness
 
 ```{r TPA_missingness, echo=F, fig.width = 7, fig.height = 5, warning=FALSE, message=FALSE, error=FALSE}
 a = cor.test( qc_data$sample_data$sample_missingness, qc_data$sample_data$TPA_completefeature)
@@ -681,8 +681,8 @@ a = cor.test( qc_data$sample_data$sample_missingness, qc_data$sample_data$TPA_co
   geom_point( fill = "grey", alpha = 0.8, size = 1.5) + 
   geom_smooth(method = "loess", color = "red", size = 2)  +
   geom_smooth(method = "lm", color = "blue", size = 2)  +
-  labs(x = "TPA, complete features", y = "sample missingness",
-       title = paste0( "TPA as influenced by missingness \nSpearmans's cor = ", round(a$estimate, d = 4), " p-value = ", 
+  labs(x = "TA, complete features", y = "sample missingness",
+       title = paste0( "TA as influenced by missingness \nSpearmans's cor = ", round(a$estimate, d = 4), " p-value = ", 
                     formatC( a$p.value, format = "e", digits = 2) ))
   )
 
@@ -694,7 +694,7 @@ Figure Legend: Relationship between total peak area at complete features (x-axis
 
 ## Univariate evaluation: batch effects
 
-The figure below provides an illustrative evaluation of the  *total peak area* as a product of sample batch variables provided by your supplier. 
+The figure below provides an illustrative evaluation of the  *total abundance* (at complete features) as a product of sample batch variables provided by your supplier. 
 
 ```{r}
 if( length(batch_variables) == 0 ) { 
@@ -702,7 +702,7 @@ if( length(batch_variables) == 0 ) {
   }
 ```
 
-```{r TPAsummary, echo = FALSE, fig.width = 12, fig.height = 10,  warning=FALSE, message=FALSE, error=FALSE}
+```{r TA_by_batch, echo = FALSE, fig.width = 12, fig.height = 10,  warning=FALSE, message=FALSE, error=FALSE}
 
 if( length(batch_variables) <= 2 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
@@ -722,7 +722,7 @@ if( length(batch_variables) <= 2 ) {
 ```
 
 
-```{r TPAsummary_3, echo = FALSE, fig.width = 12, fig.height = 17,  warning=FALSE, message=FALSE, error=FALSE}
+```{r TA_by_batch_3, echo = FALSE, fig.width = 12, fig.height = 17,  warning=FALSE, message=FALSE, error=FALSE}
 
 if( length(batch_variables) <= 4 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
@@ -742,13 +742,13 @@ if( length(batch_variables) <= 4 ) {
 ```
 
 
-```{r TPAsummary_4, echo = FALSE, fig.width = 15, fig.height = 17,  warning=FALSE, message=FALSE, error=FALSE}
+```{r TA_by_batch_4, echo = FALSE, fig.width = 15, fig.height = 17,  warning=FALSE, message=FALSE, error=FALSE}
 
 if( length(batch_variables) > 4 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
     out = variable.by.factor( dep = qc_data$sample_data$TPA_completefeature, 
                               indep = unlist( qc_data$sample_data[,x] ), 
-                              dep_name = "total peak area", 
+                              dep_name = "total abundance", 
                               orderfactor = FALSE, 
                               indep_name = x, violin = TRUE)
     return(out)
@@ -761,7 +761,7 @@ if( length(batch_variables) > 4 ) {
 
 ```
 
-Figure Legend: Violin plot illustration(s) of the relationship between total peak area (TPA) and sample batch variables that are available in your data.
+Figure Legend: Violin plot illustration(s) of the relationship between total abundance (TA; at complete features) and sample batch variables that are available in your data.
 
 
 ### Multivariate evaluation: batch variables
