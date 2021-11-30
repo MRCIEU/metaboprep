@@ -69,12 +69,12 @@ date: June 3rd 2019
 	Rscript run_metaboprep_pipeline.R /FULL/PATH/TO/example_data/excel/parameter_file.txt
 	```
 	
-5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
+5. If you experienced issues with the geneartion of the html report on an HPC, the report can be generated on a local machine as follows.
 	1. move to your newly generated metaboprep project directory. 
 		* it will take the form of "../metaboprep_release_TODAYSDATE/"
 	2. You should find an R data object called "ReportData.Rdata". Save a copy locally.
 	3. Open an R session
-	4. produce report with the function generate_report() as
+	4. produce report with the function metaboprep::generate_report() as
 		
 		```R
 		output_dir_path = paste0("FULL/PATH/", "metaboprep_release_TODAYSDATE/")
