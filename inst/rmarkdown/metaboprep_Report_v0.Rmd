@@ -407,7 +407,7 @@ if(length(w) ==1){
 count_unique = apply(qc_data$feature_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
 
 ## remove those with only one class or count == sample size
-r = which(count_unique == 1 | count_unique == nrow(qc_data$feature_data))
+r = which(count_unique == 1 | count_unique == nrow(qc_data$feature_data) | count_unique > 96)
 if(length(w) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
@@ -509,6 +509,7 @@ if(length(class_variables)<=2){
 
 ```
 
+
 ```{r featuremis_3,  echo=F, fig.width = 15, fig.height = 17, warning=FALSE, message=FALSE, error=FALSE}
 ## MISSINGNESS
 ###################################
@@ -549,7 +550,7 @@ possible_vars = possible_vars[ -c(w:length(possible_vars)) ]
 count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
 
 ## remove those with only one class or count == sample size
-r = which(count_unique == 1 | count_unique == nrow(qc_data$sample_data))
+r = which(count_unique == 1 | count_unique == nrow(qc_data$sample_data) | count_unique > 96)
 if(length(w) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
