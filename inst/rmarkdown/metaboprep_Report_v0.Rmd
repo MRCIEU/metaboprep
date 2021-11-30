@@ -399,12 +399,42 @@ Feature missingness may be influenced by the metabolites' (or features') biology
 possible_vars = colnames(qc_data$feature_data)
 ## remove summary stats from pool of possible
 w = which(possible_vars == "feature_missingness")
-possible_vars = possible_vars[ -c(w:length(possible_vars)) ]
+if(length(w) ==1){
+  possible_vars = possible_vars[ -c(w:length(possible_vars)) ]  
+}
+
 ## number of unique units for each possible variable?
-count_unique = apply(qc_data$feature_data[,possible_vars], 2, function(x){  length(unique(x))  })
-average_number_features_per_unit = ncol(qc_data$metabolite_data)/count_unique
-## keep only those with at least an average of 10 observations / unit & do not have more than 96 units
-class_variables = names( which(average_number_features_per_unit >= 10 & count_unique <= 96) )
+count_unique = apply(qc_data$feature_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
+
+## remove those with only one class or count == sample size
+r = which(count_unique == 1 | count_unique == nrow(qc_data$feature_data))
+if(length(w) > 0){
+  possible_vars = possible_vars[-r]
+  count_unique = count_unique[-r]
+}
+
+## continue filtering
+if( length(possible_vars) > 0){
+  ## estimate min, mean, max number of values within a variable
+  features_per_unit = t( apply( qc_data$feature_data[,possible_vars], 2, function(x){  
+    x = table( unlist(x) )
+    out = c( min(x), median(x), max(x) ); names(out) = c("min","median","max")
+    out
+  }) )
+  features_per_unit = as.data.frame( cbind( count_unique, features_per_unit) )
+  ## filter 2 class min of 1 variables
+  r = which(features_per_unit$count_unique == 2 & features_per_unit$min == 1)
+  if(length(r) > 0){ features_per_unit = features_per_unit[-r,] }
+  
+  ## filter for median observational count
+  k = which(features_per_unit$median >= 5 )
+  possible_vars = possible_vars[k]
+}
+
+## define
+class_variables = possible_vars
+
+
 ```
 
 
@@ -510,14 +540,41 @@ The figure provides an illustrative evaluation of the proportion of *sample miss
 ```{r id_sam_batch_vars}
 ## what are all of the variables that could be used to evaluate feature effects?
 possible_vars = colnames(qc_data$sample_data)
+
 ## remove summary stats from pool of possible
 w = which(possible_vars == "sample_missingness")
 possible_vars = possible_vars[ -c(w:length(possible_vars)) ]
+
 ## number of unique units for each possible variable?
-count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length(unique(x))  })
-average_number_features_per_unit = nrow(qc_data$metabolite_data)/count_unique
-## keep only those with at least an average of 10 observations / unit & do not have more than 96 units
-batch_variables = names( which(average_number_features_per_unit >= 10 & count_unique > 1 ) )
+count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
+
+## remove those with only one class or count == sample size
+r = which(count_unique == 1 | count_unique == nrow(qc_data$sample_data))
+if(length(w) > 0){
+  possible_vars = possible_vars[-r]
+  count_unique = count_unique[-r]
+}
+
+## continue filtering
+if( length(possible_vars) > 0){
+  ## estimate min, mean, max number of values within a variable
+  features_per_unit = t( apply( qc_data$sample_data[,possible_vars], 2, function(x){  
+    x = table( unlist(x) )
+    out = c( min(x), median(x), max(x) ); names(out) = c("min","median","max")
+    out
+  }) )
+  features_per_unit = as.data.frame( cbind( count_unique, features_per_unit) )
+  ## filter 2 class min of 1 variables
+  r = which(features_per_unit$count_unique == 2 & features_per_unit$min == 1)
+  if(length(r) > 0){ features_per_unit = features_per_unit[-r,] }
+  
+  ## filter for median observational count
+  k = which(features_per_unit$median >= 5 )
+  possible_vars = possible_vars[k]
+}
+
+## define
+batch_variables = possible_vars
 ```
 
 ```{r samplebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
