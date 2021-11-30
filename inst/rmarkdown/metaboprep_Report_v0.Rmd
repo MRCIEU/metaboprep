@@ -19,6 +19,23 @@ This report provides descriptive information for raw and filtered metabolomics d
 ```{r init, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE, quote=F, comment=NA, warning=FALSE, message=FALSE, error=FALSE, fig.align="center"  )
 
+## test for necessary packages
+if (!requireNamespace("metaboprep", quietly = TRUE)) {
+    stop("Package \"metaboprep\" needed for this function to work. Please install it.",
+      call. = FALSE)
+}
+
+if (!requireNamespace("dendextend", quietly = TRUE)) {
+    stop("Package \"dendextend\" needed for this function to work. Please install it.",
+      call. = FALSE)
+}
+
+
+if (!requireNamespace("tidyverse", quietly = TRUE)) {
+    stop("Package \"tidyverse\" needed for this function to work. Please install it.",
+      call. = FALSE)
+}
+
 suppressPackageStartupMessages(library(metaboprep))
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(dendextend))
