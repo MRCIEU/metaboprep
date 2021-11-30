@@ -399,7 +399,7 @@ Feature missingness may be influenced by the metabolites' (or features') biology
 possible_vars = colnames(qc_data$feature_data)
 ## remove summary stats from pool of possible
 w = which(possible_vars == "feature_missingness")
-if(length(w) ==1){
+if(length(w) == 1){
   possible_vars = possible_vars[ -c(w:length(possible_vars)) ]  
 }
 
@@ -408,7 +408,7 @@ count_unique = apply(qc_data$feature_data[,possible_vars], 2, function(x){  leng
 
 ## remove those with only one class or count == sample size
 r = which(count_unique == 1 | count_unique == nrow(qc_data$feature_data) | count_unique > 96)
-if(length(w) > 0){
+if(length(r) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
 }
@@ -438,48 +438,6 @@ class_variables = possible_vars
 ```
 
 
-```{r featurebatchvariables_old, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
-# ## possible batch variables that have been observed in 
-# ## METABOLON and NIGHTINGALE sample-annotation-batch-data
-# # possible_batch_variables = c("SUPER_PATHWAY","PLATFORM", "class", "subclass")
-# possible_batch_variables = c("path","platform", "class", "batch")
-# 
-# ## matching variables
-# # w = which(possible_batch_variables %in% colnames(qc_data$feature_data) )
-# # matched_variables = possible_batch_variables[w]
-# w = unique( unlist( sapply(possible_batch_variables, function(x){ grep(x, tolower( colnames(qc_data$feature_data)  )  ) }) ) )
-# if(length(w)>0){
-#   matched_variables = colnames(qc_data$feature_data)[w]
-#   
-#   ## remove batch variables, that are invariable in the sample
-#   w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ length(table(x)) }) <= 1 )
-#   if(length(w)>0){
-#     matched_variables = matched_variables[-w]  
-#   }
-#   ## insure group sizes are larger than 1
-#   w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) < 0.25 )
-#   if(length(w)>0){
-#     matched_variables = matched_variables[-w]  
-#   }
-#   ## insure the number of variables is not larger than 96
-#   w = which( apply( qc_data$feature_data[,matched_variables], 2, function(x){  length(table(x)) }) > 96 )
-#   if(length(w)>0){
-#     matched_variables = matched_variables[-w]  
-#   }
-#   
-#   ## define the class_variables
-#   class_variables = matched_variables
-#   
-#   if( "SUB_PATHWAY" %in% class_variables ){
-#     w = which(class_variables %in% "SUB_PATHWAY")
-#     class_variables = class_variables[-w]
-#   }
-# 
-# }
-# 
-
-```
-
 ```{r}
 if(length(class_variables)==0){
   paste0(" -- No feature level batch variables identified or all were invariable -- ") 
@@ -492,7 +450,7 @@ if(length(class_variables)==0){
 ###################################
 ## Iterate over each batch variable
 ###################################
-if(length(class_variables)<=2){
+if(length(class_variables) > 0 & length(class_variables)<=2){
   ClassMisPlots = lapply( class_variables , function(x){
   out = variable.by.factor( dep = qc_data$feature_data$feature_missingness , 
                            indep = unlist( qc_data$feature_data[,x] ), 
@@ -544,14 +502,16 @@ possible_vars = colnames(qc_data$sample_data)
 
 ## remove summary stats from pool of possible
 w = which(possible_vars == "sample_missingness")
-possible_vars = possible_vars[ -c(w:length(possible_vars)) ]
+if(length(w)>0){
+  possible_vars = possible_vars[ -c(w:length(possible_vars)) ]  
+}
 
 ## number of unique units for each possible variable?
 count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
 
 ## remove those with only one class or count == sample size
 r = which(count_unique == 1 | count_unique == nrow(qc_data$sample_data) | count_unique > 96)
-if(length(w) > 0){
+if(length(r) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
 }
@@ -578,53 +538,9 @@ if( length(possible_vars) > 0){
 batch_variables = possible_vars
 ```
 
-```{r samplebatchvariables, echo = FALSE, warning=FALSE, message=FALSE, error=FALSE}
-# ## possible batch variables that have been observed in 
-# ## METABOLON and NIGHTINGALE sample-annotation-batch-data
-# # possible_batch_variables = c("BOX_ID","BOX_WELL","RUN_DAY", 
-# #                              "Internal_Box_ID", 
-# #                              "Sample_Type", "SampleType" ,
-# #                              "NMRSpectrometer", "NMR_Spectrometer", 
-# #                              "Sample_prep_date_time", "Sampleprepdatetime",
-# #                              "Buffer_ID", "BufferID",
-# #                              "No.ofrepeatsofLIPOLMWM",
-# #                              "ControlB_TMSP_LMWM_Linewidth_at_half_height_(0.3Hz_line_broadening)",
-# #                              "ControlBTMSPLMWMLinewidthathalfheight0.3Hzlinebroadening")
-# 
-# possible_batch_variables = c("box", "day", "prep", "date", "time", "type", "nmr", "buffer", "lmwm")
-#   
-# 
-# ## matching variables
-# # w = which( possible_batch_variables  %in%  colnames(qc_data$sample_data)  )
-# w = unique( unlist( sapply(possible_batch_variables, function(x){ grep(x, tolower( colnames(qc_data$sample_data)  )  ) }) ) )
-# 
-# if( length(w) > 0 ){
-#   # matched_variables = possible_batch_variables[w]
-#   matched_variables = colnames(qc_data$sample_data)[w]
-#   
-#   ## batch variables, that are variable in the sample
-#   w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){ length( table(x) ) } ) > 1 )
-#   matched_variables = matched_variables[w]
-#   ## insure group sizes are larger than 1
-#   w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){ sum( table(x) > 1 ) / length(table(x)) }) >= 0.25 )
-#   matched_variables = matched_variables[w]
-#   ## insure the number of variables is not larger than 96
-#   w = which( apply( qc_data$sample_data[,matched_variables], 2, function(x){  length(table(x)) }) < 97 )
-#   matched_variables = matched_variables[w]
-#   
-#   batch_variables = matched_variables
-# } else {
-#   batch_variables = NA
-# }
-# 
-# ## In case all batch variables are not variable (typically because sample size is small and all done in 1 go.)
-# if(length(batch_variables) == 0){ batch_variables = NA }
-
-```
-
 
 ```{r}
-if(length(class_variables)==0){
+if(length(batch_variables)==0){
   paste0(" -- No feature level batch variables identified or all were invariable -- ") 
 }
 ```
@@ -635,7 +551,7 @@ if(length(class_variables)==0){
 ###################################
 ## Iterate over each batch variable
 ###################################
-if( length(batch_variables) <= 2 ) {
+if( length(batch_variables) > 0 & length(batch_variables) <= 2 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
     out = variable.by.factor( dep = qc_data$sample_data$sample_missingness , 
                               indep = unlist( qc_data$sample_data[,x] ), 
@@ -762,7 +678,7 @@ if( length(batch_variables) == 0 ) {
 
 ```{r TA_by_batch, echo = FALSE, fig.width = 12, fig.height = 10,  warning=FALSE, message=FALSE, error=FALSE}
 
-if( length(batch_variables) <= 2 ) {
+if( length(batch_variables) > 0 & length(batch_variables) <= 2 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
     out = variable.by.factor( dep = qc_data$sample_data$TPA_completefeature, 
                               indep = unlist( qc_data$sample_data[,x] ), 
@@ -782,7 +698,7 @@ if( length(batch_variables) <= 2 ) {
 
 ```{r TA_by_batch_3, echo = FALSE, fig.width = 12, fig.height = 17,  warning=FALSE, message=FALSE, error=FALSE}
 
-if( length(batch_variables) <= 4 ) {
+if( length(batch_variables) > 2 & length(batch_variables) <= 4 ) {
   BatchMisPlots = lapply( batch_variables , function(x){
     out = variable.by.factor( dep = qc_data$sample_data$TPA_completefeature, 
                               indep = unlist( qc_data$sample_data[,x] ), 
@@ -846,12 +762,9 @@ Analytical power analysis for both continuous and imbalanced presence/absence co
 ####################################   
 # Run power analysis and generate plot
 ####################################
-#( run.power.make.plot(mydata = metdata ) )
-
 p1 = run.cont.power.make.plot( mydata = qc_data$metabolite_data ) 
 p2 = run.pa.imbalanced.power.make.plot(  mydata = qc_data$metabolite_data )
 
-# gridExtra::grid.arrange(p1, p2, nrow = 1)
 
 ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
 
