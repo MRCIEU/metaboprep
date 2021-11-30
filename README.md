@@ -66,7 +66,7 @@ date: June 3rd 2019
 4. Run the metaboprep pipeline on a terminal command line as follows:
 	
 	```R	
-	Rscript run_metaboprep_pipeline.R /FULL/PATH/TO/example_data/excel/paramater_file.txt
+	Rscript run_metaboprep_pipeline.R /FULL/PATH/TO/example_data/excel/parameter_file.txt
 	```
 	
 5. We have seen that the generation of the PDF report "Project_Data_Report.pdf" fail on HPC clusters. If you experience this you can generate your PDF report on a local machine as follows.
@@ -74,13 +74,13 @@ date: June 3rd 2019
 		* it will take the form of "../metaboprep_release_TODAYSDATE/"
 	2. You should find an R data object called "ReportData.Rdata". Save a copy locally.
 	3. Open an R session
-	4. produce report with
+	4. produce report with the function generate_report() as
 		
 		```R
-		full_path_to_metaboprepReport_md = "FULL/PATH/TO/metaboprep/metaboprep_Report.Rmd"
-		full_path_to_OUTPUT_dir = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/"
-		full_path_to_Rdatafile = "FULL/PATH/TO/metaboprep_release_YEAR_MO_DA/ReportData.Rdata"
-		rmarkdown::render(full_path_to_metaboprepReport_md, output_dir = full_path_to_OUTPUT_dir, output_file = "Project_Data_Report.pdf", params = list(Rdatafile = full_path_to_Rdatafile, out_dir = full_path_to_OUTPUT_dir ) )
+		output_dir_path = paste0("FULL/PATH/", "metaboprep_release_TODAYSDATE/")
+		rdfile = paste0(output_dir_path, "ReportData.Rdata")
+		generate_report( full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
+
 		```
 
 ## Data Preparation steps in brief
@@ -96,14 +96,15 @@ date: June 3rd 2019
 	* sample annotation
 	* feature annotation
 3. Write metabolite data, sample annotation and feature annotation to flat text file.
-4. Estimate summary statistics on the raw data set **(step B below)**
+4. If data is from Metabolon or is any other technology that has run-mode or platform batches, median normalize the data. 
+5. Estimate summary statistics on the raw data set **(step B below)**
 	* write summary stats to file
-5. Perfom the data filtering **(step C below)**
+6. Perfom the data filtering **(step C below)**
 	* using parameters passed in the parameter file 
 	* write data filtering (metaboprep) data set to file
-6. Estimate sumary statistics on the filtered data set **(step B below)**
+7. Estimate sumary statistics on the filtered data set **(step B below)**
 	* write summary stats to file
-7. Generate PDF report
+8. Generate PDF report
 
 ### (B) Summary Statistic Estimation
 1. Sample Summary Statistics
