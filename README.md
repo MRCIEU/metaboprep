@@ -7,7 +7,7 @@ date: June 3rd 2019
 
 ## This package
 1. Reads in and processes (un)targeted metabolite data, saving datasets in tab-delimited format for use elsewhere
-2. Provides useful summary data in the form of tab-delimited text file and a PDF report.
+2. Provides useful summary data in the form of tab-delimited text file and a html report.
 3. Performs data filtering on the data set using a standard pipeline and according to user-defined thresholds.
 
 ## Install metaboprep
@@ -24,7 +24,6 @@ date: June 3rd 2019
 		3. from this repo download a copy of the following files
 			1. run_metaboprep_pipeline.R
 			2. parameter_file.txt
-			3. metaboprep_Report.Rmd
 			
 			* You can also download or clone the entire repo with
 				
@@ -49,7 +48,7 @@ date: June 3rd 2019
 		```R
 		if (!requireNamespace("BiocManager", quietly = TRUE))
 	   install.packages("BiocManager")
-		BiocManager::install()
+		BiocManager::install("MISSINGPACKAGENAME")
 		```
 
 
@@ -58,9 +57,8 @@ date: June 3rd 2019
 1. Edit the paramater (parameter_file.txt) file
 	1.	do not add any spaces before or after the "=" sign in the paramater file.
 	2. the paramater file can be located anywhere
-2. Move to the, or a, directory containing both:
+2. Move to the, or a, directory containing a copy of:
 	1. run_metaboprep_pipeline.R
-	2. metaboprep_Report.Rmd
 3. Make sure that R is in your environment - an often necessary step if working on an HPC.
 	1. for example: module add languages/R-3.5-ATLAS-gcc-7.1.0
 4. Run the metaboprep pipeline on a terminal command line as follows:
@@ -77,7 +75,7 @@ date: June 3rd 2019
 	4. produce report with the function metaboprep::generate_report() as
 		
 		```R
-		output_dir_path = paste0("FULL/PATH/", "metaboprep_release_TODAYSDATE/")
+		output_dir_path = paste0("FULL/PATH/TO/DIR/OF/CHOICE/")
 		rdfile = paste0(output_dir_path, "ReportData.Rdata")
 		generate_report( full_path_2_Rdatafile = rdfile, dir_4_report = output_dir_path )
 
@@ -96,7 +94,8 @@ date: June 3rd 2019
 	* sample annotation
 	* feature annotation
 3. Write metabolite data, sample annotation and feature annotation to flat text file.
-4. If data is from Metabolon or is any other technology that has run-mode or platform batches, median normalize the data. 
+4. Normalize data
+	- If data is from Metabolon or is any other technology that has run-mode or platform batches, median normalize the data. 
 5. Estimate summary statistics on the raw data set **(step B below)**
 	* write summary stats to file
 6. Perfom the data filtering **(step C below)**
@@ -104,7 +103,8 @@ date: June 3rd 2019
 	* write data filtering (metaboprep) data set to file
 7. Estimate sumary statistics on the filtered data set **(step B below)**
 	* write summary stats to file
-8. Generate PDF report
+8. Generate html report
+9. Print scatter plot, histogram, and summary stats for every metabolite to a single PDF.
 
 ### (B) Summary Statistic Estimation
 1. Sample Summary Statistics
@@ -156,19 +156,28 @@ date: June 3rd 2019
 3. Estimate feature missingness and exclude extreme features, those with a missingness >= 0.80 (or 80%)
 4. Re-estimate sample missingness and exclude samples >= user defined threshold (units: 0.2 or 20% missing) **(derived variables excluded)**
 5. Re-estimate feature missingness and exclude features >= user defined threshold (units: 0.2 or 20% missing)
-6. Estimate total peak area (the sum of all values) for each individual using complete features only and exclude samples >= user defined threshold (units: +/- SD from mean)  **(derived variables excluded)**
+6. Estimate total sum abundance/area (the sum of all values) for each individual 
+	* first z-transform each distribution
+	* second shift the mean of each distribution to the absolute minimum of ALL observed values
+7. TSA sample exclusion using a user defined threshold (units: +/- SD from mean)  **(derived variables excluded)**
 	* To ignore this step set to NA in parameter file
-8. Build feature:feature correlation matrix on filtered data derived from steps 1-6 above **(derived variables excluded)**
+8. Identify outlier values for each feature using a user defined threshold (units: +/- IQR from median) 
+9. User define what to do with outliers **for the purposes of deriving the PCs only**
+	* "leave_be" which means the outlier values will be left as they are.
+	* "turn_NA" which means they will be median imputed for the PCA.
+	* "winsorize" to the 100th quantile of all remaining (non-outlier values).
+10. Build feature:feature correlation matrix on filtered data derived from steps 1-6 above **(derived variables excluded)**
 	* To be included a feature must have a minimun of 50 observations, or N*0.8 observations if data set includes less than 50 individuals.
-9. Identify "independent" features using data from step 8 and user defined tree cut height.
+11. Identify "independent" features using data from step 8 and user defined tree cut height.
 	* we retain the feature with the least missingness within a cluster, otherwise we select the first feature in the list. 	
-10. Estimate principal components using indpendent features from step 9, and exclude on samples >= user defined threshold (units: +/- SD from the mean)
-11. If the data is from Metabolon we place the xenobiotic metabolites back into the filtered data set. 
+12. Estimate principal components using independent features from step 9
+13. PC outlier samples exclusions using user defined threshold (units: +/- SD from the mean)
+14. If the data is from Metabolon we place the xenobiotic metabolites back into the filtered data set. 
 
 
 **NOTE: Derived variable are those that are ratios or percentanges of two or more features already present in a data set, such as those found in Nightingale data.**
 
-## PDF Report includes
+## HTML Report includes
 
 *---example figures provided for illustration---*
 
