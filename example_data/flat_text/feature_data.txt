@@ -1,0 +1,101 @@
+metabolite_id	platform	pathway	kegg
+met1	neg	xenobiotic	K100
+met2	neg	xenobiotic	K100
+met3	neg	xenobiotic	K100
+met4	neg	lipid	K200
+met5	neg	lipid	K200
+met6	neg	lipid	K200
+met7	neg	lipid	K200
+met8	neg	lipid	K200
+met9	neg	lipid	K200
+met10	neg	lipid	K200
+met11	neg	lipid	K200
+met12	neg	lipid	K200
+met13	neg	lipid	K200
+met14	neg	lipid	K200
+met15	neg	lipid	K200
+met16	neg	lipid	K200
+met17	neg	lipid	K200
+met18	neg	lipid	K200
+met19	neg	lipid	K200
+met20	neg	lipid	K200
+met21	neg	lipid	K200
+met22	neg	lipid	K200
+met23	neg	lipid	K200
+met24	neg	lipid	K200
+met25	neg	lipid	K200
+met26	neg	lipid	K200
+met27	neg	lipid	K200
+met28	neg	lipid	K200
+met29	neg	lipid	K200
+met30	neg	lipid	K200
+met31	neg	lipid	K200
+met32	neg	lipid	K200
+met33	neg	lipid	K200
+met34	neg	lipid	K200
+met35	neg	lipid	K200
+met36	neg	lipid	K200
+met37	neg	lipid	K200
+met38	neg	lipid	K200
+met39	neg	lipid	K200
+met40	neg	lipid	K200
+met41	neg	lipid	K200
+met42	neg	lipid	K200
+met43	neg	lipid	K200
+met44	neg	lipid	K200
+met45	neg	lipid	K200
+met46	neg	lipid	K200
+met47	neg	lipid	K200
+met48	neg	lipid	K200
+met49	neg	amino acid	K300
+met50	pos	amino acid	K300
+met51	pos	amino acid	K300
+met52	pos	amino acid	K300
+met53	pos	amino acid	K300
+met54	pos	amino acid	K300
+met55	pos	amino acid	K300
+met56	pos	amino acid	K300
+met57	pos	amino acid	K300
+met58	pos	amino acid	K300
+met59	pos	amino acid	K300
+met60	pos	carbohydrate	K200
+met61	pos	carbohydrate	K200
+met62	pos	carbohydrate	K200
+met63	pos	carbohydrate	K200
+met64	pos	carbohydrate	K200
+met65	pos	carbohydrate	K200
+met66	pos	carbohydrate	K200
+met67	pos	carbohydrate	K200
+met68	pos	carbohydrate	K200
+met69	pos	carbohydrate	K200
+met70	pos	cofactors and vitamins	K400
+met71	pos	cofactors and vitamins	K400
+met72	pos	cofactors and vitamins	K400
+met73	pos	cofactors and vitamins	K400
+met74	pos	cofactors and vitamins	K400
+met75	pos	cofactors and vitamins	K400
+met76	pos	cofactors and vitamins	K400
+met77	pos	cofactors and vitamins	K400
+met78	pos	cofactors and vitamins	K400
+met79	pos	cofactors and vitamins	K400
+met80	pos	cofactors and vitamins	K400
+met81	pos	cofactors and vitamins	K400
+met82	pos	cofactors and vitamins	K400
+met83	pos	cofactors and vitamins	K400
+met84	pos	cofactors and vitamins	K400
+met85	pos	cofactors and vitamins	K400
+met86	pos	cofactors and vitamins	K400
+met87	pos	cofactors and vitamins	K400
+met88	pos	cofactors and vitamins	K400
+met89	pos	cofactors and vitamins	K400
+met90	pos	energy	K400
+met91	pos	energy	K400
+met92	pos	energy	K400
+met93	pos	energy	K400
+met94	pos	energy	K400
+met95	pos	energy	K400
+met96	pos	energy	K400
+met97	pos	energy	K400
+met98	pos	energy	K400
+met99	pos	energy	K400
+met100	pos	energy	K400
