@@ -81,6 +81,10 @@ date: June 3rd 2019
 
 		```
 
+## Example data
+
+An example data set can be found in the folder "example_data" here on the repository. It is a simulated data set of 100 metabolites, for 100 samples. There is a (1) metabolon like (v1 format) excel file of the data set, and a (2) flat text (tab delim) version of the data set. Both are accompanied by a parameter file to help guide you with the example. This example data includes data from two hypothetical mass spectrometry run modes or platforms, "neg" and "pos". As such, a subset of the metabolites were run (simulated) in the "neg" run mode in two batches, and the second subset of metabolites were run (simulated) in the "pos" run mode in three batches. Each batch was simulated with different mean abundance values to help illustrate possible batch effects and the normalization procedure. If looking at the flat text version of the example, information on which metabolites were simulated in which run mode or platform can be found in the flat text file "feature_data.txt" in the column "platform". Further, to identify which samples belonged to which batch, for each run mode, you would use the columns "neg" and "pos" in the flat text file "sample_data.txt".
+
 ## Data Preparation steps in brief
 
 ![](images/metaboprep_workflow.png)
