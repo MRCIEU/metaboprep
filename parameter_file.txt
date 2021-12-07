@@ -29,8 +29,7 @@ feature_missingness=0.2
 ## (8) SAMPLE QC: Proportion of missinginess on samples used as a QC threshold. 
 sample_missingness=0.2
 ## (9) SAMPLE QC: The number of standard deviation (SD) units from the mean to perform a sample QC based on total abundance
-##				- If you would like to exclude total peak area as a QC parameter set the value to NA.
-##				- Setting to NA may be appropriate for NMR data set like Nightingale
+##				- If you would like to exclude total sum abundance as a QC parameter set the value to NA.
 total_peak_area_SD=5
 ## (10) PCA Prep: Outlier values for features. The number of interquartile range (IQR) unit distances from the median to call a value an outlier
 ##				- "outliers" here are extreme values that are the product of error.

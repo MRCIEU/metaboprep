@@ -89,7 +89,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 
 ![](images/metaboprep_workflow.png)
 
-### -- a detailed synopsis can be found on this git repository's wiki --
+## See the Wiki page for a detailed synopsis of the pipeline [here](https://github.com/MRCIEU/metaboprep/wiki/Detailed-metaboprep-pipeline-steps).
 
 ### (A) General Outline of metaboprep
 1. Read in the paramater file
@@ -110,7 +110,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 8. Generate html report
 9. Print scatter plot, histogram, and summary stats for every metabolite to a single PDF.
 
-### (B) Summary Statistic Estimation
+### (B) Summary Statistics Estimated
 1. Sample Summary Statistics
 	* sample missingness
 		+ all features
