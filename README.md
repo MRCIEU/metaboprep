@@ -120,7 +120,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 		+ with complete features only (no missingness) 
 	* count of how many times a sample is an outlier across all feature
 		+ each feature analyzed within its own sample distribution
-		+ outliers determined as those +/- 5 SD of the mean.
+		+ outliers determined as those +/- 5 IQR of the median.
 2. Feature Summary Statistics
 	* feature missingness
 		+ all samples
@@ -140,7 +140,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 		+ max
 	* feature outlying sample count
 		+ count of outlying samples 
-			+ outliers determined as those +/- 5 SD of the mean.
+			+ outliers determined as those +/- 5 IQR of the median.
 3. Feature and Sample structure
 	* feature:feature correlation structure **(derived variables excluded)**
 		+ only includes features with at least 50 measurments
