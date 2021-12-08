@@ -115,7 +115,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 	* sample missingness
 		+ all features
 		+ to the exclusion of xenobiotic and\or derived variables
-	* sample total peak area (TPA) **(derived variables excluded)**
+	* sample total sum abundance (TSA) **(derived variables excluded)**
 		+ with all features 
 		+ with complete features only (no missingness) 
 	* count of how many times a sample is an outlier across all feature
