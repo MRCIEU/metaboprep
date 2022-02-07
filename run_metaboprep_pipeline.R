@@ -420,7 +420,7 @@ if(length(mydata)>3){
 ## (VII)  Normalize Metabolon or Other (MS) Data
 ##
 #########################
-if(platform != "Nightingale"){
+if(platform == "Metabolon"){
   cat( paste0("Normalization. Performing normalization on Metabolon Data.\n\n") )
   if(!is.na(feat_anno_run_mode_col)){
       cat( paste0("\t- Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
