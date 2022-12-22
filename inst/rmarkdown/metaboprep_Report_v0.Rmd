@@ -149,7 +149,7 @@ A data reduction was carried out to identify a list of representative features f
 
 feature_count = length(qcing_data$feature_sumstats$k)
 features_included_in_data_reduction = length( na.omit(qcing_data$feature_sumstats$k) )
-cluster_count = length( unique(qcing_data$feature_sumstats$k) )
+cluster_count = length( unique( na.omit(qcing_data$feature_sumstats$k) ) )
 number_of_rep_meatbolites = sum( qcing_data$feature_sumstats$independent_features_binary == 1 )
 
 temp = data.frame( data.reduction = c("total metabolite count",
@@ -265,7 +265,7 @@ tree_plot = dend %>% ggplot() + geom_hline(yintercept = tree_cut_height, color =
 ##############
 feature_count = length(qc_data$feature_data$k)
 features_included_in_data_reduction = length( na.omit(qc_data$feature_data$k) )
-cluster_count = length( unique(qc_data$feature_data$k) )
+cluster_count = length( unique( na.omit( qc_data$feature_data$k) ) )
 number_of_rep_meatbolites = sum( qc_data$feature_data$independent_features_binary == 1 )
 
 temp = data.frame( data.reduction = c("total metabolite count","metabolites included in data reduction","number of metabolite clusters","number of representative metabolites"),
