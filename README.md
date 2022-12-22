@@ -10,6 +10,14 @@ date: June 3rd 2019
 2. Provides useful summary data in the form of tab-delimited text file and a html report.
 3. Performs data filtering on the data set using a standard pipeline and according to user-defined thresholds.
 
+## Known issues
+Dec 22, 2022
+
+1. Nightingale Health has updated their data release format and has changed the spelling/format of some metabolite names. We have updated our annotation file for automatic annotation of Nightingale Health data, but you will - at present - need to extract the metabolite and sample data from your Nightingale Health release and run them as flat text files. 
+2. Nightingale Health: IF there is a metabolite ID that metaboprep can not automatically annotate, because the spelling has changed it would be best to identify this change and edit the spelling manually before running metaboprep. 
+3. Nightingale Health: IF there is a metabolite ID that metaboprep can not automatically annotate, because it is a new feature, then you can still run metaboprep BUT if that feature is a derived feature - like a ratio - and you want to exclude ratios from some of the QC steps such as when identifying independent features or estimating PCs, then metaboprep will - at present - not be able to exclude this feature. We are aware of this issue and are looking for a fix. 
+4. Metabolon has a new data release format. We are working to incorporate it into the package. At present you will just have to extract the metabolite, sample annotation, and feature annotation files as flat text files, and run them as such. 
+
 ## Install metaboprep
 1. To install do the following
 	
