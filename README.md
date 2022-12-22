@@ -227,3 +227,7 @@ An example data set can be found in the folder "example_data" here on the reposi
 	* presence -vs- absence
 	* continuous
 ![](images/power_v2.png)
+
+## change log
+
+1. 2022, Feb 7th: Edited the run_metaboprep_pipeline.R script to run the Metabolon normalization only when parameter 6 is Metabolon, rather than not Nightingale. (line 430 in script).
