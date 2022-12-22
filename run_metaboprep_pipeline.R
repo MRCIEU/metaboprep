@@ -248,6 +248,7 @@ if(isflat > 0){
     ## edit column metabolite names
     colnames(metabolitedata) = gsub("_.", "pct", colnames(metabolitedata))
     colnames(metabolitedata) = gsub("%", "pct", colnames(metabolitedata))
+    colnames(metabolitedata) = gsub("by", "", colnames(metabolitedata))
     colnames(metabolitedata) = gsub("/", "_", colnames(metabolitedata))
     colnames(metabolitedata) = gsub("\\.", "", colnames(metabolitedata))
     colnames(metabolitedata) = gsub("-", "", colnames(metabolitedata))
@@ -316,6 +317,23 @@ if( !is.na(FeatureAnno_file2process) ){
     rownames(featuredata) = gsub("_", "", rownames(featuredata))
     rownames(featuredata) = tolower(rownames(featuredata))
   }
+
+  ## Verify that the first column of feature names matches the columnnames in metabolite data
+  idsmatch = sum(rownames(featuredata) %in% colnames(metabolitedata)) == nrow(featuredata)
+  if(idsmatch == FALSE){
+    stop( 
+    paste0("The feature or metabolite IDs in the first column of your feature annotation file
+      \tdo not match the feature (column) ids in the metabolite data file.
+      \tPlease insure that these ids match and come back and try again."),
+    call.=FALSE)
+  }
+
+  ## If the IDs do match lets make sure they are ordered properly
+  if(idsmatch == TRUE){
+    m = match(  colnames(metabolitedata), rownames(featuredata))
+    featuredata = featuredata[m, ]
+  }
+
 }
 
 ##################################
@@ -328,12 +346,14 @@ if( !is.na(SampleAnno_file2process) ){
   ##
   if( length(grep(".csv", n )) > 0 ){
     cat(paste0("\t- Reading in you csv sample annotation file\n"))
+    # sampledata = read.csv(n, header = TRUE, quote = "", as.is = TRUE)
     sampledata = read.csv(n, header = TRUE, quote = "", as.is = TRUE)
   }
   ####
   if(length( c( grep(".txt", n ), grep(".tsv", n )  ) ) > 0 ){
     cat(paste0("\t- Reading in you txt sample annotation file\n"))
-    sampledata = read.table(n, header = TRUE, quote = "", as.is = TRUE, sep = "\t")
+    # sampledata = read.table(n, header = TRUE, quote = "", as.is = TRUE, sep = "\t")
+    sampledata = read.table(n, header = TRUE, as.is = TRUE, sep = "\t")
   } 
   ## format sampledata data
   editrownames = sum( rownames(sampledata) == 1:nrow(sampledata) ) /nrow(sampledata)
@@ -341,6 +361,22 @@ if( !is.na(SampleAnno_file2process) ){
     cat(paste0("\t\t- Assuming sample IDs are in column 1 and redefining rownames\n"))
     rownames(sampledata) = as.character(sampledata[,1])
     #sampledata = sampledata[,-1]
+  }
+
+  ## Verify that the first column of feature names matches the columnnames in metabolite data
+  idsmatch = sum( rownames(sampledata) %in% rownames(metabolitedata) ) == nrow(sampledata)
+  if(idsmatch == FALSE){
+    stop( 
+    paste0("The sample IDs in the first column of your sample annotation file
+      \tdo not match the sample (row) ids in the metabolite data file.
+      \tPlease insure that these ids match and come back and try again."),
+    call.=FALSE)
+  }
+
+  ## If the IDs do match lets make sure they are ordered properly
+  if(idsmatch == TRUE){
+    m = match(  rownames(metabolitedata), rownames(sampledata))
+    sampledata = sampledata[m, ]
   }
 }
 
@@ -361,6 +397,33 @@ if(isflat > 0){
   if(platform == "Nightingale"){
     m = match( rownames(featuredata), ng_anno$metabolite)
     featuredata = cbind(featuredata, ng_anno[m, -1])
+    ## Look any id that I could not match
+    w = which(is.na(m))
+    if(length(w)>0){
+      ids_i_could_not_match = rownames(featuredata)[w]
+      ## make the NAs "unknown"
+      featuredata[w, c("feature_names", "raw.label", "class", "subclass", "label", "label.no.units","derived_features")] = "unknown"
+      ## STOP as ERROR
+      cat( paste0("\n\n
+          \t- !!!! WARNING !!!!
+          \t\tPlease be aware that there is|are ",  length(w) ," metabolite IDs in your Nightingale data set that metaboprep could not annotate.
+          \t\tAt present Nightingale Health data annotation is performed with the metaboprep data frame ng_anno. 
+          \t\tYou can see it by opening an R session and typing
+          \n\t\t\t> metaboprep::ng_anno
+          \n\t\t\tThe annotation is necessary for proper treatment of derived features in the Nightingale data sets 
+          \t\t(i.e. ratios or features derived from two or more features already present in the data).
+          \t\tThis error may be the product of a new spelling Nightingale Health has chosen or the addition of a new feature.
+          \t\tThis warning is ONLY an issue IF the new or unmapped metabolite is a derived feature and you are excluding derived features
+          \t\tfrom the indpendent feature identification step, that also feeds into the PCA.
+          \t\tIf it is spelling mismatch you can edit your files and try again.
+          \t\tIf it is a new feature, we are aware of this issue, and are working on a solution.\n") )
+          
+      cat( paste0("\n\t\t- The features metaboprep could not match are:\n") )
+        
+
+      cat( paste0(ids_i_could_not_match, "\n\n\n------\n") )
+
+    }
   }
   ###
   mydata = list(metabolitedata = metabolitedata, sampledata = sampledata, featuredata = featuredata)
@@ -420,7 +483,7 @@ if(length(mydata)>3){
 ## (VII)  Normalize Metabolon or Other (MS) Data
 ##
 #########################
-if(platform != "Nightingale"){
+if(platform == "Metabolon"){
   cat( paste0("Normalization. Performing normalization on Metabolon Data.\n\n") )
   if(!is.na(feat_anno_run_mode_col)){
       cat( paste0("\t- Performing normalization with parameter file provided feature annotation column '",feat_anno_run_mode_col,"'.\n") )
@@ -463,7 +526,6 @@ if(platform != "Nightingale"){
         cat(paste0("\t- NOTE: Unable to identify a column header called 
             'PLATFORM' or 'platform' in the feature data sheet.
              This is necessary to perform batch normalization\n\n") )
-
       }
       ##################################################
       ## look for batch info in the sample sheet
@@ -534,6 +596,7 @@ if(platform != "Nightingale"){
 }
 
 
+
 #########################
 ##
 ## (VII)  Normalize Other MS Data
@@ -560,6 +623,7 @@ if( !is.na(feat_anno_run_mode_col) & platform == "Other" ){
   cat( paste0("        - Normalization completed.\n\n") )
 
 }
+
 
 #########################
 ##
