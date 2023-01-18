@@ -675,7 +675,7 @@ system(cmd)
 ### SAMPLES
 if( "sampledata" %in% names(mydata) ){
   # mydata$sampledata = cbind(mydata$sampledata, samplesumstats)
-  samplesumstats = cbind(mydata$sampledata, samplesumstats)
+  samplesumstats = cbind(mydata$sampledata, samplesumstats[,-1])
 }
 n = paste0(data_dir,  "metaboprep_release_", today, "/sumstats/raw_dataset/", project, "_", today, "_sample_anno_sumstats.txt")
 # write.table(mydata$sampledata, file = n,
