@@ -527,7 +527,7 @@ if(length(w)>0){
 count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
 
 ## remove those with only one class or count == sample size
-r = which(count_unique == 1 | count_unique == nrow(qc_data$sample_data) | count_unique > 96)
+r = which(count_unique <= 1 | count_unique == nrow(qc_data$sample_data) | count_unique > 96)
 if(length(r) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
@@ -543,7 +543,8 @@ if( length(possible_vars) > 0){
   }) )
   features_per_unit = as.data.frame( cbind( count_unique, features_per_unit) )
   ## filter 2 class min of 1 variables
-  r = which(features_per_unit$count_unique == 2 & features_per_unit$min == 1)
+  # r = which(features_per_unit$count_unique == 2 & features_per_unit$min == 1)
+  r = which(features_per_unit$count_unique < 2 | features_per_unit$min < 10)
   if(length(r) > 0){ features_per_unit = features_per_unit[-r,] }
   
   ## filter for median observational count
@@ -639,10 +640,20 @@ Figure Legend: Box plot illustration(s) of the relationship that available batch
 
 ## Multivariate evaluation: batch variables
 
-```{r sample_missingness_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 2, warning=FALSE, message=FALSE, error=FALSE}
+```{r sample_missingness_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
 if( length(batch_variables) > 0 ) {
   covars = as.data.frame( qc_data$sample_data[ , batch_variables ] )
-  for(i in 1:ncol(covars)){ covars[,i] = as.factor(covars[,i]) }
+  ## account for NAs
+  for(i in 1:ncol(covars)){ 
+    w = which(is.na(covars[,i] ))
+    if(length(w)>0){
+      covars[w,i] = "no_info_given" 
+      }
+  }
+  ## convert to factors
+  for(i in 1:ncol(covars)){ covars[,i] = as.factor(as.character(covars[,i])) }
+  
+  ## run multivariate ANOVA
   ( multivariate.anova(dep = qc_data$sample_data$sample_missingness, indep_df = covars ) )
 } else {
   paste0(" -- No sample level batch variables were provided or all were invariable -- ")
