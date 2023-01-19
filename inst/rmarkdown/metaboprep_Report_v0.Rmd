@@ -523,6 +523,10 @@ if(length(w)>0){
   possible_vars = possible_vars[ -c(w:length(possible_vars)) ]  
 }
 
+if(length(possible_vars)>0){
+  cat( paste0(" -- A total of ",length(possible_vars)," possible feature level batch variables were identified in the sample data table. -- \n") )
+}
+
 ## number of unique units for each possible variable?
 count_unique = apply(qc_data$sample_data[,possible_vars], 2, function(x){  length( unique( na.omit(x) ) )  })
 
@@ -554,12 +558,78 @@ if( length(possible_vars) > 0){
 
 ## define
 batch_variables = possible_vars
+
+if(length(batch_variables)==0){
+  cat( paste0(" -- No feature level batch variables identified or all were invariable -- \n") )
+}
+
+if(length(batch_variables)>0){
+  cat( paste0(" -- After filtering a total of ",length(batch_variables)," feature level batch variables were identified. -- \n") )
+}
+
+if(length(batch_variables)>0){
+  cat( paste0(" -- They are:\n") )
+  cat( paste0("\t", batch_variables, "\n") )
+}
+
 ```
 
 
 ```{r}
-if(length(batch_variables)==0){
-  paste0(" -- No feature level batch variables identified or all were invariable -- ") 
+## FORMAT THE BATCH COVARIABLES
+## Turn any NAs in the batch variables into a "string"
+if(length(batch_variables)>0){
+  ## extract the batch covariables
+  covars = as.data.frame( qc_data$sample_data[ , batch_variables ] )
+  
+  ## account for NAs
+  for(i in 1:ncol(covars)){ 
+    w = which(is.na(covars[,i] ))
+    if(length(w)>0){
+      covars[w,i] = "NA_other" 
+      }
+  }
+  ## convert to factors
+  for(i in 1:ncol(covars)){ covars[,i] = as.factor(as.character(covars[,i])) }
+  
+  ## replace batch variable in qc_data$sample_data
+  qc_data$sample_data[ , batch_variables ] = covars
+}
+```
+
+
+```{r}
+## TEST FOR BATCH COVARIABLE REDUNDANCIES
+if(length(batch_variables)>1){
+  Cmat = matrix(0, length(batch_variables), length(batch_variables), dimnames = list(batch_variables,batch_variables))
+  ##
+  for(i in batch_variables ){
+    for(j in batch_variables ){
+      mat = table( unlist( qc_data$sample_data[ , i ] ) , unlist( qc_data$sample_data[ , j ] ) )
+      cv = cramerV(mat)
+      Cmat[i,j] = cv
+    }
+  }
+  ## distance matrix
+  Dmat = as.dist(1-Cmat)
+  ## dendrogram
+  nj = hclust(Dmat, method = "complete")
+  ## tree cut for clusters Cramer's V > 0.95
+  k = cutree(nj, h = 0.05)
+  ## extract unique batch variables
+  new_batch_variables = c()
+  for(i in unique(k)){
+      w = which(k == i)
+      new_batch_variables = c(new_batch_variables, batch_variables[ w[1] ])
+  }
+  ## Redefine batch variables
+  batch_variables = new_batch_variables
+  
+  cat( paste0(" -- After testing for redundancies a total of ", length(batch_variables)," feature level batch variables remain. -- \n") )
+  
+  cat( paste0(" -- They are:\n") )
+  cat( paste0("\t", batch_variables, "\n") )
+  
 }
 ```
 
@@ -643,16 +713,6 @@ Figure Legend: Box plot illustration(s) of the relationship that available batch
 ```{r sample_missingness_multivatiaveANOVA, echo = FALSE, fig.width = 9, fig.height = 4, warning=FALSE, message=FALSE, error=FALSE}
 if( length(batch_variables) > 0 ) {
   covars = as.data.frame( qc_data$sample_data[ , batch_variables ] )
-  ## account for NAs
-  for(i in 1:ncol(covars)){ 
-    w = which(is.na(covars[,i] ))
-    if(length(w)>0){
-      covars[w,i] = "no_info_given" 
-      }
-  }
-  ## convert to factors
-  for(i in 1:ncol(covars)){ covars[,i] = as.factor(as.character(covars[,i])) }
-  
   ## run multivariate ANOVA
   ( multivariate.anova(dep = qc_data$sample_data$sample_missingness, indep_df = covars ) )
 } else {

@@ -26,10 +26,6 @@ an html file written to file
 \description{
 This function generates the html report.
 }
-\examples{
-
-
-}
 \keyword{html}
 \keyword{knit}
 \keyword{report}
