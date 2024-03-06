@@ -22,7 +22,6 @@ Imports:
     psych,
     pwr,
     RColorBrewer,
-    readr,
     readxl,
     tibble
 Suggests:
@@ -35,6 +34,7 @@ Suggests:
     kableExtra,
     MASS,
     purrr,
+    readr,
     stats,
     stringr,
     tidyr
