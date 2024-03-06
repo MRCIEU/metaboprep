@@ -49,7 +49,6 @@
 #' @author Salvatore Mangiafico, \email{mangiafico@njaes.rutgers.edu}
 #' @references \url{http://rcompanion.org/handbook/H_10.html}
 #' @concept correlation phi cramer V
-#' @seealso \code{\link{cohenW}}
 #' @return A single statistic, Cramer's V.  
 #'         Or a small data frame consisting of Cramer's V,
 #'         and the lower and upper confidence limits.
