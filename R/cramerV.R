@@ -55,10 +55,12 @@
 #'         and the lower and upper confidence limits.
 #'         
 #' @examples
+#' \dontrun{
 #' ### Example with table
 #' data(Anderson)
 #' fisher.test(Anderson)
 #' cramerV(Anderson)
+#' }
 #'
 #' ### Example with two vectors
 #' Species = c(rep("Species1", 16), rep("Species2", 16))
