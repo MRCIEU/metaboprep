@@ -15,10 +15,6 @@
 #' @return an html file written to file
 #'
 #' @export
-#'
-#' @examples
-#' 
-#'
 generate_report = function(full_path_2_Rdatafile = "ReportData.Rdata", dir_4_report = "./", path_2_Rmd_template = file.path( system.file("rmarkdown", package="metaboprep"), "metaboprep_Report_v0.Rmd" ) ){
    ## package check
    pkgs = c("knitr")
