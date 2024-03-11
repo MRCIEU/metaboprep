@@ -85,10 +85,12 @@ Cramer's V is used as a measure of association
           method may not be reliable, or the procedure may fail.
 }
 \examples{
+\dontrun{
 ### Example with table
 data(Anderson)
 fisher.test(Anderson)
 cramerV(Anderson)
+}
 
 ### Example with two vectors
 Species = c(rep("Species1", 16), rep("Species2", 16))
@@ -100,9 +102,6 @@ cramerV(Species, Color)
 }
 \references{
 \url{http://rcompanion.org/handbook/H_10.html}
-}
-\seealso{
-\code{\link{cohenW}}
 }
 \author{
 Salvatore Mangiafico, \email{mangiafico@njaes.rutgers.edu}

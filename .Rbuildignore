@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^example\_data$
+^images$
+^parameter_file\.sh$
+^run\_metaboprep\_pipeline\.R$
