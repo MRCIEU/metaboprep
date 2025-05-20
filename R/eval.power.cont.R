@@ -30,4 +30,3 @@ eval.power.cont = function(N, n_coeff, effect, alpha) {
   tmp <- cbind(N, effect, alpha, power, n_coeff)
   return(tmp)
 }
-

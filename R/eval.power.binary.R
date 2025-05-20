@@ -39,4 +39,3 @@ eval.power.binary = function(N, effect, alpha) {
   out <- cbind(N, N_case, N_control, effect, alpha, power)
   return(out)
 }
-

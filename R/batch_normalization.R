@@ -118,5 +118,3 @@ batch_normalization = function( wdata, feature_data_sheet = NULL, sample_data_sh
   
   return(wdata)
 }
-  
-  
