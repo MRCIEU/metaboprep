@@ -2,38 +2,17 @@ Package: metaboprep
 Title: Metabolomics data preparation and processing pipeline
 Version: 1.0.1
 Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
-    person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")) )
-Description: Reads in raw Metabolon and Nightingale xls sheets and aids in data preparation of all metabolomics data sets.
+             person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")),
+             person("Nicholas", "Sunderland", email = "nicholas.sunderland@bristol.ac.uk", role = c("aut")),
+             person("Matthew", "Lee", email = "matthew.lee@bristol.ac.uk", role = c("aut")),
+             person("Alec", "McKinlay", email = "am17168@bristol.ac.uk", role = c("aut")))
+Description: |
+  Reads in raw Metabolon and Nightingale xls sheets and aids in data preparation of all metabolomics data sets.
 Depends: R (>= 3.5.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
 Imports:
-    car,
-    dplyr,
-    ggplot2,
-    ggpubr,
-    knitr,
-    magrittr,
-    nFactors,
-    pcaMethods,
-    psych,
-    pwr,
-    RColorBrewer,
-    readr,
-    readxl,
-    tibble
 Suggests:
-    corrplot,
-    data.table,
-    dendextend,
-    forcats,
-    ggfortify,
-    gridExtra,
-    kableExtra,
-    MASS,
-    purrr,
-    stats,
-    stringr,
-    tidyr
+URL: https://mrcieu.github.io/metaboprep/
