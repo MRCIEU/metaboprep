@@ -1,0 +1,41 @@
+---
+title: "Batch Normalise"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Batch Normalise}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Create Metaboprep object
+```{r setup}
+library(metaboprep)
+
+data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "metaboprep"), header=T, row.names = 1)
+features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
+
+m <- Metaboprep(data = data, samples = samples, features = features)
+m
+
+```
+
+## Run batch normalisation
+```{r batch_normalise}
+m <- m |>
+  batch_normalise(source_layer = "input", dest_layer = "batch_normalised") |> 
+  print()
+```
+
+## Accessing data
+```{r data}
+m@data[1:5, 1:5, "input"]
+m@data[1:5, 1:5, "batch_normalised"]
+```

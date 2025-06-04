@@ -12,6 +12,10 @@ batch_normalise(
 }
 \arguments{
 \item{metaboprep}{an object of class Metaboprep}
+
+\item{source_layer}{character, which data layer to get the data from}
+
+\item{dest_layer}{character, which data layer to put the the data in to}
 }
 \description{
 Run batch normalisation based on the platform flag in the features data

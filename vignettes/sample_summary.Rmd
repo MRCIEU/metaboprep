@@ -1,0 +1,41 @@
+---
+title: "Sample summary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sample summary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Create Metaboprep object
+```{r setup}
+library(metaboprep)
+
+data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "metaboprep"), header=T, row.names = 1)
+features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
+
+m <- Metaboprep(data = data, samples = samples, features = features)
+m
+
+```
+
+## Run sample summary
+```{r batch_normalise}
+m <- m |>
+  sample_summary(source_layer = "input", outlier_udist = 1) |> 
+  print()
+```
+
+## Accessing data
+```{r data}
+m@sample_summary[1:5, , "input"]
+```

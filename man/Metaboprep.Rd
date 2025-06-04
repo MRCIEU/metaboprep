@@ -4,7 +4,18 @@
 \alias{Metaboprep}
 \title{Metaboprep Object}
 \usage{
-Metaboprep(data, samples, features)
+Metaboprep(
+  data,
+  samples,
+  features,
+  exclusions = list(raw = list(samples = list(extreme_sample_missingness = character(),
+    user_defined_sample_missingness = character(), user_defined_sample_totalpeakarea =
+    character(), user_defined_sample_pca_outlier = character()), features =
+    list(extreme_feature_missingness = character(), user_defined_feature_missingness =
+    character()))),
+  feature_summary = array(data = NA_real_, dim = c(0, 0, 0)),
+  sample_summary = array(data = NA_real_, dim = c(0, 0, 0))
+)
 }
 \arguments{
 \item{data}{numeric matrix, the data matrix containing metabolite values (not to be set directly).}

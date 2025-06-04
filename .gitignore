@@ -6,3 +6,4 @@
 # mac things 
 .DS_Store
 docs
+inst/doc

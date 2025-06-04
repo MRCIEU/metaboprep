@@ -14,9 +14,19 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Imports:
-Suggests:
+    S7
 URL: https://mrcieu.github.io/metaboprep/
 Collate: 
     'class_metaboprep.R'
     'batch_normalise.R'
+    'feature_describe.R'
+    'feature_summary.R'
+    'missingness.R'
+    'outlier_detection.R'
+    'sample_summary.R'
+    'total_peak_area.R'
     'zzz.R'
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

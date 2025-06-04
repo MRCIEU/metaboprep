@@ -72,7 +72,15 @@ Metaboprep <- new_class(
   ############################################
   # Constructor function the Metaboprep object
   ############################################
-  constructor = function(data, samples, features) {
+  constructor = function(data, samples, features, 
+                         exclusions = list(raw = list(samples  = list(extreme_sample_missingness        = character(),
+                                                                     user_defined_sample_missingness   = character(),
+                                                                     user_defined_sample_totalpeakarea = character(),
+                                                                     user_defined_sample_pca_outlier   = character()),
+                                                     features = list(extreme_feature_missingness       = character(),
+                                                                     user_defined_feature_missingness  = character()))), 
+                         feature_summary = array(data = NA_real_, dim = c(0,0,0)), 
+                         sample_summary  = array(data = NA_real_, dim = c(0,0,0))) {
     # if data is a matrix, convert to 3D array
     if (is.matrix(data)) {
       data <- array(data, dim = c(nrow(data), ncol(data), 1), dimnames = list(rownames(data), colnames(data), "input"))
@@ -85,22 +93,14 @@ Metaboprep <- new_class(
     samples  <- samples[match(rownames(data), samples[["sample_id"]]), , drop = FALSE]
     features <- features[match(colnames(data), features[["feature_id"]]), , drop = FALSE]
     
-    # populate an empty exclusions list
-    exclusions <- list(raw = list(samples  = list(extreme_sample_missingness        = character(),
-                                                  user_defined_sample_missingness   = character(),
-                                                  user_defined_sample_totalpeakarea = character(),
-                                                  user_defined_sample_pca_outlier   = character()),
-                                  features = list(extreme_feature_missingness       = character(),
-                                                  user_defined_feature_missingness  = character())))
-    
     # populate object and return it
     new_object(.parent         = S7_object(), 
                data            = data, 
                samples         = samples, 
                features        = features, 
                exclusions      = exclusions,
-               sample_summary  = array(data = NA_real_, dim = c(0,0,0)), 
-               feature_summary = array(data = NA_real_, dim = c(0,0,0)))
+               sample_summary  = sample_summary, 
+               feature_summary = feature_summary)
   },
   ##########################################
   # Validator function the Metaboprep object
@@ -120,3 +120,88 @@ Metaboprep <- new_class(
     }
   }
 )
+
+
+#' @title Add a Layer of Data (internal use)
+#' @description
+#' This function adds an additional layer of data along the third dimension to an existing 3D array (or 2D matrix/vector) by stacking a new layer of data.
+#' It ensures that the dimensions of the new layer match the first two dimensions of the existing array or matrix.
+#' If there is a mismatch in row or column names and the `force` parameter is set to `TRUE`, the function will align the data by filling missing values with `NA`.
+#' It is used internally and not intended for routine user use.
+#'
+#' @param current A vector, matrix, or 3D array representing the current stack of data.
+#' @param layer A matrix or array that represents the new layer of data to be added. It should match the dimensions of the first two dimensions of `current`.
+#' @param layer_name A character string specifying the name of the new dimension for the 3rd axis. This can be used to annotate the new data layer.
+#' @param force A logical value indicating whether to force the join and create `NA` values where row or column names do not match between `current` and `layer`. Default is `FALSE`.
+#'
+#' @returns A 3D array with the added layer in the third dimension.
+#'
+#' @export
+add_layer <- function(current, layer, layer_name, force=FALSE) {
+  
+  if (is.vector(layer)) {
+    layer <- array(layer,
+                   dim = c(length(layer), 1, 1),
+                   dimnames = list(names(layer), "value", layer_name))
+  } else if (is.matrix(layer)) {
+    layer <- array(layer,
+                   dim = c(nrow(layer), ncol(layer), 1),
+                   dimnames = list(rownames(layer), colnames(layer), layer_name))
+  }
+  
+  # If current is empty, initialize it directly with the first layer (no NAs)
+  if (length(current) == 0) {
+    return(layer)
+  }
+  
+  # Ensure row and column names match before appending
+  if (!identical(rownames(current), rownames(layer)) ||
+      !identical(colnames(current), colnames(layer))) {
+    
+    # force together anyway (ok for things like PCs or varexp)
+    if (force) {
+      all_rows <- union(rownames(current), rownames(layer))
+      all_cols <- union(colnames(current), colnames(layer))
+      current_expanded <- array(NA_real_,
+                                dim = c(length(all_rows), length(all_cols), dim(current)[3]),
+                                dimnames = list(all_rows, all_cols, dimnames(current)[[3]]))
+      current_expanded[rownames(current), colnames(current), ] <- current
+      layer_expanded <- array(NA_real_,
+                              dim = c(length(all_rows), length(all_cols), 1),
+                              dimnames = list(all_rows, all_cols, layer_name))
+      layer_expanded[rownames(layer), colnames(layer), ] <- layer
+      current <- current_expanded
+      layer <- layer_expanded
+      
+    } else {
+      stop("Error: Row names and column names must match before joining layers.")
+    }
+  }
+  
+  # Check if the layer_name already exists in the current array depth
+  existing_layer_index <- which(dimnames(current)[[3]] == layer_name)
+  
+  # If the layer exists, overwrite it
+  if (length(existing_layer_index) > 0) {
+    
+    current[, , existing_layer_index] <- layer
+    
+    # If it doesnt append layer
+  } else {
+    
+    if (is.array(current)) {
+      
+      current <- array(c(current, layer),
+                       dim = c(dim(layer)[1], dim(layer)[2], dim(current)[3] + 1),
+                       dimnames = list(rownames(layer),
+                                       colnames(layer),
+                                       c(dimnames(current)[[3]], layer_name)))
+      
+    } else {
+      stop("why is current not an array")
+    }
+    
+  }
+  
+  return(current)
+}

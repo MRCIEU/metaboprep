@@ -2,6 +2,8 @@
 #' @description
 #' Run batch normalisation based on the platform flag in the features data 
 #' @param metaboprep an object of class Metaboprep
+#' @param source_layer character, which data layer to get the data from
+#' @param dest_layer character, which data layer to put the the data in to
 #' @include class_metaboprep.R
 #' @importFrom stats median
 #' @export
