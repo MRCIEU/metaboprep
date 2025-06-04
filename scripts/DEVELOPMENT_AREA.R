@@ -18,17 +18,21 @@ load_all()
 set.seed(123)
 n_samples  <- 100
 n_features <- 20
-data <- matrix(runif(n_samples * n_features), nrow = n_samples, ncol = n_features)
 samples <- data.frame(
   sample_id = paste0("id_", 1:n_samples),
   age       = sample(18:70, size = n_samples, replace = TRUE),
-  sex       = sample(c("male", "female"), size = n_samples, replace = TRUE)
+  sex       = sample(c("male", "female"), size = n_samples, replace = TRUE), 
+  pos       = sample(c("batch1", "batch2"), size = n_samples, replace = TRUE),
+  neg       = sample(c("batch1", "batch2"), size = n_samples, replace = TRUE)
 )
 features <- data.frame(
-  feature_id = paste0("metab_id_", 1:n_features),
-  derived    = sample(c(T,F), size = n_features, replace = TRUE, prob = c(0.05,0.95)),
-  xenobiotic = sample(c(T,F), size = n_features, replace = TRUE, prob = c(0.10,0.90))
+  feature_id         = paste0("metab_id_", 1:n_features),
+  platform           = sample(c("pos","neg"), size = n_features, replace = TRUE, prob = c(0.20,0.80)),
+  pathway            = NA_character_,
+  derived_feature    = sample(c(T,F), size = n_features, replace = TRUE, prob = c(0.05,0.95)),
+  xenobiotic_feature = sample(c(T,F), size = n_features, replace = TRUE, prob = c(0.10,0.90))
 )
+data <- matrix(runif(n_samples * n_features), nrow = n_samples, ncol = n_features, dimnames = list(rows = rev(samples[["sample_id"]]), cols = features[["feature_id"]]))
 
 
 # creating a metaboprep object
@@ -36,5 +40,14 @@ m <- Metaboprep(data = data, samples = samples, features = features)
 m
 
 
-#
+# print some elements of the object 
+print(m@data[1:5, 1:5, 1])
+print(m@samples[1:5,])
+print(m@features[1:5,])
 
+
+# try running a processing block
+m <- m |>
+  batch_normalise()
+m
+m@data[, , "batch_normalised"]

@@ -16,3 +16,7 @@ RoxygenNote: 7.3.2
 Imports:
 Suggests:
 URL: https://mrcieu.github.io/metaboprep/
+Collate: 
+    'class_metaboprep.R'
+    'batch_normalise.R'
+    'zzz.R'
