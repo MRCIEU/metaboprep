@@ -1,0 +1,148 @@
+# Data Filtering
+
+## Exclusion summary
+```{r exclusion_table}
+excl <- metaboprep@exclusions
+
+make_df <- function(label, lst) {
+  reasons <- paste0("   - ", gsub("_", " ", names(lst)))
+  counts <- as.character(sapply(lst, length))
+  data.frame(
+    Reason = c(label, reasons),
+    Count = c("", counts),
+    stringsAsFactors = FALSE
+  )
+}
+
+features_df <- make_df("Features", excl[["features"]])
+samples_df  <- make_df("Samples",  excl[["samples"]])
+
+excl_tbl <- rbind(features_df, samples_df)
+
+# table notes
+general_note <- glue::glue(
+  "Six primary data filtering exclusion steps were made during the preparation of the data. ",
+  "User-defined thresholds indicated with an asterisk. In addition, the number of outlier data", 
+  "points modified during QC are presented."
+)
+sub_notes <- c(
+  "Samples with missingness >=80%.",
+  glue::glue("Sample exclusions based on the user defined threshold of *>={sprintf('%.0f%%', 0.8*100)}."),
+  "Features with missingness >=80% (xenobiotics are not included in this step).",
+  glue::glue("Feature exclusions based on user defined threshold of *>={sprintf('%.0f%%', 0.8*100)}",
+             "(xenobiotics are not included in this step)."),
+  glue::glue("Samples with a total-peak-area or total-sum-abundance that is *>={5} SD from the mean."),
+  glue::glue("Samples that are *>={5} SD from the mean on principal component axis 1 and 2")
+) |> paste(sep = ifelse(knitr::is_html_output(), "\n", "\\\\\n"))
+
+# table
+excl_tbl |>
+  knitr::kable(
+    caption   = "Sample and Feature Exclusions",
+  ) |>
+  kableExtra::kable_classic(
+    lightable_options = "hover",
+    html_font         = report_font,
+    latex_options     = c("hold_position")
+  ) |>
+  kableExtra::column_spec(
+    column = 1, 
+    width  = "35em"
+  ) |>
+  kableExtra::row_spec(
+    row    = c(1,4), 
+    italic = TRUE
+  ) |>
+  kableExtra::footnote(
+    general_title    = "Note: ",
+    general          = general_note,
+    number           = sub_notes,
+    footnote_as_chunk = knitr::is_html_output(),
+    threeparttable   = !knitr::is_html_output(),
+    fixed_small_size = TRUE,
+    escape           = FALSE
+  )
+```
+
+
+\newpage
+
+
+## Metabolite or feature reduction and principal components
+
+A data reduction was carried out to identify a list of representative features for generating a sample principal component analysis. This step reduces the level of inter-correlation in the data to ensure that the principal components are not driven by groups of correlated features.
+
+```{r pca_1_2}
+# get data
+qcing_feature_sum <- get_feature_summary(metabolites, layer="qcing")
+qcing_feature_sum <- qcing_feature_sum[, colSums(is.na(qcing_feature_sum)) < nrow(qcing_feature_sum), drop = FALSE]
+pcs               <- get_pcs(metabolites, layer="qcing", drop=TRUE)
+pcs               <- pcs[, grepl("^pc[0-9]+$", colnames(pcs))]
+af                <- get_acceleration_factor(metabolites, layer="qcing")
+pc_outlier_sd     <- metabolites@pc_outlier_sd
+
+# compute
+tbl1 <- data.table::data.table(
+  Item = c("Total metabolite count",
+           "Metabolites included in data reduction",
+           "Number of metabolite clusters",
+           "Number of representative metabolites"),
+  Count = c(ncol(qcing_feature_sum),
+            sum(!is.na(qcing_feature_sum["k", ])),
+            length(unique(stats::na.omit(qcing_feature_sum["k", ]))),
+            sum(qcing_feature_sum["independent_features_binary", ] == 1, na.rm = TRUE))
+) 
+
+# PCA - define outliers
+if (af == 1) af <- 2
+if (af > 10) af <- 10
+omat <- outlier_detection(pcs[, 1:af], nsd = pc_outlier_sd, meansd = TRUE, by="column")
+outliers <- apply(omat, 1, sum)
+outliers[outliers > 0] <- 1
+pcs <- as.data.frame(pcs)
+pcs$outliers = factor(outliers, levels=0:1, labels=c("Within range", "Outlier"))
+cutoffs <- apply(pcs[, 1:af], 2, function(x){
+  msd    <- c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE))
+  cutoff <- msd[1] + (msd[2] * pc_outlier_sd)
+  return(cutoff)
+})
+```
+
+The data reduction table presents the number of metabolites at each phase of the data reduction (Spearman's correlation distance tree cutting) analysis.
+
+```{r}
+# table
+tbl1 |>
+  knitr::kable(
+    col.names = c("Data reduction", "Count"),
+    caption = "Feature summary"
+  ) |>
+  kableExtra::kable_classic(
+    lightable_options = "hover",
+    html_font         = report_font,
+    latex_options     = c("hold_position")
+  ) |>
+  kableExtra::column_spec(
+    column = 1, 
+    width  = "25em"
+  )
+```
+
+
+The following plot respresents principal components 1 and 2 using `r sum(!is.na(qcing_feature_sum["k", ]))` representative metabolites. The red vertical and horizontal lines indicate the standard deviation cutoffs for identifying individual outliers. Outliers are those >=`r pc_outlier_sd` SD from the mean of PCs 1-`r af`.
+```{r}
+# plot
+ggplot(pcs, aes(x = pc1, y = pc2, fill = outliers)) +
+  geom_point(size = 2.5, shape = 21 ) +
+  scale_fill_manual(values = c(`Within range`="lightblue", `Outlier`="darkblue"), drop=FALSE) +
+  geom_vline(xintercept = c(cutoffs[1], -cutoffs[1]), color = "darkred") +
+  geom_hline(yintercept = c(cutoffs[2], -cutoffs[2]), color = "darkred") +
+  theme_classic() +
+  theme(
+    legend.title    = element_blank()
+  ) +
+  labs(x = "PC1", y = "PC2")
+```
+
+
+

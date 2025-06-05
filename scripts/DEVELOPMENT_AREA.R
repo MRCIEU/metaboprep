@@ -59,6 +59,46 @@ View(mqc@samples)
 View(mqc@features)
 
 
+
+
+
+### example metabolon data 
+dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
+
+# creating a metaboprep object
+m <- Metaboprep(data = dat$data[,,1], samples = dat$samples, features = dat$features)
+m
+
+
+# run QC pipeline
+mqc <- m |>
+  quality_control(source_layer = "input", 
+                  sample_missingness = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd = 5, 
+                  outlier_udist=5, 
+                  outlier_treatment="leave_be", 
+                  winsorize_quantile = 1.0, 
+                  tree_cut_height=0.5, 
+                  pc_outlier_sd =5, 
+                  derived_col=NULL, 
+                  xenobiotic_col=NULL, 
+                  sample_ids=NULL, 
+                  feature_ids=NULL)
+mqc
+
+View(mqc@data[,,"qc"])
+View(mqc@samples)
+View(mqc@features)
+
+
+
+
+
+
+
+
+
 # print some elements of the object 
 print(m@data[1:5, 1:5, 1])
 print(m@samples[1:5,])

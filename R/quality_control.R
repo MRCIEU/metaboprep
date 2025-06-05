@@ -246,11 +246,11 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   # flag exclusions and reasons in feature and sample data
   samp_reason_df <- do.call(rbind, lapply(names(metaboprep@exclusions$samples), function(reason) {
     ids <- metaboprep@exclusions$samples[[reason]]
-    if (length(ids) == 0) return(data.frame(sample_id = character(), reason = character(), excluded = logical()))
-    data.frame(sample_id = ids, reason = reason)
+    if (length(ids) == 0) return(data.frame(sample_id = character(), reason_excluded = character()))
+    data.frame(sample_id = ids, reason_excluded = reason)
   }))
   if (nrow(samp_reason_df) > 0) {
-    samp_reason_df <- aggregate(reason ~ sample_id, samp_reason_df, FUN = function(x) paste(x, collapse = ";"))
+    samp_reason_df <- aggregate(reason_excluded ~ sample_id, samp_reason_df, FUN = function(x) paste(x, collapse = ";"))
     samp_reason_df$excluded <- TRUE
   } else {
     samp_reason_df$excluded <- logical()
@@ -258,11 +258,11 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   
   feat_reason_df <- do.call(rbind, lapply(names(metaboprep@exclusions$features), function(reason) {
     ids <- metaboprep@exclusions$features[[reason]]
-    if (length(ids) == 0) return(data.frame(feature_id = character(), reason = character()))
-    data.frame(feature_id = ids, reason = reason)
+    if (length(ids) == 0) return(data.frame(feature_id = character(), reason_excluded = character()))
+    data.frame(feature_id = ids, reason_excluded = reason)
   }))
   if (nrow(feat_reason_df) > 0) {
-    feat_reason_df <- aggregate(reason ~ feature_id, feat_reason_df, FUN = function(x) paste(x, collapse = ";"))
+    feat_reason_df <- aggregate(reason_excluded ~ feature_id, feat_reason_df, FUN = function(x) paste(x, collapse = ";"))
     feat_reason_df$excluded <- TRUE
   } else {
     feat_reason_df$excluded <- logical()

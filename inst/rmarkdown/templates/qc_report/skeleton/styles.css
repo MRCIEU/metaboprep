@@ -1,0 +1,51 @@
+/* Set the default font for the entire document */
+body {
+    font-family: "Helvetica", Arial, sans-serif;
+}
+
+/* Reduce header sizes */
+h1 {
+    font-size: 1.6em; /* Default is usually ~2.2em */
+}
+
+h2 {
+    font-size: 1.4em; /* Default is usually ~1.8em */
+}
+
+h3 {
+    font-size: 1.2em; /* Default is usually ~1.5em */
+}
+
+h4 {
+    font-size: 1.0em; /* Default is usually ~1.2em */
+}
+
+h5 {
+    font-size: 0.9em; /* Default is usually ~1.1em */
+}
+
+h6 {
+    font-size: 0.8em; /* Default is usually ~1em */
+}
+
+/* Keep bold styling for headers */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Helvetica", Arial, sans-serif;
+    font-weight: bold;
+}
+
+/* Set paragraph text for readability */
+p {
+    line-height: 1.6;
+    font-size: 1em;
+}
+
+/* Ensure code blocks remain monospaced */
+code {
+    font-family: "Courier New", monospace;
+}
+
+/* Customize table text */
+table {
+    font-family: "Helvetica", Arial, sans-serif;
+}

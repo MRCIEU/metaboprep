@@ -4,12 +4,35 @@
 \alias{quality_control}
 \title{Metabolite Quality Control}
 \usage{
-quality_control(metaboprep, source_layer = "input", dest_layer = "qc")
+quality_control(
+  metaboprep,
+  source_layer = "input",
+  sample_missingness = 0.5,
+  feature_missingness = 0.5,
+  total_peak_area_sd = 5,
+  outlier_udist = 5,
+  outlier_treatment = "leave_be",
+  winsorize_quantile = 1,
+  tree_cut_height = 0.5,
+  pc_outlier_sd = 5,
+  derived_col = NULL,
+  xenobiotic_col = NULL,
+  sample_ids = NULL,
+  feature_ids = NULL
+)
 }
 \arguments{
 \item{metaboprep}{an object of class Metabolites}
 
 \item{source_layer}{character, the data layer to summarise}
+
+\item{outlier_udist}{the unit distance in SD or IQR from the mean or median estimate, respectively outliers are identified at. Default value is 5.}
+
+\item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
+
+\item{sample_ids}{character, vector of sample ids to work with}
+
+\item{feature_ids}{character, vector of feature ids to work with}
 }
 \description{
 This function is a wrapper function that performs the key quality controls steps on a metabolomics data set.

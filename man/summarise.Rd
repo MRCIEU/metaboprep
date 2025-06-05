@@ -9,11 +9,9 @@ summarise(
   source_layer = "input",
   outlier_udist = 5,
   tree_cut_height = 0.5,
-  exclude_derived = FALSE,
-  exclude_xenobiotics = FALSE,
   sample_ids = NULL,
   feature_ids = NULL,
-  output = "object"
+  output = "data.frame"
 )
 }
 \arguments{
@@ -24,10 +22,6 @@ summarise(
 \item{outlier_udist}{the unit distance in SD or IQR from the mean or median estimate, respectively outliers are identified at. Default value is 5.}
 
 \item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
-
-\item{exclude_derived}{character, column name of a logical column in the features data indicating derived features to exclude from the summary statistics}
-
-\item{exclude_xenobiotics}{character, column name of a logical column in the features data indicating xenobiotic features to exclude from the summary statistics}
 
 \item{sample_ids}{character, vector of sample ids to work with}
 

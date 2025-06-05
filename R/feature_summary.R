@@ -48,7 +48,7 @@ method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input"
   # features must have > 80% presence or <= 20% missing
   remove <- featuremis[featuremis$missingness > 0.2, "feature_id"]
   if(length(remove) > 0){
-    data <- data[, !(colnames(data) %in% remove), drop = FALSE]
+    dat <- dat[, !(colnames(dat) %in% remove), drop = FALSE]
   }
   
 

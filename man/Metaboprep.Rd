@@ -8,11 +8,12 @@ Metaboprep(
   data,
   samples,
   features,
-  exclusions = list(raw = list(samples = list(extreme_sample_missingness = character(),
-    user_defined_sample_missingness = character(), user_defined_sample_totalpeakarea =
-    character(), user_defined_sample_pca_outlier = character()), features =
-    list(extreme_feature_missingness = character(), user_defined_feature_missingness =
-    character()))),
+  exclusions = list(samples = list(user_excluded = character(),
+    extreme_sample_missingness = character(), user_defined_sample_missingness =
+    character(), user_defined_sample_totalpeakarea = character(),
+    user_defined_sample_pca_outlier = character()), features = list(user_excluded =
+    character(), extreme_feature_missingness = character(),
+    user_defined_feature_missingness = character())),
   feature_summary = array(data = NA_real_, dim = c(0, 0, 0)),
   sample_summary = array(data = NA_real_, dim = c(0, 0, 0))
 )

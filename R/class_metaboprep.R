@@ -91,8 +91,8 @@ Metaboprep <- new_class(
     stopifnot("data matrix must be named with sample_ids and feature_ids" = all(rownames(data) %in% samples[["sample_id"]] & all(colnames(data) %in% features[["feature_id"]])))
     
     # order samples and features by data
-    samples  <- samples[match(rownames(data), samples[["sample_id"]]), , drop = FALSE]
-    features <- features[match(colnames(data), features[["feature_id"]]), , drop = FALSE]
+    samples  <- as.data.frame(samples[match(rownames(data), samples[["sample_id"]]), , drop = FALSE])
+    features <- as.data.frame(features[match(colnames(data), features[["feature_id"]]), , drop = FALSE])
     
     # populate object and return it
     new_object(.parent         = S7_object(), 
