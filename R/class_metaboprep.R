@@ -46,18 +46,17 @@ Metaboprep <- new_class(
     # the feature information
     features   = new_property(class     = class_data.frame, 
                               default   = data.frame("feature_id"=character(), "platform"=character(), "pathway"=character(), "derived_feature"=logical()), 
-                              validator = function(value) if (length(setdiff(c("feature_id", "platform", "pathway", "derived_feature"), names(value))) > 0) "should have at least columns named feature_id, platform, pathway, derived_feature" else NULL),
+                              validator = function(value) if (length(setdiff(c("feature_id"), names(value))) > 0) "should have at least the column named `feature_id`" else NULL),
     # a list of exclusions
     exclusions = new_property(class     = class_list,
                               validator = function(value) {
                                 if (length(value)==0) return(NULL)
-                                check_names <- all(sapply(value, function(layer) identical(names(layer), c("samples","features"))))
-                                check_samp  <- all(sapply(value, function(layer) identical(names(layer[["samples"]]), c("extreme_sample_missingness","user_defined_sample_missingness", "user_defined_sample_totalpeakarea", "user_defined_sample_pca_outlier"))))
-                                check_feat  <- all(sapply(value, function(layer) identical(names(layer[["features"]]), c("extreme_feature_missingness","user_defined_feature_missingness"))))
-                                if (check_names && check_samp && check_feat) {
+                                check_samp  <- identical(names(value[["samples"]]), c("user_excluded", "extreme_sample_missingness","user_defined_sample_missingness", "user_defined_sample_totalpeakarea", "user_defined_sample_pca_outlier"))
+                                check_feat  <- identical(names(value[["features"]]), c("user_excluded", "extreme_feature_missingness","user_defined_feature_missingness"))
+                                if (check_samp && check_feat) {
                                   return(NULL)
                                 } else {
-                                  return("should be a list of lists with names 'samples' and 'features'. In addition, 'samples' should be a list of character vectors named 'extreme_sample_missingness','user_defined_sample_missingness', 'user_defined_sample_totalpeakarea', 'user_defined_sample_pca_outlier'; and 'features' a list of character vectors named 'extreme_feature_missingness', 'user_defined_feature_missingness'")
+                                  return("should be a lists with names 'samples' and 'features'. In addition, 'samples' should be a list of character vectors named 'user_excluded', extreme_sample_missingness','user_defined_sample_missingness', 'user_defined_sample_totalpeakarea', 'user_defined_sample_pca_outlier'; and 'features' a list of character vectors named 'user_excluded', 'extreme_feature_missingness', 'user_defined_feature_missingness'")
                                 }
                               }),
     # summary data for features
@@ -73,12 +72,14 @@ Metaboprep <- new_class(
   # Constructor function the Metaboprep object
   ############################################
   constructor = function(data, samples, features, 
-                         exclusions = list(raw = list(samples  = list(extreme_sample_missingness        = character(),
-                                                                     user_defined_sample_missingness   = character(),
-                                                                     user_defined_sample_totalpeakarea = character(),
-                                                                     user_defined_sample_pca_outlier   = character()),
-                                                     features = list(extreme_feature_missingness       = character(),
-                                                                     user_defined_feature_missingness  = character()))), 
+                         exclusions = list(samples  = list(user_excluded                     = character(),
+                                                           extreme_sample_missingness        = character(),
+                                                           user_defined_sample_missingness   = character(),
+                                                           user_defined_sample_totalpeakarea = character(),
+                                                           user_defined_sample_pca_outlier   = character()),
+                                           features = list(user_excluded                     = character(),
+                                                           extreme_feature_missingness       = character(),
+                                                           user_defined_feature_missingness  = character())), 
                          feature_summary = array(data = NA_real_, dim = c(0,0,0)), 
                          sample_summary  = array(data = NA_real_, dim = c(0,0,0))) {
     # if data is a matrix, convert to 3D array
@@ -162,10 +163,18 @@ add_layer <- function(current, layer, layer_name, force=FALSE) {
     if (force) {
       all_rows <- union(rownames(current), rownames(layer))
       all_cols <- union(colnames(current), colnames(layer))
+      
       current_expanded <- array(NA_real_,
                                 dim = c(length(all_rows), length(all_cols), dim(current)[3]),
                                 dimnames = list(all_rows, all_cols, dimnames(current)[[3]]))
       current_expanded[rownames(current), colnames(current), ] <- current
+      
+      # keep attributes
+      current_attrs <- attributes(current)
+      for (att in setdiff(names(current_attrs), c("dim", "dimnames"))) {
+        attr(current_expanded, att) <- current_attrs[[att]]
+      }
+      
       layer_expanded <- array(NA_real_,
                               dim = c(length(all_rows), length(all_cols), 1),
                               dimnames = list(all_rows, all_cols, layer_name))

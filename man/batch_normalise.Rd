@@ -6,12 +6,18 @@
 \usage{
 batch_normalise(
   metaboprep,
+  run_mode_col,
+  run_mode_colmap,
   source_layer = "input",
   dest_layer = "batch_normalised"
 )
 }
 \arguments{
 \item{metaboprep}{an object of class Metaboprep}
+
+\item{run_mode_col}{character, column name in features data containing the run mode}
+
+\item{run_mode_colmap}{named character vector or list, c(mode = "mode col name in samples")}
 
 \item{source_layer}{character, which data layer to get the data from}
 

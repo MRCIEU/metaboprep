@@ -16,14 +16,47 @@ load_all()
 # 2. a data.frame of sample information
 # 3. a data.frame of feature information
 # see the /data-raw/dummy_data.R script for creation of these datasets
-data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1)
+data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
 samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "metaboprep"), header=T, row.names = 1)
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
+set.seed(123)
+set_na_randomly <- function(mat, prop = 0.1) {
+  stopifnot(is.matrix(mat))
+  
+  n <- length(mat)
+  idx <- sample(seq_len(n), size = floor(prop * n), replace = FALSE)
+  mat[idx] <- NA
+  mat
+}
+data <- set_na_randomly(data, prop = 0.3)
+data[1,] <- NA
 
 # creating a metaboprep object
 m <- Metaboprep(data = data, samples = samples, features = features)
 m
+
+
+# run QC pipeline
+mqc <- m |>
+  quality_control(source_layer = "input", 
+                  sample_missingness = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd = 5, 
+                  outlier_udist=5, 
+                  outlier_treatment="leave_be", 
+                  winsorize_quantile = 1.0, 
+                  tree_cut_height=0.5, 
+                  pc_outlier_sd =5, 
+                  derived_col="derived_feature", 
+                  xenobiotic_col="xenobiotic_feature", 
+                  sample_ids=NULL, 
+                  feature_ids=NULL)
+mqc
+
+View(mqc@data[,,"qc"])
+View(mqc@samples)
+View(mqc@features)
 
 
 # print some elements of the object 
@@ -33,11 +66,30 @@ print(m@features[1:5,])
 
 
 # try running batch_normalise block
-m <- m |>
-  batch_normalise() |> 
-  sample_summary(source_layer = "input", outlier_udist=1)
-m
-m@data[, , "batch_normalised"]
-m@sample_summary[, , "input"]
+mb <- m |>
+  batch_normalise(run_mode_col = "platform", run_mode_colmap = c(pos="pos", neg="neg"))
+mb
+
+
+# sample summary
+ss <- m |> sample_summary(source_layer = "input", outlier_udist=1)
+ss
+
+# feature summary
+fs <- m |> feature_summary(source_layer = "input", outlier_udist=1, tree_cut_height = 0.5) 
+fs
+attributes(fs)
+
+# pcs outliers
+pcs <- m |> pc_and_outliers(source_layer = "input", feature_ids = fs$feature_id[fs$independent_features & !is.na(fs$independent_features)])
+pcs
+attributes(pcs)
+  
+
+# summarise together
+summ <- m |>
+  summarise(source_layer = "input", outlier_udist=1, tree_cut_height = 0.5)
+summ
+
 
 

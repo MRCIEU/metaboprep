@@ -11,10 +11,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
-#' feature_describe(ex_data)
-#'
 feature_describe = function(data){
 
   d = psych::describe(data)[, -c(1,6,7)]
@@ -33,8 +29,8 @@ feature_describe = function(data){
     ## coef of var
     coefvar = stats::sd(x, na.rm = T) / mean(x, na.rm = T)
 
-    ## shapiro test for normality
-    ## it can only have 5000 observation
+    # shapiro test for normality
+    # it can only have 5000 observation
     if(length(x) > 5000 ){
       x = sample(x, 5000, replace = FALSE)
     }
@@ -69,6 +65,7 @@ feature_describe = function(data){
   }) )
 
   out = cbind(d, e)
+  out$feature_id <- rownames(out)
   return(out)
 
 }

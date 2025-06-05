@@ -14,6 +14,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Imports:
+    psych,
     S7
 URL: https://mrcieu.github.io/metaboprep/
 Collate: 
@@ -23,8 +24,12 @@ Collate:
     'feature_summary.R'
     'missingness.R'
     'outlier_detection.R'
+    'pc_and_outliers.R'
+    'quality_control.R'
     'sample_summary.R'
+    'summarise.R'
     'total_peak_area.R'
+    'tree_and_independent_features.R'
     'zzz.R'
 Suggests: 
     knitr,

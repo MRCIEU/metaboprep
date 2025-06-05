@@ -5,23 +5,35 @@
 \title{Feature Summary Statistics}
 \usage{
 feature_summary(
-  metabolites,
-  layer = "raw",
+  metaboprep,
+  source_layer = "input",
+  outlier_udist = 5,
+  tree_cut_height = 0.5,
+  exclude_derived = NULL,
+  exclude_xenobiotics = NULL,
   feature_ids = NULL,
   sample_ids = NULL,
-  output = "object"
+  output = "data.frame"
 )
 }
 \arguments{
-\item{metabolites}{an object of class Metabolites}
+\item{metaboprep}{an object of class Metabolites}
 
-\item{layer}{character, the data type/source}
+\item{source_layer}{character, the data layer to summarise}
 
-\item{feature_ids}{character, vector of feature ids}
+\item{outlier_udist}{the unit distance in SD or IQR from the mean or median estimate, respectively outliers are identified at. Default value is 5.}
 
-\item{sample_ids}{character, vector of sample ids}
+\item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
 
-\item{output}{character, the output format options: "object", "data.table", "matrix", "list"}
+\item{exclude_derived}{character, column name of a logical column in the features data indicating derived features to exclude from the summary statistics}
+
+\item{exclude_xenobiotics}{character, column name of a logical column in the features data indicating xenobiotic features to exclude from the summary statistics}
+
+\item{feature_ids}{character, vector of feature ids to work with}
+
+\item{sample_ids}{character, vector of sample ids to work with}
+
+\item{output}{character, type of output, either 'object' to return the updated metaboprep object, or 'data.frame' to return the data.}
 }
 \description{
 This function estimates feature statistics for samples in a matrix of metabolite features.

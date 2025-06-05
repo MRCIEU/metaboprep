@@ -16,8 +16,3 @@ a data frame of summary statistics for features (columns) of a matrix
 This function allows you to 'describe' metabolite features using the describe() function from the psych package,
 as well as estimate variance, a dispersion index, the coeficent of variation, and shapiro's W-statistic.
 }
-\examples{
-ex_data = sapply(1:20, function(x){ rnorm(250, 40, 5) })
-feature_describe(ex_data)
-
-}
