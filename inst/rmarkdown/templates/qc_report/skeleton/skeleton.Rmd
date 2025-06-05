@@ -24,7 +24,6 @@ knitr::opts_chunk$set(
 )
 
 suppressPackageStartupMessages(library(ggplot2))
-suppressPackageStartupMessages(library(data.table))
 suppressPackageStartupMessages(library(kableExtra))
 suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(glue))
@@ -68,4 +67,14 @@ knitr::include_graphics("metaboprep_workflow.png")
 \newpage
 
 ```{r, child="01_summary_raw_data.Rmd"}
+```
+
+\newpage
+
+```{r, child="02_data_filtering.Rmd"}
+```
+
+\newpage
+
+```{r, child="03_summary_filtered_data.Rmd"}
 ```

@@ -20,6 +20,8 @@ generate_report(
 
 \item{output_filename}{character, default NULL i.e. create from input object}
 
+\item{project}{character, name for the current project}
+
 \item{format}{character, write either 'html' or 'pdf' report}
 
 \item{template}{character, type of report to output only current option is "qc_report"}

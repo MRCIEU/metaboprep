@@ -12,7 +12,7 @@
 #' @keywords metabolomics ggplot
 #'
 #' @import ggplot2
-#' @importFrom stats anova
+#' @importFrom stats anova aggregate
 #'
 #' @return a ggplot2 object
 #'
@@ -31,15 +31,21 @@ variable_by_factor = function( dep , indep ,
   ## define local variables
   m <- CI_L <- CI_H <- NULL
 
-  wdat = data.table::data.table(dep = dep, indep = as.factor(indep))
+  wdat = data.frame(dep = dep, indep = as.factor(indep))
   ####
   if(orderfactor == 1){
-    ord <- wdat[, list(m    =  mean(dep, na.rm=TRUE),
-                       CI_L = quantile(dep, 0.025, na.rm=TRUE),
-                       CI_H = quantile(dep, 0.975, na.rm=TRUE)), by="indep"]
-    ord <- ord[order(m)]
-    ##### order factor
-    wdat[, indep := factor(indep, levels = ord$indep, ordered = TRUE)]
+    ord <- aggregate(dep ~ indep, data = wdat, FUN = function(x) {
+      c(m = mean(x, na.rm = TRUE),
+        CI_L = quantile(x, 0.025, na.rm = TRUE),
+        CI_H = quantile(x, 0.975, na.rm = TRUE))
+    })
+    ord_expanded <- data.frame(indep = ord$indep, ord$dep)
+    
+    # Order by mean
+    ord_expanded <- ord_expanded[order(ord_expanded$m), ]
+    
+    # order factor
+    wdat$indep <- factor(wdat$indep, levels = ord_expanded$indep, ordered = TRUE)
   }
 
   ### FIT to linear MODEL

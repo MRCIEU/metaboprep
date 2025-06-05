@@ -73,11 +73,11 @@ method(sample_summary, Metaboprep) <- function(metaboprep, source_layer="input",
                   metaboprep
                 },
                 "matrix"     = {
-                  attr(mat, "outlier_udist")   <- outlier_udist
+                  attr(mat, paste0(source_layer, "_outlier_udist"))   <- outlier_udist
                   mat
                 },
                 "data.frame" = {
-                  attr(out, "outlier_udist")   <- outlier_udist
+                  attr(out, paste0(source_layer, "_outlier_udist"))   <- outlier_udist
                   out
                 })
   

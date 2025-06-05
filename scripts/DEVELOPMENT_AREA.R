@@ -67,8 +67,6 @@ dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", pac
 
 # creating a metaboprep object
 m <- Metaboprep(data = dat$data[,,1], samples = dat$samples, features = dat$features)
-m
-
 
 # run QC pipeline
 mqc <- m |>
@@ -86,6 +84,7 @@ mqc <- m |>
                   sample_ids=NULL, 
                   feature_ids=NULL)
 mqc
+metaboprep = mqc
 
 View(mqc@data[,,"qc"])
 View(mqc@samples)

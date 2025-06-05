@@ -74,23 +74,23 @@ A data reduction was carried out to identify a list of representative features f
 
 ```{r pca_1_2}
 # get data
-qcing_feature_sum <- get_feature_summary(metabolites, layer="qcing")
+qcing_feature_sum <- metaboprep@feature_summary[, , "input"]
 qcing_feature_sum <- qcing_feature_sum[, colSums(is.na(qcing_feature_sum)) < nrow(qcing_feature_sum), drop = FALSE]
-pcs               <- get_pcs(metabolites, layer="qcing", drop=TRUE)
-pcs               <- pcs[, grepl("^pc[0-9]+$", colnames(pcs))]
-af                <- get_acceleration_factor(metabolites, layer="qcing")
-pc_outlier_sd     <- metabolites@pc_outlier_sd
+pcs               <- metaboprep@sample_summary[, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "input"]
+attribs           <- attributes(metaboprep@sample_summary)
+af                <- attribs$qc_num_pcs_scree
+pc_outlier_sd     <- attribs$qc_outlier_udist
 
 # compute
-tbl1 <- data.table::data.table(
-  Item = c("Total metabolite count",
+tbl1 <- data.frame(
+  "Item" = c("Total metabolite count",
            "Metabolites included in data reduction",
            "Number of metabolite clusters",
            "Number of representative metabolites"),
-  Count = c(ncol(qcing_feature_sum),
+  "Count" = c(ncol(qcing_feature_sum),
             sum(!is.na(qcing_feature_sum["k", ])),
             length(unique(stats::na.omit(qcing_feature_sum["k", ]))),
-            sum(qcing_feature_sum["independent_features_binary", ] == 1, na.rm = TRUE))
+            sum(qcing_feature_sum["independent_features", ] == 1, na.rm = TRUE))
 ) 
 
 # PCA - define outliers

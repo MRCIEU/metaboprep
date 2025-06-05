@@ -81,9 +81,9 @@ method(pc_and_outliers, Metaboprep) <- function(metaboprep, source_layer="input"
   # set attributes with processing details
   pc_out <- as.data.frame(pc_out)
   pc_out <- cbind(sample_id = rownames(pc_out), pc_out)
-  attr(pc_out, "varexp")           <- varexp
-  attr(pc_out, "num_pcs_scree")    <- af
-  attr(pc_out, "num_pcs_parallel") <- nsig_parrallel
+  attr(pc_out, paste0(source_layer, "_varexp"))           <- varexp
+  attr(pc_out, paste0(source_layer, "_num_pcs_scree"))    <- af
+  attr(pc_out, paste0(source_layer, "_num_pcs_parallel")) <- nsig_parrallel
   
   
   # sample_id as data.frame

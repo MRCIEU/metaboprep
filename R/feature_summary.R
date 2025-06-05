@@ -53,8 +53,9 @@ method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input"
   
 
   # do the tree cut
-  indf = tree_and_independent_features(dat, tree_cut_height = tree_cut_height)
-
+  res  <- tree_and_independent_features(dat, tree_cut_height = tree_cut_height)
+  indf <- res$data
+  
   
   # combine summary data
   ids     <- data.frame("feature_id" = colnames(metaboprep@data))
@@ -78,18 +79,21 @@ method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input"
   # set attributes with processing details & return desired output
   ret <- switch(output,
                 "object"     = {
+                  attr(metaboprep@feature_summary, paste0(source_layer, "_tree")) <- res$tree
                   attr(metaboprep@feature_summary, paste0(source_layer, "_outlier_udist")) <- outlier_udist
                   attr(metaboprep@feature_summary, paste0(source_layer, "_tree_cut_height")) <- tree_cut_height
                   metaboprep
                 },
                 "matrix"     = {
-                  attr(mat, "outlier_udist")   <- outlier_udist
-                  attr(mat, "tree_cut_height") <- tree_cut_height
+                  attr(mat, paste0(source_layer, "_tree"))            <- res$tree
+                  attr(mat, paste0(source_layer, "_outlier_udist"))   <- outlier_udist
+                  attr(mat, paste0(source_layer, "_tree_cut_height")) <- tree_cut_height
                   mat
                 },
                 "data.frame" = {
-                  attr(out, "outlier_udist")   <- outlier_udist
-                  attr(out, "tree_cut_height") <- tree_cut_height
+                  attr(out, paste0(source_layer, "_tree"))            <- res$tree
+                  attr(out, paste0(source_layer, "_outlier_udist"))   <- outlier_udist
+                  attr(out, paste0(source_layer, "_tree_cut_height")) <- tree_cut_height
                   out
                 })
   

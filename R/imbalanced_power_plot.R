@@ -93,7 +93,7 @@ imbalanced_power_plot = function(mydata){
   ####################################
   #s = seq(0, half, by = 200)
   s = seq(0, N, by = 200)
-  pwrdata = data.table::as.data.table(pwrdata)
+  pwrdata = as.data.frame(pwrdata)
   ###
   plotout = pwrdata |>
     ggplot( aes(x=N_case, y=power) ) +

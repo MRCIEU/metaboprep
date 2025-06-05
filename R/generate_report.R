@@ -4,6 +4,7 @@
 #' @param metaboprep an object of class Metaboprep
 #' @param output_dir character, the directory to save to
 #' @param output_filename character, default NULL i.e. create from input object
+#' @param project character, name for the current project
 #' @param format character, write either 'html' or 'pdf' report
 #' @param template character, type of report to output only current option is "qc_report"
 #' @include class_metaboprep.R

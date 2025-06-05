@@ -30,7 +30,7 @@ m
 ## Run batch normalisation
 ```{r batch_normalise}
 m <- m |>
-  batch_normalise(source_layer = "input", dest_layer = "batch_normalised") |> 
+  batch_normalise(run_mode_col = "platform", run_mode_colmap = c(pos="pos", neg="neg")) |>
   print()
 ```
 

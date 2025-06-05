@@ -1,8 +1,8 @@
 # Summary of filtered data
 ```{r qcd_data}
-raw_data   <- get_data(metabolites, layer="raw")
-qc_data    <- get_data(metabolites, layer="post_qc", drop=TRUE)
-qc_sampsum <- get_sample_summary(metabolites, layer="post_qc")
+raw_data   <- metaboprep@data[, , "input"]
+qc_data    <- metaboprep@data[, , "qc"]
+qc_sampsum <- metaboprep@sample_summary[, , "qc"]
 ```
 
 ## Sample size (N) 
@@ -18,24 +18,24 @@ qc_sampsum <- get_sample_summary(metabolites, layer="post_qc")
 ### Distributions for sample and feature missingness
 ```{r qc_sample_missingness}
 missing <- rbind(
-  data.table::data.table(type       = "Samples",
-                         value_type = "missingness",
-                         value      = apply(qc_data, 1, function(x){ sum(is.na(x))/length(x)  })),
-  data.table::data.table(type       = "Features",
-                         value_type = "missingness",
-                         value      = apply(qc_data, 2, function(x){ sum(is.na(x))/length(x)  })),
-  data.table::data.table(type       = "Total abundance",
-                         value_type = "tpa_at_complete_features",
-                         value      = stats::na.omit(qc_sampsum[, "tpa_complete_features"]))
+  data.frame("type"       = "Samples",
+             "value_type" = "missingness",
+             "value"      = apply(qc_data, 1, function(x){ sum(is.na(x))/length(x)  })),
+  data.frame("type"       = "Features",
+             "value_type" = "missingness",
+             "value"      = apply(qc_data, 2, function(x){ sum(is.na(x))/length(x)  })),
+  data.frame("type"       = "Total abundance",
+             "value_type" = "tpa_at_complete_features",
+             "value"      = stats::na.omit(qc_sampsum[, "tpa_complete_features"]))
 )
-missing[, type := factor(type, levels=unique(type))]
+missing$type <- factor(missing$type, levels=unique(missing$type))
 
 # missing histograms
 plots <- lapply(levels(missing$type), function(t) {
-  p <- ggplot(missing[type==t, ], aes(x = value, color=type, fill=type)) +
+  p <- ggplot(missing[missing$type==t, ], aes(x = value, color=type, fill=type)) +
   geom_histogram(aes(y = ..density..), fill="white", bins = 25) +
   geom_density(alpha = 0.4) +
-  geom_vline(data = missing[type==t, .(median = median(value))],
+  geom_vline(data = data.frame(median = median(missing[missing$type==t, "value"])),
              aes(xintercept = median), color = "darkred", size = 0.75, linetype="dashed") +
   scale_color_manual(values = c(Samples = "darkblue", Features = "orange", `Total abundance` = "darkgreen")) +
   scale_fill_manual(values = c(Samples = "lightblue", Features = "lightyellow", `Total abundance` = "palegreen")) +
@@ -77,12 +77,14 @@ ggpubr::ggarrange(plotlist = plots, nrow=1, ncol=3)
 Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line.
 ```{r qc_dendrogram, out.width="100%"}
 # get data
-qc_feature_sum  <- get_feature_summary(metabolites, layer="post_qc", drop=TRUE)
-qc_feature_tree <- get_feature_tree(metabolites, layer="post_qc") 
+qc_feature_sum  <- metaboprep@feature_summary[,,"qc"]
+attribs         <- attributes(metaboprep@feature_summary)
+qc_feature_tree <- attribs$qc_tree
+tree_cut_height <- attribs$qc_tree_cut_height
 dend            <- stats::as.dendrogram(qc_feature_tree)
 
 ## create a vector of colors to color your tree labels
-pv_ids <- colnames(qc_feature_sum)[qc_feature_sum["independent_features_binary", ] == 1]
+pv_ids <- colnames(qc_feature_sum)[qc_feature_sum["independent_features", ] == 1]
 n <- labels(dend)
 bcol = rep("black", length(n))
 bcol[which(n %in% pv_ids )] <- "blue"
@@ -97,7 +99,7 @@ dend <- dendextend::as.ggdend(dend)
 
 # plot
 ggplot(dend) + 
-  geom_hline(yintercept = metabolites@tree_cut_height, color = "coral2")
+  geom_hline(yintercept = tree_cut_height, color = "coral2")
 ```
 
 ### Summary of the QC (filtered) metabolite data
@@ -105,18 +107,18 @@ The data reduction table presents the number of metabolites at each phase of the
 
 ```{r qc_data_reduced_table}
 # get data
-qc_feature_sum  <- get_feature_summary(metabolites, layer="post_qc", drop=TRUE)
+qc_feature_sum  <- metaboprep@feature_summary[,,"qc"]
 
 # table
-data.table::data.table(
-  Item = c("Total metabolite count (incl. xenbiotics)",
+data.frame(
+  "Item" = c("Total metabolite count (incl. xenbiotics)",
            "Metabolites included in data reduction",
            "Number of metabolite clusters",
            "Number of representative metabolites"),
-  Count = c(ncol(qc_feature_sum),
+  "Count" = c(ncol(qc_feature_sum),
             length(stats::na.omit(qc_feature_sum["k", ])),
             length(unique(stats::na.omit(qc_feature_sum["k", ]))),
-            sum(qc_feature_sum["independent_features_binary", ] == 1, na.rm = TRUE))
+            sum(qc_feature_sum["independent_features", ] == 1, na.rm = TRUE))
 ) |>
   knitr::kable(
     col.names = c("", "Count"),
@@ -134,19 +136,23 @@ data.table::data.table(
 ```
 
 ### Scree plot
-Scree plot of the variance explained by each PC (limited to 100 for plotting) and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r metabolites@acceleration_factor["post_qc"]`) and Parallel Analysis (green, n = `r metabolites@n_parallel["post_qc"]`).
-```{r qc_scree_plot}
+
+```{r qc_scree_plot_data}
 # get data
-ve <- get_var_exp(metabolites, layer="post_qc")
+attribs <- attributes(metaboprep@sample_summary)
+ve      <- attribs$qc_varexp
 if (length(ve) > 100) ve <- ve[1:100]
-af <- get_acceleration_factor(metabolites, layer="post_qc")
-np <- get_n_parallel(metabolites, layer="post_qc")
+af <- attribs$qc_num_pcs_scree
+np <- attribs$qc_num_pcs_parallel
 
 # compute
 x_labs <- sub("(?i)pc","",names(ve))
-ve <- data.table::data.table(pc = factor(x_labs, levels=x_labs),
-                             var_exp = ve)
+ve <- data.frame("pc" = factor(x_labs, levels=x_labs),
+                 "var_exp" = ve)
+```
+Scree plot of the variance explained by each PC (limited to 100 for plotting) and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r af`) and Parallel Analysis (green, n = `r np`).
 
+```{r qc_scree_plot, warning=FALSE, message=FALSE}
 # plot
 ggplot(ve, aes(x = pc, y = var_exp)) +
   geom_line(color = "grey") +
@@ -162,10 +168,11 @@ ggplot(ve, aes(x = pc, y = var_exp)) +
 Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data from PC1 and PC2. The kmeans clustering and color coding is strictly there to help provide some visualization of the major axes of variation in the sample population(s).
 ```{r qc_pc_plot}
 # get data
-pcs            <- get_pcs(metabolites, layer="post_qc", drop=TRUE, as_df = TRUE)
-qc_feature_sum <- get_feature_summary(metabolites, layer="post_qc", drop=TRUE)
-num_rep_metabs <- sum(qc_feature_sum["independent_features_binary", ] == 1, na.rm = TRUE)
-var_exp        <- get_var_exp(metabolites, layer="post_qc")
+pcs            <- as.data.frame(metaboprep@sample_summary[, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"])
+qc_feature_sum <- metaboprep@feature_summary[,,"qc"]
+num_rep_metabs <- sum(qc_feature_sum["independent_features", ] == 1, na.rm = TRUE)
+attribs        <- attributes(metaboprep@sample_summary)
+var_exp        <- attribs$qc_varexp
 
 # compute
 pcs$cluster_k <- as.factor( stats::kmeans(pcs[, 1:2], 4)$cluster )
@@ -191,8 +198,9 @@ A matrix (pairs) plot of the top five principal components including demarcation
 ```{r pca_pairsplot, out.width="100%"}
 # get data
 npcs    <- 5
-pcs     <- get_pcs(metabolites, layer="post_qc", drop=TRUE, as_df=TRUE)[, 1:npcs]
-var_exp <- get_var_exp(metabolites, layer="post_qc")[1:npcs]
+pcs     <- as.data.frame(metaboprep@sample_summary[, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"][, 1:npcs])
+attribs <- attributes(metaboprep@sample_summary)
+var_exp <- attribs$qc_varexp[1:npcs]
 
 # compute
 pcs$cluster_k <- as.factor( kmeans(pcs[, 1:2], 4)$cluster )
@@ -250,7 +258,7 @@ ggpubr::ggarrange(plotlist = plot_list, nrow = npcs-1, ncol = npcs-1)
 ### Estimates of normality: W-statistics for raw and log transformed data
 ```{r compute_for_text}
 # get data
-wstats <- get_feature_summary(metabolites, layer="post_qc", drop=TRUE)
+wstats <- metaboprep@feature_summary[,,"qc"]
 
 # compute
 count = length(wstats["W", ])
@@ -269,14 +277,14 @@ Histogram plots of Shapiro W-statistics for raw and log transformed data distrib
 ```{r shapirowilk}
 # get data
 wdat <- rbind(
-  data.table::data.table(type = "Raw",   w = wstats["W", ]),
-  data.table::data.table(type = "Log10", w = wstats["log10_W", ])
+  data.frame("type" = "Raw",   "w" = wstats["W", ]),
+  data.frame("type" = "Log10", "w" = wstats["log10_W", ])
 )
-wdat[, type := factor(type, levels = c("Raw", "Log10"))]
+wdat$type <- factor(wdat$type, levels = c("Raw", "Log10"))
 
 LogMakesDistributionWorse <- c(
   sum(wdat$type == "Log10" & wdat$w < wstats["W", ], na.rm = TRUE),
-  signif(sum(wdat[type=="Log10",w] < wdat[type=="Raw",w], na.rm = TRUE) / sum(!is.na(wdat[type=="Raw",w])), d = 3) * 100
+  signif(sum(wdat[wdat$type=="Log10", "w"] < wdat[wdat$type=="Raw", "w"], na.rm = TRUE) / sum(!is.na(wdat[wdat$type=="Raw", "w"])), d = 3) * 100
 )
 ```
 
@@ -307,24 +315,31 @@ Evaluation of the number of samples and features that are outliers across the QC
 
 ```{r outlier_summary}
 # get data
-qc_data <-  get_data(metabolites, layer="post_qc", drop=TRUE)
+qc_data <-  metaboprep@data[, , "qc"]
 
 # compute
 omat <- outlier_detection(qc_data, by="column")
 total_out_count <- sum(omat)
 outlier <- rbind(
-  data.table::data.table(type    = "Samples",
-                         outlier = apply(omat, 1, function(x){ sum(x, na.rm = TRUE)  })),
-  data.table::data.table(type    = "Features", 
-                         outlier = apply(omat, 2, function(x){ sum(x, na.rm = TRUE)  }))
+  data.frame(type = "Samples",  outlier = rowSums(omat, na.rm = TRUE)),
+  data.frame(type = "Features", outlier = colSums(omat, na.rm = TRUE))
 )
-quantiles <- outlier[, .(minimum = quantile(outlier, probs = c(0, 0.25, 0.5), na.rm = TRUE)[1],
-                         `25th`  = quantile(outlier, probs = c(0, 0.25, 0.5), na.rm = TRUE)[2],
-                         median  = quantile(outlier, probs = c(0, 0.25, 0.5), na.rm = TRUE)[3],
-                         mean    = signif( mean(outlier, na.rm = TRUE), digits = 4 ),
-                         `75th`  = quantile(outlier, probs = c( 0.75, 1), na.rm = TRUE)[1],
-                         max     = quantile(outlier, probs = c( 0.75, 1), na.rm = TRUE)[2]), by="type"]
-
+outlier_split <- split(outlier$outlier, outlier$type)
+quantiles <- do.call(rbind, lapply(names(outlier_split), function(t) {
+  x <- outlier_split[[t]]
+  q0_25_50 <- quantile(x, probs = c(0, 0.25, 0.5), na.rm = TRUE)
+  q75_100  <- quantile(x, probs = c(0.75, 1), na.rm = TRUE)
+  data.frame(
+    type    = t,
+    minimum = q0_25_50[1],
+    `25th`  = q0_25_50[2],
+    median  = q0_25_50[3],
+    mean    = signif(mean(x, na.rm = TRUE), digits = 4),
+    `75th`  = q75_100[1],
+    max     = q75_100[2]
+  )
+}))
+rownames(quantiles) <- NULL
 
 # table
 quantiles |>
@@ -358,21 +373,21 @@ Feature missingness may be influenced by the metabolites' (or features') biology
 
 ```{r id_feat_batch_vars}
 # get feature summary
-qc_features    <- get_features(metabolites, layer="post_qc")
-qc_features    <- qc_features[!feature_id %in% unlist(metabolites@exclusions[["post_qc"]][["features"]]), ]
-qc_feature_sum <- t(get_feature_summary(metabolites, layer="post_qc", drop=TRUE)) |> as.data.frame()
+qc_features    <- metaboprep@features
+excluded_feats <- unlist(metaboprep@exclusions$features)
+qc_features    <- qc_features[!qc_features$feature_id %in% excluded_feats, ]
+qc_feature_sum <- t(metaboprep@feature_summary[,,"qc"]) |> as.data.frame()
 qc_feature_sum$feature_id <- rownames(qc_feature_sum)
-qc_feature_sum <- data.table::as.data.table(qc_feature_sum)
-qc_features[qc_feature_sum, missingness := i.missingness, on="feature_id"]
+qc_features    <- merge(qc_features, qc_feature_sum[, c("feature_id", "missingness")], on="feature_id", all = TRUE)
 
 ## what are all of the variables that could be used to evaluate feature effects on missingness?
-possible_vars <- names(qc_features)
-possible_vars <- possible_vars[!grepl("^missingness|feature_id", possible_vars)]
+possible_vars <- setdiff(names(qc_features), grep("^missingness|feature_id|reason_excluded|excluded", names(qc_features), value = TRUE))
 
 ## number of unique units for each possible variable?
-count_unique <- unlist(qc_features[, lapply(.SD, function(x) length(unique(stats::na.omit(x)))), .SDcols=possible_vars])
+count_unique <- sapply(qc_features[, possible_vars, drop = FALSE], function(x) length(unique(na.omit(x))))
+
 ## remove those with only one class or count == sample size
-r <- which(count_unique == 1 | count_unique == nrow(qc_features) | count_unique > 96)
+r <- which(count_unique <= 1 | count_unique == nrow(qc_features) | count_unique > 96)
 if(length(r) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
@@ -381,28 +396,27 @@ if(length(r) > 0){
 ## continue filtering
 if( length(possible_vars) > 0) {
   ## estimate min, mean, max number of values within a variable
-  features_per_unit <- t(qc_features[, lapply(.SD, function(x) {
-    x   <- table( unlist(x) )
-    out <- c(min(x), median(x), max(x))
-  }), .SDcols=possible_vars])
+  features_per_unit <- t(sapply(qc_features[, possible_vars, drop = FALSE], function(x) {
+    tab <- table(x)
+    c(min(tab), median(tab), max(tab))
+  }))
+  
   features_per_unit <- as.data.frame(features_per_unit)
-  names(features_per_unit) <- c("min","median","max")
+  colnames(features_per_unit) <- c("min", "median", "max")
   features_per_unit$var <- rownames(features_per_unit)
-  features_per_unit <- data.table::as.data.table(features_per_unit)
   
-  # add unique count 
-  count_unique <- data.table::data.table(var = names(count_unique), count_unique = count_unique)
-  features_per_unit[count_unique, count_unique:=i.count_unique, on="var"]
-    
-  ## filter 2 class min of 1 variables
-  features_per_unit <- features_per_unit[!(count_unique==2 & min==1), ]
+  count_unique_df <- data.frame(var = names(count_unique), count_unique = count_unique)
+  features_per_unit <- merge(features_per_unit, count_unique_df, by = "var", all = TRUE)
   
-  ## filter for median observational count
-  possible_vars <- features_per_unit[median >= 5, var]
+  # filter: if only 2 classes and one of them has only 1 observation, drop
+  features_per_unit <- features_per_unit[!(features_per_unit$count_unique == 2 & features_per_unit$min == 1), ]
+  
+  # filter: keep vars with median group size >= 5
+  possible_vars <- features_per_unit[features_per_unit$median >= 5, "var"]
 }
 
 ## define
-class_variables = possible_vars
+class_variables <- possible_vars
 ```
 
 
@@ -419,8 +433,8 @@ if(length(class_variables)==0) {
 
   for (x in class_variables) {
 
-    out <- variable_by_factor( dep         = qc_features[, missingness],
-                               indep       = qc_features[, get(x)],
+    out <- variable_by_factor( dep         = qc_features[["missingness"]],
+                               indep       = qc_features[[x]],
                                dep_name    = "feature missingness",
                                indep_name  = x,
                                orderfactor = TRUE,
@@ -441,82 +455,74 @@ The figure provides an illustrative evaluation of the proportion of *sample miss
 
 ```{r id_sam_batch_vars}
 # get data
-qc_samples    <- get_samples(metabolites, layer="post_qc")
-qc_samples    <- qc_samples[!sample_id %in% unlist(metabolites@exclusions[["post_qc"]][["samples"]]), ]
-qc_sample_sum <- get_sample_summary(metabolites, layer="post_qc", drop=TRUE, as_df = TRUE)
+qc_samples     <- metaboprep@samples
+excluded_samps <- unlist(metaboprep@exclusions$samples)
+qc_samples     <- qc_samples[!qc_samples$sample_id %in% excluded_samps, ]
+qc_sample_sum  <- metaboprep@sample_summary[,,"qc"] |> as.data.frame()
 qc_sample_sum$sample_id <- rownames(qc_sample_sum)
-qc_sample_sum <- data.table::as.data.table(qc_sample_sum)
-qc_samples[qc_sample_sum, `:=`(missingness = i.missingness,
-                               tpa_complete_features = i.tpa_complete_features), on="sample_id"]
+qc_samples    <- merge(qc_samples, qc_sample_sum[, c("sample_id", "missingness", "tpa_complete_features")], on="sample_id", all = TRUE)
 
-## what are all of the variables that could be used to evaluate feature effects?
-possible_vars <- names(qc_samples)
-possible_vars <- possible_vars[!grepl("(^missingness)|(^sample_id$)|(^tpa_complete_features$)", possible_vars)]
 
-if(length(possible_vars)>0){
-  cat( paste0(" -- A total of ",length(possible_vars)," possible feature level batch variables were identified in the sample data table. -- \n") )
-}
+# what are all of the variables that could be used to evaluate feature effects?
+possible_vars <- setdiff(names(qc_samples), c("sample_id", "missingness", "tpa_complete_features", "reason_excluded", "excluded"))
 
-## number of unique units for each possible variable?
-count_unique <- unlist(qc_samples[, lapply(.SD, function(x) length(unique(stats::na.omit(x)))), .SDcols=possible_vars])
 
-## remove those with only one class or count == sample size
+# number of unique units for each possible variable?
+count_unique <- sapply(qc_samples[, possible_vars, drop = FALSE], function(x) length(unique(na.omit(x))))
+
+# remove those with only one class or count == sample size
 r = which(count_unique <= 1 | count_unique == nrow(qc_samples) | count_unique > 96)
 if(length(r) > 0){
   possible_vars = possible_vars[-r]
   count_unique = count_unique[-r]
 }
 
-## continue filtering
-if( length(possible_vars) > 0 ){
-  ## estimate min, mean, max number of values within a variable
-  features_per_unit = t(qc_samples[, lapply(.SD, function(x) {
-    x = table( unlist(x) )
-    out = c( min(x), median(x), max(x) )
-    out
-  }), .SDcols=possible_vars])
+# continue filtering
+if (length(possible_vars) > 0) {
+  
+  ## Calculate min, median, max counts of observations per level
+  features_per_unit <- t(sapply(qc_samples[, possible_vars, drop = FALSE], function(x) {
+    tab <- table(x)
+    c(min(tab), median(tab), max(tab))
+  }))
+  
   features_per_unit <- as.data.frame(features_per_unit)
-  names(features_per_unit) <- c("min","median","max")
+  names(features_per_unit) <- c("min", "median", "max")
   features_per_unit$var <- rownames(features_per_unit)
-  features_per_unit <- data.table::as.data.table(features_per_unit)
   
-  # add unique count 
-  count_unique <- data.table::data.table(var = names(count_unique), count_unique = count_unique)
-  features_per_unit[count_unique, count_unique:=i.count_unique, on="var"]
-    
-  ## filter 2 class min of 1 variables
-  features_per_unit <- features_per_unit[!(count_unique<2 | min<10), ]
+  ## Add unique value counts
+  count_unique_df <- data.frame(var = names(count_unique), count_unique = count_unique, row.names = NULL)
+  features_per_unit <- merge(features_per_unit, count_unique_df, by = "var", all.x = TRUE)
   
-  ## filter for median observational count
-  possible_vars <- features_per_unit[median >= 5, var]
+  ## Filter 2-class vars where one class has <10 observations
+  features_per_unit <- features_per_unit[!(features_per_unit$count_unique < 2 | features_per_unit$min < 10), ]
+  
+  ## Filter by median group size >= 5
+  possible_vars <- features_per_unit[features_per_unit$median >= 5, "var"]
 }
 
-## define
-batch_variables = possible_vars
+## Final list of batch variables
+batch_variables <- possible_vars
 
-if(length(batch_variables)==0){
-  cat( paste0(" -- No feature level batch variables identified or all were invariable -- \n") )
-}
-
-if(length(batch_variables)>0){
-  cat( paste0(" -- After filtering a total of ",length(batch_variables)," feature level batch variables were identified. -- \n") )
-}
-
-if(length(batch_variables)>0){
-  cat( paste0(" -- They are:\n") )
-  cat( paste0("\t", batch_variables, "\n") )
+if (length(batch_variables) == 0) {
+  cat(" -- No feature level batch variables identified or all were invariable -- \n")
+} else {
+  cat(paste0(" -- After filtering a total of ", length(batch_variables), 
+             " feature level batch variables were identified. -- \n"))
+  cat(" -- They are:\n")
+  cat(paste0("\t", batch_variables, collapse = "\n"), "\n")
 }
 
 ```
 
 ```{r}
 ## TEST FOR BATCH COVARIABLE REDUNDANCIES
-if(length(batch_variables)>1){
+if (length(batch_variables) > 1) {
   Cmat = matrix(0, length(batch_variables), length(batch_variables), dimnames = list(batch_variables,batch_variables))
-  ##
+  
   for(i in batch_variables ){
     for(j in batch_variables ){
-      mat = table( unlist( qc_samples[ , get(i)] ) , unlist( qc_samples[ , get(j)] ) )
+      mat = table( unlist( qc_samples[[i]] ) , unlist( qc_samples[[j]] ) )
       cv = cramerV(mat)
       Cmat[i,j] = cv
     }
@@ -553,8 +559,8 @@ if( length(batch_variables) > 0 ) {
   
   for (x in batch_variables) {
 
-    out <- variable_by_factor( dep         = qc_samples[, missingness],
-                               indep       = qc_samples[, get(x)],
+    out <- variable_by_factor( dep         = qc_samples[["missingness"]],
+                               indep       = qc_samples[[x]],
                                dep_name    = "feature missingness",
                                indep_name  = x,
                                orderfactor = TRUE,
@@ -576,7 +582,7 @@ TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the percen
 ```{r sample_missingness_multivatiave_anova}
 if( length(batch_variables) > 0 ) {
   ## run multivariate ANOVA
-  multivariate_anova(dep = qc_samples[ , missingness], indep_df = qc_samples[, lapply(.SD, as.factor), .SDcols = batch_variables] )
+  multivariate_anova(dep = qc_samples[["missingness"]], indep_df = as.data.frame(lapply(qc_samples[batch_variables], as.factor)) )
 } else {
   paste0(" -- No sample level batch variables were provided or all were invariable -- ")
 }
@@ -598,10 +604,10 @@ The total peak or abundance area (TA) is simply the sum of the abundances measur
 
 Correlation between total abundance (TA; at complete features) and missingness. Relationship between total peak area at complete features (x-axis) and sample missingness (y-axis).
 
-```{r TPA_missingness}
+```{r TPA_missingness, message=FALSE, warning=FALSE}
 # get data
-qc_sample_sum <- get_sample_summary(metabolites, layer="post_qc", drop=TRUE)
-a = cor.test( qc_sample_sum[, "missingness"], qc_sample_sum[, "tpa_complete_features"])
+qc_sample_sum <- metaboprep@sample_summary[,,"qc"]
+a = cor.test( qc_sample_sum[,"missingness"], qc_sample_sum[,"tpa_complete_features"])
 
 # plot
 ggplot(qc_sample_sum, aes(x = tpa_complete_features, y = missingness)) +
@@ -626,8 +632,8 @@ if(length(batch_variables)==0) {
 
   for (x in batch_variables) {
 
-    out <- variable_by_factor( dep         = qc_samples[, tpa_complete_features],
-                               indep       = qc_samples[, get(x)],
+    out <- variable_by_factor( dep         = qc_samples[["tpa_complete_features"]],
+                               indep       = qc_samples[[x]],
                                dep_name    = "total peak area",
                                indep_name  = x,
                                orderfactor = TRUE,
@@ -650,8 +656,8 @@ TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation on the percen
 
 ```{r sample_tpa_multivatiave_anova2}
 if( length(batch_variables)>0 ) {
-  multivariate_anova(dep      = qc_samples[ , tpa_complete_features],
-                     indep_df = qc_samples[, lapply(.SD, as.factor), .SDcols = batch_variables])
+  multivariate_anova(dep      = qc_samples[["tpa_complete_features"]],
+                     indep_df = as.data.frame(lapply(qc_samples[batch_variables], as.factor)))
 }else {
   paste0(" -- No sample level batch variables were provided or all were invariable -- ")
 }
@@ -669,8 +675,8 @@ Analytical power analysis for both continuous and imbalanced presence/absence co
 Simulated effect sizes (standardized by trait SD) are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axis. The total sample size is set to 99 and the x-axis depicts the number of individuals present (or absent) for the trait. The effects sizes illustrated here were chosen by running an initial set of simulations which identified effects sizes that would span a broad range of power estimates given the sample population’s sample size.
 
 ```{r power_exploration}
-p1 = continuous_power_plot( mydata = get_data(metabolites, layer="post_qc", drop=TRUE) )
-p2 = imbalanced_power_plot( mydata = get_data(metabolites, layer="post_qc", drop=TRUE) )
+p1 = continuous_power_plot( mydata = metaboprep@data[,,"qc"] )
+p2 = imbalanced_power_plot( mydata = metaboprep@data[,,"qc"] )
 
 ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
 ```

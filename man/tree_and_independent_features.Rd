@@ -10,10 +10,6 @@ tree_and_independent_features(data, tree_cut_height = 0.5)
 \item{data}{matrix, the metabolite data matrix. samples in row, metabolites in columns}
 
 \item{tree_cut_height}{the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.}
-
-\item{minimum_samplesize}{numeric,}
-
-\item{exclude_features}{character, a vector of feature|metabolite names to exclude from this analysis. This might be features heavily present|absent like Xenobiotics or variables derived from two or more variable already in the dataset.}
 }
 \value{
 a list object of (1) an hclust object, (2) independent features, (3) a data frame of feature ids, k-cluster identifiers, and a binary identifier of independent features

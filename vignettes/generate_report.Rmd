@@ -1,0 +1,79 @@
+---
+title: "Generate QC Report"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generate QC Report}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r render}
+library(metaboprep)
+
+# the data
+data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
+
+# import data 
+dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
+
+# create the object
+m <- Metaboprep(data = dat$data[,,1], samples = dat$samples, features = dat$features)
+
+# run QC
+m <- m |>
+  quality_control(source_layer = "input", 
+                  sample_missingness  = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd  = 5, 
+                  outlier_udist       = 5, 
+                  outlier_treatment   = "leave_be", 
+                  winsorize_quantile  = 1.0, 
+                  tree_cut_height     = 0.5, 
+                  pc_outlier_sd       = 5, 
+                  derived_col         = NULL, 
+                  xenobiotic_col      = NULL, 
+                  sample_ids          = NULL, 
+                  feature_ids         = NULL)
+
+# render report
+generate_report(m,
+                output_dir=getwd(),
+                output_filename=NULL,
+                format="html",
+                template="qc_report")
+
+```
+
+```{r, echo=FALSE}
+file.copy(file.path(getwd(), "myproject_metaboprep_qc_report.html"), 
+          file.path(getwd(), "../docs/articles/myproject_metaboprep_qc_report.html"), overwrite = TRUE)
+```
+
+```{r, echo=FALSE, results="asis"}
+cat('
+<div id="iframe-container" style="width: 100%;">
+  <iframe id="myIframe" src="https://MRCIEU.github.io/metaboprep/articles/myproject_metaboprep_qc_report.html" 
+          width="100%" style="border: none;"></iframe>
+</div>
+
+<script>
+  function resizeIframe() {
+    var iframe = document.getElementById("myIframe");
+    if (iframe) {
+      iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    }
+  }
+
+  document.getElementById("myIframe").onload = function() {
+    setTimeout(resizeIframe, 500);
+  };
+</script>
+')
+```

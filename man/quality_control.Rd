@@ -26,9 +26,25 @@ quality_control(
 
 \item{source_layer}{character, the data layer to summarise}
 
+\item{sample_missingness}{numeric 0-1, percentage of data missingness which should prompt exclusion of a sample}
+
+\item{feature_missingness}{numeric 0-1, percentage of data missingness which should prompt exclusion of a feature}
+
+\item{total_peak_area_sd}{numeric, number of TPA SD after which a sample would be excluded}
+
 \item{outlier_udist}{the unit distance in SD or IQR from the mean or median estimate, respectively outliers are identified at. Default value is 5.}
 
+\item{outlier_treatment}{character, how to handle outlier data values - options 'leave_be', 'turn_NA', or 'winsorize'}
+
+\item{winsorize_quantile}{numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'}
+
 \item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
+
+\item{pc_outlier_sd}{numeric, number of PCA SD after which a sample would be excluded}
+
+\item{derived_col}{character, the column name of a logical column in the features data indicating derived features such as ratios}
+
+\item{xenobiotic_col}{character, the column name of a logical column in the features data indicating xenobiotics features such as medication levels}
 
 \item{sample_ids}{character, vector of sample ids to work with}
 

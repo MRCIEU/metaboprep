@@ -11,9 +11,16 @@
 #'
 #' @inheritParams feature_summary
 #' @inheritParams sample_summary
+#' @param sample_missingness numeric 0-1, percentage of data missingness which should prompt exclusion of a sample
+#' @param feature_missingness numeric 0-1, percentage of data missingness which should prompt exclusion of a feature
+#' @param total_peak_area_sd numeric, number of TPA SD after which a sample would be excluded
+#' @param outlier_treatment character, how to handle outlier data values - options 'leave_be', 'turn_NA', or 'winsorize'
+#' @param winsorize_quantile numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'
+#' @param pc_outlier_sd numeric, number of PCA SD after which a sample would be excluded
+#' @param derived_col character, the column name of a logical column in the features data indicating derived features such as ratios 
+#' @param xenobiotic_col character, the column name of a logical column in the features data indicating xenobiotics features such as medication levels 
 #' 
 #' @include class_metaboprep.R
-#' 
 #' @importFrom stats quantile
 #' @importFrom glue glue
 #' @import cli
@@ -236,6 +243,20 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   # Make final QC dataset
   cli::cli_alert_info(glue::glue("Creating final QC dataset..."))
   metaboprep <- summarise(metaboprep, source_layer="qc", outlier_udist=outlier_udist, tree_cut_height=tree_cut_height, sample_ids=sample_ids, feature_ids=feature_ids, output="object")
+  
+  
+  # set parameters used
+  attr(metaboprep@data, "qc_sample_missingness")  <- sample_missingness
+  attr(metaboprep@data, "qc_feature_missingness") <- feature_missingness
+  attr(metaboprep@data, "qc_total_peak_area_sd")  <- total_peak_area_sd
+  attr(metaboprep@data, "qc_outlier_udist")       <- outlier_udist
+  attr(metaboprep@data, "qc_outlier_treatment")   <- outlier_treatment
+  attr(metaboprep@data, "qc_winsorize_quantile")  <- winsorize_quantile
+  attr(metaboprep@data, "qc_tree_cut_height")     <- tree_cut_height
+  attr(metaboprep@data, "qc_pc_outlier_sd")       <- pc_outlier_sd
+  attr(metaboprep@data, "qc_derived_col")         <- derived_col
+  attr(metaboprep@data, "qc_xenobiotic_col")      <- xenobiotic_col
+
   
   # set exclusion data to NA
   excl_samps <- unique(unlist(metaboprep@exclusions$samples))

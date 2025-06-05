@@ -43,9 +43,9 @@ multivariate_anova = function(dep, indep_df){
 
   ## Make an reporting table
   outmat   <- matrix(c(eta, pval), ncol = 2, byrow = FALSE, dimnames = list( c(rownames(a)), c("etasq.var.exp","pvalue")))
-  outtable <- data.table::as.data.table(outmat)
-  outtable[, batch.variable := rownames(a)]
-  data.table::setcolorder(outtable, "batch.variable")
+  outtable <- as.data.frame(outmat)
+  outtable$batch.variable <- rownames(a)
+  outtable <- outtable[, c("batch.variable", setdiff(names(outtable), "batch.variable"))]
   outtable[,1] <- tolower( unlist( outtable[,1]) )
   outtable[,1] <- gsub("_",".", unlist(outtable[,1]) )
 

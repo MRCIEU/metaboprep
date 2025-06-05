@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.6)  5 JUN 2025 15:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.6)  5 JUN 2025 18:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -567,6 +567,8 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [1
 
 {/Users/xx20081/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/xx20081/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}]
+
+[2]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 106.
 (/Users/xx20081/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
@@ -575,34 +577,200 @@ LaTeX Font Info:    Trying to load font information for TS1+phv on input line 11
 (/Users/xx20081/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1phv.fd
 File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
 )
-<metaboprep_workflow.png, id=29, 796.8972pt x 540.94095pt>
+<metaboprep_workflow.png, id=69, 796.8972pt x 540.94095pt>
 File: metaboprep_workflow.png Graphic file (type png)
 <use metaboprep_workflow.png>
 Package pdftex.def Info: metaboprep_workflow.png  used on input line 145.
 (pdftex.def)             Requested size: 465.06004pt x 315.69392pt.
 
 
-[2{/Users/xx20081/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
+[3{/Users/xx20081/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
 
-[3 <./metaboprep_workflow.png>]
+[4 <./metaboprep_workflow.png>]
 
-[4]
-</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf, id=49, 469.755pt x 325.215pt>
+[5]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf, id=89, 469.755pt x 325.215pt>
 File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf Graphic file (type pdf)
 <use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf>
 Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf  used on input line 176.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
-[5 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf>]
-</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf, id=59, 469.755pt x 325.215pt>
+[6 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/missing_matrix-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf, id=99, 469.755pt x 325.215pt>
 File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf Graphic file (type pdf)
 <use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf>
 Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf  used on input line 183.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
-[6 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf>] (./project_metaboprep_qc_report.aux)
+[7 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/histograms-1.pdf>]
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 234.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 246.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 246.
+
+
+[8]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-15-1.pdf, id=121, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-15-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-15-1.pdf  used on input line 281.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[9 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-15-1.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 292--294
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 302--304
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 304--307
+
+ []
+
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_sample_missingness-1.pdf, id=132, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_sample_missingness-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_sample_missingness-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_sample_missingness-1.pdf  used on input line 314.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[10 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_sample_missingness-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_dendrogram-1.pdf, id=147, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_dendrogram-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_dendrogram-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_dendrogram-1.pdf  used on input line 323.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
+
+
+[11 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_dendrogram-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_scree_plot-1.pdf, id=161, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_scree_plot-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_scree_plot-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_scree_plot-1.pdf  used on input line 353.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-22-1.pdf, id=162, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-22-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-22-1.pdf  used on input line 365.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[12 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/qc_scree_plot-1.pdf>]
+
+[13 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/unnamed-chunk-22-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/pca_pairsplot-1.pdf, id=183, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/pca_pairsplot-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/pca_pairsplot-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/pca_pairsplot-1.pdf  used on input line 379.
+(pdftex.def)             Requested size: 469.75502pt x 325.2142pt.
+
+
+[14 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/pca_pairsplot-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/w_dist_plot-1.pdf, id=197, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/w_dist_plot-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/w_dist_plot-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/w_dist_plot-1.pdf  used on input line 408.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[15 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/w_dist_plot-1.pdf>]
+
+[16]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-1.pdf, id=222, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-1.pdf  used on input line 463.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-2.pdf, id=223, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-2.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-2.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-2.pdf  used on input line 465.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[17 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-3.pdf, id=233, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-3.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-3.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-3.pdf  used on input line 467.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[18 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-2.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-1.pdf, id=243, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-1.pdf  used on input line 493.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[19 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/featuremis-3.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-2.pdf, id=254, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-2.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-2.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-2.pdf  used on input line 495.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[20 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness_multivatiave_anova-1.pdf, id=264, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness_multivatiave_anova-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness_multivatiave_anova-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness_multivatiave_anova-1.pdf  used on input line 507.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[21 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness-2.pdf>]
+
+[22 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_missingness_multivatiave_anova-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/TPA_missingness-1.pdf, id=285, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/TPA_missingness-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/TPA_missingness-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/TPA_missingness-1.pdf  used on input line 538.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-1.pdf, id=286, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-1.pdf  used on input line 549.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[23 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/TPA_missingness-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-2.pdf, id=303, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-2.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-2.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-2.pdf  used on input line 551.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[24 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_tpa_multivatiave_anova2-1.pdf, id=313, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_tpa_multivatiave_anova2-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_tpa_multivatiave_anova2-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_tpa_multivatiave_anova2-1.pdf  used on input line 562.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[25 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/ta_by_batch-2.pdf>]
+
+[26 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/sample_tpa_multivatiave_anova2-1.pdf>]
+</Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/power_exploration-1.pdf, id=334, 469.755pt x 325.215pt>
+File: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/power_exploration-1.pdf Graphic file (type pdf)
+<use /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/power_exploration-1.pdf>
+Package pdftex.def Info: /Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/power_exploration-1.pdf  used on input line 586.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
+
+[27 </Users/xx20081/git/metaboprep/inst/rmarkdown/templates/qc_report/skeleton/project_metaboprep_qc_report_files/figure-latex/power_exploration-1.pdf>] (./project_metaboprep_qc_report.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-14>
@@ -612,18 +780,18 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 13439 strings out of 471589
- 211006 string characters out of 5520042
- 631777 words of memory out of 5000000
- 39742 multiletter control sequences out of 15000+600000
- 671213 words of font info for 88 fonts, out of 8000000 for 9000
+ 13738 strings out of 471589
+ 237869 string characters out of 5520042
+ 639856 words of memory out of 5000000
+ 39976 multiletter control sequences out of 15000+600000
+ 687039 words of font info for 101 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,7n,93p,738b,513s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb>
-Output written on project_metaboprep_qc_report.pdf (6 pages, 1326941 bytes).
+ 89i,11n,93p,823b,515s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></Users/xx20081/Library/TinyTeX/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on project_metaboprep_qc_report.pdf (27 pages, 1537592 bytes).
 PDF statistics:
- 121 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
- 22 named destinations out of 1000 (max. 500000)
- 80 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 468 PDF objects out of 1000 (max. 8388607)
+ 385 compressed objects within 4 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 314 words of extra memory for PDF output out of 10000 (max. 10000000)
 

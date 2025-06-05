@@ -7,7 +7,6 @@
 #' read_metabolon_v1(filepath)
 #'
 #' @importFrom readxl excel_sheets read_xlsx
-#' @importFrom data.table setnames as.data.table
 #' @export
 read_metabolon_v1 <- function(filepath) {
 

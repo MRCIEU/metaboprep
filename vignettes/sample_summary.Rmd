@@ -29,13 +29,8 @@ m
 ```
 
 ## Run sample summary
-```{r batch_normalise}
+```{r summ}
 m <- m |>
   sample_summary(source_layer = "input", outlier_udist = 1) |> 
   print()
-```
-
-## Accessing data
-```{r data}
-m@sample_summary[1:5, , "input"]
 ```

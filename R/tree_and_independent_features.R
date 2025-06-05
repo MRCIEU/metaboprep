@@ -3,9 +3,7 @@
 #' This function identifies independent features using Spearman's rho correlation distances, and a dendrogram
 #' tree cut step.
 #' @param data matrix, the metabolite data matrix. samples in row, metabolites in columns
-#' @param minimum_samplesize numeric,
 #' @param tree_cut_height the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.
-#' @param exclude_features character, a vector of feature|metabolite names to exclude from this analysis. This might be features heavily present|absent like Xenobiotics or variables derived from two or more variable already in the dataset.
 #'
 #' @keywords independent features
 #'
@@ -20,7 +18,7 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5){
   # identify features with no variance
   row_var0 <- which( apply(data, 2, function(x) var(x,na.rm=T)==0) )
   if(length(row_var0) > 0){
-    data <- data[, -rowvar0]
+    data <- data[, -row_var0]
   }
 
   
@@ -64,7 +62,10 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5){
                     "k"                    = k[match(colnames(data), names(k))],
                     "independent_features" = colnames(data) %in% independent_features)
 
-  return(out)
+  # and tree as attribute for later 
+  attr(out, "")
+  
+  return(list(data = out, tree = stree))
 }
 
 

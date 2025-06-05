@@ -31,6 +31,13 @@ method(summarise, Metaboprep) <- function(metaboprep, source_layer="input", outl
   sample_sum  <- sample_sum[order(match(sample_sum[["sample_id"]], rownames(metaboprep@data))), ]
   rownames(sample_sum) <- sample_sum[["sample_id"]]
   
+  # keep attributes
+  pc_attrs <- attributes(pc_outlier)
+  for (att in setdiff(names(pc_attrs), c("row.names", "names", "class"))) {
+    attr(sample_sum, att) <- pc_attrs[[att]]
+  }
+  attr(sample_sum, paste0(source_layer, "_outlier_udist")) <- outlier_udist
+  
   # return desired output
   return(
     switch(output,
@@ -41,15 +48,22 @@ method(summarise, Metaboprep) <- function(metaboprep, source_layer="input", outl
              metaboprep@feature_summary <- add_layer(current    = metaboprep@feature_summary,
                                                      layer      = feature_sum_mat,
                                                      layer_name = source_layer, force=TRUE)
-             attr(metaboprep@feature_summary, paste0(source_layer, "_outlier_udist")) <- outlier_udist
-             attr(metaboprep@feature_summary, paste0(source_layer, "_tree_cut_height")) <- tree_cut_height
+             # keep attributes
+             feat_attrs <- attributes(feature_sum)
+             for (att in setdiff(names(feat_attrs), c("row.names", "names", "class"))) {
+               attr(metaboprep@feature_summary, att) <- feat_attrs[[att]]
+             }
              
              # set sample summary
              sample_sum_mat <- as.matrix(sample_sum[, !(names(sample_sum) %in% "sample_id")])
              metaboprep@sample_summary <- add_layer(current    = metaboprep@sample_summary,
                                                     layer      = sample_sum_mat,
                                                     layer_name = source_layer, force=TRUE)
-             attr(metaboprep@sample_summary, paste0(source_layer, "_outlier_udist")) <- outlier_udist
+             # keep attributes
+             samp_attrs <- attributes(sample_sum)
+             for (att in setdiff(names(samp_attrs), c("row.names", "names", "class"))) {
+               attr(metaboprep@sample_summary, att) <- samp_attrs[[att]]
+             }
              metaboprep
            },
            "data.frame" = list(sample_summary  = sample_sum, 

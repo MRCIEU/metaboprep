@@ -65,7 +65,7 @@ continuous_power_plot = function(mydata){
   ####################################
   # plot results
   ####################################
-  pwrdata = data.table::as.data.table(pwrdata)
+  pwrdata = as.data.frame(pwrdata)
   s = seq(0, N, by = N_step_size)
   ###
   plotout = pwrdata |>
