@@ -26,6 +26,7 @@ Imports:
     psych,
     pwr,
     readxl,
+    reshape2,
     rmarkdown,
     S7
 URL: https://mrcieu.github.io/metaboprep/
