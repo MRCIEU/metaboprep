@@ -17,6 +17,7 @@ Imports:
     boot,
     car,
     cli,
+    dendextend,
     ggplot2,
     ggpubr,
     glue,
