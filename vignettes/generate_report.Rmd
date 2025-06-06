@@ -44,6 +44,7 @@ m <- m |>
 
 # render report
 generate_report(m,
+                project = "myproject",
                 output_dir=getwd(),
                 output_filename=NULL,
                 format="html",
