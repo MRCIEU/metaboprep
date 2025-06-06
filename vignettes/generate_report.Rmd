@@ -59,7 +59,7 @@ file.copy(file.path(getwd(), "myproject_metaboprep_qc_report.html"),
 ```{r, echo=FALSE, results="asis"}
 cat('
 <div id="iframe-container" style="width: 100%;">
-  <iframe id="myIframe" src="https://MRCIEU.github.io/metaboprep/articles/myproject_metaboprep_qc_report.html" 
+  <iframe id="myIframe" src="https://mrcieu.github.io/metaboprep/articles/myproject_metaboprep_qc_report.html" 
           width="100%" style="border: none;"></iframe>
 </div>
 
