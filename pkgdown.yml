@@ -5,7 +5,7 @@ articles:
   batch_normalise: batch_normalise.html
   generate_report: generate_report.html
   sample_summary: sample_summary.html
-last_built: 2025-06-06T06:21Z
+last_built: 2025-06-10T12:04Z
 urls:
   reference: https://mrcieu.github.io/metaboprep/reference
   article: https://mrcieu.github.io/metaboprep/articles
