@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Sample summary • metaboprep</title>
+<title>Summarise • metaboprep</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sample summary">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Summarise">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -58,15 +58,20 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Sample summary</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Summarise</h1>
             
       
 
-      <div class="d-none name"><code>sample_summary.Rmd</code></div>
+      <div class="d-none name"><code>summarise.Rmd</code></div>
     </div>
 
     
     
+<p><code><a href="../reference/summarise.html">summarise()</a></code> is a wrapper for running both sample and
+feature summaries. If the <code>output='data.frame'</code> then a list
+is returned with the sample and feature summary
+<code>data.frames</code>. See the <code>Sample Summary</code> and
+<code>Feature Summary</code> vignettes for more information.</p>
 <div class="section level2">
 <h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
 </h2>
@@ -116,204 +121,80 @@
 <span><span class="co">#&gt;  @ sample_summary : num[0 , 0 , 0 ]</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="run-sample-summary">Run sample summary<a class="anchor" aria-label="anchor" href="#run-sample-summary"></a>
+<h2 id="run-summary">Run summary<a class="anchor" aria-label="anchor" href="#run-summary"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_summary.html">sample_summary</a></span><span class="op">(</span>metaboprep    <span class="op">=</span> <span class="va">m</span>, </span>
-<span>                              source_layer  <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                              outlier_udist <span class="op">=</span> <span class="fl">1.0</span>, </span>
-<span>                              output        <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="14%">
-<col width="17%">
-<col width="14%">
-<col width="32%">
-<col width="20%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">sample_id</th>
-<th align="right">missingness</th>
-<th align="right">tpa_total</th>
-<th align="right">tpa_complete_features</th>
-<th align="right">outlier_count</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">id_100</td>
-<td align="right">0</td>
-<td align="right">38.699</td>
-<td align="right">38.699</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">id_99</td>
-<td align="right">0</td>
-<td align="right">39.451</td>
-<td align="right">39.451</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">id_98</td>
-<td align="right">0</td>
-<td align="right">45.135</td>
-<td align="right">45.135</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">id_97</td>
-<td align="right">0</td>
-<td align="right">37.289</td>
-<td align="right">37.289</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">id_96</td>
-<td align="right">0</td>
-<td align="right">31.545</td>
-<td align="right">31.545</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="left">id_95</td>
-<td align="right">0</td>
-<td align="right">36.751</td>
-<td align="right">36.751</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td align="left">id_94</td>
-<td align="right">0</td>
-<td align="right">37.384</td>
-<td align="right">37.384</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">id_93</td>
-<td align="right">0</td>
-<td align="right">34.069</td>
-<td align="right">34.069</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="left">id_92</td>
-<td align="right">0</td>
-<td align="right">38.942</td>
-<td align="right">38.942</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">id_91</td>
-<td align="right">0</td>
-<td align="right">42.743</td>
-<td align="right">42.743</td>
-<td align="right">2</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level2">
-<h2 id="run-sample-summary-on-subset">Run sample summary on subset<a class="anchor" aria-label="anchor" href="#run-sample-summary-on-subset"></a>
-</h2>
-<p>Using the <code>sample_ids</code> and <code>feature_ids</code>
-arguments you can run the summary for a subset of the data. Note: all
-rows will be return, however summary data will only be returned for the
-specified ids.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sample_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_summary.html">sample_summary</a></span><span class="op">(</span>metaboprep    <span class="op">=</span> <span class="va">m</span>, </span>
-<span>                              source_layer  <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                              outlier_udist <span class="op">=</span> <span class="fl">1.0</span>,</span>
-<span>                              sample_ids    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id_96"</span>, <span class="st">"id_97"</span>, <span class="st">"id_98"</span>, <span class="st">"id_99"</span>, <span class="st">"id_100"</span><span class="op">)</span>,</span>
-<span>                              feature_ids   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"metab_id_1"</span>, <span class="st">"metab_id_2"</span>, <span class="st">"metab_id_3"</span><span class="op">)</span>,</span>
-<span>                              output        <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="14%">
-<col width="17%">
-<col width="14%">
-<col width="32%">
-<col width="20%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">sample_id</th>
-<th align="right">missingness</th>
-<th align="right">tpa_total</th>
-<th align="right">tpa_complete_features</th>
-<th align="right">outlier_count</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">id_100</td>
-<td align="right">0</td>
-<td align="right">4.876</td>
-<td align="right">4.876</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">id_99</td>
-<td align="right">0</td>
-<td align="right">6.632</td>
-<td align="right">6.632</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">id_98</td>
-<td align="right">0</td>
-<td align="right">5.907</td>
-<td align="right">5.907</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">id_97</td>
-<td align="right">0</td>
-<td align="right">6.575</td>
-<td align="right">6.575</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">id_96</td>
-<td align="right">0</td>
-<td align="right">0.870</td>
-<td align="right">0.870</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">id_95</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">id_94</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">id_93</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">id_92</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">id_91</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="va">summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarise.html">summarise</a></span><span class="op">(</span>metaboprep      <span class="op">=</span> <span class="va">m</span>, </span>
+<span>                  source_layer    <span class="op">=</span> <span class="st">"input"</span>, </span>
+<span>                  outlier_udist   <span class="op">=</span> <span class="fl">1.0</span>,</span>
+<span>                  tree_cut_height <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                  output          <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">summ</span><span class="op">)</span></span>
+<span><span class="co">#&gt; List of 2</span></span>
+<span><span class="co">#&gt;  $ sample_summary :'data.frame': 100 obs. of  24 variables:</span></span>
+<span><span class="co">#&gt;   ..$ sample_id            : chr [1:100] "id_100" "id_99" "id_98" "id_97" ...</span></span>
+<span><span class="co">#&gt;   ..$ missingness          : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ tpa_total            : num [1:100] 38.7 39.5 45.1 37.3 31.5 ...</span></span>
+<span><span class="co">#&gt;   ..$ tpa_complete_features: num [1:100] 38.7 39.5 45.1 37.3 31.5 ...</span></span>
+<span><span class="co">#&gt;   ..$ outlier_count        : num [1:100] 0 0 1 2 3 2 0 0 0 2 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc1                  : num [1:100] 1.087 0.418 -2.249 -0.619 2.231 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc2                  : num [1:100] 0.321 0.573 0.131 0.749 -0.181 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc3                  : num [1:100] 0.00338 1.58112 0.04016 0.5436 -0.9382 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc4                  : num [1:100] 0.4766 0.1105 -0.6054 1.9563 0.0382 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc5                  : num [1:100] 0.837 -1.154 -0.72 -1.659 -0.776 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc6                  : num [1:100] 0.256 -0.256 0.763 -0.174 2.453 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc7                  : num [1:100] -0.162 -0.103 -0.614 -0.669 1.494 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc8                  : num [1:100] -0.2756 0.1153 0.0756 -2.1717 1.0719 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc9                  : num [1:100] 0.577 1.961 -0.521 -0.463 0.236 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc10                 : num [1:100] -1.466 -1.201 -1.457 1.769 0.349 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc1_3_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc2_3_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc3_3_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc1_4_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc2_4_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc3_4_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc1_5_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc2_5_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ pc3_5_sd_outlier     : num [1:100] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_varexp")= Named num [1:20] 0.0996 0.0884 0.0795 0.0691 0.0669 ...</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "names")= chr [1:20] "PC1" "PC2" "PC3" "PC4" ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_num_pcs_scree")= num 3</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_num_pcs_parallel")= int 14</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_outlier_udist")= num 1</span></span>
+<span><span class="co">#&gt;  $ feature_summary:'data.frame': 20 obs. of  21 variables:</span></span>
+<span><span class="co">#&gt;   ..$ feature_id          : chr [1:20] "metab_id_1" "metab_id_2" "metab_id_3" "metab_id_4" ...</span></span>
+<span><span class="co">#&gt;   ..$ missingness         : num [1:20] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ outlier_count       : num [1:20] 5 0 10 5 11 7 7 0 10 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ n                   : num [1:20] 100 100 100 100 100 100 100 100 100 100 ...</span></span>
+<span><span class="co">#&gt;   ..$ mean                : num [1:20] 0.511 0.521 0.488 0.464 0.521 ...</span></span>
+<span><span class="co">#&gt;   ..$ sd                  : num [1:20] 0.293 0.31 0.283 0.286 0.293 ...</span></span>
+<span><span class="co">#&gt;   ..$ median              : num [1:20] 0.53 0.547 0.504 0.466 0.547 ...</span></span>
+<span><span class="co">#&gt;   ..$ min                 : num [1:20] 0.000465 0.018364 0.001192 0.004107 0.003896 ...</span></span>
+<span><span class="co">#&gt;   ..$ max                 : num [1:20] 0.993 0.993 0.995 0.992 0.976 ...</span></span>
+<span><span class="co">#&gt;   ..$ range               : num [1:20] 0.992 0.975 0.994 0.988 0.972 ...</span></span>
+<span><span class="co">#&gt;   ..$ skew                : num [1:20] -0.123 -0.1496 -0.0365 0.0924 -0.2185 ...</span></span>
+<span><span class="co">#&gt;   ..$ kurtosis            : num [1:20] -1.23 -1.4 -1.11 -1.2 -1.16 ...</span></span>
+<span><span class="co">#&gt;   ..$ se                  : num [1:20] 0.0293 0.031 0.0283 0.0286 0.0293 ...</span></span>
+<span><span class="co">#&gt;   ..$ missing             : num [1:20] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ var                 : num [1:20] 0.0859 0.0959 0.0804 0.0819 0.0856 ...</span></span>
+<span><span class="co">#&gt;   ..$ disp_index          : num [1:20] 0.168 0.184 0.165 0.177 0.164 ...</span></span>
+<span><span class="co">#&gt;   ..$ coef_variance       : num [1:20] 0.574 0.594 0.58 0.617 0.561 ...</span></span>
+<span><span class="co">#&gt;   ..$ W                   : num [1:20] 0.949 0.924 0.963 0.954 0.945 ...</span></span>
+<span><span class="co">#&gt;   ..$ log10_W             : num [1:20] 0.744 0.834 0.749 0.833 0.782 ...</span></span>
+<span><span class="co">#&gt;   ..$ k                   : int [1:20] 1 2 3 4 5 6 7 8 9 10 ...</span></span>
+<span><span class="co">#&gt;   ..$ independent_features: logi [1:20] TRUE TRUE TRUE TRUE TRUE TRUE ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_tree")=List of 7</span></span>
+<span><span class="co">#&gt;   .. ..$ merge      : int [1:19, 1:2] -11 -2 -3 -13 -10 -8 -4 -12 -9 -1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ height     : num [1:19] 0.672 0.723 0.764 0.771 0.774 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ order      : int [1:20] 3 6 4 5 8 15 10 19 7 1 ...</span></span>
+<span><span class="co">#&gt;   .. ..$ labels     : chr [1:20] "metab_id_1" "metab_id_2" "metab_id_3" "metab_id_4" ...</span></span>
+<span><span class="co">#&gt;   .. ..$ method     : chr "complete"</span></span>
+<span><span class="co">#&gt;   .. ..$ call       : language stats::hclust(d = dist_matrix, method = "complete")</span></span>
+<span><span class="co">#&gt;   .. ..$ dist.method: NULL</span></span>
+<span><span class="co">#&gt;   .. ..- attr(*, "class")= chr "hclust"</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_outlier_udist")= num 1</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "input_tree_cut_height")= num 0.5</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
