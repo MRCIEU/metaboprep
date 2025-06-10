@@ -1,0 +1,94 @@
+---
+title: "Feature summary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Feature summary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Create Metaboprep object
+```{r setup}
+library(metaboprep)
+
+# import data
+data     <- read.csv(system.file("extdata", "dummy_data.csv",     package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "metaboprep"), header=T, row.names = 1)
+features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
+
+# create object
+m <- Metaboprep(data = data, samples = samples, features = features)
+
+# print
+m
+```
+
+## Run feature summary
+```{r summ}
+feature_summ <- feature_summary(metaboprep      = m, 
+                                source_layer    = "input", 
+                                outlier_udist   = 1.0,
+                                tree_cut_height = 0.5,
+                                output          = "data.frame")
+```
+
+```{r show, echo=FALSE}
+library(kableExtra)
+
+kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
+```
+
+## Feature summary attributes
+In addition to the summary data, the hierarchical cluster dendrogram is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_tree`, in this case we summarised the `input` data, therefore the attribute name is `input_tree`.   
+
+```{r tree, out.width="100%", fig.align='center'}
+suppressPackageStartupMessages(library(dendextend))
+library(ggplot2)
+
+# extract tree from attributes
+tree <- attr(feature_summ, 'input_tree')
+dend <- stats::as.dendrogram(tree)
+
+# color the independent features blue
+metab_color       <- feature_summ[, c("feature_id", "independent_features")]
+metab_color       <- metab_color[match(labels(dend), metab_color$feature_id), ]
+metab_color$color <- ifelse(metab_color$independent_features==TRUE, "blue", "black")
+
+# format dendrogram for ploting
+dend <- dend |>
+  dendextend::set("labels_cex", 0.5) |>
+  dendextend::set("labels_col", metab_color$color) |>
+  dendextend::set("branches_lwd", 0.5) |>
+  dendextend::set("branches_k_color",  value = metab_color$color)
+
+# plot
+ggplot(dend, horiz = TRUE) + 
+  geom_hline(yintercept = 0.5, color = "coral2") 
+```
+
+
+## Run feature summary on subset
+Using the `sample_ids` and `feature_ids` arguments you can run the summary for a subset of the data. Note: all rows will be return, however summary data will only be returned for the specified ids.  
+```{r summ2}
+feature_summ <- feature_summary(metaboprep      = m, 
+                                source_layer    = "input", 
+                                outlier_udist   = 1.0,
+                                tree_cut_height = 0.5,
+                                sample_ids      = c("id_96", "id_97", "id_98", "id_99", "id_100"),
+                                feature_ids     = c("metab_id_1", "metab_id_2", "metab_id_3"),
+                                output          = "data.frame")
+```
+
+```{r show2, echo=FALSE}
+library(kableExtra)
+
+kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
+```

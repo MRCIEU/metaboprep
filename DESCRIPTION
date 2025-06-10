@@ -17,22 +17,22 @@ Imports:
     boot,
     car,
     cli,
-    dendextend,
     ggplot2,
     ggpubr,
     glue,
-    kableExtra,
     nFactors,
     pcaMethods,
     psych,
     pwr,
     readxl,
-    reshape2,
     rmarkdown,
     S7
 Suggests: 
     knitr,
-    MASS
+    MASS,
+    dendextend,
+    kableExtra,
+    reshape2
 Remotes:
     hredestig/pcaMethods
 URL: https://mrcieu.github.io/metaboprep/

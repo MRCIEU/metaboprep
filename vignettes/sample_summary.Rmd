@@ -19,18 +19,45 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(metaboprep)
 
-data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
-samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "metaboprep"), header=T, row.names = 1)
+# import data
+data     <- read.csv(system.file("extdata", "dummy_data.csv",     package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "metaboprep"), header=T, row.names = 1)
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
+# create object
 m <- Metaboprep(data = data, samples = samples, features = features)
-m
 
+# print
+m
 ```
 
 ## Run sample summary
 ```{r summ}
-m <- m |>
-  sample_summary(source_layer = "input", outlier_udist = 1) |> 
-  print()
+sample_summ <- sample_summary(metaboprep    = m, 
+                              source_layer  = "input", 
+                              outlier_udist = 1.0, 
+                              output        = "data.frame")
+```
+
+```{r show, echo=FALSE}
+library(kableExtra)
+
+kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
+```
+
+## Run sample summary on subset
+Using the `sample_ids` and `feature_ids` arguments you can run the summary for a subset of the data. Note: all rows will be return, however summary data will only be returned for the specified ids.  
+```{r summ2}
+sample_summ <- sample_summary(metaboprep    = m, 
+                              source_layer  = "input", 
+                              outlier_udist = 1.0,
+                              sample_ids    = c("id_96", "id_97", "id_98", "id_99", "id_100"),
+                              feature_ids   = c("metab_id_1", "metab_id_2", "metab_id_3"),
+                              output        = "data.frame")
+```
+
+```{r show2, echo=FALSE}
+library(kableExtra)
+
+kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
 ```

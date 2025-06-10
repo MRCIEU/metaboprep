@@ -24,7 +24,7 @@ pc_and_outliers(
 a data.frame
 }
 \description{
-This function performs two principal component analysis. In the first, missing data is imputed to the median. In the second a probablistic PCA is run to account for the missingness.
+This function performs principal component analysis. In the first, missing data is imputed to the median.
 Subsequent to the derivation of the PC, the median imputed PC data is used to identify the number of informative or "significant" PC by (1) an acceleration analysis, and (2) a parrallel analysis.
 Finally the number of sample outliers are determined at 3, 4, and 5 standard deviations from the mean on the top PCs as determined by the acceleration factor analysis.
 }
