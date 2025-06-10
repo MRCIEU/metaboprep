@@ -9,11 +9,11 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-<div style="text-align: center">
+<!-- <div style="text-align: center"> -->
 
-<img src="man/figures/logo.png" alt="metaboprep logo" width="150"/>
+<!--   <img src="man/figures/logo.png" alt="metaboprep logo" width="150"/>  -->
 
-</div>
+<!-- </div> -->
 
 The goal of metaboprep is to …
 

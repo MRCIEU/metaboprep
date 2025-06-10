@@ -232,7 +232,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   # perform exclusion on top PCs to ID outliers
   if (!is.null(pc_outlier_sd)) {
     pca_data   <- metaboprep@sample_summary[sample_ids, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"]
-    outliers   <- outlier_detection(pca_data, nsd = pc_outlier_sd, meansd = TRUE)
+    outliers   <- outlier_detection(pca_data, nsd = pc_outlier_sd, meansd = TRUE, by = "column")
     excl_samps <- names(which(apply(outliers, 1, function(x) sum(x) > 0)))
     metaboprep@exclusions$samples$user_defined_sample_pca_outlier <- excl_samps
     sample_ids <- setdiff(sample_ids, excl_samps)
