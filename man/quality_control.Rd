@@ -15,10 +15,9 @@ quality_control(
   winsorize_quantile = 1,
   tree_cut_height = 0.5,
   pc_outlier_sd = 5,
-  derived_col = NULL,
-  xenobiotic_col = NULL,
   sample_ids = NULL,
-  feature_ids = NULL
+  feature_ids = NULL,
+  features_exclude_but_keep = NULL
 )
 }
 \arguments{
@@ -42,13 +41,11 @@ quality_control(
 
 \item{pc_outlier_sd}{numeric, number of PCA SD after which a sample would be excluded}
 
-\item{derived_col}{character, the column name of a logical column in the features data indicating derived features such as ratios}
-
-\item{xenobiotic_col}{character, the column name of a logical column in the features data indicating xenobiotics features such as medication levels}
-
 \item{sample_ids}{character, vector of sample ids to work with}
 
 \item{feature_ids}{character, vector of feature ids to work with}
+
+\item{features_exclude_but_keep}{character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same}
 }
 \description{
 This function is a wrapper function that performs the key quality controls steps on a metabolomics data set.

@@ -37,18 +37,16 @@ m <- m |>
                   winsorize_quantile  = 1.0, 
                   tree_cut_height     = 0.5, 
                   pc_outlier_sd       = 5, 
-                  derived_col         = NULL, 
-                  xenobiotic_col      = NULL, 
                   sample_ids          = NULL, 
                   feature_ids         = NULL)
 
 # render report
 generate_report(m,
-                project = "myproject",
-                output_dir=getwd(),
-                output_filename=NULL,
-                format="html",
-                template="qc_report")
+                project         = "myproject",
+                output_dir      = getwd(),
+                output_filename = NULL,
+                format          = "html",
+                template        = "qc_report")
 
 ```
 

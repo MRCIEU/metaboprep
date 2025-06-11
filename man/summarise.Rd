@@ -11,6 +11,7 @@ summarise(
   tree_cut_height = 0.5,
   sample_ids = NULL,
   feature_ids = NULL,
+  features_exclude = NULL,
   output = "data.frame"
 )
 }
@@ -26,6 +27,8 @@ summarise(
 \item{sample_ids}{character, vector of sample ids to work with}
 
 \item{feature_ids}{character, vector of feature ids to work with}
+
+\item{features_exclude}{character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data}
 
 \item{output}{character, type of output, either 'object' to return the updated metaboprep object, or 'data.frame' to return the data.}
 }

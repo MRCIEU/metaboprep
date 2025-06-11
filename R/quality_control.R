@@ -17,6 +17,7 @@
 #' @param outlier_treatment character, how to handle outlier data values - options 'leave_be', 'turn_NA', or 'winsorize'
 #' @param winsorize_quantile numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'
 #' @param pc_outlier_sd numeric, number of PCA SD after which a sample would be excluded
+#' @param features_exclude_but_keep character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same
 #' 
 #' @include class_metaboprep.R
 #' @importFrom stats quantile

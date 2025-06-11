@@ -26,7 +26,8 @@ Imports:
     pwr,
     readxl,
     rmarkdown,
-    S7
+    S7,
+    yaml
 Suggests: 
     knitr,
     MASS,
@@ -41,6 +42,7 @@ Collate:
     'batch_normalise.R'
     'continous_power_plot.R'
     'cramer_v.R'
+    'export.R'
     'feature_describe.R'
     'feature_summary.R'
     'generate_report.R'
