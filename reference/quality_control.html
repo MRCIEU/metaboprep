@@ -77,10 +77,9 @@ Key principles:
 <span>  winsorize_quantile <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  tree_cut_height <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  pc_outlier_sd <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  derived_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  xenobiotic_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  feature_ids <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  feature_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  features_exclude_but_keep <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -128,20 +127,16 @@ Key principles:
 <dd><p>numeric, number of PCA SD after which a sample would be excluded</p></dd>
 
 
-<dt id="arg-derived-col">derived_col<a class="anchor" aria-label="anchor" href="#arg-derived-col"></a></dt>
-<dd><p>character, the column name of a logical column in the features data indicating derived features such as ratios</p></dd>
-
-
-<dt id="arg-xenobiotic-col">xenobiotic_col<a class="anchor" aria-label="anchor" href="#arg-xenobiotic-col"></a></dt>
-<dd><p>character, the column name of a logical column in the features data indicating xenobiotics features such as medication levels</p></dd>
-
-
 <dt id="arg-sample-ids">sample_ids<a class="anchor" aria-label="anchor" href="#arg-sample-ids"></a></dt>
 <dd><p>character, vector of sample ids to work with</p></dd>
 
 
 <dt id="arg-feature-ids">feature_ids<a class="anchor" aria-label="anchor" href="#arg-feature-ids"></a></dt>
 <dd><p>character, vector of feature ids to work with</p></dd>
+
+
+<dt id="arg-features-exclude-but-keep">features_exclude_but_keep<a class="anchor" aria-label="anchor" href="#arg-features-exclude-but-keep"></a></dt>
+<dd><p>character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same</p></dd>
 
 </dl></div>
 
