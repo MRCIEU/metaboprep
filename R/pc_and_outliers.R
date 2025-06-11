@@ -26,6 +26,10 @@ method(pc_and_outliers, Metaboprep) <- function(metaboprep, source_layer="input"
   stopifnot("feature_ids must all be found in the data" = all(feature_ids %in% metaboprep@features[["feature_id"]]) | is.null(feature_ids))  
   
   
+  # log
+  cli::cli_alert_info(glue::glue("Running PCA Outlier Analysis..."))
+  
+  
   # get ids
   if (is.null(sample_ids)) sample_ids   <- metaboprep@samples[["sample_id"]]
   if (is.null(feature_ids)) feature_ids <- metaboprep@features[["feature_id"]]

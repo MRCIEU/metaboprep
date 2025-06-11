@@ -4,7 +4,8 @@
 #' tree cut step.
 #' @param data matrix, the metabolite data matrix. samples in row, metabolites in columns
 #' @param tree_cut_height the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.
-#'
+#' @param features_exclude character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data
+#' 
 #' @keywords independent features
 #'
 #' @return a list object of (1) an hclust object, (2) independent features, (3) a data frame of feature ids, k-cluster identifiers, and a binary identifier of independent features
@@ -13,12 +14,18 @@
 #' 
 #' @export
 #'
-tree_and_independent_features = function(data, tree_cut_height = 0.5){
+tree_and_independent_features = function(data, tree_cut_height = 0.5, features_exclude = NULL){
 
   # identify features with no variance
   row_var0 <- which( apply(data, 2, function(x) var(x,na.rm=T)==0) )
   if(length(row_var0) > 0){
     data <- data[, -row_var0]
+  }
+  
+  
+  # remove excluded features
+  if (!is.null(features_exclude)) {
+    data <- data[, !colnames(data) %in% features_exclude]
   }
 
   
@@ -61,9 +68,6 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5){
   out <- data.frame("feature_id"           = colnames(data),
                     "k"                    = k[match(colnames(data), names(k))],
                     "independent_features" = colnames(data) %in% independent_features)
-
-  # and tree as attribute for later 
-  attr(out, "")
   
   return(list(data = out, tree = stree))
 }

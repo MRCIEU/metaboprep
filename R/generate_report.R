@@ -26,6 +26,7 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
   # checks
   format   <- match.arg(format, choices = c("pdf","html"))
   template <- match.arg(template, choices = available_report_templates())
+  stopifnot("\n'qc' data layer not found, have you run the quality_control() function on your Metaboprep object? \n Run `dimnames(metaboprep@data)[[3]]` to see current data layers" = "dqc" %in% dimnames(metaboprep@data)[[3]])
 
   # name the report
   if (is.null(output_filename)) {
@@ -84,5 +85,5 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
   # }
 
 
-  return(outpath)
+  invisible(metaboprep)
 }

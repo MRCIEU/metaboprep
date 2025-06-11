@@ -7,19 +7,25 @@
 #' @param tree_cut_height numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.
 #' @param sample_ids character, vector of sample ids to work with
 #' @param feature_ids character, vector of feature ids to work with
+#' @param features_exclude character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data
 #' @param output character, type of output, either 'object' to return the updated metaboprep object, or 'data.frame' to return the data.
 #' @include class_metaboprep.R
 #' @export
-feature_summary <- new_generic(name = "feature_summary", dispatch_args = c("metaboprep"), function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, feature_ids=NULL, sample_ids=NULL, output="data.frame") { S7_dispatch() })
+feature_summary <- new_generic(name = "feature_summary", dispatch_args = c("metaboprep"), function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, sample_ids=NULL, feature_ids=NULL, features_exclude=NULL, output="data.frame") { S7_dispatch() })
 #' @name feature_summary
-method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, feature_ids=NULL, sample_ids=NULL, output="data.frame") {
+method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, sample_ids=NULL, feature_ids=NULL, features_exclude=NULL, output="data.frame") {
 
   # options
   output       <- match.arg(output, choices = c("object", "matrix", "data.frame"))
   source_layer <- match.arg(source_layer, choices = dimnames(metaboprep@data)[[3]])
   stopifnot("sample_ids must all be found in the data" = all(sample_ids %in% metaboprep@samples[["sample_id"]]) | is.null(sample_ids))
   stopifnot("feature_ids must all be found in the data" = all(feature_ids %in% metaboprep@features[["feature_id"]]) | is.null(feature_ids))  
+  stopifnot("features_exclude must all be found in the data" = all(features_exclude %in% metaboprep@features[["feature_id"]]) | is.null(features_exclude)) 
   
+  
+  # log
+  cli::cli_alert_info(glue::glue("Running Feature Summary Statistics..."))
+    
   
   # get ids
   if (is.null(sample_ids)) sample_ids   <- metaboprep@samples[["sample_id"]]
@@ -53,7 +59,7 @@ method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input"
   
 
   # do the tree cut
-  res  <- tree_and_independent_features(dat, tree_cut_height = tree_cut_height)
+  res  <- tree_and_independent_features(dat, tree_cut_height = tree_cut_height, features_exclude = features_exclude)
   indf <- res$data
   
   
