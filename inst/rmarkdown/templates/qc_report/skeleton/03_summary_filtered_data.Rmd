@@ -175,8 +175,23 @@ attribs        <- attributes(metaboprep@sample_summary)
 var_exp        <- attribs$qc_varexp
 
 # compute
-pcs$cluster_k <- as.factor( stats::kmeans(pcs[, 1:2], 4)$cluster )
-
+if (nrow(pcs) > 0 && sum(complete.cases(pcs[, 1:2])) >= 4) {
+  # Filter out rows with missing values
+  pcs_complete <- pcs[complete.cases(pcs[, 1:2]), , drop = FALSE]
+  
+  # Perform clustering on complete rows
+  pcs_complete$cluster_k <- as.factor(stats::kmeans(pcs_complete[, 1:2], 4)$cluster)
+  
+  # Initialize cluster_k as NA
+  pcs$cluster_k <- NA
+  
+  # Add cluster results back to original pcs
+  pcs[rownames(pcs_complete), "cluster_k"] <- pcs_complete$cluster_k
+  
+} else {
+  pcs$cluster_k <- NA
+  warning("Skipping k-means clustering: pcs[,1:2] contains too many NA/NaN/Inf values or has zero rows.")
+}
 ```
 The plot presents principal components 1 & 2 using `r num_rep_metabs` representative metabolites.
         
