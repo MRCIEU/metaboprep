@@ -36,7 +36,7 @@ plots <- lapply(levels(missing$type), function(t) {
   geom_histogram(aes(y = ..density..), fill="white", bins = 25) +
   geom_density(alpha = 0.4) +
   geom_vline(data = data.frame(median = median(missing[missing$type==t, "value"])),
-             aes(xintercept = median), color = "darkred", size = 0.75, linetype="dashed") +
+             aes(xintercept = median), color = "darkred", linewidth = 0.75, linetype="dashed") +
   scale_color_manual(values = c(Samples = "darkblue", Features = "orange", `Total abundance` = "darkgreen")) +
   scale_fill_manual(values = c(Samples = "lightblue", Features = "lightyellow", `Total abundance` = "palegreen")) +
   theme_classic() +
