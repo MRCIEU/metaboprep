@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Summary of filtered data
 ```{r qcd_data}
 raw_data   <- metaboprep@data[, , "input"]
@@ -197,7 +202,7 @@ The plot presents principal components 1 & 2 using `r num_rep_metabs` representa
         
 ```{r}
 # plot
-ggplot(pcs, aes(x = pc1, y = pc2, fill = cluster_k)) +
+ggplot(pcs, aes(x = pc1, y = pc2, fill = as.factor(cluster_k))) +
   geom_point( size = 2.5, shape = 21) +
   scale_fill_manual(values = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")) +
   theme_classic() +
