@@ -616,7 +616,7 @@ if( length(batch_variables) > 0 ) {
 TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the percent of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*. Presence of NA's would indicate that the model is inappropriate.
 
 ```{r sample_missingness_multivatiave_anova}
-if (length(batch_variables) > 0 && any(qc_samples[["missingness"]] > 0)) {
+if (length(batch_variables) > 0 && any(qc_samples[["missingness"]] > 0, na.rm = TRUE)) {
   ## run multivariate ANOVA
   multivariate_anova(
     dep = qc_samples[["missingness"]],
