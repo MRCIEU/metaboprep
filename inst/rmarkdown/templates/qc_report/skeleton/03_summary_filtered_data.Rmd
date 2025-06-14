@@ -249,7 +249,7 @@ for (i in 1:(npcs-1)) {
     if (j<=i) {
       p <- ggplot() + theme_void()
     } else {
-      p <- ggplot(pcs, aes(x = .data[[names(pcs)[j]]], y = .data[[names(pcs)[i]]], color = cluster_k)) +
+      p <- ggplot(pcs, aes(x = .data[[names(pcs)[j]]], y = .data[[names(pcs)[i]]], color = as.factor(cluster_k))) +
         geom_point(size=1, alpha = 0.7) +
         scale_color_manual(values = colours) +
         labs(
