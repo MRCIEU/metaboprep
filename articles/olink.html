@@ -73,17 +73,180 @@
 <h2 id="import-olink-data">Import Olink data<a class="anchor" aria-label="anchor" href="#import-olink-data"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># the example Olink data file path</span></span>
+<span><span class="va">olink_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_olink_data.txt"</span>, package<span class="op">=</span><span class="st">"metaboprep"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># read data </span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_olink_v1.html">read_olink_v1</a></span><span class="op">(</span><span class="va">olink_file</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
 </h2>
 <p>Once imported, we pass the data to the <code>Metaboprep</code> class
 object.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, </span>
+<span>                features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span>, </span>
+<span>                samples  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># view </span></span>
+<span><span class="va">m</span></span>
+<span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
+<span><span class="co">#&gt;  @ data           : num [1:90, 1:100, 1] 8.32 6.12 9.74 5.11 7.96 5.89 6.06 5.62 6.51 8.46 ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:90] "Sample_00001" "Sample_00002" "Sample_00003" "Sample_00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr "input"</span></span>
+<span><span class="co">#&gt;  @ samples        :'data.frame': 90 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;  .. $ sample_id : chr  "Sample_00001" "Sample_00002" "Sample_00003" "Sample_00004" ...</span></span>
+<span><span class="co">#&gt;  .. $ PlateID   : chr  "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" ...</span></span>
+<span><span class="co">#&gt;  .. $ QC_Warning: chr  "Pass" "Pass" "Warning" "Pass" ...</span></span>
+<span><span class="co">#&gt;  @ features       :'data.frame': 100 obs. of  8 variables:</span></span>
+<span><span class="co">#&gt;  .. $ feature_id   : chr  "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  .. $ UniProt      : chr  "P60800" "P69237" "P79933" "P90793" ...</span></span>
+<span><span class="co">#&gt;  .. $ Assay        : chr  "Protein_1" "Protein_2" "Protein_3" "Protein_4" ...</span></span>
+<span><span class="co">#&gt;  .. $ MissingFreq  : num  0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 ...</span></span>
+<span><span class="co">#&gt;  .. $ Panel        : chr  "Olink Immuno-Oncology" "Olink Immuno-Oncology" "Olink Immuno-Oncology" "Olink Immuno-Oncology" ...</span></span>
+<span><span class="co">#&gt;  .. $ Panel_Version: chr  "v.3112" "v.3112" "v.3112" "v.3112" ...</span></span>
+<span><span class="co">#&gt;  .. $ LOD          : num  2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 ...</span></span>
+<span><span class="co">#&gt;  .. $ Normalization: chr  "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" ...</span></span>
+<span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
+<span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
+<span><span class="co">#&gt;  .. $ features:List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
+<span><span class="co">#&gt;  @ feature_summary: num[0 , 0 , 0 ] </span></span>
+<span><span class="co">#&gt;  @ sample_summary : num[0 , 0 , 0 ]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="qc-olink">QC Olink<a class="anchor" aria-label="anchor" href="#qc-olink"></a>
 </h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer        <span class="op">=</span> <span class="st">"input"</span>, </span>
+<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.3</span>, </span>
+<span>                  total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                  outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                  outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
+<span>                  winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
+<span>                  tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Feature Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Sample Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running PCA Outlier Analysis...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> data ready for QC.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80%...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Extreme sample missingness exclusions assessment complete. (0 samples excluded)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80%...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Extreme feature missingness exclusions assessment complete. (0 features excluded)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50%...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample missingness exclusions assessment complete. (0 samples excluded)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=30%...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Feature missingness exclusions assessment complete. (0 features excluded)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating total peak abundance outliers at +/- 5 Sdev...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Total peak abundance outlier exclusions assessment complete. (0 samples excluded)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample data outlier analysis complete.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outliers...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Feature Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Sample Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running PCA Outlier Analysis...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis complete.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Feature Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running Sample Summary Statistics...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running PCA Outlier Analysis...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for QC data complete.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Metabolite QC Process Completed</span> <span style="color: #00BBBB;">─────────────────────────────────────────────</span></span></span>
+<span></span>
+<span><span class="co"># view </span></span>
+<span><span class="va">m</span></span>
+<span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
+<span><span class="co">#&gt;  @ data           : num [1:90, 1:100, 1:2] 8.32 6.12 9.74 5.11 7.96 5.89 6.06 5.62 6.51 8.46 ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:90] "Sample_00001" "Sample_00002" "Sample_00003" "Sample_00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_sample_missingness")= num 0.5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_feature_missingness")= num 0.3</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_total_peak_area_sd")= num 5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_treatment")= chr "leave_be"</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_winsorize_quantile")= num 1</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_pc_outlier_sd")= num 5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_features_exclude_but_keep")= chr(0) </span></span>
+<span><span class="co">#&gt;  @ samples        :'data.frame': 90 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  .. $ sample_id      : chr  "Sample_00001" "Sample_00002" "Sample_00003" "Sample_00004" ...</span></span>
+<span><span class="co">#&gt;  .. $ PlateID        : chr  "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" "20211440-001_SP211650_IMO" ...</span></span>
+<span><span class="co">#&gt;  .. $ QC_Warning     : chr  "Pass" "Pass" "Warning" "Pass" ...</span></span>
+<span><span class="co">#&gt;  .. $ reason_excluded: chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  .. $ excluded       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;  @ features       :'data.frame': 100 obs. of  10 variables:</span></span>
+<span><span class="co">#&gt;  .. $ feature_id     : chr  "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  .. $ UniProt        : chr  "P60800" "P69237" "P79933" "P90793" ...</span></span>
+<span><span class="co">#&gt;  .. $ Assay          : chr  "Protein_1" "Protein_2" "Protein_3" "Protein_4" ...</span></span>
+<span><span class="co">#&gt;  .. $ MissingFreq    : num  0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 0.00147 ...</span></span>
+<span><span class="co">#&gt;  .. $ Panel          : chr  "Olink Immuno-Oncology" "Olink Immuno-Oncology" "Olink Immuno-Oncology" "Olink Immuno-Oncology" ...</span></span>
+<span><span class="co">#&gt;  .. $ Panel_Version  : chr  "v.3112" "v.3112" "v.3112" "v.3112" ...</span></span>
+<span><span class="co">#&gt;  .. $ LOD            : num  2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 2.14 ...</span></span>
+<span><span class="co">#&gt;  .. $ Normalization  : chr  "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" "Intensity Normalized (v.2)" ...</span></span>
+<span><span class="co">#&gt;  .. $ reason_excluded: chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  .. $ excluded       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
+<span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
+<span><span class="co">#&gt;  .. $ features:List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
+<span><span class="co">#&gt;  @ feature_summary: num [1:20, 1:100, 1:2] 0 0 90 7.42 1.48 ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:20] "missingness" "outlier_count" "n" "mean" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_tree")=List of 7</span></span>
+<span><span class="co">#&gt;  ..  ..$ merge      : int [1:99, 1:2] -16 -73 -36 -38 -19 -35 -18 -13 -20 -69 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ height     : num [1:99] 0.54 0.613 0.629 0.634 0.647 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ order      : int [1:100] 39 41 55 62 6 22 44 77 54 76 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ labels     : chr [1:100] "OID00001" "OID00002" "OID00003" "OID00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ method     : chr "complete"</span></span>
+<span><span class="co">#&gt;  ..  ..$ call       : language stats::hclust(d = dist_matrix, method = "complete")</span></span>
+<span><span class="co">#&gt;  ..  ..$ dist.method: NULL</span></span>
+<span><span class="co">#&gt;  ..  ..- attr(*, "class")= chr "hclust"</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
+<span><span class="co">#&gt;  @ sample_summary : num [1:90, 1:65, 1:2] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:90] "Sample_00001" "Sample_00002" "Sample_00003" "Sample_00004" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:65] "missingness" "tpa_total" "tpa_complete_features" "outlier_count" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_varexp")= Named num [1:90] 0.0399 0.0386 0.0365 0.035 0.0328 ...</span></span>
+<span><span class="co">#&gt;  ..  ..- attr(*, "names")= chr [1:90] "PC1" "PC2" "PC3" "PC4" ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_scree")= num 17</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 39</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="other">Other<a class="anchor" aria-label="anchor" href="#other"></a>
