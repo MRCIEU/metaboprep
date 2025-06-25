@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Summary of filtered data
 ```{r qcd_data}
 raw_data   <- metaboprep@data[, , "input"]
@@ -36,7 +41,7 @@ plots <- lapply(levels(missing$type), function(t) {
   geom_histogram(aes(y = ..density..), fill="white", bins = 25) +
   geom_density(alpha = 0.4) +
   geom_vline(data = data.frame(median = median(missing[missing$type==t, "value"])),
-             aes(xintercept = median), color = "darkred", size = 0.75, linetype="dashed") +
+             aes(xintercept = median), color = "darkred", linewidth = 0.75, linetype="dashed") +
   scale_color_manual(values = c(Samples = "darkblue", Features = "orange", `Total abundance` = "darkgreen")) +
   scale_fill_manual(values = c(Samples = "lightblue", Features = "lightyellow", `Total abundance` = "palegreen")) +
   theme_classic() +
@@ -175,14 +180,29 @@ attribs        <- attributes(metaboprep@sample_summary)
 var_exp        <- attribs$qc_varexp
 
 # compute
-pcs$cluster_k <- as.factor( stats::kmeans(pcs[, 1:2], 4)$cluster )
-
+if (nrow(pcs) > 0 && sum(complete.cases(pcs[, 1:2])) >= 4) {
+  # Filter out rows with missing values
+  pcs_complete <- pcs[complete.cases(pcs[, 1:2]), , drop = FALSE]
+  
+  # Perform clustering on complete rows
+  pcs_complete$cluster_k <- as.factor(stats::kmeans(pcs_complete[, 1:2], 4)$cluster)
+  
+  # Initialize cluster_k as NA
+  pcs$cluster_k <- NA
+  
+  # Add cluster results back to original pcs
+  pcs[rownames(pcs_complete), "cluster_k"] <- pcs_complete$cluster_k
+  
+} else {
+  pcs$cluster_k <- NA
+  warning("Skipping k-means clustering: pcs[,1:2] contains too many NA/NaN/Inf values or has zero rows.")
+}
 ```
 The plot presents principal components 1 & 2 using `r num_rep_metabs` representative metabolites.
         
 ```{r}
 # plot
-ggplot(pcs, aes(x = pc1, y = pc2, fill = cluster_k)) +
+ggplot(pcs, aes(x = pc1, y = pc2, fill = as.factor(cluster_k))) +
   geom_point( size = 2.5, shape = 21) +
   scale_fill_manual(values = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")) +
   theme_classic() +
@@ -203,7 +223,23 @@ attribs <- attributes(metaboprep@sample_summary)
 var_exp <- attribs$qc_varexp[1:npcs]
 
 # compute
-pcs$cluster_k <- as.factor( kmeans(pcs[, 1:2], 4)$cluster )
+if (nrow(pcs) > 0 && sum(complete.cases(pcs[, 1:2])) >= 4) {
+  # Filter out rows with missing values
+  pcs_complete <- pcs[complete.cases(pcs[, 1:2]), , drop = FALSE]
+
+  # Perform clustering on complete rows
+  pcs_complete$cluster_k <- as.factor(stats::kmeans(pcs_complete[, 1:2], 4)$cluster)
+
+  # Initialize cluster_k as NA
+  pcs$cluster_k <- NA
+
+  # Add cluster results back to original pcs
+  pcs[rownames(pcs_complete), "cluster_k"] <- pcs_complete$cluster_k
+
+} else {
+  pcs$cluster_k <- NA
+  warning("Skipping k-means clustering: pcs[,1:2] contains too many NA/NaN/Inf values or has zero rows.")
+}
 colours <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 
 # plot
@@ -213,7 +249,7 @@ for (i in 1:(npcs-1)) {
     if (j<=i) {
       p <- ggplot() + theme_void()
     } else {
-      p <- ggplot(pcs, aes(x = .data[[names(pcs)[j]]], y = .data[[names(pcs)[i]]], color = cluster_k)) +
+      p <- ggplot(pcs, aes(x = .data[[names(pcs)[j]]], y = .data[[names(pcs)[i]]], color = as.factor(cluster_k))) +
         geom_point(size=1, alpha = 0.7) +
         scale_color_manual(values = colours) +
         labs(
@@ -580,12 +616,18 @@ if( length(batch_variables) > 0 ) {
 TypeII ANOVA: the eta-squared (eta-sq) estimates are an estimation of the percent of variation explained by each independent variable, after accounting for all other variables, as derived from the sum of squares. This is a multivariate evaluation of batch variables on *sample missingness*. Presence of NA's would indicate that the model is inappropriate.
 
 ```{r sample_missingness_multivatiave_anova}
-if( length(batch_variables) > 0 ) {
+if (length(batch_variables) > 0 && any(qc_samples[["missingness"]] > 0, na.rm = TRUE)) {
   ## run multivariate ANOVA
-  multivariate_anova(dep = qc_samples[["missingness"]], indep_df = as.data.frame(lapply(qc_samples[batch_variables], as.factor)) )
-} else {
+  multivariate_anova(
+    dep = qc_samples[["missingness"]],
+    indep_df = as.data.frame(lapply(qc_samples[batch_variables], as.factor))
+  )
+} else if (length(batch_variables) == 0) {
   paste0(" -- No sample level batch variables were provided or all were invariable -- ")
+} else {
+  paste0(" -- No missingness observed in samples, skipping multivariate ANOVA -- ")
 }
+
 ```
 
 

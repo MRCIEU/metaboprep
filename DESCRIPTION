@@ -27,7 +27,12 @@ Imports:
     readxl,
     rmarkdown,
     S7,
-    yaml
+    yaml,
+    OlinkAnalyze,
+    dplyr,
+    tibble,
+    tidyr,
+    magrittr
 Suggests: 
     knitr,
     MASS,
@@ -53,6 +58,7 @@ Collate:
     'pc_and_outliers.R'
     'quality_control.R'
     'read_metabolon_v1.R'
+    'read_olink.R'
     'sample_summary.R'
     'summarise.R'
     'total_peak_area.R'
