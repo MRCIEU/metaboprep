@@ -16,18 +16,25 @@
 #'
 tree_and_independent_features = function(data, tree_cut_height = 0.5, features_exclude = NULL){
 
-  # identify features with no variance
+  # remove excluded features
+  if (!is.null(features_exclude)) {
+    data <- data[, !colnames(data) %in% features_exclude]
+  }
+  
+  
+  # remove features with no variance
   row_var0 <- which( apply(data, 2, function(x) var(x,na.rm=T)==0) )
   if(length(row_var0) > 0){
     data <- data[, -row_var0]
   }
   
   
-  # remove excluded features
-  if (!is.null(features_exclude)) {
-    data <- data[, !colnames(data) %in% features_exclude]
+  # remove features with <80% presence 
+  low_presence <- which(colMeans(!is.na(data)) < 0.8)
+  if(length(low_presence) > 0){
+    data <- data[, -low_presence]
   }
-
+  
   
   # make tree
   cor_matrix  <- stats::cor(data, method="spearman", use = "pairwise.complete.obs")
@@ -40,7 +47,7 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5, features_e
 
   
   # restrict so as to keep the feature with the least missingness
-  k_group = table(k)
+  k_group <- table(k)
   
 
   # strictly independent features
