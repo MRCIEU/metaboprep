@@ -19,17 +19,40 @@ Olink data is...
 ## Import Olink data
 ```{r setup_and_import}
 library(metaboprep)
+
+# the example Olink data file path
+olink_file <- system.file("extdata", "example_olink_data.txt", package="metaboprep")
+
+# read data 
+dat <- read_olink_v1(olink_file)
 ```
 
 ## Create Metaboprep object 
 Once imported, we pass the data to the `Metaboprep` class object. 
 ```{r metaboprep_obj}
+m <- Metaboprep(data     = dat$data, 
+                features = dat$features, 
+                samples  = dat$samples)
 
+# view 
+m
 ```
 
 ## QC Olink
 ```{r qc}
+m <- m |>
+  quality_control(source_layer        = "input", 
+                  sample_missingness  = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd  = 5, 
+                  outlier_udist       = 5, 
+                  outlier_treatment   = "leave_be", 
+                  winsorize_quantile  = 1.0, 
+                  tree_cut_height     = 0.5, 
+                  pc_outlier_sd       = 5)
 
+# view 
+m
 ```
 
 ## Other
