@@ -1,0 +1,39 @@
+---
+title: "Olink"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Olink}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Olink data is...
+
+## Import Olink data
+```{r setup_and_import}
+library(metaboprep)
+```
+
+## Create Metaboprep object 
+Once imported, we pass the data to the `Metaboprep` class object. 
+```{r metaboprep_obj}
+
+```
+
+## QC Olink
+```{r qc}
+
+```
+
+## Other
+Other Olink specific analyses include...
+```{r other}
+
+```
