@@ -45,7 +45,7 @@ Metaboprep <- new_class(
                               validator = function(value) if (length(setdiff(c("sample_id"), names(value))) > 0) "should have at least the column named `sample_id`" else NULL),
     # the feature information
     features   = new_property(class     = class_data.frame, 
-                              default   = data.frame("feature_id"=character(), "platform"=character(), "pathway"=character(), "derived_feature"=logical()), 
+                              default   = data.frame("feature_id"=character()), 
                               validator = function(value) if (length(setdiff(c("feature_id"), names(value))) > 0) "should have at least the column named `feature_id`" else NULL),
     # a list of exclusions
     exclusions = new_property(class     = class_list,

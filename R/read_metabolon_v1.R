@@ -51,14 +51,8 @@ read_metabolon_v1 <- function(filepath) {
       platform_col <- grep("(?i)platform", names(features), value = TRUE)[1]
       names(features)[names(features) %in% c(comp_id_col, pathway_col, platform_col)] <- c("comp_id", "pathway", "platform")
 
-      # annotate from MetaboAnalystR and internal custom annotations
-      # features <- annotate_features(features,
-      #                               fixed_match_cols = list(hmdb_id = "hmdb", kegg_id = "kegg", name = "metabolite_id", comp_id = "comp_id"),
-      #                               fuzzy_match_cols = list(name = NULL)) # dont fuzzy match
-
       # must have columns
       features$feature_id      <- paste0("comp_id_", features$comp_id)
-      features$derived_feature <- NA_character_
 
     }
 
