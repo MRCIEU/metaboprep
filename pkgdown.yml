@@ -5,10 +5,11 @@ articles:
   batch_normalise: batch_normalise.html
   feature_summary: feature_summary.html
   generate_report: generate_report.html
+  olink: olink.html
   pc_and_outliers: pc_and_outliers.html
   sample_summary: sample_summary.html
   summarise: summarise.html
-last_built: 2025-06-25T22:36Z
+last_built: 2025-06-25T22:43Z
 urls:
   reference: https://mrcieu.github.io/metaboprep/reference
   article: https://mrcieu.github.io/metaboprep/articles
