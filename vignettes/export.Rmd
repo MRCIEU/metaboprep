@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 `Metaboprep` can export data to various formats. 
 
 ## Setup
-Create a `Metaboprep` object as described in the [Getting Started](articles/getting_started.html) vignette. 
+Create a `Metaboprep` object as described in the [Getting Started](index.html) vignette. 
 
 ```{r setup, results='hide'}
 library(metaboprep)
