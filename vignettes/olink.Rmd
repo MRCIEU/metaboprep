@@ -21,7 +21,7 @@ Olink data is...
 library(metaboprep)
 
 # the example Olink data file path
-olink_file <- system.file("extdata", "example_olink_data.txt", package="metaboprep")
+olink_file <- system.file("extdata", "olink_v1_example.txt", package="metaboprep")
 
 # read data 
 dat <- read_olink_v1(olink_file)
