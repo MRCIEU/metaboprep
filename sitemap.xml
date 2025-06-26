@@ -3,6 +3,7 @@
 <url><loc>https://mrcieu.github.io/metaboprep/LICENSE-text.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/LICENSE.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/articles/batch_normalise.html</loc></url>
+<url><loc>https://mrcieu.github.io/metaboprep/articles/export.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/articles/feature_summary.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/articles/generate_report.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/articles/index.html</loc></url>
@@ -23,7 +24,10 @@
 <url><loc>https://mrcieu.github.io/metaboprep/reference/cramerV.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/reference/eval.power.binary.imbalanced.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/reference/eval.power.cont.html</loc></url>
-<url><loc>https://mrcieu.github.io/metaboprep/reference/export_data.html</loc></url>
+<url><loc>https://mrcieu.github.io/metaboprep/reference/export.html</loc></url>
+<url><loc>https://mrcieu.github.io/metaboprep/reference/export_comets.html</loc></url>
+<url><loc>https://mrcieu.github.io/metaboprep/reference/export_metaboanalyst.html</loc></url>
+<url><loc>https://mrcieu.github.io/metaboprep/reference/export_metaboprep.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/reference/feature_describe.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/reference/feature_summary.html</loc></url>
 <url><loc>https://mrcieu.github.io/metaboprep/reference/find.PA.effect.sizes.2.sim.html</loc></url>
