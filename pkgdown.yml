@@ -6,11 +6,13 @@ articles:
   export: export.html
   feature_summary: feature_summary.html
   generate_report: generate_report.html
+  metabolon: metabolon.html
+  nightingale: nightingale.html
   olink: olink.html
-  pc_and_outliers: pc_and_outliers.html
+  quality_control: quality_control.html
   sample_summary: sample_summary.html
-  summarise: summarise.html
-last_built: 2025-06-26T01:05Z
+  somalogic: somalogic.html
+last_built: 2025-06-26T02:15Z
 urls:
   reference: https://mrcieu.github.io/metaboprep/reference
   article: https://mrcieu.github.io/metaboprep/articles
