@@ -1,143 +1,199 @@
 #' @title Export Data from a Metaboprep Object
 #'
 #' @description
-#' Exports all data layers from a `Metaboprep` object to a structured directory format.
+#' Exports all data from a `Metaboprep` object to a structured directory format.
 #' For each data layer, the function creates a subdirectory containing:
 #' - the primary data matrix (`data.tsv`),
 #' - associated feature and sample metadata (`features.tsv`, `samples.tsv`),
 #' - feature and sample summaries (if present, `feature_summary.tsv`, `sample_summary.tsv`),
 #' - a serialized feature tree (if present),
 #' - and a `config.yml` file with additional metadata and processing parameters.
-#'
+#' 
+#' @inheritDotParams export_comets something
+#' @inheritDotParams export_metaboanalyst something
 #' @param metaboprep A `Metaboprep` object containing the data to be exported.
-#' @param directory A character string specifying the path to the directory where the data should be written.
+#' @param directory character, string specifying the path to the directory where the data should be written.
+#' @param format character, string specifying the format of the exported data - one of "metaboprep", "comets", or "metaboanalyst".
+#' @param ... other parameters passed to \code{export_metaboprep()}, \code{export_comets()}, or \code{export_metaboanalyst()}.
 #'
 #' @return the `Metaboprep` object, invisibly, for use in pipes
 #'
-#' @importFrom yaml write_yaml
-#'
 #' @export
-export_data <- new_generic("export_data", c("metaboprep", "directory"), function(metaboprep, directory) { S7_dispatch() })
-#' @name export_data
-method(export_data, list(Metaboprep, class_character)) <- function(metaboprep, directory) {
+export <- new_generic("export", c("metaboprep", "directory"), function(metaboprep, directory, format = "metaboprep", ...) { S7_dispatch() })
+#' @name export
+method(export, list(Metaboprep, class_character)) <- function(metaboprep, directory, format = "metaboprep", ...) {
   
-  # make the directories
-  today    <- gsub("-", "_", Sys.Date())
-  dir      <- file.path(sub("/$", "", directory), paste0("metaboprep_release_", today))
-  layers   <- stats::setNames(dimnames(metaboprep@data)[[3]], dimnames(metaboprep@data)[[3]])
-  sub_dirs <- lapply(layers, function(x) file.path(dir, x))
-  invisible(lapply(sub_dirs, dir.create, showWarnings = FALSE, recursive = TRUE))
+  format <- match.arg(format, choices = c("metaboprep", "comets", "metaboanalyst"))
   
-  # # combine and write the data for each layer
-  # for (j in seq_along(layers)) {
-  #   
-  #   layer <- layers[[j]]
-  #   
-  #   properties <- S7::props(metaboprep)
-  #   
-  #   # deal with feature tree separately
-  #   if (layer %in% names(properties$feature_tree)) {
-  #     tree_path <- file.path(sub_dirs[[layer]], "feature_tree.RDS")
-  #     saveRDS(properties$feature_tree[[layer]], tree_path)
-  #     properties$feature_tree[[layer]] <- tree_path
-  #   }
-  #   
-  #   # write the yaml config
-  #   config <- list(layer = j)
-  #   for (i in seq_along(properties)) {
-  #     if (!inherits(properties[[i]], c("data.frame", "array", "matrix"))) {
-  #       if (layer %in% names(properties[[i]])) {
-  #         config[[names(properties)[i]]] <- properties[[i]][[layer]]
-  #       } else if (!is.null(names(properties[[i]]))) {
-  #         config[[names(properties)[i]]] <- NA_character_
-  #       } else if (inherits(properties[[i]], c("POSIXct"))) {
-  #         config[[names(properties)[i]]] <- as.character(properties[[i]])
-  #       } else {
-  #         config[[names(properties)[i]]] <- properties[[i]]
-  #       }
-  #     }
-  #   }
-  #   yaml::write_yaml(config, file.path(sub_dirs[[layer]], "config.yml"))
-  #   
-  #   # exclusions
-  #   excl_feats <- unlist(metabolites@exclusions[[layer]][["features"]])
-  #   excl_samps <- unlist(metabolites@exclusions[[layer]][["samples"]])
-  #   
-  #   # get the features
-  #   features   <- get_features(metabolites, layer=layer)
-  #   incl_feats <- features[!feature_id %in% excl_feats, feature_id]
-  #   
-  #   # get the samples
-  #   samples    <- get_samples(metabolites, layer=layer)
-  #   incl_samps <- samples[!sample_id %in% excl_samps, sample_id]
-  #   
-  #   # write the samples
-  #   data.table::fwrite(samples[sample_id %in% incl_samps], file.path(sub_dirs[[layer]], "samples.tsv"), sep="\t")
-  #   
-  #   # write the features
-  #   data.table::fwrite(features[feature_id %in% incl_feats], file.path(sub_dirs[[layer]], "features.tsv"), sep="\t")
-  #   
-  #   # write the feature summary if present
-  #   if (layer %in% dimnames(metabolites@feature_summary)[[3]]) {
-  #     feat_sum <- t(get_feature_summary(metabolites, layer=layer, feature_ids = incl_feats))
-  #     feat_sum <- cbind(
-  #       data.table::data.table(feature_id = rownames(feat_sum)),
-  #       data.table::as.data.table(feat_sum)
-  #     )
-  #     data.table::fwrite(feat_sum, file.path(sub_dirs[[layer]], "feature_summary.tsv"), sep="\t")
-  #   }
-  #   
-  #   # write the sample summary if present
-  #   if (layer %in% dimnames(metabolites@sample_summary)[[3]]) {
-  #     samp_sum <- get_sample_summary(metabolites, layer=layer, sample_ids = incl_samps)
-  #     samp_sum <- cbind(
-  #       data.table::data.table(sample_id = rownames(samp_sum)),
-  #       data.table::as.data.table(samp_sum)
-  #     )
-  #     data.table::fwrite(samp_sum, file.path(sub_dirs[[layer]], "sample_summary.tsv"), sep="\t")
-  #   }
-  #   
-  #   # write the data
-  #   if (layer %in% dimnames(metabolites@data)[[3]]) {
-  #     data <- get_data(metabolites, layer=layer, sample_ids = incl_samps, feature_ids = incl_feats)
-  #     data <- cbind(
-  #       data.table::data.table(sample_id = rownames(data)),
-  #       data.table::as.data.table(data)
-  #     )
-  #     data.table::fwrite(data, file.path(sub_dirs[[layer]], "data.tsv"), sep="\t")
-  #   }
-  #   
-  #   # write the pcs
-  #   if (layer %in% dimnames(metabolites@data)[[3]]) {
-  #     pcs <- get_pcs(metabolites, layer=layer, sample_ids = incl_samps)
-  #     pcs <- cbind(
-  #       data.table::data.table(sample_id = rownames(pcs)),
-  #       data.table::as.data.table(pcs)
-  #     )
-  #     data.table::fwrite(pcs, file.path(sub_dirs[[layer]], "pcs.tsv"), sep="\t")
-  #   }
-  #   
-  #   # write the prob pcs
-  #   if (layer %in% dimnames(metabolites@data)[[3]]) {
-  #     prob_pcs <- get_prob_pcs(metabolites, layer=layer, sample_ids = incl_samps)
-  #     prob_pcs <- cbind(
-  #       data.table::data.table(sample_id = rownames(prob_pcs)),
-  #       data.table::as.data.table(prob_pcs)
-  #     )
-  #     data.table::fwrite(prob_pcs, file.path(sub_dirs[[layer]], "prob_pcs.tsv"), sep="\t")
-  #   }
-  #   
-  #   # write the var explained
-  #   if (layer %in% dimnames(metabolites@data)[[3]]) {
-  #     var_exp <- get_var_exp(metabolites, layer=layer)
-  #     var_exp <- data.table::data.table(pc    = names(var_exp),
-  #                                       value = var_exp)
-  #     data.table::fwrite(var_exp, file.path(sub_dirs[[layer]], "var_exp.tsv"), sep="\t")
-  #   }
-  #   
-  #   
-  #   cli::cli_alert_success("Exported `{layer}` data layer to directory {.file {sub_dirs[[layer]]}}")
-  # }
+  switch (format,
+    "metaboprep"    = export_metaboprep(metaboprep, directory, ...), 
+    "comets"        = export_comets(metaboprep, directory, ...),
+    "metaboanalyst" = export_metaboanalyst(metaboprep, directory, ...)
+  )
   
   invisible(metaboprep)
 }
+
+
+#' @title Export Data to `Metaboprep` format
+#' @inheritParams export
+#' @return the `Metaboprep` object, invisibly, for use in pipes
+#' 
+#' @importFrom yaml write_yaml 
+#' 
+#' @export
+export_metaboprep <- new_generic("export_metaboprep", c("metaboprep", "directory"), function(metaboprep, directory, ...) { S7_dispatch() })
+#' @name export_metaboprep
+method(export_metaboprep, list(Metaboprep, class_character)) <- function(metaboprep, directory, ...) {
+  
+  # make the directories
+  message("Exporting in metaboprep format to ", directory)
+  today    <- gsub("-", "_", Sys.Date())
+  dir      <- file.path(sub("/$", "", directory), paste0("metaboprep_export_", today))
+  layers   <- stats::setNames(dimnames(metaboprep@data)[[3]], dimnames(metaboprep@data)[[3]])
+  sub_dirs <- lapply(layers, function(x) file.path(dir, x))
+  invisible(lapply(sub_dirs, dir.create, showWarnings = FALSE, recursive = TRUE))
+
+  
+  # combine and write the data for each layer
+  for (j in seq_along(layers)) {
+
+    # this data layer
+    layer <- layers[[j]]
+
+    
+    # deal with feature tree separately
+    tree      <- attr(metaboprep@feature_summary, paste0(layer, "_tree"))
+    tree_path <- NULL
+    if (!is.null(tree)) {
+      tree_path <- file.path(sub_dirs[[layer]], "feature_tree.RDS")
+      saveRDS(tree, tree_path)
+    }
+
+    
+    # gather the yaml config parameters
+    config <- list(layer_index = j,
+                   layer_name  = layer,
+                   sample_missingness        = attr(metaboprep@data, paste0(layer, "_sample_missingness")), 
+                   feature_missingness       = attr(metaboprep@data, paste0(layer, "_feature_missingness")), 
+                   total_peak_area_sd        = attr(metaboprep@data, paste0(layer, "_total_peak_area_sd")), 
+                   outlier_udist             = attr(metaboprep@data, paste0(layer, "_outlier_udist")), 
+                   outlier_treatment         = attr(metaboprep@data, paste0(layer, "_outlier_treatment")), 
+                   winsorize_quantile        = attr(metaboprep@data, paste0(layer, "_winsorize_quantile")), 
+                   tree_cut_height           = attr(metaboprep@data, paste0(layer, "_tree_cut_height")), 
+                   pc_outlier_sd             = attr(metaboprep@data, paste0(layer, "_pc_outlier_sd")), 
+                   features_exclude_but_keep = attr(metaboprep@data, paste0(layer, "_features_exclude_but_keep")))
+
+    
+    # exclusions
+    excl_feats <- ifelse(layer=="qc", unlist(metaboprep@exclusions[["features"]]), character(0L))
+    excl_samps <- ifelse(layer=="qc", unlist(metaboprep@exclusions[["samples"]]),  character(0L))
+    
+    
+    # update config
+    config[["total_n_features"]]    <- ncol(metaboprep@data)
+    config[["total_n_samples"]]     <- nrow(metaboprep@data)
+    config[["included_n_features"]] <- length(setdiff(colnames(metaboprep@data), excl_feats))
+    config[["included_n_samples"]]  <- length(setdiff(rownames(metaboprep@data), excl_samps))
+    config[["excluded_features"]]   <- excl_feats
+    config[["excluded_samples"]]    <- excl_samps
+
+    
+    # get the features
+    features   <- metaboprep@features
+    incl_feats <- features[!features$feature_id %in% excl_feats, "feature_id"]
+
+    
+    # get the samples
+    samples    <- metaboprep@samples
+    incl_samps <- samples[!samples$sample_id %in% excl_samps, "sample_id"]
+    
+    
+    # get the data
+    data <- metaboprep@data[incl_samps, incl_feats, layer]
+    data <- cbind(
+      data.frame("sample_id" = rownames(data)),
+      as.data.frame(data)
+    )
+
+    
+    # write the samples & features
+    write.table(samples[samples$sample_id %in% incl_samps, ], file.path(sub_dirs[[layer]], "samples.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+    write.table(features[features$feature_id %in% incl_feats, ], file.path(sub_dirs[[layer]], "features.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+    write.table(data, file.path(sub_dirs[[layer]], "data.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+    
+    
+    # write the feature summary if present
+    if (layer %in% dimnames(metaboprep@feature_summary)[[3]]) {
+      feat_sum <- t(metaboprep@feature_summary[, incl_feats, layer])
+      feat_sum <- cbind(
+        data.frame("feature_id" = rownames(feat_sum)),
+        as.data.frame(feat_sum)
+      )
+      write.table(feat_sum, file.path(sub_dirs[[layer]], "feature_summary.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+      
+      # add tree path to config 
+      config[["tree_path"]]        <- tree_path
+    }
+
+    
+    # write the sample summary if present
+    if (layer %in% dimnames(metaboprep@sample_summary)[[3]]) {
+      samp_sum <- metaboprep@sample_summary[incl_samps, , layer]
+      samp_sum <- cbind(
+        data.frame("sample_id" = rownames(samp_sum)),
+        as.data.frame(samp_sum)
+      )
+      write.table(samp_sum, file.path(sub_dirs[[layer]], "sample_summary.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+      
+      # write variance explained
+      var_exp <- attr(metaboprep@sample_summary, paste0(layer, "_varexp"))
+      if (!is.null(var_exp)) {
+        ve <- data.frame("pc"    = names(var_exp),
+                         "value" = var_exp)
+        write.table(ve, file.path(sub_dirs[[layer]], "var_exp.tsv"), sep="\t", row.names = FALSE, quote = FALSE)
+      }
+      
+      # write analysis data
+      config[["num_pcs_scree"]]    <- attr(metaboprep@sample_summary, paste0(layer, "_num_pcs_scree"))
+      config[["num_pcs_parallel"]] <- attr(metaboprep@sample_summary, paste0(layer, "_num_pcs_parallel"))
+    }
+
+    # write config
+    yaml::write_yaml(config, file.path(sub_dirs[[layer]], "config.yml"))
+  }
+
+  invisible(metaboprep)
+}
+
+
+#' @title Export Data to `COMETS` format
+#' @inheritParams export
+#' @param something something
+#' @return the `Metaboprep` object, invisibly, for use in pipes
+#'
+#' @export
+export_comets <- new_generic("export_comets", c("metaboprep", "directory"), function(metaboprep, directory, something="foo") { S7_dispatch() })
+#' @name export_comets
+method(export_comets, list(Metaboprep, class_character)) <- function(metaboprep, directory, something="foo") {
+  message("Exporting in export_comets format to ", directory)
+  # code
+}
+
+
+
+#' @title Export Data to `MetaboAnalyst` format
+#' @inheritParams export
+#' @param something something
+#' @return the `Metaboprep` object, invisibly, for use in pipes
+#'
+#' @export
+export_metaboanalyst <- new_generic("export_metaboanalyst", c("metaboprep", "directory"), function(metaboprep, directory, something="foo") { S7_dispatch() })
+#' @name export_metaboanalyst
+method(export_metaboanalyst, list(Metaboprep, class_character)) <- function(metaboprep, directory, something="foo") {
+  message("Exporting in export_metaboanalyst format to ", directory)
+  # code
+}
+
+
+

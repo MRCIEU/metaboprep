@@ -1,0 +1,45 @@
+---
+title: "Export Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Export Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`Metaboprep` can export data to various formats. 
+
+## Setup
+Create a `Metaboprep` object as described in the [Getting Started](articles/getting_started.html) vignette. 
+
+```{r setup, results='hide'}
+library(metaboprep)
+
+data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
+dat       <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
+m         <- Metaboprep(data = dat$data[,,1], samples = dat$samples, features = dat$features)
+m         <- quality_control(metaboprep = m)
+```
+
+## Export Metaboprep
+```{r export_metaboprep}
+# where to put the files
+output_dir <- file.path(getwd(), "output")
+
+# run export
+export(m, directory = output_dir, format = "metaboprep")
+
+# view output directory files
+files <- list.files(output_dir, full.names = TRUE, recursive = TRUE)
+unname(sapply(files, function(path) {
+  parts <- strsplit(path, .Platform$file.sep)[[1]]
+  paste(tail(parts, 4), collapse = .Platform$file.sep)
+}))
+```
