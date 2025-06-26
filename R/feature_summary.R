@@ -23,10 +23,6 @@ method(feature_summary, Metaboprep) <- function(metaboprep, source_layer="input"
   stopifnot("features_exclude must all be found in the data" = all(features_exclude %in% metaboprep@features[["feature_id"]]) | is.null(features_exclude)) 
   
   
-  # log
-  cli::cli_alert_info(glue::glue("Running Feature Summary Statistics..."))
-    
-  
   # get ids
   if (is.null(sample_ids)) sample_ids   <- metaboprep@samples[["sample_id"]]
   if (is.null(feature_ids)) feature_ids <- metaboprep@features[["feature_id"]]

@@ -21,7 +21,6 @@
 #' 
 #' @include class_metaboprep.R
 #' @importFrom stats quantile
-#' @importFrom glue glue
 #' @import cli
 #' 
 #' @export
@@ -30,52 +29,54 @@ quality_control <- new_generic("quality_control", c("metaboprep"), function(meta
 method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, pc_outlier_sd =5, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL){
 
   cli::cli_h1("Starting Metabolite QC Process")
-
+  
 
   # input validation
-  cli::cli_alert_info("Validating input parameters...")
+  cli::cli_progress_step("Validating input parameters")
   source_layer <- match.arg(source_layer, choices = dimnames(metaboprep@data)[[3]])
   outlier_treatment <- match.arg(outlier_treatment, choices = c("leave_be", "turn_NA", "winsorize"))
   stopifnot("sample_ids must all be found in the data" = is.null(sample_ids) || all(sample_ids %in% metaboprep@samples[["sample_id"]]))
   stopifnot("feature_ids must all be found in the data" = is.null(feature_ids) || all(feature_ids %in% metaboprep@features[["feature_id"]]))  
   stopifnot("`features_exclude_but_keep` must be a logical column in the features data or a vector of feature ids all present in the data" = is.null(features_exclude_but_keep) || (features_exclude_but_keep %in% names(metaboprep@features) && all(is.logical(metaboprep@features[[features_exclude_but_keep]]))) || all(features_exclude_but_keep %in% metaboprep@features[["feature_id"]]) )
-  cli::cli_alert_success("Validating input parameters...")
-
+  cli_progress_update()
+  
 
   # get ids & update exclusions if user has passed a predefined set of ids
   if (is.null(sample_ids)) {
     sample_ids   <- metaboprep@samples[["sample_id"]] 
   } else {
-    cli::cli_alert_info(glue::glue("Assessing sample_id input"))
+    excl_samps <- c()
+    cli::cli_progress_step("Assessing sample_id input - excluding {length(excl_samps)} sample(s)")
     excl_samps <- setdiff(metaboprep@samples[["sample_id"]], sample_ids)
+    cli::cli_progress_update()
     metaboprep@exclusions$samples$user_excluded <- excl_samps
-    cli::cli_alert_success(glue::glue("Provided samples results in exclusion of {length(excl_samps)} sample(s)."))
   }
   if (is.null(feature_ids)) {
     feature_ids <- metaboprep@features[["feature_id"]]
   } else {
-    cli::cli_alert_info(glue::glue("Assessing feature_id input"))
+    excl_feats <- c()
+    cli::cli_progress_step("Assessing feature_id input - excluding {length(excl_feats)} feature(s)")
     excl_feats <- setdiff(metaboprep@features[["feature_id"]], feature_ids)
+    cli::cli_progress_update()
     metaboprep@exclusions$features$user_excluded <- excl_feats
-    cli::cli_alert_success(glue::glue("Provided samples results in exclusion of {length(excl_feats)} feature(s)."))
   }
 
 
   # exclude from analysis but keep in data features
   exclude_but_keep_feats <- character()
   if (!is.null(features_exclude_but_keep)) {
+    cli::cli_progress_step("Excluding {length(exclude_but_keep_feats)} features from sample summary analysis but keeping in output data")
     if (length(features_exclude_but_keep)==1 && features_exclude_but_keep %in% colnames(metaboprep@features)) {
       exclude_but_keep_feats <- metaboprep@features[metaboprep@features[[features_exclude_but_keep]]==TRUE, "feature_id"]
-      cli::cli_alert_info(glue::glue("Excluding {length(exclude_but_keep_feats)} features from sample summary analysis but keeping in output data, flagged form column `{features_exclude_but_keep}`..."))
     } else {
       exclude_but_keep_feats <- features_exclude_but_keep
-      cli::cli_alert_info(glue::glue("Excluding {length(exclude_but_keep_feats)} features from sample summary analysis but keeping in output data, identified from `features_exclude_but_keep` argument..."))
     }
+    cli::cli_progress_update()
   } 
   
 
   # run sample summary and feature summary on the raw data
-  cli::cli_alert_info(glue::glue("Sample & Feature Summary Statistics for raw data..."))
+  cli::cli_progress_step("Sample & Feature Summary Statistics for raw data")
   stopifnot("No remaining features" = length(setdiff(feature_ids, exclude_but_keep_feats)) > 0)
   stopifnot("No remaining samples"  = length(sample_ids) > 0)
   metaboprep <- summarise(metaboprep, 
@@ -86,22 +87,21 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
                           feature_ids      = feature_ids,
                           features_exclude = exclude_but_keep_feats,
                           output           = "object")
-  cli::cli_alert_success(glue::glue("Sample & Feature Summary Statistics for raw data..."))
 
 
   # data to work from and add another layer - we now work with the 'destination data', plus any exclusions, from now on
-  cli::cli_alert_info(glue::glue("Copying {source_layer} data to new 'qc' data layer..."))
+  cli::cli_progress_step("Copying {source_layer} data to new 'qc' data layer")
   dat <- metaboprep@data[, , source_layer]
   dat[!rownames(dat) %in% sample_ids, ]  <- NA_real_
   dat[, !colnames(dat) %in% feature_ids] <- NA_real_
   metaboprep@data <- add_layer(current    = metaboprep@data,
                                layer      = dat,
                                layer_name = "qc")
-  cli::cli_alert_success(glue::glue("data ready for QC."))
 
 
   # very bad sample missingness
-  cli::cli_alert_info(glue::glue("Assessing for extreme sample missingness >=80%..."))
+  excl_samps <- c()
+  cli::cli_progress_step("Assessing for extreme sample missingness >=80% - excluding {length(excl_samps)} sample(s)")
   est_samps  <- sample_ids
   est_feats  <- setdiff(feature_ids, exclude_but_keep_feats)
   stopifnot("No remaining features" = length(est_feats) > 0)
@@ -109,13 +109,14 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   dat        <- metaboprep@data[est_samps, est_feats, "qc"]
   samplemis  <- missingness(dat, by="row")
   excl_samps <- samplemis[samplemis$missingness >= 0.8, "sample_id"]
+  cli::cli_progress_update()
   metaboprep@exclusions$samples$extreme_sample_missingness <- excl_samps
   sample_ids <- setdiff(sample_ids, excl_samps)
-  cli::cli_alert_success(glue::glue("Extreme sample missingness exclusions assessment complete. ({length(excl_samps)} samples excluded)"))
-
+  
   
   # very bad feature missingness
-  cli::cli_alert_info(glue::glue("Assessing for extreme feature missingness >=80%..."))
+  excl_feats <- c()
+  cli::cli_progress_step("Assessing for extreme feature missingness >=80% - excluding {length(excl_feats)} feature(s)")
   est_samps  <- sample_ids
   est_feats  <- setdiff(feature_ids, exclude_but_keep_feats)
   stopifnot("No remaining features" = length(est_feats) > 0)
@@ -123,14 +124,15 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   dat        <- metaboprep@data[est_samps, est_feats, "qc"]
   featuremis <- missingness(dat, by="column")
   excl_feats <- featuremis[featuremis$missingness >= 0.8, "feature_id"]
+  cli::cli_progress_update()
   metaboprep@exclusions$features$extreme_feature_missingness <- unique(metaboprep@exclusions$features$extreme_feature_missingness, excl_feats)
   feature_ids <- setdiff(feature_ids, excl_feats)
-  cli::cli_alert_success(glue::glue("Extreme feature missingness exclusions assessment complete. ({length(excl_feats)} features excluded)"))
-
+  
 
   # re-estimate sample missingness and exclude based on user-defined
   if (!is.null(sample_missingness) && !is.na(sample_missingness)) {
-    cli::cli_alert_info(glue::glue("Assessing for sample missingness at specified level of >={round(sample_missingness*100)}%..."))
+    excl_samps <- c()
+    cli::cli_progress_step("Assessing for sample missingness at specified level of >={round(sample_missingness*100)}% - excluding {length(excl_samps)} sample(s)")
     est_samps  <- sample_ids
     est_feats  <- setdiff(feature_ids, exclude_but_keep_feats)
     stopifnot("No remaining features" = length(est_feats) > 0)
@@ -138,17 +140,16 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
     dat        <- metaboprep@data[est_samps, est_feats, "qc"]
     samplemis  <- missingness(dat, by="row")
     excl_samps <- samplemis[samplemis$missingness >= sample_missingness, "sample_id"]
+    cli::cli_progress_update()
     metaboprep@exclusions$samples$user_defined_sample_missingness <- excl_samps
     sample_ids <- setdiff(sample_ids, excl_samps)
-    cli::cli_alert_success(glue::glue("Sample missingness exclusions assessment complete. ({length(excl_samps)} samples excluded)"))
-  } else {
-    cli::cli_alert_warning(glue::glue("Skipping assessment of sample missingness from user defined threshold [sample_missingness={sample_missingness}]..."))
   }
 
   
   # re-estimate feature missingness
   if (!is.null(feature_missingness) && !is.na(feature_missingness)) {
-    cli::cli_alert_info(glue::glue("Assessing for feature missingness at specified level of >={round(feature_missingness*100)}%..."))
+    excl_feats <- c()
+    cli::cli_progress_step("Assessing for feature missingness at specified level of >={round(feature_missingness*100)}% - excluding {length(excl_feats)} feature(s)")
     est_samps  <- sample_ids
     est_feats  <- setdiff(feature_ids, exclude_but_keep_feats)
     stopifnot("No remaining features" = length(est_feats) > 0)
@@ -156,17 +157,16 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
     dat        <- metaboprep@data[sample_ids, est_feats, "qc"]
     featuremis <- missingness(dat, by="column")
     excl_feats <- featuremis[featuremis$missingness >= feature_missingness, "feature_id"]
+    cli::cli_progress_update()
     metaboprep@exclusions$features$user_defined_feature_missingness <- excl_feats
     feature_ids <- setdiff(feature_ids, excl_feats)
-    cli::cli_alert_success(glue::glue("Feature missingness exclusions assessment complete. ({length(excl_feats)} features excluded)"))
-  } else {
-    cli::cli_alert_warning(glue::glue("Skipping assessment of feature missingness from user defined threshold [feature_missingness={feature_missingness}]..."))
   }
 
   
   # total peak area
   if (!is.null(total_peak_area_sd) && !is.na(total_peak_area_sd)) {
-    cli::cli_alert_info(glue::glue("Calculating total peak abundance outliers at +/- {total_peak_area_sd} Sdev..."))
+    excl_samps <- c()
+    cli::cli_progress_step("Calculating total peak abundance outliers at +/- {total_peak_area_sd} Sdev - excluding {length(excl_samps)} sample(s)")
     est_samps     <- sample_ids
     est_feats     <- setdiff(feature_ids, exclude_but_keep_feats)
     stopifnot("No remaining features" = length(est_feats) > 0)
@@ -178,17 +178,15 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
     tpa[["UL"]]   <- tpa$mean + tpa$sdev * total_peak_area_sd
     tpa[["LL"]]   <- tpa$mean - tpa$sdev * total_peak_area_sd
     excl_samps    <- tpa$sample_id[!(tpa$tpa_total >= tpa$LL & tpa$tpa_total <= tpa$UL)]
+    cli::cli_progress_update()
     metaboprep@exclusions$samples$user_defined_sample_totalpeakarea <- excl_samps
     sample_ids    <- setdiff(sample_ids, excl_samps)
-    cli::cli_alert_success(glue::glue("Total peak abundance outlier exclusions assessment complete. ({length(excl_samps)} samples excluded)"))
-  } else {
-    cli::cli_alert_warning(glue::glue("Skipping assessment of outliers based on total peak abundance [total_peak_area_sd={total_peak_area_sd}]..."))
   }
 
 
   # Sample PCA analysis - first deal with outlier data depending on option selected
   if (!is.null(outlier_udist) && !is.na(outlier_udist)) {
-    cli::cli_alert_info(glue::glue("Running sample data PCA outlier analysis at +/- {outlier_udist} Sdev..."))
+    cli::cli_progress_step("Running sample data PCA outlier analysis at +/- {outlier_udist} Sdev")
     est_samps     <- sample_ids
     est_feats     <- setdiff(feature_ids, exclude_but_keep_feats)
     stopifnot("No remaining features" = length(est_feats) > 0)
@@ -207,7 +205,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   
         # turn NA in actual destination data
         metaboprep@data[adjust_samps, adjust_feats, "qc"] <- NA_real_
-        cli::cli_alert_info(glue::glue("All identified outliers were turned into NA..."))
+        cli::cli_alert_info("All identified outliers were turned into NA...")
   
       } else if (outlier_treatment == "winsorize") {
   
@@ -218,19 +216,17 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   
           # set in the destination data
           metabolites@data[adjust_samps, fid, "qc"] <- quantile_value
-          cli::cli_alert_info(glue::glue("Outliers were winsorized to the {winsorize_quantile * 100} quantile of remaining (non outlying) values."))
+          cli::cli_alert_info("Outliers were winsorized to the {winsorize_quantile * 100} quantile of remaining (non outlying) values.")
         }
       }
     }#end dealing with adjustments pre PCA run
-    cli::cli_alert_info(glue::glue("Sample data outlier analysis complete."))
-  } else {
-    cli::cli_alert_warning(glue::glue("Skipping assessment & adjustment of outliers based on faw data values [outlier_udist={outlier_udist}]..."))
   }
 
   
   # perform exclusion on top PCs to ID outliers
   if (!is.null(pc_outlier_sd) && !is.na(pc_outlier_sd)) {
-    cli::cli_alert_info(glue::glue("Sample PCA outlier analysis - re-identify feature independence and PC outliers..."))
+    excl_samps <- c()
+    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s)")
     metaboprep  <- summarise(metaboprep,  
                              source_layer     = "qc", 
                              outlier_udist    = outlier_udist, 
@@ -243,16 +239,14 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
     pca_data   <- metaboprep@sample_summary[sample_ids, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"]
     outliers   <- outlier_detection(pca_data, nsd = pc_outlier_sd, meansd = TRUE, by = "column")
     excl_samps <- names(which(apply(outliers, 1, function(x) sum(x) > 0)))
+    cli::cli_progress_update()
     metaboprep@exclusions$samples$user_defined_sample_pca_outlier <- excl_samps
     sample_ids <- setdiff(sample_ids, excl_samps)
-    cli::cli_alert_info(glue::glue("Sample PCA outlier analysis complete."))
-  } else {
-    cli::cli_alert_warning(glue::glue("Skipping assessment of outliers based on sample PCs [pc_outlier_sd={pc_outlier_sd}]..."))
   }
   
 
   # Make final QC dataset
-  cli::cli_alert_info(glue::glue("Creating final QC dataset..."))
+  cli::cli_progress_step("Creating final QC dataset...")
   metaboprep <- summarise(metaboprep, 
                           source_layer     = "qc", 
                           outlier_udist    = outlier_udist, 
@@ -317,9 +311,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   metaboprep@samples  <- s
   metaboprep@features <- f
   
-  cli::cli_alert_success(glue::glue("Sample & Feature Summary Statistics for QC data complete."))
-
-  cli::cli_h1("Metabolite QC Process Completed")
+  cli::cli_progress_step("Metabolite QC Process Completed")
 
   # return the metabolites with underlying data (+/- adjustments) and exclusion matrix
   return(metaboprep)
