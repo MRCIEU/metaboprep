@@ -80,6 +80,7 @@ m
 tree <- attr(m@feature_summary, "qc_tree")
 dend <- stats::as.dendrogram(tree)
 plot(dend)
+
 ```
 
 
