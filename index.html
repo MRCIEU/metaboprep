@@ -143,39 +143,18 @@
 <span>                  feature_ids         <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Starting Metabolite QC Process ──────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ℹ Validating input parameters...</span></span>
-<span><span class="co">#&gt; ✔ Validating input parameters...</span></span>
-<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data...</span></span>
-<span><span class="co">#&gt; ℹ Running Feature Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running Sample Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running PCA Outlier Analysis...</span></span>
-<span><span class="co">#&gt; ✔ Sample &amp; Feature Summary Statistics for raw data...</span></span>
-<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer...</span></span>
-<span><span class="co">#&gt; ✔ data ready for QC.</span></span>
-<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80%...</span></span>
-<span><span class="co">#&gt; ✔ Extreme sample missingness exclusions assessment complete. (0 samples excluded)</span></span>
-<span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80%...</span></span>
-<span><span class="co">#&gt; ✔ Extreme feature missingness exclusions assessment complete. (0 features excluded)</span></span>
-<span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=50%...</span></span>
-<span><span class="co">#&gt; ✔ Sample missingness exclusions assessment complete. (0 samples excluded)</span></span>
-<span><span class="co">#&gt; ℹ Assessing for feature missingness at specified level of &gt;=30%...</span></span>
-<span><span class="co">#&gt; ✔ Feature missingness exclusions assessment complete. (0 features excluded)</span></span>
-<span><span class="co">#&gt; ℹ Calculating total peak abundance outliers at +/- 5 Sdev...</span></span>
-<span><span class="co">#&gt; ✔ Total peak abundance outlier exclusions assessment complete. (0 samples excluded)</span></span>
-<span><span class="co">#&gt; ℹ Running sample data PCA outlier analysis at +/- 5 Sdev...</span></span>
-<span><span class="co">#&gt; ℹ Sample data outlier analysis complete.</span></span>
-<span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outliers...</span></span>
-<span><span class="co">#&gt; ℹ Running Feature Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running Sample Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running PCA Outlier Analysis...</span></span>
-<span><span class="co">#&gt; ℹ Sample PCA outlier analysis complete.</span></span>
-<span><span class="co">#&gt; ℹ Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; ℹ Running Feature Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running Sample Summary Statistics...</span></span>
-<span><span class="co">#&gt; ℹ Running PCA Outlier Analysis...</span></span>
-<span><span class="co">#&gt; ✔ Sample &amp; Feature Summary Statistics for QC data complete.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Metabolite QC Process Completed ─────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [4ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [544ms]</span></span>
+<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [8ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) [8ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; ℹ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…✔ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
+<span><span class="co">#&gt; ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
+<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [524ms]</span></span>
+<span><span class="co">#&gt; ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [8ms]</span></span>
 <span></span>
 <span><span class="co"># view </span></span>
 <span><span class="va">m</span></span>
@@ -248,7 +227,7 @@
 <span><span class="co">#&gt;  .. - attr(*, "qc_varexp")= Named num [1:95] 0.1001 0.0496 0.0448 0.0412 0.0388 ...</span></span>
 <span><span class="co">#&gt;  ..  ..- attr(*, "names")= chr [1:95] "PC1" "PC2" "PC3" "PC4" ...</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_scree")= num 2</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 14</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 13</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
 <span></span>
 <span><span class="co"># view tree</span></span>
