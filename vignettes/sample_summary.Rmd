@@ -32,7 +32,7 @@ m
 ```
 
 ## Run sample summary
-```{r summ}
+```{r ssumm}
 sample_summ <- sample_summary(metaboprep    = m, 
                               source_layer  = "input", 
                               outlier_udist = 1.0, 
@@ -60,4 +60,69 @@ sample_summ <- sample_summary(metaboprep    = m,
 library(kableExtra)
 
 kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
+```
+
+
+## Run PCA analysis
+
+`pc_and_outliers()` performs principal component analysis. Missing data is imputed to the median and used to identify the number of informative or 'significant' PCs by (1) an acceleration analysis, and (2) a parallel analysis. Finally the number of sample outliers are determined at 3, 4, and 5 standard deviations from the mean on the top PCs as determined by the acceleration factor analysis.
+
+```{r summ}
+pc_analysis <- pc_and_outliers(metaboprep      = m, 
+                               source_layer    = "input")
+```
+
+```{r show3, echo=FALSE}
+library(kableExtra)
+
+kable(head(pc_analysis, 10), digits = 3, row.names = FALSE)
+```
+
+
+## Additional attributes
+In addition, the variance explained vector is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_varexp`, in this case we used the `input` data, therefore the attribute name is `input_varexp`. In a similar way, the results of the acceleration analysis (`input_num_pcs_scree`) and a parallel analysis (`input_num_pcs_parallel`) can also be extracted.
+
+```{r varexp, out.width="100%", fig.align='center', warning=FALSE, message=FALSE}
+library(ggplot2)
+
+# extract varexp from attributes
+varexp <- attr(pc_analysis, 'input_varexp')
+
+# subset to top 100 for nicer plotting
+if (length(varexp) > 100) varexp <- varexp[1:100]
+
+# get acceleration and parallel analysis results
+af <- attr(pc_analysis, 'input_num_pcs_scree')
+np <- attr(pc_analysis, 'input_num_pcs_parallel')
+if (af==np) np <- np+0.1 # make line visible if equal
+
+# as data.frame
+x_labs <- sub("(?i)pc","", names(varexp))
+ve     <- data.frame("pc"      = factor(x_labs, levels=x_labs),
+                     "var_exp" = varexp)
+lines  <- data.frame("Analysis" = c("Acceleration", "Parallel"), 
+                     "pc"       = c(af, np))   
+
+# plot
+ggplot(ve, aes(x = pc, y = var_exp)) +
+  geom_line(color = "grey") +
+  geom_point(shape = 21, fill = "#377EB8", size = 2) +
+  geom_vline(data = lines, aes(xintercept = pc, color = Analysis), inherit.aes = FALSE) +
+  scale_color_manual(values = c("Acceleration"="#E41A1C", "Parallel"="#4DAF4A")) +
+  scale_x_discrete(labels = function(x) ifelse(seq_along(x) %% 10 == 0 | x==1, x, "")) +
+  labs(x = "PC", y = "Variance explained") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+
+## Run sample & feature summaries together
+```{r summ3}
+summ <- summarise(metaboprep      = m, 
+                  source_layer    = "input", 
+                  outlier_udist   = 1.0,
+                  tree_cut_height = 0.5,
+                  output          = "data.frame")
+
+str(summ)
 ```

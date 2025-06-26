@@ -92,3 +92,16 @@ library(kableExtra)
 
 kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
 ```
+
+
+
+## Run sample & feature summaries together
+```{r summ3}
+summ <- summarise(metaboprep      = m, 
+                  source_layer    = "input", 
+                  outlier_udist   = 1.0,
+                  tree_cut_height = 0.5,
+                  output          = "data.frame")
+
+str(summ)
+```

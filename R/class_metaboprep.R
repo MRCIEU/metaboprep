@@ -27,7 +27,7 @@ globalVariables(c(""), package = "metaboprep")
 #' @import S7
 #' 
 #' @export
-#' 
+#' @name class_metaboprep
 Metaboprep <- new_class(
   name    = "Metaboprep",
   package = "metaboprep",

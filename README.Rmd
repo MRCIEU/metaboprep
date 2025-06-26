@@ -40,7 +40,7 @@ pak::pak("MRCIEU/metaboprep")
 ```
 
 ## Quality control pipeline
-![](inst/rmarkdown/templates/qc_report/skeleton/metaboprep_workflow.png)
+![](man/figures/metaboprep_workflow.png)
 
 
 ## Example

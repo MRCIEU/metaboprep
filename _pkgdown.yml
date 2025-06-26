@@ -1,4 +1,105 @@
 url: https://mrcieu.github.io/metaboprep/
 template:
-  bootstrap: 5
+  bootstrap: 5  
+  light-switch: true
 
+navbar:
+  structure:
+    left:  [intro, reference, articles]
+    right: [search, github, lightswitch]
+  components:
+    articles:
+      text: Articles
+      menu:
+      - text: Importing Data
+      - text: Metabolon
+        href: articles/metabolon.html
+      - text: Nightingale
+        href: articles/nightingale.html
+      - text: Olink
+        href: articles/olink.html
+      - text: Somalogic
+        href: articles/somalogic.html
+      - text: -------
+      - text: Summaries
+      - text: Samples
+        href: articles/sample_summary.html
+      - text: Features
+        href: articles/feature_summary.html
+      - text: QC pipeline
+        href: articles/quality_control.html
+      - text: -------
+      - text: Reports
+      - text: Generate HTML/PDF
+        href: articles/generate_report.html
+      - text: -------
+      - text: Exporting Data
+      - text: Export
+        href: articles/export.html
+      - text: -------
+      - text: Other
+      - text: Batch normalisation
+        href: articles/batch_normalise.html
+        
+reference:
+- title: "Metaboprep Object"
+  desc: >
+    The main S7 class behind the metaboprep R package along with class helper functions. 
+    A container for measurement, sample, and feature data.
+  contents:
+    - class_metaboprep
+    - add_layer
+    
+- title: "Importing & Exporting Data"
+  desc: >
+    Functions importing data from a variety of data sources and formats.
+  contents:
+    - starts_with("read_")
+    - available_data_formats
+    - starts_with("export")
+
+- title: "Summary functions"
+  desc: >
+    Functions to summarise data.
+  contents:
+    - summarise
+    - feature_summary
+    - sample_summary
+    - pc_and_outliers
+    - tree_and_independent_features
+    
+- title: "Quality control & Reporting"
+  desc: >
+    Functions to run the quality control pipeline and generate a report.
+  contents:
+    - quality_control
+    - available_report_templates
+    - generate_report
+    
+- title: "Other processing tools"
+  desc: >
+    Stand alone data processing or filtering tools.
+  contents:
+    - batch_normalise
+    
+    
+- title: "Helper functions"
+  desc: >
+    Helper functions, mainly used internally.
+  contents:
+    - feature_describe
+    - missingness
+    - outlier_detection
+    - outliers
+    - total_peak_area
+    - continuous_power_plot
+    - multivariate_anova
+    - cramerV
+    - eval.power.binary.imbalanced
+    - eval.power.cont
+    - find.PA.effect.sizes.2.sim
+    - find.cont.effect.sizes.2.sim
+    - imbalanced_power_plot
+    - variable_by_factor
+    - clean_names
+    

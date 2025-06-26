@@ -36,7 +36,7 @@ pak::pak("MRCIEU/metaboprep")
 
 ## Quality control pipeline
 
-![](inst/rmarkdown/templates/qc_report/skeleton/metaboprep_workflow.png)
+![](man/figures/metaboprep_workflow.png)
 
 ## Example
 
@@ -175,7 +175,7 @@ m
 #>  .. - attr(*, "qc_varexp")= Named num [1:95] 0.1001 0.0496 0.0448 0.0412 0.0388 ...
 #>  ..  ..- attr(*, "names")= chr [1:95] "PC1" "PC2" "PC3" "PC4" ...
 #>  .. - attr(*, "qc_num_pcs_scree")= num 2
-#>  .. - attr(*, "qc_num_pcs_parallel")= int 13
+#>  .. - attr(*, "qc_num_pcs_parallel")= int 14
 #>  .. - attr(*, "qc_outlier_udist")= num 5
 
 # view tree

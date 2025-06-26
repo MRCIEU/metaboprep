@@ -1,8 +1,8 @@
 ---
-title: "Olink"
+title: "Import Olink Proteomic Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Olink}
+  %\VignetteIndexEntry{Import Olink Proteomic Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

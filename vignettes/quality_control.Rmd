@@ -1,0 +1,19 @@
+---
+title: "quality_control"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{quality_control}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(metaboprep)
+```
