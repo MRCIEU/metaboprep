@@ -28,6 +28,8 @@ Imports:
     S7,
     yaml,
     OlinkAnalyze,
+    SomaDataIO,
+    stringr,
     dplyr,
     tibble,
     tidyr,
