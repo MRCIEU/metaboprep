@@ -17,9 +17,6 @@ knitr::opts_chunk$set(
 ```{r render}
 library(metaboprep)
 
-# the data
-data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
-
 # import data 
 dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
 

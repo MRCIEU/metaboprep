@@ -11,7 +11,7 @@ read_nightingale_v1 <- function(filepath) {
   # 
   # # testing
   # if (FALSE) {
-  #   filepath <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep2")
+  #   filepath <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep1")
   # }
   # 
   # # check excel file

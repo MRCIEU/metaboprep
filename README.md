@@ -47,7 +47,7 @@ This is a basic example which shows you how to load data and run the
 library(metaboprep)
 
 # the data
-data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
+data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
 
 # import data 
 dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
@@ -71,17 +71,17 @@ m <- m |>
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters✔ Validating input parameters [4ms]
-#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [544ms]
+#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [541ms]
 #> ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [8ms]
 #> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [8ms]
 #> ℹ Assessing for sample missingness at specified level of >=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of >=50% - excluding 0 sa…
 #> ℹ Assessing for feature missingness at specified level of >=30% - excluding 0 f…✔ Assessing for feature missingness at specified level of >=30% - excluding 0 f…
 #> ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
-#> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]
+#> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [9ms]
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [524ms]
-#> ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [8ms]
+#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [526ms]
+#> ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [7ms]
 
 # view 
 m
@@ -154,7 +154,7 @@ m
 #>  .. - attr(*, "qc_varexp")= Named num [1:95] 0.1001 0.0496 0.0448 0.0412 0.0388 ...
 #>  ..  ..- attr(*, "names")= chr [1:95] "PC1" "PC2" "PC3" "PC4" ...
 #>  .. - attr(*, "qc_num_pcs_scree")= num 2
-#>  .. - attr(*, "qc_num_pcs_parallel")= int 13
+#>  .. - attr(*, "qc_num_pcs_parallel")= int 14
 #>  .. - attr(*, "qc_outlier_udist")= num 5
 
 # view tree

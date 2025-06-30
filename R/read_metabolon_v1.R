@@ -3,7 +3,7 @@
 #' @returns list,  list(data = 3D matrix, samples = samples data.frame, features = features data.frame)
 #'
 #' @examples
-#' filepath <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
+#' filepath <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
 #' read_metabolon_v1(filepath)
 #'
 #' @importFrom readxl excel_sheets read_xlsx

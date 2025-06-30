@@ -1,4 +1,4 @@
-name: Metaboprep2 Report
+name: Metaboprep Report
 description: >
    A report for processed metabolites data.
 create_dir: FALSE

@@ -51,7 +51,7 @@ This is a basic example which shows you how to load data and run the `metaboprep
 library(metaboprep)
 
 # the data
-data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep2")
+data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
 
 # import data 
 dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
