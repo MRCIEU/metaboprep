@@ -62,7 +62,8 @@ method(pc_and_outliers, Metaboprep) <- function(metaboprep, source_layer="input"
   # identify outliers - 3SD
   o_mat3           <- outlier_detection(mypca$x[, 1:af], nsd = 3, by = "column")
   colnames(o_mat3) <- paste0(colnames(o_mat3), "_3_sd_outlier")
-  pc_out           <- cbind(mypca$x[,1:10], o_mat3)
+  max_cols         <- ifelse(ncol(mypca$x)<10, ncol(mypca$x), 10)
+  pc_out           <- cbind(mypca$x[,1:max_cols], o_mat3)
    
   
   # identify outliers - 4SD
