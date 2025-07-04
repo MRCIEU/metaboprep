@@ -38,7 +38,7 @@
 read_olink_v1 <- function(filepath) {
   
   if (FALSE) {
-    filepath <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
+    filepath <- system.file("extdata", "olink_v1_example.txt", package = "metaboprep")
   }
   
   # 
@@ -65,12 +65,12 @@ read_olink_v1 <- function(filepath) {
   ## olink have multiple versions, some have a Sample_Type column (SAMPLE, CONTROL) some don't and instead have "CONTROL" in SampleID column
   if ("Sample_Type" %in% colnames(df)) {
     df_features_samples <- df %>%
-      filter(Sample_Type == "SAMPLE") %>%
-      filter(!grepl("empty well", SampleID, ignore.case = TRUE))
+      dplyr::filter(Sample_Type == "SAMPLE") %>%
+      dplyr::filter(!grepl("empty well", SampleID, ignore.case = TRUE))
   } else if (any(grepl("CONTROL", df$SampleID, ignore.case = TRUE))) {
     df_features_samples <- df %>%
-      filter(!grepl("CONTROL", SampleID, ignore.case = TRUE)) %>%
-      filter(!grepl("empty well", SampleID, ignore.case = TRUE))
+      dplyr::filter(!grepl("CONTROL", SampleID, ignore.case = TRUE)) %>%
+      dplyr::filter(!grepl("empty well", SampleID, ignore.case = TRUE))
   } else {
     stop("The dataset does not contain a 'Sample_Type' column or any 'CONTROL' entries in 'SampleID'. It is likely not an Olink file. Suggest you use an alternative approach to reading in your data (see Vignette XXX)", call. = FALSE)
   }
@@ -81,17 +81,17 @@ read_olink_v1 <- function(filepath) {
       names_from = OlinkID,
       values_from = NPX
     ) %>%
-    tibble::column_to_rownames(var = "SampleID") %>%  # from tibble::column_to_rownames
+    tibble::column_to_rownames(var = "SampleID") %>% 
     as.matrix()
     
   # feature data for CONTROLS ====
   ## olink have multiple versions, some have a Sample_Type column (SAMPLE, CONTROL) some don't and instead have "CONTROL" in SampleID column
   if ("Sample_Type" %in% colnames(df)) {
     df_features_controls <- df %>% 
-      filter(Sample_Type == "CONTROL" | grepl("empty well", SampleID, ignore.case = TRUE))
+      dplyr::filter(Sample_Type == "CONTROL" | grepl("empty well", SampleID, ignore.case = TRUE))
   } else if (any(grepl("CONTROL", df$SampleID, ignore.case = TRUE))) {
     df_features_controls <- df %>% 
-      filter(grepl("CONTROL", SampleID, ignore.case = TRUE) | 
+      dplyr::filter(grepl("CONTROL", SampleID, ignore.case = TRUE) | 
                grepl("empty well", SampleID, ignore.case = TRUE))
   } else {
     stop("The dataset does not contain a 'Sample_Type' column or any 'CONTROL' entries in 'SampleID'. It is likely not an Olink file. Suggest you use an alternative approach to reading in your data (see Vignette XXX)", call. = FALSE)
@@ -135,7 +135,6 @@ read_olink_v1 <- function(filepath) {
     ) %>%
     unique() %>%
     dplyr::rename(sample_id = SampleID)
-  
   
   # return ====
   return(list(data       = data,
