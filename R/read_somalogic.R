@@ -41,31 +41,31 @@
 #'
 #' @examples
 #' \dontrun{
-#' filepath <- system.file("extdata", "example_data10.adat", package = "SomaDataIO")
-#' somalogic_data <- read_somalogic(filepath)
-#'
-#' @importFrom dplyr filter select rename mutate relocate
-#' @importFrom tidyr contains
-#' @importFrom tibble remove_rownames column_to_rownames as_tibble
+#'   filepath <- system.file("extdata", "example_data10.adat", package = "SomaDataIO")
+#'   somalogic_data <- read_somalogic(filepath)
+#' }
 #' @importFrom SomaDataIO read_adat is.soma_adat
-#' @importFrom stringr str_replace_all
-#' @importFrom magrittr %>%
 #' @export
 read_somalogic <- function(filepath) {
   
+  # testing ====
   if (FALSE) {
     filepath <- system.file("extdata", "example_data10.adat",
                              package = "SomaDataIO", mustWork = TRUE)
   }
   
-  # 
+  
+  # checks 1 ====
   if (!grepl("(?i)\\.(adat)$", filepath)) {
     stop(paste0("Expected a commercial Somalogic file with extension .adat"), call. = FALSE)
   }
   
+  
   # read data ====
   df <- SomaDataIO::read_adat(file = filepath)
 
+  
+  # checks 2 ====
   if (!SomaDataIO::is.soma_adat(df)) {
     stop("The file is not a SomaLogic 'adat' file.")
   }  
@@ -73,61 +73,54 @@ read_somalogic <- function(filepath) {
     stop("Column 'SampleId' not found in the dataset. Either your data is not Somalogic or you have renamed your sample column for some reason. Suggest you use an alternative approach to reading in your data (see Vignette XXX).", call. = FALSE)
   }
   
+  
+  # init ====
   data <- NULL
   controls <- NULL
   features <- NULL
   samples <- NULL
   control_metadata <- NULL
   
-  # feature data for SAMPLES ====
-  df_features_samples <- df %>%
-    dplyr::filter(SampleType == "Sample")
   
-  data <- df_features_samples %>%
-    dplyr::select(SampleId, tidyr::contains("seq")) %>%
-    tibble::remove_rownames() %>% # Add this step to ensure no existing row names
-    tibble::column_to_rownames(var = "SampleId") %>%
-    as.matrix()
+  # feature data for SAMPLES ====
+  data           <- df[df$SampleType == "Sample", ]
+  rownames(data) <- data$SampleId
+  data           <- data[, grep("seq", colnames(data), value = TRUE)]
+  data           <- as.matrix(data)
+
   
   # feature data for CONTROLS ====
-  df_features_controls <- df %>%
-    dplyr::filter(SampleType == "Calibrator")
-  
-  controls <- df_features_controls %>%
-    dplyr::select(SampleId, tidyr::contains("seq")) %>%
-    tibble::remove_rownames() %>% 
-    tibble::column_to_rownames(var = "SampleId") %>%
-    as.matrix()
+  controls           <- df[df$SampleType == "Calibrator", ]
+  rownames(controls) <- controls$SampleId
+  controls           <- controls[, grep("seq", colnames(controls), value = TRUE)]
+  controls           <- as.matrix(controls)
     
-  # feature meta-data ====
-  features <- attr(df, "Col.Meta") %>%
-    dplyr::mutate(
-      feature_id = paste0("seq.", stringr::str_replace_all(SeqId, "-", "."))
-    ) %>%
-    dplyr::relocate(feature_id, .before = 1)
-
-  # sample meta-data ====
-  samples <- df %>%
-    tibble::as_tibble() %>% # Convert to a regular tibble first to strip special attributes
-    dplyr::select(attr(df, "row_meta")) %>% # Now select columns from the plain tibble
-    tibble::remove_rownames() %>%
-    dplyr::rename(sample_id = SampleId) %>%
-    dplyr::relocate(sample_id, .before = 1) %>%
-    dplyr::filter(SampleType == "Sample")
   
-  control_sample_meta <- df %>%
-    tibble::as_tibble() %>% # Convert to a regular tibble first to strip special attributes
-    dplyr::select(attr(df, "row_meta")) %>% # Now select columns from the plain tibble
-    tibble::remove_rownames() %>%
-    dplyr::rename(sample_id = SampleId) %>%
-    dplyr::relocate(sample_id, .before = 1) %>%
-    dplyr::filter(SampleType == "Calibrator")
+  # feature meta-data ====
+  features            <- attr(df, "Col.Meta") 
+  features$feature_id <- paste0("seq.", gsub("-", ".", features$SeqId))
+  features            <- features[, c("feature_id", setdiff(names(features), "feature_id"))]
+
+  
+  # sample meta-data ====
+  row_meta <- attr(df, "row_meta")
+  plain_df <- as.data.frame(df)
+  samples  <- plain_df[, row_meta, drop = FALSE]
+  names(samples)[names(samples) == "SampleId"] <- "sample_id"
+  samples  <- samples[c("sample_id", setdiff(names(samples), "sample_id"))]
+  samples  <- samples[samples$SampleType == "Sample", ]
+  
+  control_sample_meta <- plain_df[, row_meta, drop = FALSE]
+  names(control_sample_meta)[names(control_sample_meta) == "SampleId"] <- "sample_id"
+  control_sample_meta <- control_sample_meta[c("sample_id", setdiff(names(control_sample_meta), "sample_id"))]
+  control_sample_meta <- control_sample_meta[control_sample_meta$SampleType == "Calibrator", ]
+  
   
   # return ====
-  return(list(data       = data,
-              samples    = samples,
-              features   = features,
-              controls = controls,
+  return(list(data             = data,
+              samples          = samples,
+              features         = features,
+              controls         = controls,
               control_metadata = control_sample_meta))
   
 }

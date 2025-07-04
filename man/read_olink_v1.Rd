@@ -33,8 +33,7 @@ If neither format is detected, the function stops with an error indicating that 
 }
 \examples{
 \dontrun{
-filepath <- system.file("extdata", "example_olink_data.txt", package = "metaboprep")
-olink_data <- read_olink_v1(filepath)
+  filepath <- system.file("extdata", "example_olink_data.txt", package = "metaboprep")
+  olink_data <- read_olink_v1(filepath)
 }
-
 }

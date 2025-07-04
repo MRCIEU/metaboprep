@@ -1,11 +1,11 @@
 Package: metaboprep
 Title: Metabolomics data preparation and processing pipeline
 Version: 1.0.1
-Authors@R: c(person("Laura", "Corbin", email = "laura.corbin@bristol.ac.uk", role = c("aut")), 
-             person("David", "Hughes", email = "hughes.evoanth@gmail.com", role = c("aut", "cre")),
+Authors@R: c(person("Laura", "Corbin",        email = "laura.corbin@bristol.ac.uk",        role = c("aut")), 
+             person("David", "Hughes",        email = "hughes.evoanth@gmail.com",          role = c("aut", "cre")),
              person("Nicholas", "Sunderland", email = "nicholas.sunderland@bristol.ac.uk", role = c("aut")),
-             person("Matthew", "Lee", email = "matthew.lee@bristol.ac.uk", role = c("aut")),
-             person("Alec", "McKinlay", email = "am17168@bristol.ac.uk", role = c("aut")))
+             person("Matthew", "Lee",         email = "matthew.lee@bristol.ac.uk",         role = c("aut")),
+             person("Alec", "McKinlay",       email = "am17168@bristol.ac.uk",             role = c("aut")))
 Description: |
   Reads in raw Metabolon and Nightingale xls sheets and aids in data preparation of all metabolomics data sets.
 Depends: R (>= 4.1.0)
@@ -29,17 +29,12 @@ Imports:
     yaml,
     OlinkAnalyze,
     SomaDataIO,
-    stringr,
-    dplyr,
-    tibble,
-    tidyr,
-    magrittr
+    reshape2
 Suggests: 
     knitr,
     MASS,
     dendextend,
-    kableExtra,
-    reshape2
+    kableExtra
 Remotes:
     hredestig/pcaMethods
 URL: https://mrcieu.github.io/metaboprep/

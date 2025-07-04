@@ -16,4 +16,29 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(metaboprep)
+
+# Somalogic data file path
+filepath <- system.file("extdata", "somalogic_v1_example.adat", package = "metaboprep")
+
+# read Somalogic data
+somalogic_data <- read_somalogic(filepath)
+
+# create the object (downsampled for speed)
+m <- Metaboprep(data     = somalogic_data$data[1:9, 1:100], 
+                samples  = somalogic_data$samples[1:9, ], 
+                features = somalogic_data$features[1:100, ])
+
+# run QC
+m <- m |>
+  quality_control(source_layer = "input", 
+                  sample_missingness  = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd  = 5, 
+                  outlier_udist       = 5, 
+                  outlier_treatment   = "leave_be", 
+                  winsorize_quantile  = 1.0, 
+                  tree_cut_height     = 0.5, 
+                  pc_outlier_sd       = 5, 
+                  sample_ids          = NULL, 
+                  feature_ids         = NULL)
 ```

@@ -24,122 +24,126 @@
 #'
 #' @examples
 #' \dontrun{
-#' filepath <- system.file("extdata", "example_olink_data.txt", package = "metaboprep")
-#' olink_data <- read_olink_v1(filepath)
+#'   filepath <- system.file("extdata", "example_olink_data.txt", package = "metaboprep")
+#'   olink_data <- read_olink_v1(filepath)
 #' }
-#'
-#' @importFrom dplyr filter select rename
-#' @importFrom tidyr pivot_wider
-#' @importFrom tibble column_to_rownames
 #' @importFrom OlinkAnalyze read_NPX
-#' @importFrom magrittr %>%
+#' @importFrom reshape2 dcast
 #' @export
 
 read_olink_v1 <- function(filepath) {
   
+  # testing ====
   if (FALSE) {
     filepath <- system.file("extdata", "olink_v1_example.txt", package = "metaboprep")
   }
   
-  # 
+  
+  # checks 1 ====
   if (!grepl("(?i)\\.(csv|xls|xlsx|zip|txt|parquet)$", filepath)) {
     stop(paste0("Expected a commercial Olink file with extension .csv, .xls, .xlsx, .txt, .zip, or .parquet"), call. = FALSE)
   }
+  
   
   # read data ====
   df <- OlinkAnalyze::read_NPX(filepath)
   if (!"SampleID" %in% colnames(df)) {
     stop("Column 'SampleID' not found in the dataset. Either your data is not Olink or you have renamed your sample column for some reason. Suggest you use an alternative approach to reading in your data (see Vignette XXX).", call. = FALSE)
   }
+  
+  
+  # checks 2 ====
   if (!any(duplicated(df$SampleID))) {
     stop("The dataset does not appear to be in long format - no duplicate SampleID values found. Suggest you use an alternative approach to reading in your data (see Vignette XXX).", call. = FALSE)
   }
   
+  
+  # init ====
   data <- NULL
   controls <- NULL
   features <- NULL
   samples <- NULL
   control_metadata <- NULL
   
+  
   # feature data for SAMPLES ====
   ## olink have multiple versions, some have a Sample_Type column (SAMPLE, CONTROL) some don't and instead have "CONTROL" in SampleID column
   if ("Sample_Type" %in% colnames(df)) {
-    df_features_samples <- df %>%
-      dplyr::filter(Sample_Type == "SAMPLE") %>%
-      dplyr::filter(!grepl("empty well", SampleID, ignore.case = TRUE))
+    
+    df_features_samples <- df[df$Sample_Type == "SAMPLE" & !grepl("empty well", df$SampleID, ignore.case = TRUE), ]
+    
   } else if (any(grepl("CONTROL", df$SampleID, ignore.case = TRUE))) {
-    df_features_samples <- df %>%
-      dplyr::filter(!grepl("CONTROL", SampleID, ignore.case = TRUE)) %>%
-      dplyr::filter(!grepl("empty well", SampleID, ignore.case = TRUE))
+    
+    df_features_samples <- df[!grepl("CONTROL", df$SampleID, ignore.case = TRUE) & !grepl("empty well", df$SampleID, ignore.case = TRUE), ]
+    
   } else {
+    
     stop("The dataset does not contain a 'Sample_Type' column or any 'CONTROL' entries in 'SampleID'. It is likely not an Olink file. Suggest you use an alternative approach to reading in your data (see Vignette XXX)", call. = FALSE)
+  
   }
 
-  data <- df_features_samples %>%
-    dplyr::select(SampleID, OlinkID, NPX) %>%
-    tidyr::pivot_wider(
-      names_from = OlinkID,
-      values_from = NPX
-    ) %>%
-    tibble::column_to_rownames(var = "SampleID") %>% 
-    as.matrix()
+  data           <- reshape2::dcast(df_features_samples, SampleID ~ OlinkID, value.var = "NPX")
+  rownames(data) <- data$SampleID
+  data           <- as.matrix(data[ , setdiff(colnames(data), "SampleID") ])
     
+  
   # feature data for CONTROLS ====
   ## olink have multiple versions, some have a Sample_Type column (SAMPLE, CONTROL) some don't and instead have "CONTROL" in SampleID column
   if ("Sample_Type" %in% colnames(df)) {
-    df_features_controls <- df %>% 
-      dplyr::filter(Sample_Type == "CONTROL" | grepl("empty well", SampleID, ignore.case = TRUE))
+    
+    df_features_controls <- df[df$Sample_Type == "CONTROL" | grepl("empty well", df$SampleID, ignore.case = TRUE), ]
+    
   } else if (any(grepl("CONTROL", df$SampleID, ignore.case = TRUE))) {
-    df_features_controls <- df %>% 
-      dplyr::filter(grepl("CONTROL", SampleID, ignore.case = TRUE) | 
-               grepl("empty well", SampleID, ignore.case = TRUE))
+    
+    df_features_controls <- df[grepl("CONTROL", df$SampleID, ignore.case = TRUE) | grepl("empty well", df$SampleID, ignore.case = TRUE), ]
+  
   } else {
+    
     stop("The dataset does not contain a 'Sample_Type' column or any 'CONTROL' entries in 'SampleID'. It is likely not an Olink file. Suggest you use an alternative approach to reading in your data (see Vignette XXX)", call. = FALSE)
+  
   }
   
-  controls <- df_features_controls %>%
-    dplyr::select(SampleID, OlinkID, NPX) %>%
-    tidyr::pivot_wider(
-      names_from = OlinkID,
-      values_from = NPX
-    ) %>%
-    tibble::column_to_rownames(var = "SampleID") %>%  # from tibble::column_to_rownames
-    as.matrix()
+  controls           <- reshape2::dcast(df_features_controls, SampleID ~ OlinkID, value.var = "NPX")
+  rownames(controls) <- controls$SampleID
+  controls_matrix    <- as.matrix(controls[ , setdiff(colnames(controls), "SampleID") ])
+  
   
   # feature meta-data ====
-  features <- df_features_samples %>%
-    dplyr::select(
-      setdiff(colnames(.), c("SampleID", "NPX", "QC_Warning", "Index", "PlateID"))
-    ) %>%
-    unique() %>%
-    dplyr::rename(feature_id = OlinkID)
+  features <- df_features_samples[
+    , setdiff(colnames(df_features_samples), c("SampleID", "NPX", "QC_Warning", "Index", "PlateID")), 
+    drop = FALSE
+  ]
+  features <- unique(features)
+  names(features)[names(features) == "OlinkID"] <- "feature_id"
   
-  control_feature_meta <- df_features_controls %>%
-    dplyr::select(
-      setdiff(colnames(.), c("SampleID", "NPX", "QC_Warning", "Index", "PlateID"))
-    ) %>%
-    unique() %>%
-    dplyr::rename(feature_id = OlinkID)
+  control_feature_meta <- df_features_controls[
+    , setdiff(colnames(df_features_controls), c("SampleID", "NPX", "QC_Warning", "Index", "PlateID")), 
+    drop = FALSE
+  ]
+  control_feature_meta <- unique(control_feature_meta)
+  names(control_feature_meta)[names(control_feature_meta) == "OlinkID"] <- "feature_id"
+  
   
   # sample meta-data ====
-  samples <- df_features_samples %>%
-    dplyr::select(
-      setdiff(colnames(.), c("Index", "OlinkID", "UniProt", "Assay", "Assay_Warning", "MissingFreq", "LOD", "NPX", "Panel", "Panel_Version", "Normalization"))
-    ) %>%
-    unique() %>%
-    dplyr::rename(sample_id = SampleID)
+  samples <- df_features_samples[
+    , setdiff(colnames(df_features_samples), c("Index", "OlinkID", "UniProt", "Assay", "Assay_Warning", "MissingFreq", "LOD", "NPX", "Panel", "Panel_Version", "Normalization")),
+    drop = FALSE
+  ]
+  samples <- unique(samples)
+  names(samples)[names(samples) == "SampleID"] <- "sample_id"
   
-  control_sample_meta <- df_features_controls %>%
-    dplyr::select(
-      setdiff(colnames(.), c("Index", "OlinkID", "UniProt", "Assay", "Assay_Warning", "MissingFreq", "LOD", "NPX", "Panel", "Panel_Version", "Normalization"))
-    ) %>%
-    unique() %>%
-    dplyr::rename(sample_id = SampleID)
+  control_sample_meta <- df_features_controls[
+    , setdiff(colnames(df_features_controls), c("Index", "OlinkID", "UniProt", "Assay", "Assay_Warning", "MissingFreq", "LOD", "NPX", "Panel", "Panel_Version", "Normalization")),
+    drop = FALSE
+  ]
+  control_sample_meta <- unique(control_sample_meta)
+  names(control_sample_meta)[names(control_sample_meta) == "SampleID"] <- "sample_id"
+  
   
   # return ====
-  return(list(data       = data,
-              samples    = samples,
-              features   = features,
-              controls = controls,
+  return(list(data             = data,
+              samples          = samples,
+              features         = features,
+              controls         = controls,
               control_metadata = control_sample_meta))
 }
