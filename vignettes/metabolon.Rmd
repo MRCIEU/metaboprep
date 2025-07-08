@@ -14,6 +14,46 @@ knitr::opts_chunk$set(
 )
 ```
 
+Metabolon data is...
+
+## Import Metabolon data
 ```{r setup}
 library(metaboprep)
+
+# example file
+filepath <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
+
+# import
+dat <- read_metabolon(filepath, sheet = 'OrigScale')
+
+# view structure
+str(dat)
+```
+
+## Create Metaboprep object 
+Once imported, we pass the data to the `Metaboprep` class object. 
+```{r metaboprep_obj}
+m <- Metaboprep(data     = dat$data, 
+                features = dat$features, 
+                samples  = dat$samples)
+
+# view 
+m
+```
+
+## QC Metabolon
+```{r qc}
+m <- m |>
+  quality_control(source_layer        = "input", 
+                  sample_missingness  = 0.5, 
+                  feature_missingness = 0.3, 
+                  total_peak_area_sd  = 5, 
+                  outlier_udist       = 5, 
+                  outlier_treatment   = "leave_be", 
+                  winsorize_quantile  = 1.0, 
+                  tree_cut_height     = 0.5, 
+                  pc_outlier_sd       = 5)
+
+# view 
+m
 ```

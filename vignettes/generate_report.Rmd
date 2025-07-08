@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 library(metaboprep)
 
 # import data 
-dat <- read_metabolon_v1(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"))
+dat <- read_metabolon(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
 
 # create the object
-m <- Metaboprep(data = dat$data[,,1], samples = dat$samples, features = dat$features)
+m <- Metaboprep(data = dat$data, samples = dat$samples, features = dat$features)
 
 # run QC
 m <- m |>
