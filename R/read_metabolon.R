@@ -162,8 +162,8 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
 
   
   # checks
-  stopifnot("Sample ids do not exactly match row names of data" = identical(samples$sample_id, rownames(data)))
-  stopifnot("Feature ids do not exactly match row names of data" = identical(features$feature_id, colnames(data)))
+  stopifnot("Sample ids do not exactly match row names of data" = identical(as.character(samples$sample_id), as.character(rownames(data))))
+  stopifnot("Feature ids do not exactly match row names of data" = identical(as.character(features$feature_id), as.character(colnames(data))))
   
   
   # return ====
