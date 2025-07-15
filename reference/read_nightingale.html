@@ -593,7 +593,283 @@
 <span class="r-in"><span><span class="co"># version 2 data format</span></span></span>
 <span class="r-in"><span><span class="va">filepath2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nightingale_v2_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">read_nightingale</span><span class="op">(</span><span class="va">filepath2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[.data.frame`(samples, , c("sample_id", setdiff(names(samples),     "sample_id"))):</span> undefined columns selected</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       XXL-VLDL-P XXL-VLDL-L XXL-VLDL-PL XXL-VLDL-C XXL-VLDL-CE XXL-VLDL-FC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind1   2.836e-10    0.00000   4.239e-03  0.0000000   0.000e+00   0.0038430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind2   3.857e-11    0.01816   2.932e-03  0.0068880   9.999e-04   0.0029690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind3   9.589e-11    0.00000   6.286e-03  0.0000000   3.351e-05   0.0018300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind4   2.210e-10    0.01179   2.036e-03  0.0054940   1.439e-04   0.0014010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind5   1.237e-10    0.04199   2.376e-03  0.0053500   0.000e+00   0.0014010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind6   2.324e-10    0.05112   3.661e-05  0.0011680   2.704e-03   0.0001044</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind7   0.000e+00    0.02039   1.206e-03  0.0094930   2.821e-03   0.0025290</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind8   0.000e+00    0.04702   1.286e-03  0.0033350   2.833e-03   0.0010330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind9   7.704e-11    0.00000   5.789e-03  0.0042700   0.000e+00   0.0011370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind10  1.106e-10    0.02935   1.604e-03  0.0000000   1.439e-04   0.0040060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind11  2.199e-10    0.05333   0.000e+00  0.0041920   1.566e-04   0.0035600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind12  2.210e-10    0.02260   0.000e+00  0.0084590   1.138e-03   0.0018300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind13  1.105e-10    0.00000   2.673e-03  0.0000000   2.095e-03   0.0029390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind14  5.647e-11    0.04702   0.000e+00  0.0011680   6.668e-05   0.0004685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind15  1.056e-10    0.00000   3.411e-03  0.0068730   1.138e-03   0.0016960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind16  0.000e+00    0.01816   5.820e-03  0.0042700   6.338e-03   0.0038430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind17  1.664e-11    0.01483   1.206e-03  0.0009705   0.000e+00   0.0039020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind18  1.664e-11    0.00807   1.896e-03  0.0038410   3.030e-03   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind19  0.000e+00    0.00807   0.000e+00  0.0054940   3.049e-03   0.0001044</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind20  2.475e-10    0.04783   2.157e-03  0.0000000   2.490e-03   0.0015630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind21  0.000e+00    0.01567   0.000e+00  0.0000000   2.426e-03   0.0012850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind22  3.423e-11    0.01483   2.147e-04  0.0068730   1.566e-04   0.0020980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind23  1.056e-10    0.03480   5.820e-03  0.0038410   3.351e-05   0.0035600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind24  2.071e-11    0.00000   2.516e-03  0.0028450   5.697e-03   0.0039020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind25  7.345e-11    0.01179   2.226e-03  0.0027400   5.697e-03   0.0039020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind26  1.237e-10    0.00000   5.789e-03  0.0056020   7.277e-04   0.0010330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind27  0.000e+00    0.05112   4.632e-03  0.0039420   3.049e-03   0.0006782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind28  2.210e-10    0.02090   1.669e-03  0.0075900   6.338e-03   0.0043180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind29  5.601e-11    0.05333   0.000e+00  0.0005352   2.134e-03   0.0008139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind30  9.589e-11    0.01641   1.896e-03  0.0005352   0.000e+00   0.0008139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind31  9.715e-11    0.00000   1.592e-03  0.0094930   0.000e+00   0.0048060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind32  9.715e-11    0.06075   4.447e-03  0.0075900   1.658e-03   0.0019930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind33  5.647e-11    0.02609   2.376e-03  0.0000000   0.000e+00   0.0016540</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind34  0.000e+00    0.05112   0.000e+00  0.0053500   7.055e-04   0.0004560</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind35  9.589e-11    0.01321   5.222e-03  0.0097130   6.780e-03   0.0011630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind36  3.857e-11    0.03480   5.850e-03  0.0035100   1.666e-03   0.0008139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind37  0.000e+00    0.01567   5.311e-03  0.0053500   5.933e-03   0.0010360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind38  1.056e-10    0.02638   5.820e-03  0.0000000   0.000e+00   0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind39  2.210e-10    0.04702   2.932e-03  0.0044830   3.351e-05   0.0010900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind40  0.000e+00    0.03673   3.411e-03  0.0075900   2.095e-03   0.0016540</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind41  9.715e-11    0.02018   3.661e-05  0.0000000   2.833e-03   0.0029690</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind42  1.924e-11    0.01526   3.661e-05  0.0000000   9.999e-04   0.0016540</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind43  2.475e-10    0.02638   5.789e-03  0.0067980   2.525e-03   0.0013410</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind44  0.000e+00    0.01567   7.362e-03  0.0053500   1.230e-03   0.0016540</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind45  1.630e-10    0.02638   1.669e-03  0.0000000   2.389e-04   0.0035600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind46  3.423e-11    0.04983   2.226e-03  0.0011840   3.584e-03   0.0010360</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind47  2.071e-11    0.00000   3.411e-03  0.0000000   1.566e-04   0.0011370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind48  7.234e-11    0.02039   1.318e-03  0.0067980   0.000e+00   0.0040060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind49  7.041e-11    0.03722   2.062e-03  0.0028450   3.351e-05   0.0038020</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind50  1.105e-10    0.02353   1.592e-03  0.0000000   1.138e-03   0.0011370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       XXL-VLDL-TG XL-VLDL-P XL-VLDL-L XL-VLDL-PL XL-VLDL-C XL-VLDL-CE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind1     0.011240 0.000e+00  0.055210  0.0186200 0.0047640  0.0001245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind2     0.000000 3.742e-10  0.000000  0.0052360 0.0131400  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind3     0.014450 8.210e-10  0.056030  0.0186200 0.0002091  0.0166900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind4     0.009420 0.000e+00  0.000000  0.0090720 0.0175800  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind5     0.000000 5.519e-10  0.117400  0.0026660 0.0037290  0.0053850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind6     0.011670 0.000e+00  0.057140  0.0000000 0.0107200  0.0063630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind7     0.036500 4.537e-10  0.000000  0.0211300 0.0100800  0.0024220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind8     0.016700 4.684e-10  0.047730  0.0064940 0.0005087  0.0098710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind9     0.026600 6.668e-10  0.009037  0.0078490 0.0227400  0.0178300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind10    0.000000 1.012e-10  0.039200  0.0144900 0.0048110  0.0042060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind11    0.016900 1.024e-09  0.056030  0.0091070 0.0122200  0.0178300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind12    0.018880 0.000e+00  0.047730  0.0007439 0.0109500  0.0153200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind13    0.032300 4.684e-10  0.025040  0.0071370 0.0091730  0.0135400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind14    0.011690 5.794e-10  0.154900  0.0071370 0.0175800  0.0110800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind15    0.013500 4.684e-10  0.052370  0.0210800 0.0072290  0.0026670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind16    0.014400 5.357e-10  0.015730  0.0050890 0.0073840  0.0153200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind17    0.000000 1.451e-09  0.115700  0.0210800 0.0000000  0.0105800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind18    0.012130 1.257e-09  0.056030  0.0048280 0.0297400  0.0093680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind19    0.029900 0.000e+00  0.034520  0.0090720 0.0257200  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind20    0.017030 1.355e-09  0.130900  0.0000000 0.0000000  0.0170600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind21    0.000000 0.000e+00  0.154900  0.0091070 0.0238800  0.0055160</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind22    0.000000 1.012e-10  0.057140  0.0000000 0.0100800  0.0027640</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind23    0.003821 4.126e-10  0.066210  0.0063600 0.0059830  0.0053850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind24    0.011240 3.095e-10  0.096990  0.0070060 0.0037290  0.0071980</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind25    0.026880 1.355e-09  0.000000  0.0000000 0.0238800  0.0133800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind26    0.000000 1.024e-09  0.053320  0.0066380 0.0048110  0.0040480</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind27    0.031140 3.540e-10  0.124600  0.0052360 0.0000000  0.0071790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind28    0.005913 1.024e-09  0.040690  0.0098430 0.0116200  0.0053850</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind29    0.011670 5.676e-10  0.145400  0.0071370 0.0016350  0.0125200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind30    0.026880 3.742e-10  0.055210  0.0126400 0.0326300  0.0135400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind31    0.009329 1.069e-09  0.000000  0.0000000 0.0000000  0.0001245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind32    0.016900 5.357e-10  0.040690  0.0090720 0.0002091  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind33    0.031090 1.184e-09  0.035110  0.0209000 0.0032500  0.0073670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind34    0.017030 5.520e-10  0.115700  0.0037310 0.0002091  0.0024220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind35    0.000000 4.054e-10  0.079840  0.0103800 0.0175800  0.0056420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind36    0.016700 3.242e-10  0.099240  0.0252800 0.0000000  0.0166900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind37    0.000000 3.540e-10  0.029880  0.0255100 0.0238800  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind38    0.003015 0.000e+00  0.000000  0.0211300 0.0000000  0.0026670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind39    0.026600 5.357e-10  0.063250  0.0003883 0.0048110  0.0063630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind40    0.000000 1.069e-09  0.043870  0.0000000 0.0000000  0.0021760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind41    0.018880 3.095e-10  0.039200  0.0083690 0.0027650  0.0013950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind42    0.000000 3.129e-10  0.154900  0.0072320 0.0057230  0.0093680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind43    0.000000 1.476e-09  0.015730  0.0098430 0.0057230  0.0056420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind44    0.036280 0.000e+00  0.117400  0.0037310 0.0037290  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind45    0.011500 3.742e-10  0.000000  0.0000000 0.0275100  0.0054930</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind46    0.012130 1.271e-09  0.000000  0.0000000 0.0027650  0.0027640</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind47    0.011130 4.537e-10  0.009037  0.0083690 0.0238800  0.0042060</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind48    0.017030 1.012e-10  0.063250  0.0083690 0.0238800  0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind49    0.011670 9.952e-10  0.025040  0.0000000 0.0125900  0.0166900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind50    0.011130 1.451e-09  0.000000  0.0072320 0.0047640  0.0024220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       XL-VLDL-FC XL-VLDL-TG S-HDL-TG_%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind1   1.999e-03   0.000000      5.634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind2   0.000e+00   0.027850      5.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind3   3.885e-03   0.035390      6.147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind4   1.307e-03   0.064530      5.458</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind5   0.000e+00   0.013350      4.698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind6   1.219e-02   0.013350      5.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind7   2.406e-04   0.060490      6.232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind8   8.211e-03   0.077030      5.989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind9   3.181e-03   0.051270      5.203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind10  4.854e-03   0.007886      4.536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind11  0.000e+00   0.019440      6.729</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind12  8.459e-05   0.013350      5.634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind13  2.185e-03   0.027850      4.872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind14  3.304e-03   0.033980      4.088</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind15  0.000e+00   0.028430      4.088</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind16  1.480e-02   0.025190      4.012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind17  8.211e-03   0.096810      4.698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind18  1.027e-02   0.077000      6.232</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind19  4.582e-03   0.032900      4.039</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind20  5.759e-03   0.077000      5.255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind21  8.662e-03   0.019330      4.320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind22  8.662e-03   0.022610      4.220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind23  0.000e+00   0.027850      5.203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind24  4.854e-03   0.068410      4.872</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind25  8.459e-05   0.072930      4.890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind26  1.135e-02   0.035850      6.147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind27  0.000e+00   0.042050      4.088</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind28  8.743e-03   0.000000      7.319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind29  1.150e-02   0.085890      6.271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind30  1.480e-02   0.030240      6.274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind31  1.073e-03   0.024380      3.910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind32  3.092e-03   0.028430      4.279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind33  3.181e-03   0.000000      6.271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind34  4.800e-03   0.000000      5.078</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind35  1.459e-02   0.027850      4.890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind36  2.633e-03   0.022610      5.906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind37  9.271e-05   0.035200      4.603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind38  1.135e-02   0.035850      5.456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind39  1.307e-03   0.014470      6.043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind40  1.942e-03   0.077030      4.385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind41  8.459e-05   0.077030      6.745</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind42  1.027e-02   0.085890      4.350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind43  0.000e+00   0.068410      4.768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind44  4.442e-03   0.032900      6.043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind45  1.054e-02   0.088740      5.906</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind46  2.406e-04   0.035200      3.933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind47  4.854e-03   0.032900      3.910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind48  3.517e-03   0.000000      4.890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind49  4.800e-03   0.022210      4.289</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ind50  1.999e-03   0.033980      4.698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $samples</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    sample_id high_pyruvate high_lactate low_glutamine__high_glutamate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13      ind1             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14      ind2             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15      ind3             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16      ind4             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17      ind5             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18      ind6             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19      ind7             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20      ind8             0            1                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21      ind9             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22     ind10             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23     ind11             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24     ind12             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25     ind13             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26     ind14             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27     ind15             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28     ind16             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29     ind17             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30     ind18             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31     ind19             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32     ind20             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33     ind21             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34     ind22             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35     ind23             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36     ind24             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37     ind25             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38     ind26             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39     ind27             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40     ind28             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41     ind29             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42     ind30             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43     ind31             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44     ind32             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45     ind33             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46     ind34             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47     ind35             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48     ind36             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49     ind37             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50     ind38             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51     ind39             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52     ind40             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53     ind41             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54     ind42             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55     ind43             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56     ind44             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57     ind45             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58     ind46             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59     ind47             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60     ind48             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61     ind49             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62     ind50             0            0                             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    plasma_sample</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62             0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $features</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     feature_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   XXL-VLDL-P</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   XXL-VLDL-L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  XXL-VLDL-PL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   XXL-VLDL-C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  XXL-VLDL-CE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  XXL-VLDL-FC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  XXL-VLDL-TG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    XL-VLDL-P</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    XL-VLDL-L</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  XL-VLDL-PL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   XL-VLDL-C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  XL-VLDL-CE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  XL-VLDL-FC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  XL-VLDL-TG</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  S-HDL-TG_%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
