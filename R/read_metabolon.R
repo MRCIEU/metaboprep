@@ -10,20 +10,21 @@
 #' @examples
 #' # version 1 data format
 #' filepath1 <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
-#' read_metabolon(filepath1, sheet = 2)
+#' m <- read_metabolon(filepath1, sheet = 2)
 #' 
 #' # version 2 data format
 #' filepath2 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
-#' read_metabolon(filepath2, sheet = 'OrigScale')
+#' m <- read_metabolon(filepath2, sheet = 'OrigScale')
+#'
 #' 
 #' # version 3 data format
 #' filepath3 <- system.file("extdata", "metabolon_v3_example.xlsx", package = "metaboprep")
-#' read_metabolon(filepath3, 
-#'                sheet = 'Batch-normalized Data', 
-#'                feature_sheet = 'Chemical Annotation', 
-#'                feature_id_col = 'CHEM_ID', 
-#'                sample_sheet = 'Sample Meta Data', 
-#'                sample_id_col = 'PARENT_SAMPLE_NAME')
+#' m <- read_metabolon(filepath3, 
+#'                     sheet = 'Batch-normalized Data', 
+#'                     feature_sheet = 'Chemical Annotation', 
+#'                     feature_id_col = 'CHEM_ID', 
+#'                     sample_sheet = 'Sample Meta Data', 
+#'                     sample_id_col = 'PARENT_SAMPLE_NAME')
 #'
 #' @importFrom readxl excel_sheets read_xlsx
 #' @export
