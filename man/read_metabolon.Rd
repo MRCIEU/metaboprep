@@ -4,12 +4,27 @@
 \alias{read_metabolon}
 \title{Read Metabolon Data}
 \usage{
-read_metabolon(filepath, sheet = NULL)
+read_metabolon(
+  filepath,
+  sheet = NULL,
+  feature_sheet = NULL,
+  feature_id_col = NULL,
+  sample_sheet = NULL,
+  sample_id_col = NULL
+)
 }
 \arguments{
 \item{filepath}{character, commercial Metabolon excel sheet with extension .xls or .xlsx}
 
 \item{sheet}{character or integer, the excel sheet name (or index) from which to read.}
+
+\item{feature_sheet}{character or integer, the excel sheet name (or index) from which to read the feature data.}
+
+\item{feature_id_col}{character, the excel column containing the feature_id mapping to the data.}
+
+\item{sample_sheet}{character or integer, the excel sheet name (or index) from which to read the sample data.}
+
+\item{sample_id_col}{character, the excel column containing the sample_id mapping to the data.}
 }
 \value{
 list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
@@ -25,5 +40,14 @@ read_metabolon(filepath1, sheet = 2)
 # version 2 data format
 filepath2 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
 read_metabolon(filepath2, sheet = 'OrigScale')
+
+# version 3 data format
+filepath3 <- system.file("extdata", "metabolon_v3_example.xlsx", package = "metaboprep")
+read_metabolon(filepath3, 
+               sheet = 'Batch-normalized Data', 
+               feature_sheet = 'Chemical Annotation', 
+               feature_id_col = 'CHEM_ID', 
+               sample_sheet = 'Sample Meta Data', 
+               sample_id_col = 'PARENT_SAMPLE_NAME')
 
 }

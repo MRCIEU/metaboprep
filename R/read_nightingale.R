@@ -49,7 +49,7 @@ read_nightingale <- function(filepath) {
     samples[]         <- lapply(samples, function(x) as.integer(!is.na(x)))
     names(samples)    <- unlist(raw[(head_inds[1L, "row"] - 1), 1:(head_inds[1L, "col"] - 1)])
     samples$sample_id <- raw_sample_ids
-    names(samples)    <- clean_names(samples)
+    names(samples)    <- clean_names(names(samples))
     samples           <- samples[, c("sample_id", setdiff(names(samples), "sample_id"))]
 
     # features
