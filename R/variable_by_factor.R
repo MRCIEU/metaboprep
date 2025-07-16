@@ -32,6 +32,7 @@ variable_by_factor = function( dep , indep ,
   m <- CI_L <- CI_H <- NULL
 
   wdat = data.frame(dep = dep, indep = as.factor(indep))
+  
   ####
   if(orderfactor == 1){
     ord <- aggregate(dep ~ indep, data = wdat, FUN = function(x) {
@@ -46,6 +47,9 @@ variable_by_factor = function( dep , indep ,
     
     # order factor
     wdat$indep <- factor(wdat$indep, levels = ord_expanded$indep, ordered = TRUE)
+    
+    #Error with ctrfn function from stats package when indep is a factor with > 95 levels, add in line to prevent this error
+    contrasts(wdat$indep) <- contr.treatment(length(levels(wdat$indep)))
   }
 
   ### FIT to linear MODEL
