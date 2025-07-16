@@ -8,17 +8,17 @@
 #' @returns list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
 #'
 #' @examples
-#' # version 1 data format
-#' filepath1 <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
+#' # version 1.1 data format
+#' filepath1 <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
 #' m <- read_metabolon(filepath1, sheet = 2)
 #' 
-#' # version 2 data format
-#' filepath2 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
+#' # version 1.2 data format (different column names)
+#' filepath2 <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
 #' m <- read_metabolon(filepath2, sheet = 'OrigScale')
 #'
 #' 
-#' # version 3 data format
-#' filepath3 <- system.file("extdata", "metabolon_v3_example.xlsx", package = "metaboprep")
+#' # version 2 data format
+#' filepath3 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
 #' m <- read_metabolon(filepath3, 
 #'                     sheet = 'Batch-normalized Data', 
 #'                     feature_sheet = 'Chemical Annotation', 
@@ -32,15 +32,15 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
 
   # testing ====
   if (FALSE) {
-    #filepath <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
-    filepath <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
+    #filepath <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
+    filepath <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
     sheet = 'OrigScale'
     feature_sheet = NULL
     feature_id_col = NULL
     sample_sheet = NULL
     sample_id_col = NULL
     
-    # filepath <- system.file("extdata", "metabolon_v3_example.xlsx", package = "metaboprep")
+    # filepath <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
     # sheet = 'Batch-normalized Data'
     # feature_sheet = 'Chemical Annotation'
     # feature_id_col = 'CHEM_ID'

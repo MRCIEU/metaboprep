@@ -21,7 +21,7 @@ Metabolon data is...
 library(metaboprep)
 
 # example file
-filepath <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
+filepath <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
 
 # import
 dat <- read_metabolon(filepath, sheet = 'OrigScale')

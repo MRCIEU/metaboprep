@@ -33,21 +33,22 @@ list,  list(data = matrix, samples = samples data.frame, features = features dat
 Read Metabolon Data
 }
 \examples{
-# version 1 data format
-filepath1 <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
-read_metabolon(filepath1, sheet = 2)
+# version 1.1 data format
+filepath1 <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
+m <- read_metabolon(filepath1, sheet = 2)
+
+# version 1.2 data format (different column names)
+filepath2 <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
+m <- read_metabolon(filepath2, sheet = 'OrigScale')
+
 
 # version 2 data format
-filepath2 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
-read_metabolon(filepath2, sheet = 'OrigScale')
-
-# version 3 data format
-filepath3 <- system.file("extdata", "metabolon_v3_example.xlsx", package = "metaboprep")
-read_metabolon(filepath3, 
-               sheet = 'Batch-normalized Data', 
-               feature_sheet = 'Chemical Annotation', 
-               feature_id_col = 'CHEM_ID', 
-               sample_sheet = 'Sample Meta Data', 
-               sample_id_col = 'PARENT_SAMPLE_NAME')
+filepath3 <- system.file("extdata", "metabolon_v2_example.xlsx", package = "metaboprep")
+m <- read_metabolon(filepath3, 
+                    sheet = 'Batch-normalized Data', 
+                    feature_sheet = 'Chemical Annotation', 
+                    feature_id_col = 'CHEM_ID', 
+                    sample_sheet = 'Sample Meta Data', 
+                    sample_id_col = 'PARENT_SAMPLE_NAME')
 
 }

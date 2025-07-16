@@ -18,10 +18,10 @@ Read Nightingale Data (format 1)
 \examples{
 # version 1 data format
 filepath1 <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep")
-read_nightingale(filepath1)
+m <- read_nightingale(filepath1)
 
 # version 2 data format
 filepath2 <- system.file("extdata", "nightingale_v2_example.xlsx", package = "metaboprep")
-read_nightingale(filepath2)
+m <- read_nightingale(filepath2)
 
 }
