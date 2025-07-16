@@ -100,22 +100,22 @@
 <p>Create a <code>Metaboprep</code> object as described in the <a href="index.html">Getting Started</a> vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
-<span><span class="va">dat</span>       <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
+<span><span class="va">dat</span>       <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
 <span><span class="va">m</span>         <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, samples <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span>, features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">)</span></span>
 <span><span class="va">m</span>         <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>metaboprep <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[8ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[9ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[905ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[941ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[31ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[32ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[17ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[18ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[18m</span>…</span></span>
@@ -136,10 +136,10 @@
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[879ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[966ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[28ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[26ms]</span></span></span>
 <span><span class="co">#&gt; </span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -159,20 +159,20 @@
 <span>  <span class="va">parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">path</span>, <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">parts</span>, <span class="fl">4</span><span class="op">)</span>, collapse <span class="op">=</span> <span class="va">.Platform</span><span class="op">$</span><span class="va">file.sep</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "output/metaboprep_export_2025_07_15/input/config.yml"         </span></span>
-<span><span class="co">#&gt;  [2] "output/metaboprep_export_2025_07_15/input/data.tsv"           </span></span>
-<span><span class="co">#&gt;  [3] "output/metaboprep_export_2025_07_15/input/feature_summary.tsv"</span></span>
-<span><span class="co">#&gt;  [4] "output/metaboprep_export_2025_07_15/input/features.tsv"       </span></span>
-<span><span class="co">#&gt;  [5] "output/metaboprep_export_2025_07_15/input/sample_summary.tsv" </span></span>
-<span><span class="co">#&gt;  [6] "output/metaboprep_export_2025_07_15/input/samples.tsv"        </span></span>
-<span><span class="co">#&gt;  [7] "output/metaboprep_export_2025_07_15/qc/config.yml"            </span></span>
-<span><span class="co">#&gt;  [8] "output/metaboprep_export_2025_07_15/qc/data.tsv"              </span></span>
-<span><span class="co">#&gt;  [9] "output/metaboprep_export_2025_07_15/qc/feature_summary.tsv"   </span></span>
-<span><span class="co">#&gt; [10] "output/metaboprep_export_2025_07_15/qc/feature_tree.RDS"      </span></span>
-<span><span class="co">#&gt; [11] "output/metaboprep_export_2025_07_15/qc/features.tsv"          </span></span>
-<span><span class="co">#&gt; [12] "output/metaboprep_export_2025_07_15/qc/sample_summary.tsv"    </span></span>
-<span><span class="co">#&gt; [13] "output/metaboprep_export_2025_07_15/qc/samples.tsv"           </span></span>
-<span><span class="co">#&gt; [14] "output/metaboprep_export_2025_07_15/qc/var_exp.tsv"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "output/metaboprep_export_2025_07_16/input/config.yml"         </span></span>
+<span><span class="co">#&gt;  [2] "output/metaboprep_export_2025_07_16/input/data.tsv"           </span></span>
+<span><span class="co">#&gt;  [3] "output/metaboprep_export_2025_07_16/input/feature_summary.tsv"</span></span>
+<span><span class="co">#&gt;  [4] "output/metaboprep_export_2025_07_16/input/features.tsv"       </span></span>
+<span><span class="co">#&gt;  [5] "output/metaboprep_export_2025_07_16/input/sample_summary.tsv" </span></span>
+<span><span class="co">#&gt;  [6] "output/metaboprep_export_2025_07_16/input/samples.tsv"        </span></span>
+<span><span class="co">#&gt;  [7] "output/metaboprep_export_2025_07_16/qc/config.yml"            </span></span>
+<span><span class="co">#&gt;  [8] "output/metaboprep_export_2025_07_16/qc/data.tsv"              </span></span>
+<span><span class="co">#&gt;  [9] "output/metaboprep_export_2025_07_16/qc/feature_summary.tsv"   </span></span>
+<span><span class="co">#&gt; [10] "output/metaboprep_export_2025_07_16/qc/feature_tree.RDS"      </span></span>
+<span><span class="co">#&gt; [11] "output/metaboprep_export_2025_07_16/qc/features.tsv"          </span></span>
+<span><span class="co">#&gt; [12] "output/metaboprep_export_2025_07_16/qc/sample_summary.tsv"    </span></span>
+<span><span class="co">#&gt; [13] "output/metaboprep_export_2025_07_16/qc/samples.tsv"           </span></span>
+<span><span class="co">#&gt; [14] "output/metaboprep_export_2025_07_16/qc/var_exp.tsv"</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

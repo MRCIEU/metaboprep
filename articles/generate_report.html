@@ -97,7 +97,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import data </span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create the object</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, samples <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span>, features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">)</span></span>
@@ -118,10 +118,10 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[8ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[9ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[935ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[949ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[32ms]</span></span></span>
@@ -130,7 +130,7 @@
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[18ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[19m</span>…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[18m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
@@ -142,16 +142,16 @@
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[19ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[18ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[900ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[923ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[29ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[27ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="co"># render report</span></span>
@@ -163,7 +163,7 @@
 <span>                template        <span class="op">=</span> <span class="st">"qc_report"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; processing file: skeleton.Rmd</span></span>
 <span><span class="co">#&gt; output file: skeleton.knit.md</span></span>
-<span><span class="co">#&gt; /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS skeleton.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/metaboprep/metaboprep/vignettes/myproject_metaboprep_qc_report.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 2 --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --number-sections --variable theme=bootstrap --css styles.css --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/RtmpAj4dm5/rmarkdown-str1fc85e178ecf.html</span></span>
+<span><span class="co">#&gt; /opt/hostedtoolcache/pandoc/3.1.11/x64/pandoc +RTS -K512m -RTS skeleton.knit.md --to html4 --from markdown+autolink_bare_uris+tex_math_single_backslash --output /home/runner/work/metaboprep/metaboprep/vignettes/myproject_metaboprep_qc_report.html --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/pagebreak.lua --lua-filter /home/runner/work/_temp/Library/rmarkdown/rmarkdown/lua/latex-div.lua --embed-resources --standalone --variable bs3=TRUE --section-divs --table-of-contents --toc-depth 2 --template /home/runner/work/_temp/Library/rmarkdown/rmd/h/default.html --no-highlight --variable highlightjs=1 --number-sections --variable theme=bootstrap --css styles.css --mathjax --variable 'mathjax-url=https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML' --include-in-header /tmp/RtmptpnLPb/rmarkdown-str20163880b46b.html</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Output created: myproject_metaboprep_qc_report.html</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] TRUE</span></span></code></pre>
