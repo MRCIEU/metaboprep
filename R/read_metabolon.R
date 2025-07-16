@@ -64,6 +64,12 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
     choice <- sheet
   }
   
+  # V3 checks ====
+  # if V3 version ensure user has provided features and sample sheets along with id cols so function runs
+  if (any(sheets %in% c("Chemical Annotation", "Sample Meta Data")) &&
+      any(sapply(list(feature_sheet, feature_id_col, sample_sheet, sample_id_col), is.null))) {
+    stop("Please provide feature_sheet, feature_id_col, sample_sheet and sample_id_col to the function options", call.=FALSE)
+  }
   
   # determine if version 3 (multi-tab) or not
   if (!is.null(feature_sheet) || !is.null(sample_sheet)) {
