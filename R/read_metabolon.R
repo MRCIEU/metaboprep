@@ -104,6 +104,10 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
     stopifnot("sample_id_col provided but not found in sample sheet" = sample_id_col %in% names(samples))
     names(samples)[names(samples) == sample_id_col] <- "sample_id"
     
+    #Make both columns character class
+    features$feature_id <- as.character(features$feature_id)
+    samples$sample_id <- as.character(samples$sample_id)
+    
     
   } else {
   
@@ -168,8 +172,8 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
 
   
   # checks
-  stopifnot("Sample ids do not exactly match row names of data" = identical(as.character(samples$sample_id), as.character(rownames(data))))
-  stopifnot("Feature ids do not exactly match row names of data" = identical(as.character(features$feature_id), as.character(colnames(data))))
+  stopifnot("Sample ids do not exactly match row names of data" = identical(samples$sample_id, rownames(data)))
+  stopifnot("Feature ids do not exactly match row names of data" = identical(features$feature_id, colnames(data)))
   
   
   # return ====
