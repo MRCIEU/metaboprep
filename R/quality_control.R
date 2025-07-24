@@ -225,8 +225,9 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   
   # perform exclusion on top PCs to ID outliers
   if (!is.null(pc_outlier_sd) && !is.na(pc_outlier_sd)) {
-    excl_samps <- c()
-    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s)")
+    excl_samps <- "..."
+    num_pcs    <- "..."
+    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s) over PCs 1:{num_pcs}")
     metaboprep  <- summarise(metaboprep,  
                              source_layer     = "qc", 
                              outlier_udist    = outlier_udist, 
@@ -236,8 +237,14 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
                              features_exclude = exclude_but_keep_feats,
                              output           = "object")
 
+
+    num_pcs    <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
     pca_data   <- metaboprep@sample_summary[sample_ids, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"]
-    outliers   <- outlier_detection(pca_data, nsd = pc_outlier_sd, meansd = TRUE, by = "column")
+    
+    print(num_pcs)
+    print(dim(pca_data))
+    
+    outliers   <- outlier_detection(pca_data[, 1:num_pcs], nsd = pc_outlier_sd, meansd = TRUE, by = "column")
     excl_samps <- names(which(apply(outliers, 1, function(x) sum(x) > 0)))
     cli::cli_progress_update()
     metaboprep@exclusions$samples$user_defined_sample_pca_outlier <- excl_samps

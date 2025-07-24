@@ -34,7 +34,8 @@ Suggests:
     knitr,
     MASS,
     dendextend,
-    kableExtra
+    kableExtra,
+    testthat (>= 3.0.0)
 Remotes:
     hredestig/pcaMethods
 URL: https://mrcieu.github.io/metaboprep/
@@ -65,3 +66,4 @@ Collate:
     'variable_by_factor.R'
     'zzz.R'
 VignetteBuilder: knitr
+Config/testthat/edition: 3

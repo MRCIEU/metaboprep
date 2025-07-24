@@ -49,7 +49,7 @@ variable_by_factor = function( dep , indep ,
     wdat$indep <- factor(wdat$indep, levels = ord_expanded$indep, ordered = TRUE)
     
     #Error with ctrfn function from stats package when indep is a factor with > 95 levels, add in line to prevent this error
-    contrasts(wdat$indep) <- contr.treatment(length(levels(wdat$indep)))
+    stats::contrasts(wdat$indep) <- stats::contr.treatment(length(levels(wdat$indep)))
   }
 
   ### FIT to linear MODEL
