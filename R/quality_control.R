@@ -125,7 +125,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   featuremis <- missingness(dat, by="column")
   excl_feats <- featuremis[featuremis$missingness >= 0.8, "feature_id"]
   cli::cli_progress_update()
-  metaboprep@exclusions$features$extreme_feature_missingness <- unique(metaboprep@exclusions$features$extreme_feature_missingness, excl_feats)
+  metaboprep@exclusions$features$extreme_feature_missingness <- excl_feats
   feature_ids <- setdiff(feature_ids, excl_feats)
   
 
@@ -240,10 +240,6 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
 
     num_pcs    <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
     pca_data   <- metaboprep@sample_summary[sample_ids, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"]
-    
-    print(num_pcs)
-    print(dim(pca_data))
-    
     outliers   <- outlier_detection(pca_data[, 1:num_pcs], nsd = pc_outlier_sd, meansd = TRUE, by = "column")
     excl_samps <- names(which(apply(outliers, 1, function(x) sum(x) > 0)))
     cli::cli_progress_update()
