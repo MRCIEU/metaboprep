@@ -15,6 +15,7 @@ quality_control(
   winsorize_quantile = 1,
   tree_cut_height = 0.5,
   pc_outlier_sd = 5,
+  max_num_pcs = 10,
   sample_ids = NULL,
   feature_ids = NULL,
   features_exclude_but_keep = NULL
@@ -40,6 +41,8 @@ quality_control(
 \item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
 
 \item{pc_outlier_sd}{numeric, number of PCA SD after which a sample would be excluded}
+
+\item{max_num_pcs}{numeric, the maximum number of PCs to use (look in) when filtering samples on PC outlier SD, default=10, set to NULL to use all informative PCs from the Scree analysis}
 
 \item{sample_ids}{character, vector of sample ids to work with}
 

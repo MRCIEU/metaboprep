@@ -17,6 +17,7 @@
 #' @param outlier_treatment character, how to handle outlier data values - options 'leave_be', 'turn_NA', or 'winsorize'
 #' @param winsorize_quantile numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'
 #' @param pc_outlier_sd numeric, number of PCA SD after which a sample would be excluded
+#' @param max_num_pcs numeric, the maximum number of PCs to use (look in) when filtering samples on PC outlier SD, default=10, set to NULL to use all informative PCs from the Scree analysis
 #' @param features_exclude_but_keep character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same
 #' 
 #' @include class_metaboprep.R
@@ -24,9 +25,9 @@
 #' @import cli
 #' 
 #' @export
-quality_control <- new_generic("quality_control", c("metaboprep"), function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, pc_outlier_sd =5, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL) { S7_dispatch() })
+quality_control <- new_generic("quality_control", c("metaboprep"), function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, pc_outlier_sd =5, max_num_pcs = 10, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL) { S7_dispatch() })
 #' @name quality_control
-method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, pc_outlier_sd =5, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL){
+method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, pc_outlier_sd =5, max_num_pcs = 10, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL){
 
   cli::cli_h1("Starting Metabolite QC Process")
   
@@ -37,7 +38,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   outlier_treatment <- match.arg(outlier_treatment, choices = c("leave_be", "turn_NA", "winsorize"))
   stopifnot("sample_ids must all be found in the data" = is.null(sample_ids) || all(sample_ids %in% metaboprep@samples[["sample_id"]]))
   stopifnot("feature_ids must all be found in the data" = is.null(feature_ids) || all(feature_ids %in% metaboprep@features[["feature_id"]]))  
-  stopifnot("`features_exclude_but_keep` must be a logical column in the features data or a vector of feature ids all present in the data" = is.null(features_exclude_but_keep) || (features_exclude_but_keep %in% names(metaboprep@features) && all(is.logical(metaboprep@features[[features_exclude_but_keep]]))) || all(features_exclude_but_keep %in% metaboprep@features[["feature_id"]]) )
+  stopifnot("`features_exclude_but_keep` must be a logical column in the features data or a vector of feature ids all present in the data" = is.null(features_exclude_but_keep) || (all(features_exclude_but_keep %in% names(metaboprep@features)) && all(is.logical(metaboprep@features[[features_exclude_but_keep]]))) || all(features_exclude_but_keep %in% metaboprep@features[["feature_id"]]) )
   cli_progress_update()
   
 
@@ -227,7 +228,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
   if (!is.null(pc_outlier_sd) && !is.na(pc_outlier_sd)) {
     excl_samps <- "..."
     num_pcs    <- "..."
-    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s) over PCs 1:{num_pcs}")
+    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s) over PCs 1:{num_pcs} [max PCs set at {max_num_pcs}]")
     metaboprep  <- summarise(metaboprep,  
                              source_layer     = "qc", 
                              outlier_udist    = outlier_udist, 
@@ -237,8 +238,14 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
                              features_exclude = exclude_but_keep_feats,
                              output           = "object")
 
-
-    num_pcs    <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
+    if (is.null(max_num_pcs)) {
+      num_pcs <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
+    } else if (max_num_pcs > attr(metaboprep@sample_summary, "qc_num_pcs_scree")) {
+      warning("The stated max PCs to use in PCA outlier assessment is greater than the number of available informative PCs, using number of PCs from the Scree analysis instead")
+      num_pcs <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
+    } else {
+      num_pcs <- max_num_pcs
+    }
     pca_data   <- metaboprep@sample_summary[sample_ids, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"]
     outliers   <- outlier_detection(pca_data[, 1:num_pcs], nsd = pc_outlier_sd, meansd = TRUE, by = "column")
     excl_samps <- names(which(apply(outliers, 1, function(x) sum(x) > 0)))
