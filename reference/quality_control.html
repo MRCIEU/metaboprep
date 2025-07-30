@@ -96,6 +96,7 @@ Key principles:
 <span>  winsorize_quantile <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  tree_cut_height <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  pc_outlier_sd <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  max_num_pcs <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  sample_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  feature_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  features_exclude_but_keep <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -144,6 +145,10 @@ Key principles:
 
 <dt id="arg-pc-outlier-sd">pc_outlier_sd<a class="anchor" aria-label="anchor" href="#arg-pc-outlier-sd"></a></dt>
 <dd><p>numeric, number of PCA SD after which a sample would be excluded</p></dd>
+
+
+<dt id="arg-max-num-pcs">max_num_pcs<a class="anchor" aria-label="anchor" href="#arg-max-num-pcs"></a></dt>
+<dd><p>numeric, the maximum number of PCs to use (look in) when filtering samples on PC outlier SD, default=10, set to NULL to use all informative PCs from the Scree analysis</p></dd>
 
 
 <dt id="arg-sample-ids">sample_ids<a class="anchor" aria-label="anchor" href="#arg-sample-ids"></a></dt>
