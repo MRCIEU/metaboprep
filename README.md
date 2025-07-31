@@ -34,9 +34,9 @@ You can install the development version of metaboprep from
 pak::pak("MRCIEU/metaboprep")
 ```
 
-## Quality control pipeline
+## Cheatsheet
 
-![](man/figures/metaboprep_workflow.png)
+![](man/figures/cheatsheet.png)
 
 ## Example
 
@@ -46,11 +46,8 @@ This is a basic example which shows you how to load data and run the
 ``` r
 library(metaboprep)
 
-# the data
-data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
-
 # import data 
-dat <- read_metabolon(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
+dat <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
 
 # create the object
 m <- Metaboprep(data = dat$data, samples = dat$samples, features = dat$features)
@@ -71,8 +68,8 @@ m <- m |>
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters✔ Validating input parameters [4ms]
-#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [446ms]
-#> ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [11ms]
+#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [449ms]
+#> ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [8ms]
 #> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [8ms]
 #> ℹ Assessing for sample missingness at specified level of >=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of >=50% - excluding 0 sa…
@@ -80,7 +77,7 @@ m <- m |>
 #> ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
 #> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [419ms]
+#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [445ms]
 #> ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [10ms]
 
 # view 

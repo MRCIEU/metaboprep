@@ -39,8 +39,8 @@ You can install the development version of metaboprep from [GitHub](https://gith
 pak::pak("MRCIEU/metaboprep")
 ```
 
-## Quality control pipeline
-![](man/figures/metaboprep_workflow.png)
+## Cheatsheet
+![](man/figures/cheatsheet.png)
 
 
 ## Example
@@ -50,11 +50,8 @@ This is a basic example which shows you how to load data and run the `metaboprep
 ```{r example}
 library(metaboprep)
 
-# the data
-data_file <- system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep")
-
 # import data 
-dat <- read_metabolon(system.file("extdata", "metabolon_v1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
+dat <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
 
 # create the object
 m <- Metaboprep(data = dat$data, samples = dat$samples, features = dat$features)
