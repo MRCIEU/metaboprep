@@ -185,6 +185,7 @@ if (nrow(pcs) > 0 && sum(complete.cases(pcs[, 1:2])) >= 4) {
   pcs_complete <- pcs[complete.cases(pcs[, 1:2]), , drop = FALSE]
   
   # Perform clustering on complete rows
+  set.seed(123)
   pcs_complete$cluster_k <- as.factor(stats::kmeans(pcs_complete[, 1:2], 4)$cluster)
   
   # Initialize cluster_k as NA
@@ -228,6 +229,7 @@ if (nrow(pcs) > 0 && sum(complete.cases(pcs[, 1:2])) >= 4) {
   pcs_complete <- pcs[complete.cases(pcs[, 1:2]), , drop = FALSE]
 
   # Perform clustering on complete rows
+  set.seed(123)
   pcs_complete$cluster_k <- as.factor(stats::kmeans(pcs_complete[, 1:2], 4)$cluster)
 
   # Initialize cluster_k as NA
