@@ -16,13 +16,17 @@
 #' @export
 #'
 #' @examples
-#' cmat = matrix(1, 3, 3 )
-#' cmat[1,] = c(1, 0.5, 0.3)
-#' cmat[2,] = c(0.5, 1, 0.25)
-#' cmat[3,] = c(0.3, 0.25, 1)
-#' ## simulate some correlated data (multivariable random normal)
+#' ## simulate some correlated data
 #' set.seed(1110)
-#' ex_data = MASS::mvrnorm(n = 250, mu = c(5, 45, 25), Sigma = cmat )
+#' n <- 250
+#' mu <- c(5, 45, 25)
+#' cmat <- matrix(c(1, 0.5, 0.3,
+#'                  0.5, 1, 0.25,
+#'                  0.3, 0.25, 1), nrow = 3, byrow = TRUE)
+#' L <- chol(cmat)
+#' Z <- matrix(rnorm(n * 3), nrow = n)
+#' ex_data <- Z %*% L
+#' ex_data <- sweep(ex_data, 2, mu, "+")
 #' colnames(ex_data) = c("outcome","age","bmi")
 #' multivariate_anova(dep = ex_data[,1], indep_df = ex_data[, 2:3])
 #'
@@ -67,7 +71,7 @@ remove_perfect_correlation <- function(df) {
   diag(cor_mat) <- 0
   
   to_remove <- c()
-  while (any(abs(cor_mat) == 1)) {
+  while (any(abs(cor_mat) == 1, na.rm = TRUE)) {
     # find first pair perfectly correlated
     pos <- which(abs(cor_mat) == 1, arr.ind = TRUE)[1, ]
     # choose one variable to remove (e.g. second one)
