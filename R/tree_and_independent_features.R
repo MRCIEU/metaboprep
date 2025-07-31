@@ -16,6 +16,18 @@
 #'
 tree_and_independent_features = function(data, tree_cut_height = 0.5, features_exclude = NULL){
 
+  # testing
+  if (FALSE) {
+    tree_cut_height = 0.5
+    features_exclude = NULL
+    set.seed(123)
+    data <- matrix(rnorm(1000), nrow = 100, ncol = 10)
+    colnames(data) <- paste0("F", 1:10)
+    data[sample(length(data), 100)] <- NA
+    data <- cbind(data, F_dup = data[, "F2"] + rnorm(100, sd = 0.01))
+  }
+  
+  
   # remove excluded features
   if (!is.null(features_exclude)) {
     data <- data[, !colnames(data) %in% features_exclude]
@@ -44,30 +56,24 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5, features_e
   
   # restrict based on cut off
   k <- stats::cutree(stree, h = tree_cut_height)
-
-  
-  # restrict so as to keep the feature with the least missingness
   k_group <- table(k)
   
 
-  # strictly independent features
-  w     <- which(k_group == 1)
-  ind_k <- names( k_group[w] )
-  w     <- which(k %in% ind_k)
-  ind   <- names(k)[w]
-
+  # keep all single-feature clusters
+  ind_k <- names(k_group[k_group == 1])
+  ind   <- names(k)[k %in% ind_k]
   
-  # identify feature with least missingness in each group
-  N       <- apply(data, 2, function(x){ sum(!is.na(x)) })
-  w       <- which(k_group > 1) 
-  k_group <- names( k_group[w] )
   
-  ind2 <- sapply(k_group, function(x){
-    w   <- which(k %in% x); n = names( k[w] )
-    o   <- sort(N[n], decreasing = FALSE)
-    out <- names(o)[1]
-    return(out)
+  # clusters with >1 feature, pick one with highest variance explained
+  cluster_ids <- names(k_group[k_group > 1])
+  ind2 <- sapply(cluster_ids, function(cluster) {
+    members <- names(k)[k == as.integer(cluster)]
+    sub_cor <- cor_matrix[members, members]
+    cor_sums <- rowSums(abs(sub_cor), na.rm = TRUE)
+    best_feature <- names(which.max(cor_sums))
+    return(best_feature)
   })
+  
   independent_features <- paste( c(ind, ind2) )
 
 
