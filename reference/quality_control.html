@@ -95,6 +95,7 @@ Key principles:
 <span>  outlier_treatment <span class="op">=</span> <span class="st">"leave_be"</span>,</span>
 <span>  winsorize_quantile <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  tree_cut_height <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  feature_selection <span class="op">=</span> <span class="st">"max_var_exp"</span>,</span>
 <span>  pc_outlier_sd <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  max_num_pcs <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  sample_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -141,6 +142,10 @@ Key principles:
 
 <dt id="arg-tree-cut-height">tree_cut_height<a class="anchor" aria-label="anchor" href="#arg-tree-cut-height"></a></dt>
 <dd><p>numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.</p></dd>
+
+
+<dt id="arg-feature-selection">feature_selection<a class="anchor" aria-label="anchor" href="#arg-feature-selection"></a></dt>
+<dd><p>character, either 'max_var_exp' or 'least_missingness', how to select the independent feature within clusters</p></dd>
 
 
 <dt id="arg-pc-outlier-sd">pc_outlier_sd<a class="anchor" aria-label="anchor" href="#arg-pc-outlier-sd"></a></dt>
