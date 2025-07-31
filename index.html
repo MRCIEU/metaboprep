@@ -108,9 +108,9 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"MRCIEU/metaboprep"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="quality-control-pipeline">Quality control pipeline<a class="anchor" aria-label="anchor" href="#quality-control-pipeline"></a>
+<h2 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
 </h2>
-<p><img src="reference/figures/metaboprep_workflow.png"></p>
+<p><img src="reference/figures/cheatsheet.png"></p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -119,11 +119,8 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># the data</span></span>
-<span><span class="va">data_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># import data </span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create the object</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, samples <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span>, features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">)</span></span>
@@ -144,8 +141,8 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Starting Metabolite QC Process ──────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [4ms]</span></span>
-<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [446ms]</span></span>
-<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [11ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [449ms]</span></span>
+<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]</span></span>
 <span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [8ms]</span></span>
 <span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) [8ms]</span></span>
 <span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
@@ -153,7 +150,7 @@
 <span><span class="co">#&gt; ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]</span></span>
 <span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
-<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [419ms]</span></span>
+<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [445ms]</span></span>
 <span><span class="co">#&gt; ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [10ms]</span></span>
 <span></span>
 <span><span class="co"># view </span></span>
