@@ -32,7 +32,6 @@ Imports:
     reshape2
 Suggests: 
     knitr,
-    MASS,
     dendextend,
     kableExtra,
     remotes,
