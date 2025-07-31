@@ -7,7 +7,8 @@
 tree_and_independent_features(
   data,
   tree_cut_height = 0.5,
-  features_exclude = NULL
+  features_exclude = NULL,
+  feature_selection = "max_var_exp"
 )
 }
 \arguments{
@@ -16,13 +17,29 @@ tree_and_independent_features(
 \item{tree_cut_height}{the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.}
 
 \item{features_exclude}{character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data}
+
+\item{feature_selection}{character. Method for selecting a representative feature from each correlated feature cluster. 
+One of:
+\describe{
+  \item{\code{"max_var_exp"}}{(Default) Selects the feature with the highest sum of absolute Spearman correlations to other features in the cluster; 
+  effectively the feature explaining the most shared variance.}
+  \item{\code{"least_missingness"}}{Selects the feature with the fewest missing values within the cluster.}
+}}
 }
 \value{
-a list object of (1) an hclust object, (2) independent features, (3) a data frame of feature ids, k-cluster identifiers, and a binary identifier of independent features
+A list with the following components:
+\describe{
+  \item{data}{A `data.frame` with:
+    \itemize{
+      \item `feature_id`: Feature (column) names from the input matrix.
+      \item `k`: The cluster index assigned to each feature after tree cutting.
+      \item `independent_features`: Logical indicator of whether the feature was selected as an independent (representative) feature.
+    }
+  }
+  \item{tree}{A `hclust` object representing the hierarchical clustering of the features based on 1 - |Spearman's rho| distance.}
+}
 }
 \description{
 This function identifies independent features using Spearman's rho correlation distances, and a dendrogram
 tree cut step.
 }
-\keyword{features}
-\keyword{independent}

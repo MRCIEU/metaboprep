@@ -5,21 +5,36 @@
 #' @param data matrix, the metabolite data matrix. samples in row, metabolites in columns
 #' @param tree_cut_height the tree cut height. A value of 0.2 (1-Spearman's rho) is equivalent to saying that features with a rho >= 0.8 are NOT independent.
 #' @param features_exclude character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data
-#' 
-#' @keywords independent features
-#'
-#' @return a list object of (1) an hclust object, (2) independent features, (3) a data frame of feature ids, k-cluster identifiers, and a binary identifier of independent features
+#' @param feature_selection character. Method for selecting a representative feature from each correlated feature cluster. 
+#' One of:
+#' \describe{
+#'   \item{\code{"max_var_exp"}}{(Default) Selects the feature with the highest sum of absolute Spearman correlations to other features in the cluster; 
+#'   effectively the feature explaining the most shared variance.}
+#'   \item{\code{"least_missingness"}}{Selects the feature with the fewest missing values within the cluster.}
+#' }
+#' @return A list with the following components:
+#' \describe{
+#'   \item{data}{A `data.frame` with:
+#'     \itemize{
+#'       \item `feature_id`: Feature (column) names from the input matrix.
+#'       \item `k`: The cluster index assigned to each feature after tree cutting.
+#'       \item `independent_features`: Logical indicator of whether the feature was selected as an independent (representative) feature.
+#'     }
+#'   }
+#'   \item{tree}{A `hclust` object representing the hierarchical clustering of the features based on 1 - |Spearman's rho| distance.}
+#' }
 #' 
 #' @importFrom stats cor as.dist hclust cutree
 #' 
 #' @export
 #'
-tree_and_independent_features = function(data, tree_cut_height = 0.5, features_exclude = NULL){
+tree_and_independent_features = function(data, tree_cut_height = 0.5, features_exclude = NULL, feature_selection = "max_var_exp"){
 
   # testing
   if (FALSE) {
     tree_cut_height = 0.5
     features_exclude = NULL
+    feature_selection <- "least_missingness"
     set.seed(123)
     data <- matrix(rnorm(1000), nrow = 100, ncol = 10)
     colnames(data) <- paste0("F", 1:10)
@@ -27,6 +42,9 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5, features_e
     data <- cbind(data, F_dup = data[, "F2"] + rnorm(100, sd = 0.01))
   }
   
+  
+  # checks 
+  feature_selection <- match.arg(feature_selection, choices = c("max_var_exp", "least_missingness"))
   
   # remove excluded features
   if (!is.null(features_exclude)) {
@@ -64,15 +82,37 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5, features_e
   ind   <- names(k)[k %in% ind_k]
   
   
-  # clusters with >1 feature, pick one with highest variance explained
+  # pick 1 feature within the clusters of size > 1
   cluster_ids <- names(k_group[k_group > 1])
-  ind2 <- sapply(cluster_ids, function(cluster) {
-    members <- names(k)[k == as.integer(cluster)]
-    sub_cor <- cor_matrix[members, members]
-    cor_sums <- rowSums(abs(sub_cor), na.rm = TRUE)
-    best_feature <- names(which.max(cor_sums))
-    return(best_feature)
-  })
+  
+  if (feature_selection == "least_missingness") {
+    
+    N       <- apply(data, 2, function(x){ sum(!is.na(x)) })
+    ind2 <- sapply(cluster_ids, function(x){
+      w   <- which(k %in% x)
+      n   <- names( k[w] )
+      o   <- sort(N[n], decreasing = FALSE)
+      out <- names(o)[1]
+      return(out)
+    })
+    
+  } else if (feature_selection == "max_var_exp") {
+    
+    # clusters with >1 feature, pick one with highest variance explained
+    ind2 <- sapply(cluster_ids, function(cluster) {
+      members      <- names(k)[k == as.integer(cluster)]
+      sub_cor      <- cor_matrix[members, members]
+      cor_sums     <- rowSums(abs(sub_cor), na.rm = TRUE)
+      best_feature <- names(which.max(cor_sums))
+      return(best_feature)
+    })
+    
+  } else {
+    
+    stop("feature_selection parameter not recognised - (this shouldn't happen)")
+    
+  }
+
   
   independent_features <- paste( c(ind, ind2) )
 

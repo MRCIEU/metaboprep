@@ -14,6 +14,7 @@ quality_control(
   outlier_treatment = "leave_be",
   winsorize_quantile = 1,
   tree_cut_height = 0.5,
+  feature_selection = "max_var_exp",
   pc_outlier_sd = 5,
   max_num_pcs = 10,
   sample_ids = NULL,
@@ -39,6 +40,8 @@ quality_control(
 \item{winsorize_quantile}{numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'}
 
 \item{tree_cut_height}{numeric, the threshold for feature independence in hierarchical clustering. Default is 0.5.}
+
+\item{feature_selection}{character, either 'max_var_exp' or 'least_missingness', how to select the independent feature within clusters}
 
 \item{pc_outlier_sd}{numeric, number of PCA SD after which a sample would be excluded}
 

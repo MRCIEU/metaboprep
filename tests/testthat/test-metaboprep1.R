@@ -130,6 +130,7 @@ test_that("metaboprep output same as metaboprep1", {
                        outlier_udist       = as.numeric(params$outlier_udist), 
                        outlier_treatment   = params$outlier_treatment, 
                        tree_cut_height     = as.numeric(params$tree_cut_height),
+                       feature_selection   = "least_missingness",
                        pc_outlier_sd       = as.numeric(params$PC_outlier_SD), 
                        max_num_pcs = 6)
   
