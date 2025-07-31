@@ -30,7 +30,10 @@ multivariate_anova = function(dep, indep_df){
   ## define local variable
   batch.variable <- NULL
 
-  wdat = data.frame( cbind(indep_df, dep) )
+  ## remove colinear predictors
+  indep_df_clean <- remove_perfect_correlation(indep_df)
+  
+  wdat = data.frame( cbind(indep_df_clean, dep) )
   ## fit the model
   fit = lm(dep ~ . , data = wdat)
 
@@ -56,3 +59,21 @@ multivariate_anova = function(dep, indep_df){
   return(outtable)
 }
 
+
+remove_perfect_correlation <- function(df) {
+  numeric_df <- data.frame(lapply(df, as.numeric))
+  
+  cor_mat <- cor(numeric_df, use = "pairwise.complete.obs")
+  diag(cor_mat) <- 0
+  
+  to_remove <- c()
+  while (any(abs(cor_mat) == 1)) {
+    # find first pair perfectly correlated
+    pos <- which(abs(cor_mat) == 1, arr.ind = TRUE)[1, ]
+    # choose one variable to remove (e.g. second one)
+    to_remove <- c(to_remove, colnames(cor_mat)[pos[2]])
+    # remove variable from matrix
+    cor_mat <- cor_mat[-pos[2], -pos[2], drop = FALSE]
+  }
+  df[, !(colnames(df) %in% to_remove), drop = FALSE]
+}
