@@ -101,7 +101,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># example file</span></span>
-<span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nightingale_v1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
+<span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nightingale_v2_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_nightingale.html">read_nightingale</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span></span>
@@ -109,43 +109,18 @@
 <span><span class="co"># view structure</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ data    : num [1:50, 1:12] 3.85 NA 5.2 3.01 2.68 ...</span></span>
+<span><span class="co">#&gt;  $ data    : num [1:50, 1:15] 2.84e-10 3.86e-11 9.59e-11 2.21e-10 1.24e-10 ...</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
 <span><span class="co">#&gt;   .. ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
-<span><span class="co">#&gt;  $ samples :'data.frame':    50 obs. of  25 variables:</span></span>
-<span><span class="co">#&gt;   ..$ sample_id                      : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;   ..$ informed_sample_type           : chr [1:50] "Serum" "Serum" "Serum" "Serum" ...</span></span>
-<span><span class="co">#&gt;   ..$ sample_excluded                : chr [1:50] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ sample_notes                   : chr [1:50] NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;   ..$ edta_plasma                    : chr [1:50] "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ citrate_plasma                 : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ low_ethanol                    : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ medium_ethanol                 : chr [1:50] "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ high_ethanol                   : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ isopropyl_alcohol              : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ 1methyl2pyrrolidone            : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ polysaccharides                : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ aminocaproic_acid              : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ low_glucose                    : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ high_lactate                   : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ high_pyruvate                  : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ low_glutamine__high_glutamate  : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ gluconolactone                 : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ low_protein                    : chr [1:50] "1" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ unexpected_amino_acid_signals  : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ unidentified_macromolecules    : chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ unidentified_small_molecule (a): chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ unidentified_small_molecule (b): chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ unidentified_small_molecule (c): chr [1:50] "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;   ..$ below_limit_of_quantification  : chr [1:50] "1" "1" "1" "1" ...</span></span>
-<span><span class="co">#&gt;  $ features:'data.frame':    12 obs. of  6 variables:</span></span>
-<span><span class="co">#&gt;   ..$ feature_id     : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
-<span><span class="co">#&gt;   ..$ csv_column_name: chr [1:12] "Total_C" "non_HDL_C" "Remnant_C" "VLDL_C" ...</span></span>
-<span><span class="co">#&gt;   ..$ biomarker_name : chr [1:12] "Total cholesterol" "Total cholesterol minus HDL-C" "Remnant cholesterol (non-HDL, non-LDL -cholesterol)" "VLDL cholesterol" ...</span></span>
-<span><span class="co">#&gt;   ..$ unit           : chr [1:12] "mmol/l" "mmol/l" "mmol/l" "mmol/l" ...</span></span>
-<span><span class="co">#&gt;   ..$ group          : chr [1:12] "Cholesterol" "Cholesterol" "Cholesterol" "Cholesterol" ...</span></span>
-<span><span class="co">#&gt;   ..$ subgroup       : chr [1:12] NA NA NA NA ...</span></span></code></pre></div>
+<span><span class="co">#&gt;   .. ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  $ samples :'data.frame':    50 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;   ..$ sample_id                    : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
+<span><span class="co">#&gt;   ..$ high_pyruvate                : int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ high_lactate                 : int [1:50] 0 0 0 0 0 0 0 1 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ low_glutamine__high_glutamate: int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ plasma_sample                : int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  $ features:'data.frame':    15 obs. of  1 variable:</span></span>
+<span><span class="co">#&gt;   ..$ feature_id: chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
@@ -160,44 +135,19 @@ object.</p>
 <span><span class="co"># view </span></span>
 <span><span class="va">m</span></span>
 <span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
-<span><span class="co">#&gt;  @ data           : num [1:50, 1:12, 1] 3.85 NA 5.2 3.01 2.68 ...</span></span>
+<span><span class="co">#&gt;  @ data           : num [1:50, 1:15, 1] 2.84e-10 3.86e-11 9.59e-11 2.21e-10 1.24e-10 ...</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr "input"</span></span>
-<span><span class="co">#&gt;  @ samples        :'data.frame': 50 obs. of  25 variables:</span></span>
-<span><span class="co">#&gt;  .. $ sample_id                      : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  .. $ informed_sample_type           : chr  "Serum" "Serum" "Serum" "Serum" ...</span></span>
-<span><span class="co">#&gt;  .. $ sample_excluded                : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ sample_notes                   : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ edta_plasma                    : chr  "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ citrate_plasma                 : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_ethanol                    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ medium_ethanol                 : chr  "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_ethanol                   : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ isopropyl_alcohol              : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ 1methyl2pyrrolidone            : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ polysaccharides                : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ aminocaproic_acid              : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_glucose                    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_lactate                   : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_pyruvate                  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_glutamine__high_glutamate  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ gluconolactone                 : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_protein                    : chr  "1" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unexpected_amino_acid_signals  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_macromolecules    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (a): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (b): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (c): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ below_limit_of_quantification  : chr  "1" "1" "1" "1" ...</span></span>
-<span><span class="co">#&gt;  @ features       :'data.frame': 12 obs. of  6 variables:</span></span>
-<span><span class="co">#&gt;  .. $ feature_id     : chr  "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
-<span><span class="co">#&gt;  .. $ csv_column_name: chr  "Total_C" "non_HDL_C" "Remnant_C" "VLDL_C" ...</span></span>
-<span><span class="co">#&gt;  .. $ biomarker_name : chr  "Total cholesterol" "Total cholesterol minus HDL-C" "Remnant cholesterol (non-HDL, non-LDL -cholesterol)" "VLDL cholesterol" ...</span></span>
-<span><span class="co">#&gt;  .. $ unit           : chr  "mmol/l" "mmol/l" "mmol/l" "mmol/l" ...</span></span>
-<span><span class="co">#&gt;  .. $ group          : chr  "Cholesterol" "Cholesterol" "Cholesterol" "Cholesterol" ...</span></span>
-<span><span class="co">#&gt;  .. $ subgroup       : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  @ samples        :'data.frame': 50 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  .. $ sample_id                    : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
+<span><span class="co">#&gt;  .. $ high_pyruvate                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ high_lactate                 : int  0 0 0 0 0 0 0 1 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ low_glutamine__high_glutamate: int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ plasma_sample                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  @ features       :'data.frame': 15 obs. of  1 variable:</span></span>
+<span><span class="co">#&gt;  .. $ feature_id: chr  "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
 <span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
 <span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
@@ -232,16 +182,16 @@ object.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[8ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[141ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[146ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[22ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[24ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 2 sample(s) <span style="color: #B2B2B2;">[16ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[19ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[16m</span>…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[18m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
@@ -253,7 +203,7 @@ object.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[17ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[19ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; Warning in `method(quality_control, metaboprep::Metaboprep)`(metaboprep =</span></span>
@@ -263,19 +213,19 @@ object.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[106ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[113ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[14ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[21ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span></span>
 <span><span class="co"># view </span></span>
 <span><span class="va">m</span></span>
 <span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
-<span><span class="co">#&gt;  @ data           : num [1:50, 1:12, 1:2] 3.85 NA 5.2 3.01 2.68 ...</span></span>
+<span><span class="co">#&gt;  @ data           : num [1:50, 1:15, 1:2] 2.84e-10 3.86e-11 9.59e-11 2.21e-10 1.24e-10 ...</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_sample_missingness")= num 0.5</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_feature_missingness")= num 0.3</span></span>
@@ -286,47 +236,22 @@ object.</p>
 <span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_pc_outlier_sd")= num 5</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_features_exclude_but_keep")= chr(0) </span></span>
-<span><span class="co">#&gt;  @ samples        :'data.frame': 50 obs. of  27 variables:</span></span>
-<span><span class="co">#&gt;  .. $ sample_id                      : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  .. $ informed_sample_type           : chr  "Serum" "Serum" "Serum" "Serum" ...</span></span>
-<span><span class="co">#&gt;  .. $ sample_excluded                : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ sample_notes                   : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ edta_plasma                    : chr  "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ citrate_plasma                 : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_ethanol                    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ medium_ethanol                 : chr  "0" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_ethanol                   : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ isopropyl_alcohol              : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ 1methyl2pyrrolidone            : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ polysaccharides                : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ aminocaproic_acid              : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_glucose                    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_lactate                   : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ high_pyruvate                  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_glutamine__high_glutamate  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ gluconolactone                 : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ low_protein                    : chr  "1" "1" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unexpected_amino_acid_signals  : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_macromolecules    : chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (a): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (b): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ unidentified_small_molecule (c): chr  "0" "0" "0" "0" ...</span></span>
-<span><span class="co">#&gt;  .. $ below_limit_of_quantification  : chr  "1" "1" "1" "1" ...</span></span>
-<span><span class="co">#&gt;  .. $ reason_excluded                : chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ excluded                       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  @ features       :'data.frame': 12 obs. of  8 variables:</span></span>
-<span><span class="co">#&gt;  .. $ feature_id     : chr  "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
-<span><span class="co">#&gt;  .. $ csv_column_name: chr  "Total_C" "non_HDL_C" "Remnant_C" "VLDL_C" ...</span></span>
-<span><span class="co">#&gt;  .. $ biomarker_name : chr  "Total cholesterol" "Total cholesterol minus HDL-C" "Remnant cholesterol (non-HDL, non-LDL -cholesterol)" "VLDL cholesterol" ...</span></span>
-<span><span class="co">#&gt;  .. $ unit           : chr  "mmol/l" "mmol/l" "mmol/l" "mmol/l" ...</span></span>
-<span><span class="co">#&gt;  .. $ group          : chr  "Cholesterol" "Cholesterol" "Cholesterol" "Cholesterol" ...</span></span>
-<span><span class="co">#&gt;  .. $ subgroup       : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  @ samples        :'data.frame': 50 obs. of  7 variables:</span></span>
+<span><span class="co">#&gt;  .. $ sample_id                    : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
+<span><span class="co">#&gt;  .. $ high_pyruvate                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ high_lactate                 : int  0 0 0 0 0 0 0 1 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ low_glutamine__high_glutamate: int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ plasma_sample                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ reason_excluded              : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  .. $ excluded                     : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
+<span><span class="co">#&gt;  @ features       :'data.frame': 15 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;  .. $ feature_id     : chr  "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  .. $ reason_excluded: chr  NA NA NA NA ...</span></span>
 <span><span class="co">#&gt;  .. $ excluded       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
 <span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
 <span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
 <span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr [1:2] "ind15" "ind35"</span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
 <span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
 <span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
 <span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
@@ -334,31 +259,31 @@ object.</p>
 <span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
 <span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
 <span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
-<span><span class="co">#&gt;  @ feature_summary: num [1:20, 1:12, 1:2] 0.12 0 44 3.8 1.06 ...</span></span>
+<span><span class="co">#&gt;  @ feature_summary: num [1:20, 1:15, 1:2] 0.00 0.00 5.00e+01 8.91e-11 8.15e-11 ...</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:20] "missingness" "outlier_count" "n" "mean" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_tree")=List of 7</span></span>
-<span><span class="co">#&gt;  ..  ..$ merge      : int [1:11, 1:2] -10 -7 -1 -2 -4 -6 3 -5 6 2 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ height     : num [1:11] 0.602 0.624 0.634 0.69 0.714 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ order      : int [1:12] 5 4 10 12 7 8 6 11 1 3 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ labels     : chr [1:12] "Total-C" "non-HDL-C" "Remnant-C" "VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ merge      : int [1:14, 1:2] -4 -2 -1 -7 -14 -13 -9 -8 -3 -6 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ height     : num [1:14] 0.646 0.675 0.699 0.731 0.758 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ order      : int [1:15] 8 10 3 9 2 11 6 14 1 5 ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ labels     : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
 <span><span class="co">#&gt;  ..  ..$ method     : chr "complete"</span></span>
 <span><span class="co">#&gt;  ..  ..$ call       : language stats::hclust(d = dist_matrix, method = "complete")</span></span>
 <span><span class="co">#&gt;  ..  ..$ dist.method: NULL</span></span>
 <span><span class="co">#&gt;  ..  ..- attr(*, "class")= chr "hclust"</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
-<span><span class="co">#&gt;  @ sample_summary : num [1:50, 1:20, 1:2] 0.0833 0.25 0.1667 0 0.0833 ...</span></span>
+<span><span class="co">#&gt;  @ sample_summary : num [1:50, 1:35, 1:2] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:20] "missingness" "tpa_total" "tpa_complete_features" "outlier_count" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:35] "missingness" "tpa_total" "tpa_complete_features" "outlier_count" ...</span></span>
 <span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_varexp")= Named num [1:12] 0.1904 0.1516 0.1185 0.1105 0.0973 ...</span></span>
-<span><span class="co">#&gt;  ..  ..- attr(*, "names")= chr [1:12] "PC1" "PC2" "PC3" "PC4" ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_scree")= num 2</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 6</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_varexp")= Named num [1:15] 0.1355 0.1149 0.1059 0.1025 0.0924 ...</span></span>
+<span><span class="co">#&gt;  ..  ..- attr(*, "names")= chr [1:15] "PC1" "PC2" "PC3" "PC4" ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_scree")= num 7</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 15</span></span>
 <span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
