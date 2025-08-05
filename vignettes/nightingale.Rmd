@@ -21,7 +21,7 @@ Nightingale data is...
 library(metaboprep)
 
 # example file
-filepath <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep")
+filepath <- system.file("extdata", "nightingale_v2_example.xlsx", package = "metaboprep")
 
 # import
 dat <- read_nightingale(filepath)

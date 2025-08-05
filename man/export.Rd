@@ -16,6 +16,7 @@ export(metaboprep, directory, format = "metaboprep", ...)
 \item{...}{
   Arguments passed on to \code{\link[=export_comets]{export_comets}}, \code{\link[=export_metaboanalyst]{export_metaboanalyst}}
   \describe{
+    \item{\code{layer}}{character, the name of the `metaboprep@data` layer (3rd array dimension) to write out}
     \item{\code{something}}{something}
   }}
 }

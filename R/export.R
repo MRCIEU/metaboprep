@@ -9,7 +9,7 @@
 #' - a serialized feature tree (if present),
 #' - and a `config.yml` file with additional metadata and processing parameters.
 #' 
-#' @inheritDotParams export_comets something
+#' @inheritDotParams export_comets layer
 #' @inheritDotParams export_metaboanalyst something
 #' @param metaboprep A `Metaboprep` object containing the data to be exported.
 #' @param directory character, string specifying the path to the directory where the data should be written.
@@ -169,15 +169,183 @@ method(export_metaboprep, list(Metaboprep, class_character)) <- function(metabop
 
 #' @title Export Data to `COMETS` format
 #' @inheritParams export
-#' @param something something
+#' @param layer character, the name of the `metaboprep@data` layer (3rd array dimension) to write out 
 #' @return the `Metaboprep` object, invisibly, for use in pipes
-#'
+#' @importFrom openxlsx addWorksheet writeData saveWorkbook
 #' @export
-export_comets <- new_generic("export_comets", c("metaboprep", "directory"), function(metaboprep, directory, something="foo") { S7_dispatch() })
+export_comets <- new_generic("export_comets", c("metaboprep", "directory"), function(metaboprep, directory, layer = NULL) { S7_dispatch() })
 #' @name export_comets
-method(export_comets, list(Metaboprep, class_character)) <- function(metaboprep, directory, something="foo") {
-  message("Exporting in export_comets format to ", directory)
-  # code
+method(export_comets, list(Metaboprep, class_character)) <- function(metaboprep, directory, layer = NULL) {
+
+  # testing 
+  if (FALSE) {
+    library(devtools)
+    load_all()
+    directory <- "~/Desktop/metaboprep_test"
+    data     <- read.csv(system.file("extdata", "dummy_data.csv",     package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+    samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "metaboprep"), header=T, row.names = 1)
+    features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
+    metaboprep <- Metaboprep(data = data, samples = samples, features = features)
+  }
+  
+  
+  # init ====
+  today  <- gsub("-", "_", Sys.Date())
+  fp     <- file.path(sub("/$", "", directory), paste0("metaboprep_comets_export_", today, ".xlsx"))
+  dir.create(dirname(fp), showWarnings = FALSE)
+  layers <- dimnames(metaboprep@data)[[3]]
+  if (is.null(layer)) {
+    if ("qc" %in% layers) {
+      layer <- "qc"
+    } else if ("input" %in% layers) {
+      layer <- "input"
+    } else {
+      warning("Neither 'qc' nor 'input' layer found in metaboprep@data.")
+      layer <- NULL
+    }
+  } else {
+    if (!(layer %in% layers)) {
+      stop(sprintf("Specified layer '%s' not found in metaboprep@data.", layer))
+    }
+  }
+  message(paste0("Exporting data layer `", layer, "` in comets format to ", fp))
+    
+  
+  # extract data ====
+  data     <- metaboprep@data[, , layer] |> as.data.frame()
+  data     <- cbind(SAMPLE_ID = rownames(data), data)
+  samples  <- metaboprep@samples
+  features <- metaboprep@features
+  names(samples)[names(samples) == "sample_id"] <- "SAMPLE_ID"
+  names(features)[names(features) == "feature_id"] <- "metabid"
+  name_cols <- grep("name", names(features), ignore.case = TRUE, value = TRUE)
+  if (length(name_cols) > 0) {
+    names(features)[names(features) == name_cols[1]] <- "metabolite_name"
+  } else {
+    features$metabolite_name <- features$metabid
+  }
+  
+  
+  # create other sheets ====
+  guess_vartype_and_accepted <- function(column) {
+    unique_vals <- sort(unique(column))
+    n_unique <- length(unique_vals)
+    
+    # Check if numeric
+    if (is.numeric(column)) {
+      # Check if continuous or categorical numeric
+      if (all(column %% 1 == 0)) {  # all integers
+        if (n_unique <= 10) {
+          # categorical integer values
+          vartype <- "categorical"
+          accepted <- paste(unique_vals, collapse = ", ")
+        } else {
+          # large number of unique integers -> treat as continuous
+          vartype <- "continuous"
+          if (min(column) >= 0) {
+            accepted <- "[0, Inf)"
+          } else {
+            accepted <- "(-Inf, Inf)"
+          }
+        }
+      } else {
+        # numeric with decimals = continuous
+        vartype <- "continuous"
+        if (min(column) >= 0) {
+          accepted <- "[0, Inf)"
+        } else {
+          accepted <- "(-Inf, Inf)"
+        }
+      }
+    } else if (is.factor(column) || is.character(column)) {
+      # categorical for factors and characters
+      vartype <- "categorical"
+      if (n_unique <= 10) {
+        accepted <- paste(unique_vals, collapse = ", ")
+      } else {
+        accepted <- NA_character_
+      }
+    } else {
+      vartype <- NA_character_
+      accepted <- NA_character_
+    }
+    
+    return(c(vartype, accepted))
+  }
+  
+  # Apply function to your sample dataframe
+  results <- t(sapply(samples, guess_vartype_and_accepted))
+  colnames(results) <- c("VARTYPE", "ACCEPTED_VALUES")
+  results["SAMPLE_ID", "VARTYPE"] <- "NA"
+  results["SAMPLE_ID", "ACCEPTED_VALUES"] <- NA_character_
+  
+  var_map <- data.frame(
+    VARREFERENCE = names(samples),
+    VARDEFINITION = paste("Definition for", names(samples)),
+    COHORTVARIABLE = names(samples),
+    VARTYPE = results[, "VARTYPE"],
+    ACCEPTED_VALUES = results[, "ACCEPTED_VALUES"],
+    COHORTNOTES = paste("Notes for", names(samples)),
+    stringsAsFactors = FALSE
+  )
+  var_map <- rbind(
+    data.frame(
+      VARREFERENCE = "metabolite_id",
+      VARDEFINITION = "Definition for metabid",
+      COHORTVARIABLE = "metabid",
+      VARTYPE = "NA",
+      ACCEPTED_VALUES = NA_character_,
+      COHORTNOTES = "Notes for metabid",
+      stringsAsFactors = FALSE
+    ),
+    var_map
+  )
+  var_map[which(var_map$VARREFERENCE == "SAMPLE_ID"), "VARREFERENCE"] <- "id"
+  
+  # model dataframe
+  exposure_vars <- setdiff(names(samples), "SAMPLE_ID")
+  exposure_reference <- rep(NA_character_, length(exposure_vars))
+  for (i in seq_along(exposure_vars)) {
+    col <- samples[[exposure_vars[i]]]
+    if (is.factor(col)) {
+      exposure_reference[i] <- as.character(levels(col)[1])  # first factor level
+    } else if (is.character(col)) {
+      exposure_reference[i] <- sort(unique(col))[1]  # first unique string value
+    }
+  }
+  models <- data.frame(
+    MODEL = paste(1:length(exposure_vars), exposure_vars),
+    OUTCOMES = "All metabolites",
+    EXPOSURE = exposure_vars,
+    EXPOSURE_REFERENCE = exposure_reference,
+    ADJUSTMENT = NA_character_,
+    STRATIFICATION = NA_character_,
+    WHERE = NA_character_,
+    TIME = NA_character_,
+    GROUP = NA_character_,
+    MODEL_TYPE = "corr (spearman)",
+    stringsAsFactors = FALSE
+  )
+  
+  # write to excel ====
+  wb <- openxlsx::createWorkbook()
+  
+  openxlsx::addWorksheet(wb, "Metabolites")
+  openxlsx::addWorksheet(wb, "SubjectMetabolites")
+  openxlsx::addWorksheet(wb, "SubjectData")
+  openxlsx::addWorksheet(wb, "VarMap")
+  openxlsx::addWorksheet(wb, "Models")
+  
+  openxlsx::writeData(wb, "Metabolites", features)
+  openxlsx::writeData(wb, "SubjectMetabolites", data)
+  openxlsx::writeData(wb, "SubjectData", samples)
+  openxlsx::writeData(wb, "VarMap", var_map)
+  openxlsx::writeData(wb, "Models", models)
+  
+  openxlsx::saveWorkbook(wb, fp, overwrite = TRUE)
+  
+  message("Export complete.")
+  invisible(fp)
 }
 
 
@@ -193,6 +361,11 @@ export_metaboanalyst <- new_generic("export_metaboanalyst", c("metaboprep", "dir
 method(export_metaboanalyst, list(Metaboprep, class_character)) <- function(metaboprep, directory, something="foo") {
   message("Exporting in export_metaboanalyst format to ", directory)
   # code
+
+  
+  
+  
+  
 }
 
 
