@@ -10,7 +10,7 @@
 #' - and a `config.yml` file with additional metadata and processing parameters.
 #' 
 #' @inheritDotParams export_comets layer
-#' @inheritDotParams export_metaboanalyst something
+#' @inheritDotParams export_metaboanalyst layer group_col
 #' @param metaboprep A `Metaboprep` object containing the data to be exported.
 #' @param directory character, string specifying the path to the directory where the data should be written.
 #' @param format character, string specifying the format of the exported data - one of "metaboprep", "comets", or "metaboanalyst".
@@ -352,19 +352,72 @@ method(export_comets, list(Metaboprep, class_character)) <- function(metaboprep,
 
 #' @title Export Data to `MetaboAnalyst` format
 #' @inheritParams export
-#' @param something something
+#' @param layer character, the name of the `metaboprep@data` layer (3rd array dimension) to write out 
+#' @param group_col character, the column name in the `metaboprep@samples` data identifying the group for one-factor analysis
 #' @return the `Metaboprep` object, invisibly, for use in pipes
 #'
 #' @export
-export_metaboanalyst <- new_generic("export_metaboanalyst", c("metaboprep", "directory"), function(metaboprep, directory, something="foo") { S7_dispatch() })
+export_metaboanalyst <- new_generic("export_metaboanalyst", c("metaboprep", "directory"), function(metaboprep, directory, layer = NULL, group_col = NULL) { S7_dispatch() })
 #' @name export_metaboanalyst
-method(export_metaboanalyst, list(Metaboprep, class_character)) <- function(metaboprep, directory, something="foo") {
+method(export_metaboanalyst, list(Metaboprep, class_character)) <- function(metaboprep, directory, layer = NULL, group_col = NULL) {
   message("Exporting in export_metaboanalyst format to ", directory)
   # code
 
+  if (FALSE) {
+    library(devtools)
+    load_all()
+    directory <- "~/Desktop/metaboprep_test"
+    data     <- read.csv(system.file("extdata", "dummy_data.csv",     package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
+    samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "metaboprep"), header=T, row.names = 1)
+    features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
+    metaboprep <- Metaboprep(data = data, samples = samples, features = features)
+    layer = NULL
+    group_col = "sex"
+  }
+  
+  # init ====
+  today  <- gsub("-", "_", Sys.Date())
+  fp     <- file.path(sub("/$", "", directory), paste0("metaboprep_metaboanalyst_export_", today, ".csv"))
+  dir.create(dirname(fp), showWarnings = FALSE)
+  layers <- dimnames(metaboprep@data)[[3]]
+  if (is.null(layer)) {
+    if ("qc" %in% layers) {
+      layer <- "qc"
+    } else if ("input" %in% layers) {
+      layer <- "input"
+    } else {
+      warning("Neither 'qc' nor 'input' layer found in metaboprep@data.")
+      layer <- NULL
+    }
+  } else {
+    if (!(layer %in% layers)) {
+      stop(sprintf("Specified layer '%s' not found in metaboprep@data.", layer))
+    }
+  }
+  message(paste0("Exporting data layer `", layer, "` in comets format to ", fp))
   
   
+  # grouping column 
+  if (is.null(group_col)) {
+    group_dat <- data.frame(`PatientID` = rownames(metaboprep@data[, , layer]),
+                            group = 0)
+  } else {
+    group_dat <- metaboprep@samples[, c("sample_id", group_col)]
+    colnames(group_dat) <- c("PatientID", group_col)
+  }
   
+  
+  # extract data ====
+  ddata <- metaboprep@data[, , layer] |> as.data.frame()
+  data <- cbind(`PatientID` = rownames(data), data)
+  
+  
+  # merge group info ====
+  data <- merge(group_dat, data, by = "PatientID")
+  
+  
+  # save ====
+  write.csv(data, fp, row.names = FALSE)
   
 }
 

@@ -3,6 +3,7 @@ library(testthat)
 test_that("metaboprep output same as metaboprep1", {
   # skip if offline 
   skip_if_offline()
+  skip_on_cran()
   
   # example data
   fp  <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
@@ -10,8 +11,10 @@ test_that("metaboprep output same as metaboprep1", {
   # get the previous version and attached 
   tmp_lib <- tempfile("mainlib_") # "~/Desktop/mainlib" #  
   dir.create(tmp_lib)
-  system2("git", c("clone", "https://github.com/MRCIEU/metaboprep.git", tmp_lib))
   cwd <- getwd()
+  
+  # clones the old repo ====
+  system2("git", c("clone", "https://github.com/MRCIEU/metaboprep.git", tmp_lib))
   setwd(tmp_lib)
   system2("git", c("checkout", "bbe1f85"))
   
@@ -91,11 +94,18 @@ test_that("metaboprep output same as metaboprep1", {
   new_script <- c(inject_lines, "", script_lines)
   writeLines(new_script, pipeline_script)
 
-  system2("Rscript", c("run_metaboprep_pipeline.R", file.path(getwd(), "parameter_file_updated.sh")))
+  res <- system2(file.path(R.home("bin"), "Rscript"), 
+                 c("run_metaboprep_pipeline.R", file.path(getwd(), "parameter_file_updated.sh")), 
+                 stdout = TRUE,
+                 stderr = TRUE)
+  
+  status <- attr(res, "status") # NULL if success, non-zero if failure
+  if (!is.null(status) && status != 0) {
+    stop(paste(c("Pipeline failed with status", status, res), collapse = "\n"))
+  }
   
   # get the metaboprep1 data
-  output_dir    <- "/Users/xx20081/Desktop/mainlib/inst/extdata"
-  release_dir   <- list.dirs(output_dir, full.names = TRUE, recursive = FALSE)
+  release_dir   <- list.dirs(dirname(new_fp), full.names = TRUE, recursive = FALSE)
   release_dir   <- release_dir[grepl("metaboprep_release_\\d{4}_\\d{2}_\\d{2}$", release_dir)]
   raw_files     <- list.files(file.path(release_dir, "raw_data"), full.names = TRUE)
   raw_data      <- read.csv(grep("OrigScale", raw_files, value=TRUE), sep="\t") 
@@ -144,5 +154,7 @@ test_that("metaboprep output same as metaboprep1", {
   new_feat_excl  <- unname(unlist(m@exclusions$features))
   expect_equal(sort(as.character(orig_feat_excl)), sort(as.character(new_feat_excl)))
   
-  
+  # clean
+  setwd(cwd)
+  unlink(tmp_lib, recursive = TRUE, force = TRUE)
 })

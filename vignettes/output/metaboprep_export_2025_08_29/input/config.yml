@@ -1,0 +1,17 @@
+layer_index: 1
+layer_name: input
+sample_missingness: ~
+feature_missingness: ~
+total_peak_area_sd: ~
+outlier_udist: ~
+outlier_treatment: ~
+winsorize_quantile: ~
+tree_cut_height: ~
+pc_outlier_sd: ~
+features_exclude_but_keep: ~
+total_n_features: 100
+total_n_samples: 100
+included_n_features: 100
+included_n_samples: 100
+excluded_features: .na.character
+excluded_samples: .na.character

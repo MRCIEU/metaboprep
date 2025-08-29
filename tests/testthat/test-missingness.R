@@ -51,7 +51,7 @@ test_that("missingness assessment works", {
   
   
   # run the QC ====
-  m <- quality_control(m, sample_missingness = samp_miss_thresh, feature_missingness = feat_miss_thresh)
+  m <- quality_control(m, sample_missingness = samp_miss_thresh, feature_missingness = feat_miss_thresh, max_num_pcs = 2)
   
   
   # check m@exclusions ====

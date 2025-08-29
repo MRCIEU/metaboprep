@@ -40,14 +40,14 @@ pak::pak("MRCIEU/metaboprep")
 ```
 
 ## Cheatsheet
-![](man/figures/cheatsheet.png)
+![Cheatsheet](man/figures/cheatsheet.png)
 
 
 ## Example
 
 This is a basic example which shows you how to load data and run the `metaboprep` quality control pipeline.
 
-```{r example}
+```{r example, fig.alt = "Dendrogram"}
 library(metaboprep)
 
 # import data 

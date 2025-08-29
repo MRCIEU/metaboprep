@@ -17,7 +17,7 @@ export(metaboprep, directory, format = "metaboprep", ...)
   Arguments passed on to \code{\link[=export_comets]{export_comets}}, \code{\link[=export_metaboanalyst]{export_metaboanalyst}}
   \describe{
     \item{\code{layer}}{character, the name of the `metaboprep@data` layer (3rd array dimension) to write out}
-    \item{\code{something}}{something}
+    \item{\code{group_col}}{character, the column name in the `metaboprep@samples` data identifying the group for one-factor analysis}
   }}
 }
 \value{

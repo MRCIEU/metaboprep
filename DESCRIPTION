@@ -59,6 +59,7 @@ Collate:
     'read_nightingale.R'
     'read_olink.R'
     'read_somalogic.R'
+    'run_metaboprep1.R'
     'sample_summary.R'
     'summarise.R'
     'total_peak_area.R'

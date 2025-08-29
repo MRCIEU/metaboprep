@@ -36,7 +36,10 @@ pak::pak("MRCIEU/metaboprep")
 
 ## Cheatsheet
 
-![](man/figures/cheatsheet.png)
+<figure>
+<img src="man/figures/cheatsheet.png" alt="Cheatsheet" />
+<figcaption aria-hidden="true">Cheatsheet</figcaption>
+</figure>
 
 ## Example
 
@@ -68,7 +71,7 @@ m <- m |>
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters✔ Validating input parameters [4ms]
-#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [449ms]
+#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [464ms]
 #> ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [8ms]
 #> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [8ms]
@@ -77,7 +80,7 @@ m <- m |>
 #> ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
 #> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [445ms]
+#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [452ms]
 #> ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [10ms]
 
 # view 
@@ -159,4 +162,4 @@ dend <- stats::as.dendrogram(tree)
 plot(dend)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="Dendrogram" width="100%" />

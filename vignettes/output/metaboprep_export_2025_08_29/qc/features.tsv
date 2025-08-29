@@ -1,0 +1,101 @@
+feature_id	metabolite_id	platform	pathway	kegg	group_hmdb	reason_excluded	excluded
+123	met1	neg	xenobiotic	K100	HMDB1	NA	FALSE
+124	met2	neg	xenobiotic	K100	HMDB2	NA	FALSE
+125	met3	neg	xenobiotic	K100	HMDB3	NA	FALSE
+126	met4	neg	lipid	K200	HMDB4	NA	FALSE
+127	met5	neg	lipid	K200	HMDB5	NA	FALSE
+128	met6	neg	lipid	K200	HMDB6	NA	FALSE
+129	met7	neg	lipid	K200	HMDB7	NA	FALSE
+130	met8	neg	lipid	K200	HMDB8	NA	FALSE
+131	met9	neg	lipid	K200	HMDB9	NA	FALSE
+132	met10	neg	lipid	K200	HMDB10	NA	FALSE
+133	met11	neg	lipid	K200	HMDB11	NA	FALSE
+134	met12	neg	lipid	K200	HMDB12	NA	FALSE
+135	met13	neg	lipid	K200	HMDB13	NA	FALSE
+136	met14	neg	lipid	K200	HMDB14	NA	FALSE
+137	met15	neg	lipid	K200	HMDB15	NA	FALSE
+138	met16	neg	lipid	K200	HMDB16	NA	FALSE
+139	met17	neg	lipid	K200	HMDB17	NA	FALSE
+140	met18	neg	lipid	K200	HMDB18	NA	FALSE
+141	met19	neg	lipid	K200	HMDB19	NA	FALSE
+142	met20	neg	lipid	K200	HMDB20	NA	FALSE
+143	met21	neg	lipid	K200	HMDB21	NA	FALSE
+144	met22	neg	lipid	K200	HMDB22	NA	FALSE
+145	met23	neg	lipid	K200	HMDB23	NA	FALSE
+146	met24	neg	lipid	K200	HMDB24	NA	FALSE
+147	met25	neg	lipid	K200	HMDB25	NA	FALSE
+148	met26	neg	lipid	K200	HMDB26	NA	FALSE
+149	met27	neg	lipid	K200	HMDB27	NA	FALSE
+150	met28	neg	lipid	K200	HMDB28	NA	FALSE
+151	met29	neg	lipid	K200	HMDB29	NA	FALSE
+152	met30	neg	lipid	K200	HMDB30	NA	FALSE
+153	met31	neg	lipid	K200	HMDB31	NA	FALSE
+154	met32	neg	lipid	K200	HMDB32	NA	FALSE
+155	met33	neg	lipid	K200	HMDB33	NA	FALSE
+156	met34	neg	lipid	K200	HMDB34	NA	FALSE
+157	met35	neg	lipid	K200	HMDB35	NA	FALSE
+158	met36	neg	lipid	K200	HMDB36	NA	FALSE
+159	met37	neg	lipid	K200	HMDB37	NA	FALSE
+160	met38	neg	lipid	K200	HMDB38	NA	FALSE
+161	met39	neg	lipid	K200	HMDB39	NA	FALSE
+162	met40	neg	lipid	K200	HMDB40	NA	FALSE
+163	met41	neg	lipid	K200	HMDB41	NA	FALSE
+164	met42	neg	lipid	K200	HMDB42	NA	FALSE
+165	met43	neg	lipid	K200	HMDB43	NA	FALSE
+166	met44	neg	lipid	K200	HMDB44	NA	FALSE
+167	met45	neg	lipid	K200	HMDB45	NA	FALSE
+168	met46	neg	lipid	K200	HMDB46	NA	FALSE
+169	met47	neg	lipid	K200	HMDB47	NA	FALSE
+170	met48	neg	lipid	K200	HMDB48	NA	FALSE
+171	met49	neg	amino acid	K300	HMDB49	NA	FALSE
+172	met50	pos	amino acid	K300	HMDB50	NA	FALSE
+173	met51	pos	amino acid	K300	HMDB51	NA	FALSE
+174	met52	pos	amino acid	K300	HMDB52	NA	FALSE
+175	met53	pos	amino acid	K300	HMDB53	NA	FALSE
+176	met54	pos	amino acid	K300	HMDB54	NA	FALSE
+177	met55	pos	amino acid	K300	HMDB55	NA	FALSE
+178	met56	pos	amino acid	K300	HMDB56	NA	FALSE
+179	met57	pos	amino acid	K300	HMDB57	NA	FALSE
+180	met58	pos	amino acid	K300	HMDB58	NA	FALSE
+181	met59	pos	amino acid	K300	HMDB59	NA	FALSE
+182	met60	pos	carbohydrate	K200	HMDB60	NA	FALSE
+183	met61	pos	carbohydrate	K200	HMDB61	NA	FALSE
+184	met62	pos	carbohydrate	K200	HMDB62	NA	FALSE
+185	met63	pos	carbohydrate	K200	HMDB63	NA	FALSE
+186	met64	pos	carbohydrate	K200	HMDB64	NA	FALSE
+187	met65	pos	carbohydrate	K200	HMDB65	NA	FALSE
+188	met66	pos	carbohydrate	K200	HMDB66	NA	FALSE
+189	met67	pos	carbohydrate	K200	HMDB67	NA	FALSE
+190	met68	pos	carbohydrate	K200	HMDB68	NA	FALSE
+191	met69	pos	carbohydrate	K200	HMDB69	NA	FALSE
+192	met70	pos	cofactors and vitamins	K400	HMDB70	NA	FALSE
+193	met71	pos	cofactors and vitamins	K400	HMDB71	NA	FALSE
+194	met72	pos	cofactors and vitamins	K400	HMDB72	NA	FALSE
+195	met73	pos	cofactors and vitamins	K400	HMDB73	NA	FALSE
+196	met74	pos	cofactors and vitamins	K400	HMDB74	NA	FALSE
+197	met75	pos	cofactors and vitamins	K400	HMDB75	NA	FALSE
+198	met76	pos	cofactors and vitamins	K400	HMDB76	NA	FALSE
+199	met77	pos	cofactors and vitamins	K400	HMDB77	NA	FALSE
+200	met78	pos	cofactors and vitamins	K400	HMDB78	NA	FALSE
+201	met79	pos	cofactors and vitamins	K400	HMDB79	NA	FALSE
+202	met80	pos	cofactors and vitamins	K400	HMDB80	NA	FALSE
+203	met81	pos	cofactors and vitamins	K400	HMDB81	NA	FALSE
+204	met82	pos	cofactors and vitamins	K400	HMDB82	NA	FALSE
+205	met83	pos	cofactors and vitamins	K400	HMDB83	NA	FALSE
+206	met84	pos	cofactors and vitamins	K400	HMDB84	NA	FALSE
+207	met85	pos	cofactors and vitamins	K400	HMDB85	NA	FALSE
+208	met86	pos	cofactors and vitamins	K400	HMDB86	NA	FALSE
+209	met87	pos	cofactors and vitamins	K400	HMDB87	NA	FALSE
+210	met88	pos	cofactors and vitamins	K400	HMDB88	NA	FALSE
+211	met89	pos	cofactors and vitamins	K400	HMDB89	NA	FALSE
+212	met90	pos	energy	K400	HMDB90	NA	FALSE
+213	met91	pos	energy	K400	HMDB91	NA	FALSE
+214	met92	pos	energy	K400	HMDB92	NA	FALSE
+215	met93	pos	energy	K400	HMDB93	NA	FALSE
+216	met94	pos	energy	K400	HMDB94	NA	FALSE
+217	met95	pos	energy	K400	HMDB95	NA	FALSE
+218	met96	pos	energy	K400	HMDB96	NA	FALSE
+219	met97	pos	energy	K400	HMDB97	NA	FALSE
+220	met98	pos	energy	K400	HMDB98	NA	FALSE
+221	met99	pos	energy	K400	HMDB99	NA	FALSE
+222	met100	pos	energy	K400	HMDB100	NA	FALSE

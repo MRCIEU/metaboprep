@@ -4,14 +4,16 @@
 \alias{export_metaboanalyst}
 \title{Export Data to `MetaboAnalyst` format}
 \usage{
-export_metaboanalyst(metaboprep, directory, something = "foo")
+export_metaboanalyst(metaboprep, directory, layer = NULL, group_col = NULL)
 }
 \arguments{
 \item{metaboprep}{A `Metaboprep` object containing the data to be exported.}
 
 \item{directory}{character, string specifying the path to the directory where the data should be written.}
 
-\item{something}{something}
+\item{layer}{character, the name of the `metaboprep@data` layer (3rd array dimension) to write out}
+
+\item{group_col}{character, the column name in the `metaboprep@samples` data identifying the group for one-factor analysis}
 }
 \value{
 the `Metaboprep` object, invisibly, for use in pipes

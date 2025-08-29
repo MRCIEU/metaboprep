@@ -82,7 +82,7 @@ kable(head(pc_analysis, 10), digits = 3, row.names = FALSE)
 ## Additional attributes
 In addition, the variance explained vector is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_varexp`, in this case we used the `input` data, therefore the attribute name is `input_varexp`. In a similar way, the results of the acceleration analysis (`input_num_pcs_scree`) and a parallel analysis (`input_num_pcs_parallel`) can also be extracted.
 
-```{r varexp, out.width="100%", fig.align='center', warning=FALSE, message=FALSE}
+```{r varexp, out.width="100%", fig.align='center', warning=FALSE, message=FALSE, fig.alt = "Variance explained"}
 library(ggplot2)
 
 # extract varexp from attributes

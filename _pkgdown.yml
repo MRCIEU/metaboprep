@@ -75,6 +75,7 @@ reference:
     - quality_control
     - available_report_templates
     - generate_report
+    - run_metaboprep1
     
 - title: "Other processing tools"
   desc: >

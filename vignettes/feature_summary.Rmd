@@ -49,7 +49,7 @@ kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
 ## Feature summary attributes
 In addition to the summary data, the hierarchical cluster dendrogram is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_tree`, in this case we summarised the `input` data, therefore the attribute name is `input_tree`.   
 
-```{r tree, out.width="100%", fig.align='center'}
+```{r tree, out.width="100%", fig.align='center', fig.alt = "Decision tree showing feature importance in dataset"}
 suppressPackageStartupMessages(library(dendextend))
 library(ggplot2)
 
