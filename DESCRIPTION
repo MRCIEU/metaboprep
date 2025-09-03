@@ -62,6 +62,7 @@ Collate:
     'run_metaboprep1.R'
     'sample_summary.R'
     'summarise.R'
+    'summary_metaboprep.R'
     'total_peak_area.R'
     'tree_and_independent_features.R'
     'utils.R'
