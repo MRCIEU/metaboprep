@@ -22,7 +22,7 @@ globalVariables(c(""), package = "metaboprep")
 #' @slot feature_summary numeric matrix, feature summary statistics.
 #' @slot sample_summary numeric matrix, sample summary statistics.
 #'
-#' @return An object of class `Metaboprep` (S7 class).
+#' @return An object of class Metaboprep, an S7 class.
 #'
 #' @import S7
 #' 

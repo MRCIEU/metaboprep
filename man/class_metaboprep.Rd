@@ -33,7 +33,7 @@ Metaboprep(
 \item{sample_summary}{numeric matrix, summary statistics for samples (not to be set directly).}
 }
 \value{
-An object of class `Metaboprep` (S7 class).
+An object of class Metaboprep, an S7 class.
 }
 \description{
 A `Metaboprep` object is a container for matrices of metabolite data, along with associated metadata.
