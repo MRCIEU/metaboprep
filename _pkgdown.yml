@@ -48,6 +48,7 @@ reference:
     A container for measurement, sample, and feature data.
   contents:
     - class_metaboprep
+    - summary.Metaboprep
     - add_layer
     
 - title: "Importing & Exporting Data"

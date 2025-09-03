@@ -9,7 +9,8 @@
 #'
 #' @return Invisibly returns NULL. Prints a formatted summary to the console.
 #'
-#' @seealso \code{\link{Metaboprep-class}}
+#'
+#' @seealso \code{\link{class_metaboprep}}
 #' @importFrom S7 method S7_inherits
 #' @name summary.Metaboprep
 S7::method(summary, Metaboprep) <- function(object, ...) {

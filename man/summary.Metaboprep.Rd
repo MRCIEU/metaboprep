@@ -17,5 +17,5 @@ It reports key dimensions of the data, the presence of metadata columns,
 the number of data layers, and the status of quality control summaries and exclusions.
 }
 \seealso{
-\code{\link{Metaboprep-class}}
+\code{\link{class_metaboprep}}
 }
