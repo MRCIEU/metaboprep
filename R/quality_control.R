@@ -25,9 +25,37 @@
 #' @import cli
 #' 
 #' @export
-quality_control <- new_generic("quality_control", c("metaboprep"), function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, feature_selection = "max_var_exp", pc_outlier_sd =5, max_num_pcs = 10, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL) { S7_dispatch() })
+quality_control <- new_generic("quality_control", c("metaboprep"), function(metaboprep, 
+                                                                            source_layer="input", 
+                                                                            sample_missingness = 0.2, 
+                                                                            feature_missingness = 0.2, 
+                                                                            total_peak_area_sd = 5, 
+                                                                            outlier_udist = 5, 
+                                                                            outlier_treatment ="leave_be", 
+                                                                            winsorize_quantile = 1.0, 
+                                                                            tree_cut_height = 0.5, 
+                                                                            feature_selection = "max_var_exp", 
+                                                                            pc_outlier_sd = 5, 
+                                                                            max_num_pcs = 10, 
+                                                                            sample_ids = NULL, 
+                                                                            feature_ids = NULL, 
+                                                                            features_exclude_but_keep = NULL) { S7_dispatch() })
 #' @name quality_control
-method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input", sample_missingness = 0.5, feature_missingness = 0.5, total_peak_area_sd = 5, outlier_udist=5, outlier_treatment="leave_be", winsorize_quantile = 1.0, tree_cut_height=0.5, feature_selection = "max_var_exp", pc_outlier_sd =5, max_num_pcs = 10, sample_ids=NULL, feature_ids=NULL, features_exclude_but_keep=NULL){
+method(quality_control, Metaboprep) <- function(metaboprep, 
+                                                source_layer="input", 
+                                                sample_missingness = 0.2, 
+                                                feature_missingness = 0.2, 
+                                                total_peak_area_sd = 5, 
+                                                outlier_udist = 5, 
+                                                outlier_treatment ="leave_be", 
+                                                winsorize_quantile = 1.0, 
+                                                tree_cut_height = 0.5, 
+                                                feature_selection = "max_var_exp", 
+                                                pc_outlier_sd = 5, 
+                                                max_num_pcs = 10, 
+                                                sample_ids = NULL, 
+                                                feature_ids = NULL, 
+                                                features_exclude_but_keep = NULL){
 
   cli::cli_h1("Starting Metabolite QC Process")
   
@@ -84,7 +112,7 @@ method(quality_control, Metaboprep) <- function(metaboprep, source_layer="input"
                           source_layer     = source_layer, 
                           outlier_udist    = outlier_udist, 
                           tree_cut_height  = tree_cut_height, 
-                          feature_selection=feature_selection,
+                          feature_selection= feature_selection,
                           sample_ids       = sample_ids, 
                           feature_ids      = feature_ids,
                           features_exclude = exclude_but_keep_feats,
