@@ -5,6 +5,7 @@
 #' @param feature_id_col character, the excel column containing the feature_id mapping to the data. 
 #' @param sample_sheet character or integer, the excel sheet name (or index) from which to read the sample data. 
 #' @param sample_id_col character, the excel column containing the sample_id mapping to the data. 
+#' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
 #' @returns list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
 #'
 #' @examples
@@ -28,7 +29,7 @@
 #'
 #' @importFrom readxl excel_sheets read_xlsx
 #' @export
-read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature_id_col = NULL, sample_sheet = NULL, sample_id_col = NULL) {
+read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature_id_col = NULL, sample_sheet = NULL, sample_id_col = NULL, return_Metaboprep = TRUE) {
 
   # testing ====
   if (FALSE) {
@@ -177,9 +178,11 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
   
   
   # return ====
-  return(list(data       = data,
-              samples    = samples,
-              features   = features))
+  if (return_Metaboprep) {
+    return(Metaboprep(data = data, samples = samples, features = features))
+    } else {
+      return(list(data = data, samples = samples, features = features))
+    }
   
 }
 
