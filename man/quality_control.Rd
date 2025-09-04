@@ -7,8 +7,8 @@
 quality_control(
   metaboprep,
   source_layer = "input",
-  sample_missingness = 0.5,
-  feature_missingness = 0.5,
+  sample_missingness = 0.2,
+  feature_missingness = 0.2,
   total_peak_area_sd = 5,
   outlier_udist = 5,
   outlier_treatment = "leave_be",

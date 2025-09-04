@@ -10,7 +10,8 @@ read_metabolon(
   feature_sheet = NULL,
   feature_id_col = NULL,
   sample_sheet = NULL,
-  sample_id_col = NULL
+  sample_id_col = NULL,
+  return_Metaboprep = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ read_metabolon(
 \item{sample_sheet}{character or integer, the excel sheet name (or index) from which to read the sample data.}
 
 \item{sample_id_col}{character, the excel column containing the sample_id mapping to the data.}
+
+\item{return_Metaboprep}{logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.}
 }
 \value{
 list,  list(data = matrix, samples = samples data.frame, features = features data.frame)

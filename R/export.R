@@ -47,7 +47,7 @@ export_metaboprep <- new_generic("export_metaboprep", c("metaboprep", "directory
 method(export_metaboprep, list(Metaboprep, class_character)) <- function(metaboprep, directory, ...) {
   
   # make the directories
-  message("Exporting in metaboprep format to ", directory)
+  message("Exporting in metaboprep format to: \n\t\t", directory)
   today    <- gsub("-", "_", Sys.Date())
   dir      <- file.path(sub("/$", "", directory), paste0("metaboprep_export_", today))
   layers   <- stats::setNames(dimnames(metaboprep@data)[[3]], dimnames(metaboprep@data)[[3]])
@@ -86,8 +86,8 @@ method(export_metaboprep, list(Metaboprep, class_character)) <- function(metabop
 
     
     # exclusions
-    excl_feats <- ifelse(layer=="qc", unlist(metaboprep@exclusions[["features"]]), character(0L))
-    excl_samps <- ifelse(layer=="qc", unlist(metaboprep@exclusions[["samples"]]),  character(0L))
+    excl_feats <- if (layer == "qc") { unique(unlist(metaboprep@exclusions[["features"]])) } else { character(0L) }
+    excl_samps <- if (layer == "qc") { unique(unlist(metaboprep@exclusions[["samples"]])) } else { character(0L) }
     
     
     # update config
