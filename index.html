@@ -142,91 +142,57 @@ Cheatsheet
 <span>                  feature_ids         <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Starting Metabolite QC Process ──────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [4ms]</span></span>
-<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [464ms]</span></span>
-<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [12ms]</span></span>
-<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [8ms]</span></span>
+<span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [5ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [436ms]</span></span>
+<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [13ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [10ms]</span></span>
 <span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) [8ms]</span></span>
 <span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; ℹ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…✔ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]</span></span>
-<span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
-<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [452ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…                                                                                 ! The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]</span></span>
+<span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
+<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [442ms]</span></span>
 <span><span class="co">#&gt; ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [10ms]</span></span>
 <span></span>
 <span><span class="co"># view </span></span>
-<span><span class="va">m</span></span>
-<span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
-<span><span class="co">#&gt;  @ data           : num [1:100, 1:100, 1:2] 11.03 12.5 NA 6.98 8.56 ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "123" "124" "125" "126" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_sample_missingness")= num 0.5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_feature_missingness")= num 0.3</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_total_peak_area_sd")= num 5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_treatment")= chr "leave_be"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_winsorize_quantile")= num 1</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_pc_outlier_sd")= num 5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_features_exclude_but_keep")= chr(0) </span></span>
-<span><span class="co">#&gt;  @ samples        :'data.frame': 100 obs. of  8 variables:</span></span>
-<span><span class="co">#&gt;  .. $ sample_id      : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  .. $ neg            : chr  "batch1" "batch1" "batch1" "batch1" ...</span></span>
-<span><span class="co">#&gt;  .. $ pos            : chr  "batch1" "batch1" "batch1" "batch1" ...</span></span>
-<span><span class="co">#&gt;  .. $ run_day        : chr  "day1" "day1" "day1" "day1" ...</span></span>
-<span><span class="co">#&gt;  .. $ box_id         : chr  "box1" "box1" "box1" "box1" ...</span></span>
-<span><span class="co">#&gt;  .. $ lot            : chr  "lot250" "lot250" "lot250" "lot250" ...</span></span>
-<span><span class="co">#&gt;  .. $ reason_excluded: chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ excluded       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  @ features       :'data.frame': 100 obs. of  8 variables:</span></span>
-<span><span class="co">#&gt;  .. $ feature_id     : chr  "123" "124" "125" "126" ...</span></span>
-<span><span class="co">#&gt;  .. $ metabolite_id  : chr  "met1" "met2" "met3" "met4" ...</span></span>
-<span><span class="co">#&gt;  .. $ platform       : chr  "neg" "neg" "neg" "neg" ...</span></span>
-<span><span class="co">#&gt;  .. $ pathway        : chr  "xenobiotic" "xenobiotic" "xenobiotic" "lipid" ...</span></span>
-<span><span class="co">#&gt;  .. $ kegg           : chr  "K100" "K100" "K100" "K200" ...</span></span>
-<span><span class="co">#&gt;  .. $ group_hmdb     : chr  "HMDB1" "HMDB2" "HMDB3" "HMDB4" ...</span></span>
-<span><span class="co">#&gt;  .. $ reason_excluded: chr  NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ excluded       : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
-<span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
-<span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
-<span><span class="co">#&gt;  .. $ features:List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
-<span><span class="co">#&gt;  @ feature_summary: num [1:20, 1:100, 1:2] 0.2 0 80 10.51 2.25 ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:20] "missingness" "outlier_count" "n" "mean" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "123" "124" "125" "126" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_tree")=List of 7</span></span>
-<span><span class="co">#&gt;  ..  ..$ merge      : int [1:99, 1:2] -11 -3 -75 -85 -54 -57 -55 -4 -65 -53 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ height     : num [1:99] 0.149 0.155 0.21 0.218 0.26 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ order      : int [1:100] 58 81 67 99 72 91 94 74 65 89 ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ labels     : chr [1:100] "123" "124" "125" "126" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ method     : chr "complete"</span></span>
-<span><span class="co">#&gt;  ..  ..$ call       : language stats::hclust(d = dist_matrix, method = "complete")</span></span>
-<span><span class="co">#&gt;  ..  ..$ dist.method: NULL</span></span>
-<span><span class="co">#&gt;  ..  ..- attr(*, "class")= chr "hclust"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_tree_cut_height")= num 0.5</span></span>
-<span><span class="co">#&gt;  @ sample_summary : num [1:100, 1:20, 1:2] 0 0 0.02 0 0 0 0 0 0.29 0 ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:20] "missingness" "tpa_total" "tpa_complete_features" "outlier_count" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:2] "input" "qc"</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_varexp")= Named num [1:77] 0.1316 0.093 0.0449 0.0397 0.0353 ...</span></span>
-<span><span class="co">#&gt;  ..  ..- attr(*, "names")= chr [1:77] "PC1" "PC2" "PC3" "PC4" ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_scree")= num 2</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_num_pcs_parallel")= int 7</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "qc_outlier_udist")= num 5</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Metaboprep Object Summary</span></span>
+<span><span class="co">#&gt; --------------------------</span></span>
+<span><span class="co">#&gt; Samples      : 100</span></span>
+<span><span class="co">#&gt; Features     : 100</span></span>
+<span><span class="co">#&gt; Data Layers  : 2</span></span>
+<span><span class="co">#&gt; Layer Names  : input, qc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Summary Layers : input, qc</span></span>
+<span><span class="co">#&gt; Feature Summary Layers: input, qc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 8</span></span>
+<span><span class="co">#&gt;   Names  : sample_id, neg, pos, run_day, box_id, lot, reason_excluded, excluded</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Feature Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 8</span></span>
+<span><span class="co">#&gt;   Names  : feature_id, metabolite_id, platform, pathway, kegg, group_hmdb, reason_excluded, excluded</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Exclusion Codes Summary:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Sample Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                     | 0</span></span>
+<span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Feature Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                    | 0</span></span>
+<span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
+<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span>
 <span></span>
 <span><span class="co"># view tree</span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">m</span><span class="op">@</span><span class="va">feature_summary</span>, <span class="st">"qc_tree"</span><span class="op">)</span></span>
