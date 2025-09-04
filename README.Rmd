@@ -47,20 +47,26 @@ pak::pak("MRCIEU/metaboprep")
 
 This is a basic example which shows you how to load data and run the `metaboprep` quality control pipeline.
 
-```{r example, fig.alt = "Dendrogram"}
+### Read data into R and create the Metaboprep object
+
+```{r}
 library(metaboprep)
 
 # import data 
-dat <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
+m <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
+                    sheet = "OrigScale",      ## The name of the sheet in the excel file to read in
+                    return_Metaboprep = TRUE  ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
+                    )
 
-# create the object
-m <- Metaboprep(data = dat$data, samples = dat$samples, features = dat$features)
+```
 
+### Run the quality control pipeline
+
+```{r example}
 # run QC
-m <- m |>
-  quality_control(source_layer = "input", 
-                  sample_missingness  = 0.5, 
-                  feature_missingness = 0.3, 
+m <- suppressWarnings( quality_control(m, source_layer = "input", 
+                  sample_missingness  = 0.2, 
+                  feature_missingness = 0.2, 
                   total_peak_area_sd  = 5, 
                   outlier_udist       = 5, 
                   outlier_treatment   = "leave_be", 
@@ -68,16 +74,22 @@ m <- m |>
                   tree_cut_height     = 0.5, 
                   pc_outlier_sd       = 5, 
                   sample_ids          = NULL, 
-                  feature_ids         = NULL)
-
-# view 
-m
-
-# view tree
-tree <- attr(m@feature_summary, "qc_tree")
-dend <- stats::as.dendrogram(tree)
-plot(dend)
-
+                  feature_ids         = NULL) )
 ```
 
+### View a summary of the Metaboprep object
+
+```{r summary}
+# view summary
+summary(m)
+```
+
+### Plot a dendrogram of the feature tree
+
+```{r treeplot, fig.alt = "Dendrogram", fig.width = 20, fig.height = 5}
+# view feature tree
+tree <- attr(m@feature_summary, "qc_tree")
+par(mar = c(1,3,5,1) )
+plot(tree, hang = -1, cex = 0.75, main = "Example Dataset Feature Tree", sub = "", xlab = "")
+```
 
