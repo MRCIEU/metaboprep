@@ -71,7 +71,7 @@ m <- m |>
                   feature_ids         = NULL)
 
 # view 
-m
+summary(m)
 
 # view tree
 tree <- attr(m@feature_summary, "qc_tree")
