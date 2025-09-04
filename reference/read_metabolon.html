@@ -70,7 +70,8 @@
 <span>  feature_sheet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  feature_id_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_sheet <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sample_id_col <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  sample_id_col <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  return_Metaboprep <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,10 +102,14 @@
 <dt id="arg-sample-id-col">sample_id_col<a class="anchor" aria-label="anchor" href="#arg-sample-id-col"></a></dt>
 <dd><p>character, the excel column containing the sample_id mapping to the data.</p></dd>
 
+
+<dt id="arg-return-metaboprep">return_Metaboprep<a class="anchor" aria-label="anchor" href="#arg-return-metaboprep"></a></dt>
+<dd><p>logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>list,  list(data = matrix, samples = samples data.frame, features = features data.frame)</p>
+    <p>list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)</p>
     </div>
 
     <div class="section level2">

@@ -100,47 +100,47 @@
 <p>Create a <code>Metaboprep</code> object as described in the <a href="index.html">Getting Started</a> vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
-<span><span class="va">dat</span>       <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
-<span><span class="va">m</span>         <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, samples <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span>, features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">)</span></span>
-<span><span class="va">m</span>         <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>metaboprep <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="va">f</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span>, return_Metaboprep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>metaboprep <span class="op">=</span> <span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[12ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[13ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[902ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[952ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[32ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[33ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[17ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[17m</span>…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[18m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 2 sa…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=50% - excluding 0 f…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=50% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[17ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[18ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…<span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[866ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[854ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[28ms]</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[27ms]</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="export-metaboprep">Export Metaboprep<a class="anchor" aria-label="anchor" href="#export-metaboprep"></a>
@@ -151,7 +151,8 @@
 <span></span>
 <span><span class="co"># run export</span></span>
 <span><span class="fu"><a href="../reference/export.html">export</a></span><span class="op">(</span><span class="va">m</span>, directory <span class="op">=</span> <span class="va">output_dir</span>, format <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Exporting in metaboprep format to /home/runner/work/metaboprep/metaboprep/vignettes/output</span></span>
+<span><span class="co">#&gt; Exporting in metaboprep format to: </span></span>
+<span><span class="co">#&gt;      /home/runner/work/metaboprep/metaboprep/vignettes/output</span></span>
 <span></span>
 <span><span class="co"># view output directory files</span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">output_dir</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>

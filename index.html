@@ -118,45 +118,56 @@ Cheatsheet
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>This is a basic example which shows you how to load data and run the <code>metaboprep</code> quality control pipeline.</p>
+<div class="section level3">
+<h3 id="read-data-into-r-and-create-the-metaboprep-object">Read data into R and create the Metaboprep object<a class="anchor" aria-label="anchor" href="#read-data-into-r-and-create-the-metaboprep-object"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import data </span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, sheet<span class="op">=</span><span class="st">"OrigScale"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># create the object</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, samples <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span>, features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># run QC</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.3</span>, </span>
-<span>                  total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>                  outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>                  outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
-<span>                  winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
-<span>                  tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>                  sample_ids          <span class="op">=</span> <span class="cn">NULL</span>, </span>
-<span>                  feature_ids         <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_metabolon.html">read_metabolon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"metabolon_v1.1_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, </span>
+<span>                    sheet <span class="op">=</span> <span class="st">"OrigScale"</span>,      <span class="co">## The name of the sheet in the excel file to read in</span></span>
+<span>                    return_Metaboprep <span class="op">=</span> <span class="cn">TRUE</span>  <span class="co">## Whether to return a Metaboprep object (TRUE) or a list (FALSE)</span></span>
+<span>                    <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="run-the-quality-control-pipeline">Run the quality control pipeline<a class="anchor" aria-label="anchor" href="#run-the-quality-control-pipeline"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># run QC</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/quality_control.html">quality_control</a></span><span class="op">(</span><span class="va">m</span>, </span>
+<span>                     source_layer <span class="op">=</span> <span class="st">"input"</span>, </span>
+<span>                     sample_missingness  <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>                     feature_missingness <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>                     total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                     outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                     outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
+<span>                     winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
+<span>                     tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
+<span>                     pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                     sample_ids          <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>                     feature_ids         <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Starting Metabolite QC Process ──────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [5ms]</span></span>
-<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [436ms]</span></span>
-<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [13ms]</span></span>
-<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [10ms]</span></span>
-<span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) [8ms]</span></span>
-<span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…✔ Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
-<span><span class="co">#&gt; ℹ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…✔ Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; ℹ Validating input parameters✔ Validating input parameters [4ms]</span></span>
+<span><span class="co">#&gt; ℹ Sample &amp; Feature Summary Statistics for raw data✔ Sample &amp; Feature Summary Statistics for raw data [540ms]</span></span>
+<span><span class="co">#&gt; ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [10ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) [7ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) [7ms]</span></span>
+<span><span class="co">#&gt; ℹ Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…✔ Assessing for sample missingness at specified level of &gt;=20% - excluding 2 sa…</span></span>
+<span><span class="co">#&gt; ℹ Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…✔ Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]</span></span>
 <span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…                                                                                 ! The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]</span></span>
 <span><span class="co">#&gt; ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
-<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [442ms]</span></span>
-<span><span class="co">#&gt; ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [10ms]</span></span>
-<span></span>
-<span><span class="co"># view </span></span>
+<span><span class="co">#&gt; ℹ Creating final QC dataset...✔ Creating final QC dataset... [409ms]</span></span>
+<span><span class="co">#&gt; ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [9ms]</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="view-a-summary-of-the-metaboprep-object">View a summary of the Metaboprep object<a class="anchor" aria-label="anchor" href="#view-a-summary-of-the-metaboprep-object"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># view summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Metaboprep Object Summary</span></span>
 <span><span class="co">#&gt; --------------------------</span></span>
@@ -183,7 +194,7 @@ Cheatsheet
 <span><span class="co">#&gt; -----------------</span></span>
 <span><span class="co">#&gt; user_excluded                     | 0</span></span>
 <span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
-<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_missingness   | 2</span></span>
 <span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
 <span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -192,13 +203,18 @@ Cheatsheet
 <span><span class="co">#&gt; -----------------</span></span>
 <span><span class="co">#&gt; user_excluded                    | 0</span></span>
 <span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
-<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span>
-<span></span>
-<span><span class="co"># view tree</span></span>
+<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="plot-a-dendrogram-of-the-feature-tree">Plot a dendrogram of the feature tree<a class="anchor" aria-label="anchor" href="#plot-a-dendrogram-of-the-feature-tree"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># view feature tree</span></span>
 <span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">m</span><span class="op">@</span><span class="va">feature_summary</span>, <span class="st">"qc_tree"</span><span class="op">)</span></span>
-<span><span class="va">dend</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">tree</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dend</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-example-1.png" alt="Dendrogram" width="100%"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">tree</span>, hang <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">0.75</span>, main <span class="op">=</span> <span class="st">"Example Dataset Feature Tree"</span>, sub <span class="op">=</span> <span class="st">""</span>, xlab <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-treeplot-1.png" alt="Dendrogram" width="100%"></p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">

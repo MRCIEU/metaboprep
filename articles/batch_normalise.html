@@ -104,38 +104,42 @@
 <span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"dummy_features.csv"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, header<span class="op">=</span><span class="cn">T</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, samples <span class="op">=</span> <span class="va">samples</span>, features <span class="op">=</span> <span class="va">features</span><span class="op">)</span></span>
-<span><span class="va">m</span></span>
-<span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
-<span><span class="co">#&gt;  @ data           : num [1:100, 1:20, 1] 0.755887 0.662386 0.444527 0.627146 0.000465 ...</span></span>
-<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:100] "id_100" "id_99" "id_98" "id_97" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr [1:20] "metab_id_1" "metab_id_2" "metab_id_3" "metab_id_4" ...</span></span>
-<span><span class="co">#&gt;  ..  ..$ : chr "input"</span></span>
-<span><span class="co">#&gt;  @ samples        :'data.frame': 100 obs. of  5 variables:</span></span>
-<span><span class="co">#&gt;  .. $ sample_id: chr  "id_100" "id_99" "id_98" "id_97" ...</span></span>
-<span><span class="co">#&gt;  .. $ age      : int  29 47 65 57 52 40 42 63 49 42 ...</span></span>
-<span><span class="co">#&gt;  .. $ sex      : chr  "male" "male" "female" "female" ...</span></span>
-<span><span class="co">#&gt;  .. $ pos      : chr  "batch2" "batch1" "batch2" "batch1" ...</span></span>
-<span><span class="co">#&gt;  .. $ neg      : chr  "batch2" "batch2" "batch2" "batch1" ...</span></span>
-<span><span class="co">#&gt;  @ features       :'data.frame': 20 obs. of  5 variables:</span></span>
-<span><span class="co">#&gt;  .. $ feature_id        : chr  "metab_id_1" "metab_id_2" "metab_id_3" "metab_id_4" ...</span></span>
-<span><span class="co">#&gt;  .. $ platform          : chr  "neg" "neg" "neg" "pos" ...</span></span>
-<span><span class="co">#&gt;  .. $ pathway           : logi  NA NA NA NA NA NA ...</span></span>
-<span><span class="co">#&gt;  .. $ derived_feature   : logi  TRUE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  .. $ xenobiotic_feature: logi  FALSE FALSE FALSE FALSE FALSE FALSE ...</span></span>
-<span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
-<span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
-<span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
-<span><span class="co">#&gt;  .. $ features:List of 3</span></span>
-<span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
-<span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
-<span><span class="co">#&gt;  @ feature_summary: num[0 , 0 , 0 ] </span></span>
-<span><span class="co">#&gt;  @ sample_summary : num[0 , 0 , 0 ]</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Metaboprep Object Summary</span></span>
+<span><span class="co">#&gt; --------------------------</span></span>
+<span><span class="co">#&gt; Samples      : 100</span></span>
+<span><span class="co">#&gt; Features     : 20</span></span>
+<span><span class="co">#&gt; Data Layers  : 1</span></span>
+<span><span class="co">#&gt; Layer Names  : input</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Summary Layers : none</span></span>
+<span><span class="co">#&gt; Feature Summary Layers: none</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 5</span></span>
+<span><span class="co">#&gt;   Names  : sample_id, age, sex, pos, neg</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Feature Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 5</span></span>
+<span><span class="co">#&gt;   Names  : feature_id, platform, pathway, derived_feature, xenobiotic_feature</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Exclusion Codes Summary:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Sample Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                     | 0</span></span>
+<span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Feature Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                    | 0</span></span>
+<span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
+<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="run-batch-normalisation">Run batch normalisation<a class="anchor" aria-label="anchor" href="#run-batch-normalisation"></a>
