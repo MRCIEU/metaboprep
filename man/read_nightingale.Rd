@@ -4,13 +4,15 @@
 \alias{read_nightingale}
 \title{Read Nightingale Data (format 1)}
 \usage{
-read_nightingale(filepath)
+read_nightingale(filepath, return_Metaboprep = TRUE)
 }
 \arguments{
 \item{filepath}{character, commercial Nightingale excel sheet with extension .xls or .xlsx}
+
+\item{return_Metaboprep}{logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.}
 }
 \value{
-list,  list(data = 3D matrix, samples = samples data.table, features = features data.table)
+list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 }
 \description{
 Read Nightingale Data (format 1)

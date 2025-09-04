@@ -30,7 +30,7 @@ read_metabolon(
 \item{return_Metaboprep}{logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.}
 }
 \value{
-list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
+list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 }
 \description{
 Read Metabolon Data

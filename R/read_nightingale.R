@@ -1,6 +1,7 @@
 #' @title Read Nightingale Data (format 1)
 #' @param filepath character, commercial Nightingale excel sheet with extension .xls or .xlsx
-#' @returns list,  list(data = 3D matrix, samples = samples data.table, features = features data.table)
+#' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
+#' @returns list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 #'
 #' @examples
 #' # version 1 data format
@@ -13,7 +14,7 @@
 #'
 #' @importFrom readxl excel_sheets read_xlsx
 #' @export
-read_nightingale <- function(filepath) {
+read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
 
   # testing ====
   if (FALSE) {
@@ -125,7 +126,10 @@ read_nightingale <- function(filepath) {
   
   
   # return ====
-  return(list(data       = data,
-              samples    = samples,
-              features   = features))
+  if (return_Metaboprep) {
+    return(Metaboprep(data = data, samples = samples, features = features))
+  } else {
+    return(list(data = data, samples = samples, features = features))
+  }
+  
 }

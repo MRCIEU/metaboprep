@@ -21,9 +21,9 @@ Create a `Metaboprep` object as described in the [Getting Started](index.html) v
 
 ```{r setup, results='hide'}
 library(metaboprep)
-dat       <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), sheet="OrigScale")
-m         <- Metaboprep(data = dat$data, samples = dat$samples, features = dat$features)
-m         <- quality_control(metaboprep = m)
+f <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
+m <- read_metabolon(f, sheet="OrigScale", return_Metaboprep = TRUE)
+m <- quality_control(metaboprep = m)
 ```
 
 ## Export Metaboprep

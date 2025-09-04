@@ -123,10 +123,7 @@ test_that("metaboprep output same as metaboprep1", {
   qc_sum_feat   <- read.csv(grep("feature_anno", qc_sum_files, value=TRUE), sep="\t") 
   
   # run new metaboprep
-  dat <- read_metabolon(fp, sheet="OrigScale")
-  m <- Metaboprep(data = dat$data, 
-                  features = dat$features, 
-                  samples = dat$samples)
+  m <- read_metabolon(fp, sheet="OrigScale", return_Metaboprep = TRUE)
   m <- batch_normalise(m,
                        run_mode_col = "platform", 
                        run_mode_colmap = c(pos="pos", neg="neg"),

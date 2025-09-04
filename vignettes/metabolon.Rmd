@@ -24,7 +24,7 @@ library(metaboprep)
 filepath <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
 
 # import
-dat <- read_metabolon(filepath, sheet = 'OrigScale')
+dat <- read_metabolon(filepath, sheet = 'OrigScale', return_Metaboprep = FALSE)
 
 # view structure
 str(dat)
@@ -38,7 +38,7 @@ m <- Metaboprep(data     = dat$data,
                 samples  = dat$samples)
 
 # view 
-m
+summary(m)
 ```
 
 ## QC Metabolon
@@ -55,5 +55,5 @@ m <- m |>
                   pc_outlier_sd       = 5)
 
 # view 
-m
+summary(m)
 ```

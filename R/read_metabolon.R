@@ -6,7 +6,7 @@
 #' @param sample_sheet character or integer, the excel sheet name (or index) from which to read the sample data. 
 #' @param sample_id_col character, the excel column containing the sample_id mapping to the data. 
 #' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
-#' @returns list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
+#' @returns list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 #'
 #' @examples
 #' # version 1.1 data format
@@ -180,9 +180,9 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
   # return ====
   if (return_Metaboprep) {
     return(Metaboprep(data = data, samples = samples, features = features))
-    } else {
-      return(list(data = data, samples = samples, features = features))
-    }
+  } else {
+    return(list(data = data, samples = samples, features = features))
+  }
   
 }
 

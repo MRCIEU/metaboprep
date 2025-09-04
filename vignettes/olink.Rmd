@@ -35,7 +35,7 @@ m <- Metaboprep(data     = dat$data,
                 samples  = dat$samples)
 
 # view 
-m
+summary(m)
 ```
 
 ## QC Olink
@@ -52,7 +52,7 @@ m <- m |>
                   pc_outlier_sd       = 5)
 
 # view 
-m
+summary(m)
 ```
 
 ## Other
