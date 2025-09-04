@@ -1,7 +1,25 @@
 #' @title Read Nightingale Data (format 1)
+#' Reads and processes a commercial Nightingale Excel sheet in format version 1 or 2. Returns either a structured `Metaboprep` object or a list of components.
+#' 
+#' @details
+#' This function reads a commercial Nightingale Excel file in either single-sheet (v1/v2) or multi-sheet (v3) format.
+#' It extracts sample-level and feature-level metadata alongside the numeric data matrix.
+#' Users can choose to return either a structured `Metaboprep` S7 object or a basic list via the `return_Metaboprep` parameter.
+#' 
 #' @param filepath character, commercial Nightingale excel sheet with extension .xls or .xlsx
-#' @returns list,  list(data = 3D matrix, samples = samples data.table, features = features data.table)
+#' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
+#' 
+#' @returns Metaboprep object or list,  list(data = 3D matrix, samples = samples data.table, features = features data.table)
 #'
+#' @return
+#' If `return_Metaboprep = TRUE` (default), returns a `Metaboprep` object containing the input data.
+#' If `return_Metaboprep = FALSE`, returns a named list with the following elements:
+#' \describe{
+#'   \item{data}{A numeric matrix of metabolite values with samples as rows and features as columns.}
+#'   \item{samples}{A `data.frame` containing metadata for each sample (must include `sample_id`).}
+#'   \item{features}{A `data.frame` containing metadata for each metabolite feature (must include `feature_id`).}
+#' }
+#' 
 #' @examples
 #' # version 1 data format
 #' filepath1 <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep")
@@ -13,7 +31,8 @@
 #'
 #' @importFrom readxl excel_sheets read_xlsx
 #' @export
-read_nightingale <- function(filepath) {
+read_nightingale <- function(filepath, 
+                             return_Metaboprep = TRUE) {
 
   # testing ====
   if (FALSE) {
@@ -125,7 +144,9 @@ read_nightingale <- function(filepath) {
   
   
   # return ====
-  return(list(data       = data,
-              samples    = samples,
-              features   = features))
+  if (return_Metaboprep) {
+    return(Metaboprep(data = data, samples = samples, features = features))
+  } else {
+    return(list(data = data, samples = samples, features = features))
+  }
 }
