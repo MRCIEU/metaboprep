@@ -257,7 +257,7 @@ method(quality_control, Metaboprep) <- function(metaboprep,
   if (!is.null(pc_outlier_sd) && !is.na(pc_outlier_sd)) {
     excl_samps <- "..."
     num_pcs    <- "..."
-    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s) over PCs 1:{num_pcs} [max PCs set at {max_num_pcs}]")
+    cli::cli_progress_step("Sample PCA outlier analysis - re-identify feature independence and PC outliers - excluding {length(excl_samps)} sample(s) over PCs 1:{num_pcs}")
     metaboprep  <- summarise(metaboprep,  
                              source_layer     = "qc", 
                              outlier_udist    = outlier_udist, 
@@ -271,8 +271,9 @@ method(quality_control, Metaboprep) <- function(metaboprep,
     if (is.null(max_num_pcs)) {
       num_pcs <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
     } else if (max_num_pcs > attr(metaboprep@sample_summary, "qc_num_pcs_scree")) {
-      warning("The stated max PCs to use in PCA outlier assessment is greater than the number of available informative PCs, using number of PCs from the Scree analysis instead")
       num_pcs <- attr(metaboprep@sample_summary, "qc_num_pcs_scree")
+      cli::cli_progress_update()
+      cli::cli_alert_warning("The stated max PCs [max_num_pcs={max_num_pcs}] to use in PCA outlier assessment is greater than the number of available informative PCs [{num_pcs}]")
     } else {
       num_pcs <- max_num_pcs
     }

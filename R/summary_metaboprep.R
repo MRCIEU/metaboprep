@@ -13,8 +13,7 @@
 #' @seealso \code{\link{class_metaboprep}}
 #' @importFrom S7 method S7_inherits
 #' @name summary.Metaboprep
-S7::method(summary, Metaboprep) <- function(object, ...) {
-  # stopifnot(S7::S7_inherits(object, Metaboprep))
+method(summary, Metaboprep) <- function(object, ...) {
   
   output <- c()
   
