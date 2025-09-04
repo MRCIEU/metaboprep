@@ -38,7 +38,7 @@ sample_size_table |>
 \newpage
 
 # Missingness
-Missingness is evaluated across samples and features using the original/raw data set. 
+Missingness is evaluated across samples and features using the original (input) data set. 
 
 ## Visual structure of missingness in the raw data
 ```{r missing_matrix}
@@ -77,6 +77,15 @@ ggplot(nadat_long, aes(x = features, y = samples, fill = missing)) +
 \newpage
 
 ## Summary of sample and feature missingness
+The extent of missing data in both samples and features of the dataset was evaluated - for each sample, the proportion of features with missing values, and for each feature, the proportion of samples with missing values. This can identify whether missingness is more strongly driven by poorly measured features or by problematic samples. 
+
+The distribution of missingness is summarized in:  
+
+1. histograms  
+2. tabulated using percentiles, and  
+3. estimates of study samples sizes under various levels of feature missingness - this helps in understanding how filtering features with high levels of missing data would affect the dataset.
+
+
 ```{r missing_summary_compute}
 # raw data
 data <- metaboprep@data[, , "input"]
@@ -90,11 +99,11 @@ missing <- rbind(
 )
 
 # quantile distribution of missingness table
-probs <- seq(0, 1, 0.25)
-split_list <- split(missing$missingness, missing$type)
+probs         <- seq(0, 1, 0.25)
+split_list    <- split(missing$missingness, missing$type)
 quantile_list <- lapply(split_list, function(x) quantile(x, probs = probs))
-tbl1 <- do.call(cbind, quantile_list)
-tbl1 <- data.frame(percentile = probs, tbl1, check.names = FALSE)
+tbl1          <- do.call(cbind, quantile_list)
+tbl1          <- data.frame(percentile = probs, tbl1, check.names = FALSE)
 
 tbl1 <- tbl1 |>
   knitr::kable(
@@ -115,16 +124,20 @@ tbl1 <- tbl1 |>
   )
 
 # Estimates of sample size given various levels of missingness
-sq <- seq(0.1, 0.5, 0.1)
+sq <- seq(0.0, 1.0, 0.01)
 fmiss_samplesize <- data.frame(
-  `Missingness (%)` = scales::percent(sq, accuracy = 1),
-  `Sample Size`     = sapply(sq, function(x){ round(nrow(data)*(1-x)) })
+  `Missingness` = scales::percent(sq, accuracy = 1),
+  `Sample Size` = sapply(sq, function(threshold) {
+    kept_features <- which(colMeans(is.na(data)) <= threshold)
+    filtered_data <- data[, kept_features, drop = FALSE]
+    sum(rowSums(!is.na(filtered_data)) > 0)
+  })
 )
 
 # tables together
 tbl2 <- fmiss_samplesize |>
   knitr::kable(
-    caption = "Estimates of samples sizes under various levels of feature missingness.",
+    caption = "Estimates of samples sizes using different feature missingness thresholds.",
     align   = rep("c", 2)
   ) |>
   kableExtra::kable_classic(
@@ -134,7 +147,7 @@ tbl2 <- fmiss_samplesize |>
   ) |>
   kableExtra::column_spec(
     column = 1:2, 
-    width  = "10em"
+    width  = "15em"
   )
 
 # missing histograms
@@ -173,6 +186,7 @@ tbl1
 ```
 
 <!-- Estimates of study samples sizes under various levels of feature missingness. -->
+
 ```{r miss_sample_sizes}
 tbl2
 ```
