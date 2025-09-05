@@ -32,6 +32,7 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
   if (is.null(output_filename)) {
     outpath <- file.path(output_dir, clean_names(paste0(project, "_metaboprep_", template)))
   } else {
+    output_filename <- basename(output_filename)
     outpath <- file.path(output_dir, output_filename)
   }
 
@@ -58,9 +59,11 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
     envir             = new.env()  # Use a new environment to avoid conflicts
   )
 
-  # clean log files
-  log_file <- list.files(file.path(dirname(template_path)), full.names = TRUE)
-  unlink(log_file)
+  # move latex log files 
+  log_file <- list.files(file.path(dirname(template_path)), full.names = TRUE, pattern = paste0(output_filename, "\\.log"))
+  if (length(log_file) > 0) {
+    file.rename(log_file, file.path(dirname(outpath), basename(log_file)))
+  }
   
   #
   #

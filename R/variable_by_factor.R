@@ -13,6 +13,7 @@
 #'
 #' @import ggplot2
 #' @importFrom stats anova aggregate
+#' @importFrom stringr str_wrap str_to_sentence
 #'
 #' @return a ggplot2 object
 #'
@@ -33,7 +34,6 @@ variable_by_factor = function( dep , indep ,
 
   wdat = data.frame(dep = dep, indep = as.factor(indep))
   
-  ####
   if(orderfactor == 1){
     ord <- aggregate(dep ~ indep, data = wdat, FUN = function(x) {
       c(m = mean(x, na.rm = TRUE),
@@ -52,41 +52,49 @@ variable_by_factor = function( dep , indep ,
     stats::contrasts(wdat$indep) <- stats::contr.treatment(length(levels(wdat$indep)))
   }
 
-  ### FIT to linear MODEL
+  # FIT to linear MODEL ====
   fit = lm(dep ~ indep, data = wdat)
   a = stats::anova(fit)
   eta = signif( (a[1,2]/sum(a[,2])*100 ), digits = 2 )
   pval = signif( a[1, 5], digits = 3 )
-  ###
-  if(violin == 1){
-    plotA = wdat  |>
-      ggplot( aes(x = indep, y = dep)) +
-      geom_violin( aes(fill = as.factor(indep) ), color = NA ) +
-      theme( axis.text.x = element_text(angle = 45, size = 6, hjust = 1)) +
-      labs(title = paste0( dep_name, " by ", indep_name),
-           subtitle = paste0( "   ---  " ,
-                              eta ,
-                              "% of the variation in ",
-                              dep_name, " can be explained by ",
-                              indep_name, "(pval = ",
-                              pval, ")."),
-           y = dep_name, x = indep_name, fill = indep_name)
+  
+  
+  # base plot ====
+  plotA <- ggplot(wdat, aes(x = indep, y = dep))
+ 
+  
+  # type ====
+  if (violin == TRUE) {
+    plotA <- plotA + geom_violin( aes(fill = as.factor(indep) ), color = NA )
   } else {
-    plotA = wdat  |>
-      ggplot( aes(x = indep, y = dep)) +
-      geom_boxplot( aes(fill = as.factor(indep)), notch = FALSE) +
-      theme( axis.text.x = element_text(angle = 45, size = 6, hjust = 1)) +
-      labs(title = paste0( dep_name, " by ", indep_name),
-           subtitle = paste0( "   ---  " ,
-                              eta ,
-                              "% of the variation in ",
-                              dep_name, " can be explained by ",
-                              indep_name, "(pval = ",
-                              pval, ")."),
-           y = dep_name, x = indep_name, fill = indep_name)
+    plotA <- plotA + geom_boxplot( aes(fill = as.factor(indep)), notch = FALSE)
   }
+  
+  
+  # common bits ====
+  plotA <- plotA + 
+    theme_minimal() + 
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      legend.position = "bottom",        # move legend below
+      legend.text = element_text(size = 8), # reduce text if many levels
+      legend.key.size = unit(0.4, "cm"), # smaller keys
+      plot.caption = element_text(hjust = 0, margin = margin(t = 5)) # left-align caption
+    ) +
+    labs(subtitle = paste0(dep_name, " by ", indep_name),
+         caption  = stringr::str_wrap(paste0(eta, "% of the variation in ", dep_name,
+                                    " can be explained by ", indep_name,
+                                    " (pval = ", pval, ")"), 
+                             width = 100),
+          y       = stringr::str_to_sentence(dep_name), 
+          x       = indep_name, 
+          fill    = indep_name) +
+    guides(
+      fill = "none"
+    )
+
+  
+  # return ====
   return(plotA)
-
-
 }
 

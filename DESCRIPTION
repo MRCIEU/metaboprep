@@ -30,7 +30,8 @@ Imports:
     OlinkAnalyze,
     SomaDataIO,
     reshape2,
-    openxlsx
+    openxlsx,
+    stringr
 Suggests: 
     knitr,
     dendextend,
