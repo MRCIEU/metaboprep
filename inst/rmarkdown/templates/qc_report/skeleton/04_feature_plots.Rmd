@@ -28,7 +28,7 @@
 <!--     ######################## -->
 <!--     ## Summary Statistics -->
 <!--     ######################## -->
-<!--     ss = metaboprep::feature.describe(df)[1,]  -->
+<!--     ss = metaboprep::feature.describe(df)[1,] -->
 <!--     rownames(ss) = trait -->
 <!--     ## reorder sum stats -->
 <!--     ss = ss[c(1,11, 2:10, 12:16)] -->
@@ -55,7 +55,7 @@
 <!--     p3 = ggpubr::ggtexttable(ss) -->
 
 <!--     ## combine plots -->
-<!--     top = ggpubr::ggarrange(p1,p2, nrow = 1)  -->
+<!--     top = ggpubr::ggarrange(p1,p2, nrow = 1) -->
 <!--     out = ggpubr::ggarrange(  top, p3, nrow = 2, heights = c(4,1) ) -->
 
 <!--     ## return combined plot to lapply function -->
@@ -71,7 +71,7 @@
 
 <!--   ## Print plots to file -->
 <!--   f = paste0(outdir, "feature_distributions.pdf") -->
-<!--   ggpubr::ggarrange(plotlist = plotsout, ncol = 1, nrow = 3) %>%  -->
+<!--   ggpubr::ggarrange(plotlist = plotsout, ncol = 1, nrow = 3) %>% -->
 <!--     ggpubr::ggexport(filename = f, width = 13, height = 15) -->
 
 <!-- } -->
