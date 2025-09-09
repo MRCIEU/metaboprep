@@ -743,5 +743,5 @@ Simulated effect sizes (standardized by trait SD) are illustrated by their color
 p1 = continuous_power_plot( mydata = metaboprep@data[,,"qc"] )
 p2 = imbalanced_power_plot( mydata = metaboprep@data[,,"qc"] )
 
-ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 1, nrow = 2)
+ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 1, nrow = 2, common.legend = TRUE, legend = "right")
 ```

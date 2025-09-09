@@ -31,11 +31,9 @@ continuous_power_plot = function(mydata){
   # simulation paramaters
   ####################################
   # calculate power for different scenarios
-  run_parameters <- expand.grid(#N = N*(seq(0.10,1,0.10)),
-    N = seq(10, N, N_step_size ),
+  run_parameters <- expand.grid(
+    N = seq(10, N, N_step_size),
     n_coeff = 1,
-    #effect = c(0.001, 0.005, 0.01,0.025,0.05,0.075,0.1,0.125, 0.15 ),
-    #effect = seq(0.006, 0.024, by  = 0.002),
     effect = effect_estimates,
     alpha = 0.05)
 
@@ -53,7 +51,8 @@ continuous_power_plot = function(mydata){
 
 
   con_power <- as.data.frame(do.call(rbind, con_power))
-  con_power$effect = as.factor(con_power$effect)
+  #con_power$effect = as.factor(con_power$effect)
+  con_power$effect = as.numeric(con_power$effect)
   con_power$type = "continuous"
 
   ####################################
@@ -69,15 +68,17 @@ continuous_power_plot = function(mydata){
   s = seq(0, N, by = N_step_size)
   ###
   plotout = pwrdata |>
-    ggplot( aes(x=N, y=power) ) +
-    geom_line(aes(color = effect), alpha = 0.8, size = 1.5) +
+    ggplot( aes(x=N, y=power, color = effect, group = effect) ) +
+    geom_line(alpha = 0.8, size = 1.5) +
     scale_linetype_manual(values=c( "dotdash", "solid")) +
     theme_bw() +
     geom_hline(yintercept=0.8, color = "grey50", size = 1) +
-    scale_color_brewer(palette="Spectral") +
-    labs(y = "power", x = "total sample size",
+    scale_color_gradientn(
+      colours = RColorBrewer::brewer.pal(11, "Spectral"),
+    ) +
+    labs(y = "Power", x = "Total sample size",
          title = "Estimated power for continuous traits",
-         color = "effect\nsize") +
+         color = "Effect\nsize") +
     geom_vline(xintercept = s, linetype="dotted", color = "grey20", size=0.25)
 
   ####################################
