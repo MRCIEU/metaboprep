@@ -28,7 +28,7 @@ features <- read.csv(system.file("extdata", "dummy_features.csv", package = "met
 m <- Metaboprep(data = data, samples = samples, features = features)
 
 # print
-m
+summary(m)
 ```
 
 ## Run feature summary

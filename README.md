@@ -10,7 +10,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 <!-- <div style="text-align: center"> -->
+
 <!--   <img src="man/figures/logo.png" alt="metaboprep logo" width="150"/>  -->
+
 <!-- </div> -->
 
 The goal of `metaboprep` is to:
@@ -60,55 +62,33 @@ m <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", packag
 
 ``` r
 # run QC
-m <- suppressWarnings( quality_control(m, source_layer = "input", 
-                  sample_missingness  = 0.2, 
-                  feature_missingness = 0.2, 
-                  total_peak_area_sd  = 5, 
-                  outlier_udist       = 5, 
-                  outlier_treatment   = "leave_be", 
-                  winsorize_quantile  = 1.0, 
-                  tree_cut_height     = 0.5, 
-                  pc_outlier_sd       = 5, 
-                  sample_ids          = NULL, 
-                  feature_ids         = NULL) )
+m <- quality_control(m, 
+                     source_layer = "input", 
+                     sample_missingness  = 0.2, 
+                     feature_missingness = 0.2, 
+                     total_peak_area_sd  = 5, 
+                     outlier_udist       = 5, 
+                     outlier_treatment   = "leave_be", 
+                     winsorize_quantile  = 1.0, 
+                     tree_cut_height     = 0.5, 
+                     pc_outlier_sd       = 5, 
+                     sample_ids          = NULL, 
+                     feature_ids         = NULL)
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
-#> ℹ Validating input parameters
-#> ✔ Validating input parameters [5ms]
-#> 
-#> ℹ Sample & Feature Summary Statistics for raw data
-#> ✔ Sample & Feature Summary Statistics for raw data [451ms]
-#> 
-#> ℹ Copying input data to new 'qc' data layer
-#> ✔ Copying input data to new 'qc' data layer [10ms]
-#> 
-#> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)
-#> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [7ms]
-#> 
-#> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)
-#> ✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [7ms]
-#> 
-#> ℹ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…
-#> ✔ Assessing for sample missingness at specified level of >=20% - excluding 2 sa…
-#> 
-#> ℹ Assessing for feature missingness at specified level of >=20% - excluding 0 f…
-#> ✔ Assessing for feature missingness at specified level of >=20% - excluding 0 f…
-#> 
-#> ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
-#> ✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
-#> 
-#> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev
-#> ✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]
-#> 
-#> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> ! The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]
+#> ℹ Validating input parameters✔ Validating input parameters [4ms]
+#> ℹ Sample & Feature Summary Statistics for raw data✔ Sample & Feature Summary Statistics for raw data [540ms]
+#> ℹ Copying input data to new 'qc' data layer✔ Copying input data to new 'qc' data layer [10ms]
+#> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [7ms]
+#> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [7ms]
+#> ℹ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…✔ Assessing for sample missingness at specified level of >=20% - excluding 2 sa…
+#> ℹ Assessing for feature missingness at specified level of >=20% - excluding 0 f…✔ Assessing for feature missingness at specified level of >=20% - excluding 0 f…
+#> ℹ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
+#> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev✔ Running sample data PCA outlier analysis at +/- 5 Sdev [8ms]
+#> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…                                                                                 ! The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> 
-#> ℹ Creating final QC dataset...
-#> ✔ Creating final QC dataset... [443ms]
-#> 
-#> ℹ Metabolite QC Process Completed
-#> ✔ Metabolite QC Process Completed [9ms]
+#> ℹ Creating final QC dataset...✔ Creating final QC dataset... [409ms]
+#> ℹ Metabolite QC Process Completed✔ Metabolite QC Process Completed [9ms]
 ```
 
 ### View a summary of the Metaboprep object

@@ -7,6 +7,11 @@ editor_options:
 ```{r qcd_data}
 raw_data   <- metaboprep@data[, , "input"]
 qc_data    <- metaboprep@data[, , "qc"]
+excl_samps <- unique(unname(unlist(metaboprep@exclusions$samples)))
+excl_feats <- unique(unname(unlist(metaboprep@exclusions$features)))
+qc_data    <- qc_data[setdiff(rownames(qc_data), excl_samps), 
+                      setdiff(colnames(qc_data), excl_feats),
+                      drop=FALSE]
 qc_sampsum <- metaboprep@sample_summary[, , "qc"]
 ```
 
@@ -16,7 +21,7 @@ qc_sampsum <- metaboprep@sample_summary[, , "qc"]
 
 ## Relative to the raw data
   * `r nrow(raw_data) - nrow(qc_data)` samples were filtered out, given the user's criteria.  
-  * `r ncol(raw_data) - ncol(qc_data)` features were filtered out, given the user's criteria (also excluding xenobiotics)   
+  * `r ncol(raw_data) - ncol(qc_data)` features were filtered out, given the user's criteria.     
   * Please review details above and your log file for the number of features and samples excluded and why.  
 
 
@@ -56,7 +61,8 @@ plots <- lapply(levels(missing$type), function(t) {
   
   if (t!="Total abundance") {
     p <- p + 
-      scale_x_continuous(labels = scales::percent) +
+      scale_x_continuous(labels = function(x) scales::percent(x, accuracy = 1), 
+                         breaks = scales::breaks_pretty(n = 6)) +
       labs(
         x       = "Missingness", 
         y       = "Density",
@@ -96,15 +102,19 @@ bcol[which(n %in% pv_ids )] <- "blue"
 
 # redefine elements of dendrogram
 dend <- dend |>
-  dendextend::set("labels_cex", 0.5) |>
-  dendextend::set("labels_col", bcol) |>
-  dendextend::set("branches_lwd", 0.5) |>
+  dendextend::set("labels", rep("", length(n))) |>
+  dendextend::set("branches_lwd", 0.25) |>
   dendextend::set("branches_k_color",  value = bcol)
 dend <- dendextend::as.ggdend(dend)
 
 # plot
 ggplot(dend) + 
-  geom_hline(yintercept = tree_cut_height, color = "coral2")
+  geom_hline(yintercept = tree_cut_height, color = "coral2") +
+  theme_minimal() +
+  theme(axis.text = element_blank(),
+        axis.title  = element_blank(),
+        axis.ticks = element_blank(), 
+        panel.grid = element_blank())
 ```
 
 ### Summary of the QC (filtered) metabolite data
@@ -116,7 +126,7 @@ qc_feature_sum  <- metaboprep@feature_summary[,,"qc"]
 
 # table
 data.frame(
-  "Item" = c("Total metabolite count (incl. xenbiotics)",
+  "Item" = c("Total metabolite count",
            "Metabolites included in data reduction",
            "Number of metabolite clusters",
            "Number of representative metabolites"),
@@ -155,6 +165,7 @@ x_labs <- sub("(?i)pc","",names(ve))
 ve <- data.frame("pc" = factor(x_labs, levels=x_labs),
                  "var_exp" = ve)
 ```
+
 Scree plot of the variance explained by each PC (limited to 100 for plotting) and a plot of principal component 1 and 2, as derived from the representative metabolites. The Scree plot also identifies the number of PCs estimated to be informative (vertical lines) by the Cattel's Scree Test acceleration factor (red,  n = `r af`) and Parallel Analysis (green, n = `r np`).
 
 ```{r qc_scree_plot, warning=FALSE, message=FALSE}
@@ -174,6 +185,7 @@ Individuals in the PC plot were clustered into 4 kmeans (k) clusters, using data
 ```{r qc_pc_plot}
 # get data
 pcs            <- as.data.frame(metaboprep@sample_summary[, grep("^pc[0-9]+$", colnames(metaboprep@sample_summary), value=TRUE), "qc"])
+pcs            <- pcs[!is.na(pcs$pc1), ]
 qc_feature_sum <- metaboprep@feature_summary[,,"qc"]
 num_rep_metabs <- sum(qc_feature_sum["independent_features", ] == 1, na.rm = TRUE)
 attribs        <- attributes(metaboprep@sample_summary)
@@ -392,9 +404,9 @@ quantiles |>
   )
 ```
 
-### Notes on outlying samples at each metabolite|feature
+### Notes on outlying samples at each feature
 
-There may be extreme outlying observations at individual metabolites|features that have not been accounted for. You may want to:
+There may be extreme outlying observations at individual features that have not been accounted for. You may want to:
 
 1. Turn these observations into NAs.
 2. Winsorize the data to some maximum value.
@@ -407,7 +419,7 @@ There may be extreme outlying observations at individual metabolites|features th
 
 ## Feature missingness
 
-Feature missingness may be influenced by the metabolites' (or features') biology or pathway classification, or your technologies methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files.
+Feature missingness may be influenced by the features' biology or pathway classification, or the measurement methodology. The figure(s) below provides an illustrative evaluation of the proportion of *feature missigness* as a product of the variable(s) available in the raw data files.
 
 ```{r id_feat_batch_vars}
 # get feature summary
@@ -455,6 +467,15 @@ if( length(possible_vars) > 0) {
 
 ## define
 class_variables <- possible_vars
+
+if (length(class_variables) == 0) {
+  cat(" -- No feature level class variables identified or all were invariable -- \n")
+} else {
+  cat(paste0(" -- After filtering a total of ", length(class_variables), 
+             " feature level batch variables were identified. -- \n"))
+  cat(" -- They are:\n")
+  cat(paste0("\t", class_variables, collapse = "\n"), "\n")
+}
 ```
 
 
@@ -473,7 +494,7 @@ if(length(class_variables)==0) {
 
     out <- variable_by_factor( dep         = qc_features[["missingness"]],
                                indep       = qc_features[[x]],
-                               dep_name    = "feature missingness",
+                               dep_name    = "Feature missingness",
                                indep_name  = x,
                                orderfactor = TRUE,
                                violin      = FALSE )
@@ -481,11 +502,12 @@ if(length(class_variables)==0) {
 
 
   }
-  ## plot the output
-  #ggpubr::ggarrange(plotlist = ClassMisPlots, ncol = 1)
 }
-
 ```
+
+
+\newpage
+
 
 ## Sample missingness
 
@@ -599,18 +621,18 @@ if( length(batch_variables) > 0 ) {
 
     out <- variable_by_factor( dep         = qc_samples[["missingness"]],
                                indep       = qc_samples[[x]],
-                               dep_name    = "feature missingness",
+                               dep_name    = "Feature missingness",
                                indep_name  = x,
                                orderfactor = TRUE,
                                violin      = FALSE )
     print(out)
   }
-  
-  ## plot the output
-  #ggpubr::ggarrange(plotlist = BatchMisPlots, ncol = ifelse(length(batch_variables) > 4, 2, 1))
 
 }
 ```
+
+
+\newpage
 
 
 ## Multivariate evaluation: batch variables
@@ -658,9 +680,10 @@ ggplot(qc_sample_sum, aes(x = tpa_complete_features, y = missingness)) +
   geom_point( fill = "grey", alpha = 0.8, size = 1.5) +
   geom_smooth(method = "loess", color = "red", size = 2)  +
   geom_smooth(method = "lm", color = "blue", size = 2)  +
-  labs(x = "TA, complete features", y = "sample missingness",
-       title = paste0( "TA as influenced by missingness \nSpearmans's cor = ", round(a$estimate, d = 4), " p-value = ",
-                    formatC( a$p.value, format = "e", digits = 2) ))
+  theme_minimal() +
+  labs(x = "Total abundance (complete features)", y = "Sample missingness",
+       subtitle = paste0("Spearmans's cor = ", round(a$estimate, d = 4), " p-value = ",
+                         formatC( a$p.value, format = "e", digits = 2) ))
 ```
 
 
@@ -678,7 +701,7 @@ if(length(batch_variables)==0) {
 
     out <- variable_by_factor( dep         = qc_samples[["tpa_complete_features"]],
                                indep       = qc_samples[[x]],
-                               dep_name    = "total peak area",
+                               dep_name    = "Total peak area",
                                indep_name  = x,
                                orderfactor = TRUE,
                                violin      = FALSE )
@@ -686,8 +709,6 @@ if(length(batch_variables)==0) {
 
 
   }
-  ## plot the output
-  #ggpubr::ggarrange(plotlist = ClassMisPlots, ncol = 1)
 }
 
 
@@ -722,5 +743,5 @@ Simulated effect sizes (standardized by trait SD) are illustrated by their color
 p1 = continuous_power_plot( mydata = metaboprep@data[,,"qc"] )
 p2 = imbalanced_power_plot( mydata = metaboprep@data[,,"qc"] )
 
-ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1)
+ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 1, nrow = 2, common.legend = TRUE, legend = "right")
 ```

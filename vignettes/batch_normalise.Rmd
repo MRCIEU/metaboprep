@@ -23,7 +23,7 @@ samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "meta
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
 m <- Metaboprep(data = data, samples = samples, features = features)
-m
+summary(m)
 
 ```
 

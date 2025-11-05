@@ -77,6 +77,7 @@ reference:
     - available_report_templates
     - generate_report
     - run_metaboprep1
+    - shiny_app
     
 - title: "Other processing tools"
   desc: >

@@ -2,8 +2,7 @@
 % Please edit documentation in R/read_metabolon.R
 \name{read_metabolon}
 \alias{read_metabolon}
-\title{Read Metabolon Data
-Reads and processes a commercial Metabolon Excel sheet in v1.1, v1.2, or v2 format. Returns either a structured `Metaboprep` object or a list of components.}
+\title{Read Metabolon Data}
 \usage{
 read_metabolon(
   filepath,
@@ -31,24 +30,10 @@ read_metabolon(
 \item{return_Metaboprep}{logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.}
 }
 \value{
-Metaboprep object or list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
-
-If `return_Metaboprep = TRUE` (default), returns a `Metaboprep` object containing the input data.
-If `return_Metaboprep = FALSE`, returns a named list with the following elements:
-\describe{
-  \item{data}{A numeric matrix of metabolite values with samples as rows and features as columns.}
-  \item{samples}{A `data.frame` containing metadata for each sample (must include `sample_id`).}
-  \item{features}{A `data.frame` containing metadata for each metabolite feature (must include `feature_id`).}
-}
+list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 }
 \description{
 Read Metabolon Data
-Reads and processes a commercial Metabolon Excel sheet in v1.1, v1.2, or v2 format. Returns either a structured `Metaboprep` object or a list of components.
-}
-\details{
-This function reads a commercial Metabolon Excel file in either single-sheet (v1/v2) or multi-sheet (v3) format.
-It extracts sample-level and feature-level metadata alongside the numeric data matrix. 
-Users can choose to return either a structured `Metaboprep` S7 object or a basic list via the `return_Metaboprep` parameter.
 }
 \examples{
 # version 1.1 data format

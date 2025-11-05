@@ -14,6 +14,39 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 ```{r setup}
 library(metaboprep)
+
+# import data 
+m <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
+                    sheet = "OrigScale",      ## The name of the sheet in the excel file to read in
+                    return_Metaboprep = TRUE  ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
+                    )
+```
+
+### Run the quality control pipeline
+
+```{r example}
+# run QC
+m <- quality_control(m, 
+                     source_layer = "input", 
+                     sample_missingness  = 0.2, 
+                     feature_missingness = 0.2, 
+                     total_peak_area_sd  = 5, 
+                     outlier_udist       = 5, 
+                     outlier_treatment   = "leave_be", 
+                     winsorize_quantile  = 1.0, 
+                     tree_cut_height     = 0.5, 
+                     pc_outlier_sd       = 5, 
+                     sample_ids          = NULL, 
+                     feature_ids         = NULL)
+```
+
+
+### View a summary of the Metaboprep object
+
+```{r summary}
+# view summary
+summary(m)
 ```

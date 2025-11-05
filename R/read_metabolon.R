@@ -1,11 +1,4 @@
 #' @title Read Metabolon Data
-#' Reads and processes a commercial Metabolon Excel sheet in v1.1, v1.2, or v2 format. Returns either a structured `Metaboprep` object or a list of components.
-#' 
-#' @details
-#' This function reads a commercial Metabolon Excel file in either single-sheet (v1/v2) or multi-sheet (v3) format.
-#' It extracts sample-level and feature-level metadata alongside the numeric data matrix. 
-#' Users can choose to return either a structured `Metaboprep` S7 object or a basic list via the `return_Metaboprep` parameter.
-#' 
 #' @param filepath character, commercial Metabolon excel sheet with extension .xls or .xlsx
 #' @param sheet character or integer, the excel sheet name (or index) from which to read. 
 #' @param feature_sheet character or integer, the excel sheet name (or index) from which to read the feature data. 
@@ -13,18 +6,8 @@
 #' @param sample_sheet character or integer, the excel sheet name (or index) from which to read the sample data. 
 #' @param sample_id_col character, the excel column containing the sample_id mapping to the data. 
 #' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
-#' 
-#' @returns Metaboprep object or list,  list(data = matrix, samples = samples data.frame, features = features data.frame)
+#' @returns list or Metaboprep object, list(data = matrix, samples = samples data.frame, features = features data.frame)
 #'
-#' @return
-#' If `return_Metaboprep = TRUE` (default), returns a `Metaboprep` object containing the input data.
-#' If `return_Metaboprep = FALSE`, returns a named list with the following elements:
-#' \describe{
-#'   \item{data}{A numeric matrix of metabolite values with samples as rows and features as columns.}
-#'   \item{samples}{A `data.frame` containing metadata for each sample (must include `sample_id`).}
-#'   \item{features}{A `data.frame` containing metadata for each metabolite feature (must include `feature_id`).}
-#' }
-#' 
 #' @examples
 #' # version 1.1 data format
 #' filepath1 <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
@@ -46,13 +29,7 @@
 #'
 #' @importFrom readxl excel_sheets read_xlsx
 #' @export
-read_metabolon <- function(filepath, 
-                           sheet = NULL, 
-                           feature_sheet = NULL, 
-                           feature_id_col = NULL, 
-                           sample_sheet = NULL, 
-                           sample_id_col = NULL, 
-                           return_Metaboprep = TRUE) {
+read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature_id_col = NULL, sample_sheet = NULL, sample_id_col = NULL, return_Metaboprep = TRUE) {
 
   # testing ====
   if (FALSE) {
@@ -203,9 +180,9 @@ read_metabolon <- function(filepath,
   # return ====
   if (return_Metaboprep) {
     return(Metaboprep(data = data, samples = samples, features = features))
-    } else {
-      return(list(data = data, samples = samples, features = features))
-    }
+  } else {
+    return(list(data = data, samples = samples, features = features))
+  }
   
 }
 

@@ -32,6 +32,7 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
   if (is.null(output_filename)) {
     outpath <- file.path(output_dir, clean_names(paste0(project, "_metaboprep_", template)))
   } else {
+    output_filename <- basename(output_filename)
     outpath <- file.path(output_dir, output_filename)
   }
 
@@ -48,14 +49,22 @@ method(generate_report, Metaboprep) <- function(metaboprep, output_dir, output_f
 
   # render the report
   rmarkdown::render(
-    input         = template_path,
-    output_file   = outpath,
-    params        = list(project = project, metaboprep = metaboprep),
-    output_format = paste(format, "document", sep="_"),
-    envir         = new.env()  # Use a new environment to avoid conflicts
+    input             = template_path,
+    output_file       = outpath,
+    output_dir        = dirname(outpath),
+    knit_root_dir     = dirname(outpath),
+    intermediates_dir = dirname(outpath),
+    params            = list(project = project, metaboprep = metaboprep),
+    output_format     = paste(format, "document", sep="_"),
+    envir             = new.env()  # Use a new environment to avoid conflicts
   )
 
-
+  # move latex log files 
+  log_file <- list.files(file.path(dirname(template_path)), full.names = TRUE, pattern = paste0(output_filename, "\\.log"))
+  if (length(log_file) > 0) {
+    file.rename(log_file, file.path(dirname(outpath), basename(log_file)))
+  }
+  
   #
   #
   # # Only run if the output format is PDF

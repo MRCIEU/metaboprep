@@ -64,17 +64,18 @@ m <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", packag
 
 ```{r example}
 # run QC
-m <- suppressWarnings( quality_control(m, source_layer = "input", 
-                  sample_missingness  = 0.2, 
-                  feature_missingness = 0.2, 
-                  total_peak_area_sd  = 5, 
-                  outlier_udist       = 5, 
-                  outlier_treatment   = "leave_be", 
-                  winsorize_quantile  = 1.0, 
-                  tree_cut_height     = 0.5, 
-                  pc_outlier_sd       = 5, 
-                  sample_ids          = NULL, 
-                  feature_ids         = NULL) )
+m <- quality_control(m, 
+                     source_layer = "input", 
+                     sample_missingness  = 0.2, 
+                     feature_missingness = 0.2, 
+                     total_peak_area_sd  = 5, 
+                     outlier_udist       = 5, 
+                     outlier_treatment   = "leave_be", 
+                     winsorize_quantile  = 1.0, 
+                     tree_cut_height     = 0.5, 
+                     pc_outlier_sd       = 5, 
+                     sample_ids          = NULL, 
+                     feature_ids         = NULL)
 ```
 
 

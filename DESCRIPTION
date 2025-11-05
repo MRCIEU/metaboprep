@@ -30,7 +30,13 @@ Imports:
     OlinkAnalyze,
     SomaDataIO,
     reshape2,
-    openxlsx
+    openxlsx,
+    stringr,
+    shiny,
+    shinycssloaders,
+    bslib,
+    DT,
+    plotly
 Suggests: 
     knitr,
     dendextend,
@@ -61,6 +67,7 @@ Collate:
     'read_somalogic.R'
     'run_metaboprep1.R'
     'sample_summary.R'
+    'shiny_app.R'
     'summarise.R'
     'summary_metaboprep.R'
     'total_peak_area.R'
