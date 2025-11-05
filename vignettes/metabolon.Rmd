@@ -23,15 +23,17 @@ library(metaboprep)
 # example file
 filepath <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
 
-# import
-dat <- read_metabolon(filepath, sheet = 'OrigScale')
+# import data as a list object rather than directly as a Metaboprep object
+dat <- read_metabolon(filepath, sheet = 'OrigScale', return_Metaboprep = FALSE)
 
 # view structure
 str(dat)
 ```
 
 ## Create Metaboprep object 
+
 Once imported, we pass the data to the `Metaboprep` class object. 
+
 ```{r metaboprep_obj}
 m <- Metaboprep(data     = dat$data, 
                 features = dat$features, 
@@ -45,8 +47,8 @@ m
 ```{r qc}
 m <- m |>
   quality_control(source_layer        = "input", 
-                  sample_missingness  = 0.5, 
-                  feature_missingness = 0.3, 
+                  sample_missingness  = 0.2, 
+                  feature_missingness = 0.2, 
                   total_peak_area_sd  = 5, 
                   outlier_udist       = 5, 
                   outlier_treatment   = "leave_be", 
