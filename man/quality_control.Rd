@@ -51,7 +51,7 @@ quality_control(
 
 \item{feature_ids}{character, vector of feature ids to work with}
 
-\item{features_exclude_but_keep}{character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same}
+\item{features_exclude_but_keep}{character, vector of feature ids indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same}
 }
 \description{
 This function is a wrapper function that performs the key quality controls steps on a metabolomics data set.

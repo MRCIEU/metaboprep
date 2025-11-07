@@ -3,21 +3,34 @@
 ## Sample size of `r project` data set:  
 
 ```{r sample_size, echo=FALSE, results = 'asis'}
+layer_names = dimnames(metaboprep@data)[[3]]
+excl_samps = unique( unlist(metaboprep@exclusions$samples ))
+incl_samps = setdiff(rownames(metaboprep@data[, ,layer_names[2]]), excl_samps)
+excl_feats = unique( unlist(metaboprep@exclusions$features ))
+incl_feats = setdiff(colnames(metaboprep@data[, ,layer_names[2]]), excl_feats)
+
+sample_size_table <- data.frame(
+  Dataset  = toupper(gsub("_"," ",layer_names)),
+  Samples  = c( nrow(metaboprep@data[ , ,layer_names[1]]) , length(incl_samps) ),
+  Features = c( ncol(metaboprep@data[ , ,layer_names[1]]) ,  length(incl_feats) ),
+  stringsAsFactors = FALSE
+)
+
 # extract
-sample_size_table <- do.call(rbind, lapply(dimnames(metaboprep@data)[[3]], function(layer_name) {
-  
-  incl_samps <- setdiff(rownames(metaboprep@data[, , layer_name]), unlist(metaboprep@exclusions[["samples"]]))
-  incl_feats <- setdiff(colnames(metaboprep@data[, , layer_name]), unlist(metaboprep@exclusions[["features"]]))
-  data <- metaboprep@data[incl_samps, incl_feats, layer_name]
-  
-  data.frame(
-    `Dataset`  = toupper(gsub("_"," ",layer_name)), 
-    `Samples`  = nrow(data), 
-    `Features` = ncol(data),
-    stringsAsFactors = FALSE
-  ) 
-  
-}))
+# sample_size_table <- do.call(rbind, lapply(dimnames(metaboprep@data)[[3]], function(layer_name) {
+#   
+#   incl_samps <- setdiff(rownames(metaboprep@data[, , layer_name]), unlist(metaboprep@exclusions[["samples"]]))
+#   incl_feats <- setdiff(colnames(metaboprep@data[, , layer_name]), unlist(metaboprep@exclusions[["features"]]))
+#   data <- metaboprep@data[incl_samps, incl_feats, layer_name]
+#   
+#   data.frame(
+#     `Dataset`  = toupper(gsub("_"," ",layer_name)), 
+#     `Samples`  = nrow(data), 
+#     `Features` = ncol(data),
+#     stringsAsFactors = FALSE
+#   ) 
+#   
+# }))
 
 # table
 sample_size_table |>
@@ -41,7 +54,7 @@ sample_size_table |>
 Missingness is evaluated across samples and features using the original (input) data set. 
 
 ## Visual structure of missingness in the raw data
-```{r missing_matrix}
+```{r missing_matrix, fig.width=10, fig.height=6}
 # raw data
 namat <- metaboprep@data[, , "input"]
 namat[!is.na(namat)] <- 1 
@@ -58,7 +71,7 @@ nadat_long$features <- factor(nadat_long$features, levels = colnames(namat))
 ggplot(nadat_long, aes(x = features, y = samples, fill = missing)) + 
   geom_tile() + 
   scale_fill_manual(
-    values = c("Missing" = "red", "Present" = "white")
+    values = c("Missing" = "red", "Present" = "grey95")
   ) +
   theme(
     text            = element_text(family = "Helvetica"),
@@ -83,7 +96,7 @@ The distribution of missingness is summarized in:
 
 1. histograms  
 2. tabulated using percentiles, and  
-3. estimates of study samples sizes under various levels of feature / sample missingness filtering thresholds - this helps in understanding how filtering sample and/or features with high levels of missing data would affect the dataset
+3. estimates of sample and feature samples sizes under various levels of missingness filtering thresholds
 
 
 ```{r missing_summary_compute}
@@ -124,35 +137,46 @@ tbl1 <- tbl1 |>
   )
 
 # Estimates of sample size given various levels of missingness
-miss_thresholds <- expand.grid(fmiss_thresh = seq(0.0, 1.0, 0.1), 
-                               smiss_thresh = seq(0.0, 1.0, 0.1))
-miss_thresholds[["Feature missingness threshold"]] <- scales::percent(miss_thresholds[["fmiss_thresh"]], accuracy = 1)
-miss_thresholds[["Sample missingness threshold"]]  <- scales::percent(miss_thresholds[["smiss_thresh"]], accuracy = 1)
-miss_thresholds[["Feature missingness threshold"]] <- factor(miss_thresholds[["Feature missingness threshold"]], levels = unique(miss_thresholds[["Feature missingness threshold"]]))
-miss_thresholds[["Sample missingness threshold"]]  <- factor(miss_thresholds[["Sample missingness threshold"]], levels = unique(miss_thresholds[["Sample missingness threshold"]]))
-miss_thresholds[["Sample size"]] <- mapply(function(f_thresh, s_thresh) {
-  filtered_data <- data
-  bad_features  <- which(colMeans(is.na(filtered_data)) >= f_thresh)
-  bad_samples   <- which(rowMeans(is.na(filtered_data)) >= s_thresh)
-  if (length(bad_features) > 0 & length(bad_samples) > 0) {
-    filtered_data <- filtered_data[-bad_samples, -bad_features, drop = FALSE]
-  } else if (length(bad_samples) > 0) {
-    filtered_data <- filtered_data[-bad_samples, , drop = FALSE]
-  } else if (length(bad_features) > 0) {
-    filtered_data <- filtered_data[, -bad_features, drop = FALSE]
-  }
-  sum(rowSums(!is.na(filtered_data)) > 0)
-}, 
-f_thresh = miss_thresholds$fmiss_thresh,
-s_thresh = miss_thresholds$smiss_thresh)
+# miss_thresholds <- expand.grid(fmiss_thresh = seq(0.0, 1.0, 0.1), 
+#                                smiss_thresh = seq(0.0, 1.0, 0.1))
+# miss_thresholds[["Feature missingness threshold"]] <- scales::percent(miss_thresholds[["fmiss_thresh"]], accuracy = 1)
+# miss_thresholds[["Sample missingness threshold"]]  <- scales::percent(miss_thresholds[["smiss_thresh"]], accuracy = 1)
+# miss_thresholds[["Feature missingness threshold"]] <- factor(miss_thresholds[["Feature missingness threshold"]], levels = unique(miss_thresholds[["Feature missingness threshold"]]))
+# miss_thresholds[["Sample missingness threshold"]]  <- factor(miss_thresholds[["Sample missingness threshold"]], levels = unique(miss_thresholds[["Sample missingness threshold"]]))
+# miss_thresholds[["Sample size"]] <- mapply(function(f_thresh, s_thresh) {
+#   filtered_data <- data
+#   bad_features  <- which(colMeans(is.na(filtered_data)) >= f_thresh)
+#   bad_samples   <- which(rowMeans(is.na(filtered_data)) >= s_thresh)
+#   if (length(bad_features) > 0 & length(bad_samples) > 0) {
+#     filtered_data <- filtered_data[-bad_samples, -bad_features, drop = FALSE]
+#   } else if (length(bad_samples) > 0) {
+#     filtered_data <- filtered_data[-bad_samples, , drop = FALSE]
+#   } else if (length(bad_features) > 0) {
+#     filtered_data <- filtered_data[, -bad_features, drop = FALSE]
+#   }
+#   sum(rowSums(!is.na(filtered_data)) > 0)
+# }, 
+# f_thresh = miss_thresholds$fmiss_thresh,
+# s_thresh = miss_thresholds$smiss_thresh)
+# 
+## Number of samples at various sample missingness thresholds
+thresholds = seq(0.05, 1, by = 0.05)
+missing_sample_sizes <- sapply(thresholds, function(thresh) {
+  length(split_list$Samples) - sum(split_list$Samples >= thresh)
+})
 
+missing_feature_sizes <- sapply(thresholds, function(thresh) {
+  length(split_list$Features) - sum(split_list$Features >= thresh)
+})
 
-# feature missingness threshold table
-tbl2f <- miss_thresholds[miss_thresholds$smiss_thresh==1.0 & miss_thresholds$fmiss_thresh %in% seq(0, 1, 0.2), 
-                        c("Feature missingness threshold", "Sample size")] |>
+tbl2sf = data.frame(
+  `Missingness threshold` = scales::percent(thresholds, accuracy = 1),
+  `Number of Samples`     = missing_sample_sizes,
+  `Number of Features`    = missing_feature_sizes
+  ) |>
   knitr::kable(
-    caption = "Estimates of samples sizes using different feature missingness thresholds.",
-    align   = rep("c", 2), 
+    caption = "Estimates of sample and feature sample sizes at different missingness thresholds.",
+    align   = rep("c", 2),
     row.names  = FALSE
   ) |>
   kableExtra::kable_classic(
@@ -161,54 +185,73 @@ tbl2f <- miss_thresholds[miss_thresholds$smiss_thresh==1.0 & miss_thresholds$fmi
     latex_options     = c("hold_position")
   ) |>
   kableExtra::column_spec(
-    column = 1:2, 
+    column = 1:2,
     width  = "15em"
   )
 
-# sample missingness threshold table
-tbl2s <- miss_thresholds[miss_thresholds$fmiss_thresh==1.0 & miss_thresholds$smiss_thresh %in% seq(0, 1, 0.2), 
-                        c("Sample missingness threshold", "Sample size")] |>
-  knitr::kable(
-    caption = "Estimates of samples sizes using different sample missingness thresholds.",
-    align   = rep("c", 2), 
-    row.names  = FALSE
-  ) |>
-  kableExtra::kable_classic(
-    lightable_options = "hover",
-    html_font         = report_font,
-    latex_options     = c("hold_position")
-  ) |>
-  kableExtra::column_spec(
-    column = 1:2, 
-    width  = "15em"
-  )
+
+# # feature missingness threshold table
+# tbl2f <- miss_thresholds[miss_thresholds$smiss_thresh==1.0 & miss_thresholds$fmiss_thresh %in% seq(0, 1, 0.2),
+#                         c("Feature missingness threshold", "Sample size")] |>
+#   knitr::kable(
+#     caption = "Estimates of samples sizes using different feature missingness thresholds.",
+#     align   = rep("c", 2),
+#     row.names  = FALSE
+#   ) |>
+#   kableExtra::kable_classic(
+#     lightable_options = "hover",
+#     html_font         = report_font,
+#     latex_options     = c("hold_position")
+#   ) |>
+#   kableExtra::column_spec(
+#     column = 1:2,
+#     width  = "15em"
+#   )
+
+# # sample missingness threshold table
+# tbl2s <- miss_thresholds[miss_thresholds$fmiss_thresh==1.0 & miss_thresholds$smiss_thresh %in% seq(0, 1, 0.2), 
+#                         c("Sample missingness threshold", "Sample size")] |>
+#   knitr::kable(
+#     caption = "Estimates of samples sizes using different sample missingness thresholds.",
+#     align   = rep("c", 2), 
+#     row.names  = FALSE
+#   ) |>
+#   kableExtra::kable_classic(
+#     lightable_options = "hover",
+#     html_font         = report_font,
+#     latex_options     = c("hold_position")
+#   ) |>
+#   kableExtra::column_spec(
+#     column = 1:2, 
+#     width  = "15em"
+#   )
 
 # sample size by thresholds
-miss_thresh_sample_size_heatmap <- ggplot(
-  miss_thresholds,
-  aes(
-    x = `Feature missingness threshold`,
-    y = `Sample missingness threshold`,
-    fill = `Sample size`
-  )
-) +
-  geom_tile(color = "white") +
-  scale_fill_gradient(
-    low = "firebrick",
-    high = "steelblue",
-    name = "Sample size"
-  ) +
-  labs(
-    x = "Feature missingness threshold",
-    y = "Sample missingness threshold"
-  ) +
-  theme_minimal() +
-  coord_fixed() +
-  theme(
-    axis.text.x  = element_text(angle = 45, hjust = 1),
-    panel.grid   = element_blank(), 
-    legend.position = "top"
-  )
+# miss_thresh_sample_size_heatmap <- ggplot(
+#   miss_thresholds,
+#   aes(
+#     x = `Feature missingness threshold`,
+#     y = `Sample missingness threshold`,
+#     fill = `Sample size`
+#   )
+# ) +
+#   geom_tile(color = "white") +
+#   scale_fill_gradient(
+#     low = "firebrick",
+#     high = "steelblue",
+#     name = "Sample size"
+#   ) +
+#   labs(
+#     x = "Feature missingness threshold",
+#     y = "Sample missingness threshold"
+#   ) +
+#   theme_minimal() +
+#   coord_fixed() +
+#   theme(
+#     axis.text.x  = element_text(angle = 45, hjust = 1),
+#     panel.grid   = element_blank(), 
+#     legend.position = "top"
+#   )
 
 # missing histograms
 medians <- tapply(missing$missingness, missing$type, median)
@@ -236,7 +279,7 @@ miss_hists <- ggplot(missing, aes(x = missingness, color=type, fill=type)) +
   facet_wrap(~type, scales = "free")
 ```
 
-```{r histograms}
+```{r histograms, fig.width=14, fig.height=4}
 miss_hists
 ```
 
@@ -250,7 +293,8 @@ tbl1
 <!-- Estimates of study samples sizes under various levels of feature missingness. -->
 
 ```{r miss_sample_sizes}
-tbl2f
-tbl2s
-miss_thresh_sample_size_heatmap
+# tbl2f
+# tbl2s
+tbl2sf
+# miss_thresh_sample_size_heatmap
 ```

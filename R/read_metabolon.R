@@ -100,10 +100,19 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
     
     
     # rename
+    # stopifnot("feature_id_col provided but not found in feature sheet" = feature_id_col %in% names(features))
+    # names(features)[names(features) == feature_id_col] <- "feature_id"
+    # stopifnot("sample_id_col provided but not found in sample sheet" = sample_id_col %in% names(samples))
+    # names(samples)[names(samples) == sample_id_col] <- "sample_id"
+    
+    # Check that the requested columns exist
     stopifnot("feature_id_col provided but not found in feature sheet" = feature_id_col %in% names(features))
-    names(features)[names(features) == feature_id_col] <- "feature_id"
     stopifnot("sample_id_col provided but not found in sample sheet" = sample_id_col %in% names(samples))
-    names(samples)[names(samples) == sample_id_col] <- "sample_id"
+    
+    # Add new columns (instead of renaming)
+    features$feature_id <- features[[feature_id_col]]
+    samples$sample_id   <- samples[[sample_id_col]]
+    
     
     #Make both columns character class
     features$feature_id <- as.character(features$feature_id)
@@ -128,11 +137,15 @@ read_metabolon <- function(filepath, sheet = NULL, feature_sheet = NULL, feature
     
     if (any(grepl("(?i)COMP.*?ID", names(features)))) { 
       
-      names(features)[grep("(?i)COMP.*?ID", names(features))[1]] <- "feature_id"
+      # names(features)[grep("(?i)COMP.*?ID", names(features))[1]] <- "feature_id"
+      match_col <- grep("(?i)COMP.*?ID", names(features), value = TRUE)[1]
+      features$feature_id <- features[[match_col]]
       
     } else if (any(grepl("(?i)metabolite.*?id", names(features)))) {
       
-      names(features)[grep("(?i)metabolite.*?id", names(features))[1]] <- "feature_id"
+      # names(features)[grep("(?i)metabolite.*?id", names(features))[1]] <- "feature_id"
+      match_col <- grep("(?i)metabolite.*?id", names(features), value = TRUE)[1]
+      features$feature_id <- features[[match_col]]
       
     } else {
       

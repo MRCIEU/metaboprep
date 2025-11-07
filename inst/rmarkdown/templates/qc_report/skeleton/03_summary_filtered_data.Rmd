@@ -26,7 +26,7 @@ qc_sampsum <- metaboprep@sample_summary[, , "qc"]
 
 
 ### Distributions for sample and feature missingness
-```{r qc_sample_missingness}
+```{r qc_sample_missingness, fig.width=15, fig.height=5}
 missing <- rbind(
   data.frame("type"       = "Samples",
              "value_type" = "missingness",
@@ -46,9 +46,9 @@ plots <- lapply(levels(missing$type), function(t) {
   geom_histogram(aes(y = ..density..), fill="white", bins = 25) +
   geom_density(alpha = 0.4) +
   geom_vline(data = data.frame(median = median(missing[missing$type==t, "value"])),
-             aes(xintercept = median), color = "darkred", linewidth = 0.75, linetype="dashed") +
-  scale_color_manual(values = c(Samples = "darkblue", Features = "orange", `Total abundance` = "darkgreen")) +
-  scale_fill_manual(values = c(Samples = "lightblue", Features = "lightyellow", `Total abundance` = "palegreen")) +
+             aes(xintercept = median), color = "#E41A1C", linewidth = 0.75, linetype="dashed") +
+  scale_color_manual(values = c(Samples = "#2171B5", Features = "#F16913", `Total abundance` = "#238B45")) +
+  scale_fill_manual(values = c(Samples = "#9ECAE1", Features = "#FDD0A2", `Total abundance` = "#A1D99B")) +
   theme_classic() +
   guides(fill="none", color="none") +
   theme(
@@ -86,7 +86,7 @@ ggpubr::ggarrange(plotlist = plots, nrow=1, ncol=3)
 
 ### Clustering dendrogram of representative features
 Spearman's correlation distance clustering dendrogram highlighting the metabolites used as representative features in blue, the clustering tree cut height is denoted by the horizontal line.
-```{r qc_dendrogram, out.width="100%"}
+```{r qc_dendrogram, out.width="100%", fig.width=20, fig.height=5}
 # get data
 qc_feature_sum  <- metaboprep@feature_summary[,,"qc"]
 attribs         <- attributes(metaboprep@feature_summary)
@@ -97,8 +97,8 @@ dend            <- stats::as.dendrogram(qc_feature_tree)
 ## create a vector of colors to color your tree labels
 pv_ids <- colnames(qc_feature_sum)[qc_feature_sum["independent_features", ] == 1]
 n <- labels(dend)
-bcol = rep("black", length(n))
-bcol[which(n %in% pv_ids )] <- "blue"
+bcol = rep("#999999", length(n))
+bcol[which(n %in% pv_ids )] <- "#377EB8"
 
 # redefine elements of dendrogram
 dend <- dend |>
@@ -109,7 +109,7 @@ dend <- dendextend::as.ggdend(dend)
 
 # plot
 ggplot(dend) + 
-  geom_hline(yintercept = tree_cut_height, color = "coral2") +
+  geom_hline(yintercept = tree_cut_height, color = "#E41A1C") +
   theme_minimal() +
   theme(axis.text = element_blank(),
         axis.title  = element_blank(),
@@ -130,7 +130,7 @@ data.frame(
            "Metabolites included in data reduction",
            "Number of metabolite clusters",
            "Number of representative metabolites"),
-  "Count" = c(ncol(qc_feature_sum),
+  "Count" = c( ncol(qc_data),
             length(stats::na.omit(qc_feature_sum["k", ])),
             length(unique(stats::na.omit(qc_feature_sum["k", ]))),
             sum(qc_feature_sum["independent_features", ] == 1, na.rm = TRUE))
@@ -227,7 +227,7 @@ ggplot(pcs, aes(x = pc1, y = pc2, fill = as.factor(cluster_k))) +
 \newpage
 
 ## Structure among samples
-A matrix (pairs) plot of the top five principal components including demarcations of the 3rd (grey), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs.
+A matrix (pairs) plot of the top five principal components including demarcations of the 3rd (yellow), 4th (orange), and 5th (red) standard deviations from the mean. Samples are color coded as in the summary PC plot above using a kmeans analysis of PC1 and PC2 with a k (number of clusters) set at 4. The choice of k = 4 was not robustly chosen it was a choice of simplicity to help aid visualize variation and sample mobility across the PCs.
 ```{r pca_pairsplot, out.width="100%"}
 # get data
 npcs    <- 5
@@ -287,9 +287,9 @@ for (i in 1:(npcs-1)) {
         outliersH  = unlist( outliers(pcs[,i], nsd=nsd)[2:3] )
         p <- p +
           geom_vline(xintercept = outliersV, linewidth = 0.25,
-                     color = ifelse(nsd == 3, "grey", ifelse(nsd == 4, "orange", "red"))) +
+                     color = ifelse(nsd == 3, "#FFFFBF", ifelse(nsd == 4, "#FDAE61", "#D53E4F"))) +
           geom_hline(yintercept = outliersH, linewidth = 0.25,
-                     color = ifelse(nsd == 3, "grey", ifelse(nsd == 4, "orange", "red")))
+                     color = ifelse(nsd == 3, "#FFFFBF", ifelse(nsd == 4, "#FDAE61", "#D53E4F")))
       }
       
     }
@@ -308,13 +308,19 @@ ggpubr::ggarrange(plotlist = plot_list, nrow = npcs-1, ncol = npcs-1)
 ### Estimates of normality: W-statistics for raw and log transformed data
 ```{r compute_for_text}
 # get data
-wstats <- metaboprep@feature_summary[,,"qc"]
+qc_feature_sum  <- metaboprep@feature_summary[,,"qc"]
+# remove excluded features
+w = which(excl_feats %in% colnames(qc_feature_sum))
+if(length(w) > 0){
+  qc_feature_sum <- qc_feature_sum[, -w, drop=FALSE]
+}
+
 
 # compute
-count = length(wstats["W", ])
-nacount = sum(is.na(wstats["W", ]))
+count = length(  qc_feature_sum["W", ])
+nacount = sum(is.na(qc_feature_sum["W", ]))
 remain_count = count - nacount
-normcount = sum(wstats["W", ] >= 0.95, na.rm = TRUE)
+normcount = sum(qc_feature_sum["W", ] >= 0.95, na.rm = TRUE)
 ```
 
 Of the `r count` features in the data `r nacount` features were excluded from this analysis because of no variation or too few observations (n < 40). Of the remaining `r remain_count` metabolite features, a total of `r normcount` may be considered normally distributed given a Shapiro W-statistic >= 0.95.
@@ -324,7 +330,7 @@ Of the `r count` features in the data `r nacount` features were excluded from th
 
 Histogram plots of Shapiro W-statistics for raw and log transformed data distributions. A W-statistic value of 1 indicates the sample distribution is perfectly normal and value of 0 indicates it is perfectly uniform. Please note that log transformation of the data *may not* improve the normality of your data.
 
-```{r shapirowilk}
+```{r shapirowilk, fig.width=15, fig.height=4}
 # get data
 wdat <- rbind(
   data.frame("type" = "Raw",   "w" = wstats["W", ]),
@@ -340,7 +346,7 @@ LogMakesDistributionWorse <- c(
 
 `r normcount` of the metabolites exhibit distributions that may declared normal, given a W-stat >= 0.95. In `r LogMakesDistributionWorse[1]` instances (`r LogMakesDistributionWorse[2]`%) of the tested metabolites the log10 data W-stat is < raw data W-stat.
 
-```{r w_dist_plot}
+```{r w_dist_plot, fig.width=12, fig.height=5}
 # Plot
 ggplot(wdat, aes(x = w, fill = type)) +
   geom_histogram(bins=10, position = "identity", alpha = 0.6, color = "black", show.legend = FALSE) +
@@ -365,7 +371,7 @@ Evaluation of the number of samples and features that are outliers across the QC
 
 ```{r outlier_summary}
 # get data
-qc_data <-  metaboprep@data[, , "qc"]
+# qc_data <-  metaboprep@data[, , "qc"] ## already defined on line 12
 
 # compute
 omat <- outlier_detection(qc_data, by="column")
@@ -424,11 +430,12 @@ Feature missingness may be influenced by the features' biology or pathway classi
 ```{r id_feat_batch_vars}
 # get feature summary
 qc_features    <- metaboprep@features
-excluded_feats <- unlist(metaboprep@exclusions$features)
-qc_features    <- qc_features[!qc_features$feature_id %in% excluded_feats, ]
+qc_features    <- qc_features[!qc_features$feature_id %in% excl_feats, ]
 qc_feature_sum <- t(metaboprep@feature_summary[,,"qc"]) |> as.data.frame()
 qc_feature_sum$feature_id <- rownames(qc_feature_sum)
-qc_features    <- merge(qc_features, qc_feature_sum[, c("feature_id", "missingness")], on="feature_id", all = TRUE)
+m = match(qc_features$feature_id, qc_feature_sum$feature_id)
+qc_features = cbind(qc_features, missingness = qc_feature_sum[m, c("missingness")])
+
 
 ## what are all of the variables that could be used to evaluate feature effects on missingness?
 possible_vars <- setdiff(names(qc_features), grep("^missingness|feature_id|reason_excluded|excluded", names(qc_features), value = TRUE))
@@ -739,9 +746,9 @@ Analytical power analysis for both continuous and imbalanced presence/absence co
 
 Simulated effect sizes (standardized by trait SD) are illustrated by their color in each figure. Figure (A) provides estimates of power for continuous traits with the total sample size on the x-axis and the estimated power on the y-axis. Figure (B) provides estimates of power for presence/absence (or binary) traits in an imbalanced design. The estimated power is on the y-axis. The total sample size is set to 99 and the x-axis depicts the number of individuals present (or absent) for the trait. The effects sizes illustrated here were chosen by running an initial set of simulations which identified effects sizes that would span a broad range of power estimates given the sample population’s sample size.
 
-```{r power_exploration}
+```{r power_exploration, fig.width=17, fig.height=6}
 p1 = continuous_power_plot( mydata = metaboprep@data[,,"qc"] )
 p2 = imbalanced_power_plot( mydata = metaboprep@data[,,"qc"] )
 
-ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 1, nrow = 2, common.legend = TRUE, legend = "right")
+ggpubr::ggarrange(p1, p2, labels = c("A", "B"), ncol = 2, nrow = 1, common.legend = FALSE, legend = "right")
 ```
