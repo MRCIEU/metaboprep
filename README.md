@@ -53,12 +53,12 @@ library(metaboprep)
 
 # import data 
 mydata <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
-                         sheet = "OrigScale",      ## The name of the sheet in the excel file to read in
-                         return_Metaboprep = FALSE  ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
+                         sheet             = "OrigScale", ## The name of the sheet in the excel file to read in
+                         return_Metaboprep = FALSE        ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
                          )
 
 # create metaboprep object
-mydata <- Metaboprep(data     = mydata$data, 
+mydata <- Metaboprep(data    = mydata$data, 
                     features = mydata$features, 
                     samples  = mydata$samples)
 ```
@@ -67,7 +67,7 @@ mydata <- Metaboprep(data     = mydata$data,
 
 ``` r
 # run QC
-mydata <- mydata |> quality_control( source_layer = "input", 
+mydata <- mydata |> quality_control( source_layer        = "input", 
                                      sample_missingness  = 0.2, 
                                      feature_missingness = 0.2, 
                                      total_peak_area_sd  = 5, 
