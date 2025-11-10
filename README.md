@@ -100,6 +100,7 @@ mydata <- mydata |> quality_control( source_layer = "input",
 ``` r
 # view summary
 summary(mydata)
+#> 
 #> Metaboprep Object Summary
 #> --------------------------
 #> Samples      : 100
