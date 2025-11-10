@@ -58,9 +58,9 @@ mydata <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", p
                          )
 
 # create metaboprep object
-mydata <- Metaboprep(data    = mydata$data, 
-                    features = mydata$features, 
-                    samples  = mydata$samples)
+mydata <- Metaboprep(data     = mydata$data, 
+                     features = mydata$features, 
+                     samples  = mydata$samples)
 ```
 
 ### Run the quality control pipeline
