@@ -47,11 +47,11 @@ quality_control(
 
 \item{max_num_pcs}{numeric, the maximum number of PCs to use (look in) when filtering samples on PC outlier SD, default=10, set to NULL to use all informative PCs from the Scree analysis}
 
-\item{sample_ids}{character, vector of sample ids to work with}
+\item{sample_ids}{character, vector of sample ids to retain and work with, all others samples will be excluded}
 
-\item{feature_ids}{character, vector of feature ids to work with}
+\item{feature_ids}{character, vector of feature ids to retain and work with, all other features will be excluded}
 
-\item{features_exclude_but_keep}{character, vector of feature ids indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same}
+\item{features_exclude_but_keep}{character, vector of feature ids indicating features to exclude from the sample and PCA quality control analysis but keep in the data, OR a name of a logical column in the features data indicating the same}
 }
 \description{
 This function is a wrapper function that performs the key quality controls steps on a metabolomics data set.

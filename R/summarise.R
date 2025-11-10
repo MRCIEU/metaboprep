@@ -6,9 +6,27 @@
 #' @param output character, type of output, either 'object' to return the updated metaboprep object, or 'data.frame' to return the data.
 #' @include class_metaboprep.R
 #' @export
-summarise <- new_generic(name = "summarise", dispatch_args = c("metaboprep"), function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, feature_selection = "max_var_exp", sample_ids=NULL, feature_ids=NULL, features_exclude=NULL, output="data.frame") { S7_dispatch() })
+summarise <- new_generic(name = "summarise", 
+                         dispatch_args = c("metaboprep"), 
+                         function(metaboprep, 
+                                  source_layer      = "input", 
+                                  outlier_udist     = 5, 
+                                  tree_cut_height   = 0.5, 
+                                  feature_selection = "max_var_exp", 
+                                  sample_ids        = NULL, 
+                                  feature_ids       = NULL, 
+                                  features_exclude  = NULL, 
+                                  output="data.frame") { S7_dispatch() })
 #' @name summarise
-method(summarise, Metaboprep) <- function(metaboprep, source_layer="input", outlier_udist=5, tree_cut_height=0.5, feature_selection = "max_var_exp", sample_ids=NULL, feature_ids=NULL, features_exclude=NULL, output="data.frame") {
+method(summarise, Metaboprep) <- function(metaboprep, 
+                                          source_layer      ="input", 
+                                          outlier_udist     = 5, 
+                                          tree_cut_height   = 0.5, 
+                                          feature_selection = "max_var_exp", 
+                                          sample_ids        = NULL, 
+                                          feature_ids       = NULL, 
+                                          features_exclude  = NULL, 
+                                          output="data.frame") {
   
   # check inputs 
   output       <- match.arg(output, choices = c("object", "data.frame"))
