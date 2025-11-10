@@ -111,10 +111,15 @@ dend <- dendextend::as.ggdend(dend)
 ggplot(dend) + 
   geom_hline(yintercept = tree_cut_height, color = "#E41A1C") +
   theme_minimal() +
-  theme(axis.text = element_blank(),
-        axis.title  = element_blank(),
-        axis.ticks = element_blank(), 
-        panel.grid = element_blank())
+  theme(
+    axis.text.x  = element_blank(),  # remove x-axis text
+    axis.ticks.x = element_blank(),  # remove x-axis ticks
+    axis.title = element_blank()     # remove axis titles
+  )
+  # theme(axis.text = element_blank(),
+  #       axis.title  = element_blank(),
+  #       axis.ticks = element_blank(), 
+  #       panel.grid = element_blank())
 ```
 
 ### Summary of the QC (filtered) metabolite data
@@ -333,13 +338,13 @@ Histogram plots of Shapiro W-statistics for raw and log transformed data distrib
 ```{r shapirowilk, fig.width=15, fig.height=4}
 # get data
 wdat <- rbind(
-  data.frame("type" = "Raw",   "w" = wstats["W", ]),
-  data.frame("type" = "Log10", "w" = wstats["log10_W", ])
+  data.frame("type" = "Raw",   "w" = qc_feature_sum["W", ]),
+  data.frame("type" = "Log10", "w" = qc_feature_sum["log10_W", ])
 )
 wdat$type <- factor(wdat$type, levels = c("Raw", "Log10"))
 
 LogMakesDistributionWorse <- c(
-  sum(wdat$type == "Log10" & wdat$w < wstats["W", ], na.rm = TRUE),
+  sum(wdat$type == "Log10" & wdat$w < qc_feature_sum["W", ], na.rm = TRUE),
   signif(sum(wdat[wdat$type=="Log10", "w"] < wdat[wdat$type=="Raw", "w"], na.rm = TRUE) / sum(!is.na(wdat[wdat$type=="Raw", "w"])), d = 3) * 100
 )
 ```
