@@ -6,8 +6,9 @@
 #' a structured list suitable for further analysis.
 #'
 #' @param filepath A string specifying the path to the SomaLogic `.adat` file.
-#'
-#' @return A named list with the following elements:
+#' @param return_Metaboprep logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.
+#' 
+#' @return A metaboprep object or a named list with the following elements:
 #' \describe{
 #'   \item{data}{A matrix of RFU values for experimental samples, with `SampleId`
 #'         as row names and `SeqId` (from columns containing "seq") as column names.}
@@ -46,7 +47,7 @@
 #' }
 #' @importFrom SomaDataIO read_adat is.soma_adat
 #' @export
-read_somalogic <- function(filepath) {
+read_somalogic <- function(filepath, return_Metaboprep = FALSE) {
   
   # testing ====
   if (FALSE) {
@@ -117,10 +118,16 @@ read_somalogic <- function(filepath) {
   
   
   # return ====
-  return(list(data             = data,
-              samples          = samples,
-              features         = features,
-              controls         = controls,
-              control_metadata = control_sample_meta))
+  if (return_Metaboprep) {
+    return(Metaboprep(data      = data, 
+                      samples   = samples, 
+                      features  = features))
+  } else {
+    return(list(data             = data,
+                samples          = samples,
+                features         = features,
+                controls         = controls,
+                control_metadata = control_sample_meta))
+  }
   
 }

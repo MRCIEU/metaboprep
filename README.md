@@ -52,28 +52,32 @@ This is a basic example which shows you how to load data and run the
 library(metaboprep)
 
 # import data 
-m <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
-                    sheet = "OrigScale",      ## The name of the sheet in the excel file to read in
-                    return_Metaboprep = TRUE  ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
-                    )
+mydata <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
+                         sheet             = "OrigScale", ## The name of the sheet in the excel file to read in
+                         return_Metaboprep = FALSE        ## Whether to return a Metaboprep object (TRUE) or a list (FALSE)
+                         )
+
+# create metaboprep object
+mydata <- Metaboprep(data     = mydata$data, 
+                     features = mydata$features, 
+                     samples  = mydata$samples)
 ```
 
 ### Run the quality control pipeline
 
 ``` r
 # run QC
-m <- quality_control(m, 
-                     source_layer = "input", 
-                     sample_missingness  = 0.2, 
-                     feature_missingness = 0.2, 
-                     total_peak_area_sd  = 5, 
-                     outlier_udist       = 5, 
-                     outlier_treatment   = "leave_be", 
-                     winsorize_quantile  = 1.0, 
-                     tree_cut_height     = 0.5, 
-                     pc_outlier_sd       = 5, 
-                     sample_ids          = NULL, 
-                     feature_ids         = NULL)
+mydata <- mydata |> quality_control( source_layer        = "input", 
+                                     sample_missingness  = 0.2, 
+                                     feature_missingness = 0.2, 
+                                     total_peak_area_sd  = 5, 
+                                     outlier_udist       = 5, 
+                                     outlier_treatment   = "leave_be", 
+                                     winsorize_quantile  = 1.0, 
+                                     tree_cut_height     = 0.5, 
+                                     pc_outlier_sd       = 5, 
+                                     sample_ids          = NULL, 
+                                     feature_ids         = NULL)
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters✔ Validating input parameters [4ms]
@@ -95,7 +99,8 @@ m <- quality_control(m,
 
 ``` r
 # view summary
-summary(m)
+summary(mydata)
+#> 
 #> Metaboprep Object Summary
 #> --------------------------
 #> Samples      : 100
@@ -137,7 +142,7 @@ summary(m)
 
 ``` r
 # view feature tree
-tree <- attr(m@feature_summary, "qc_tree")
+tree <- attr(mydata@feature_summary, "qc_tree")
 par(mar = c(1,3,5,1) )
 plot(tree, hang = -1, cex = 0.75, main = "Example Dataset Feature Tree", sub = "", xlab = "")
 ```

@@ -51,8 +51,8 @@ continuous_power_plot = function(mydata){
 
 
   con_power <- as.data.frame(do.call(rbind, con_power))
-  #con_power$effect = as.factor(con_power$effect)
-  con_power$effect = as.numeric(con_power$effect)
+  con_power$effect = as.factor(con_power$effect)
+  #con_power$effect = as.numeric(con_power$effect)
   con_power$type = "continuous"
 
   ####################################
@@ -73,9 +73,10 @@ continuous_power_plot = function(mydata){
     scale_linetype_manual(values=c( "dotdash", "solid")) +
     theme_bw() +
     geom_hline(yintercept=0.8, color = "grey50", size = 1) +
-    scale_color_gradientn(
-      colours = RColorBrewer::brewer.pal(11, "Spectral"),
-    ) +
+    # scale_color_gradientn(
+    #   colours = RColorBrewer::brewer.pal(11, "Spectral"),
+    # ) +
+    scale_color_brewer( palette = "Spectral") +
     labs(y = "Power", x = "Total sample size",
          title = "Estimated power for continuous traits",
          color = "Effect\nsize") +

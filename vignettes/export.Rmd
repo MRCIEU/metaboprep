@@ -17,14 +17,36 @@ knitr::opts_chunk$set(
 `Metaboprep` can export data to various formats. 
 
 ## Setup
+
+### load the metaboprep library
+
+```{r}
+library(metaboprep)
+```
+
+
+### Read in the data and make a Metaboprep object
+
 Create a `Metaboprep` object as described in the [Getting Started](index.html) vignette. 
 
 ```{r setup, results='hide'}
-library(metaboprep)
-f <- system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep")
-m <- read_metabolon(f, sheet="OrigScale", return_Metaboprep = TRUE)
-m <- quality_control(metaboprep = m)
+# read in the metabolon data as a list object
+datain     <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
+                            sheet="OrigScale", 
+                            return_Metaboprep = FALSE)
+
+# build the Metaboprep class object
+mydata      <- Metaboprep(data = datain$data, samples = datain$samples, features = datain$features)
+
 ```
+
+## Run the quality control
+
+```{r, warnngs=FALSE}
+## Adding suppressWarnings() to avoid deparse() error when rendering vignette with S7 method warnings
+mydata         <- suppressWarnings( quality_control(mydata) )
+```
+
 
 ## Export Metaboprep
 ```{r export_metaboprep}
@@ -32,7 +54,7 @@ m <- quality_control(metaboprep = m)
 output_dir <- file.path(getwd(), "output")
 
 # run export
-export(m, directory = output_dir, format = "metaboprep")
+export(mydata, directory = output_dir, format = "metaboprep")
 
 # view output directory files
 files <- list.files(output_dir, full.names = TRUE, recursive = TRUE)

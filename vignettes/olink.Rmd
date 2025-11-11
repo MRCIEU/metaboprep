@@ -14,49 +14,75 @@ knitr::opts_chunk$set(
 )
 ```
 
-Olink data is...
 
 ## Import Olink data
+
+Read in the Olink data using the `read_olink` function. Here we will read in the example data provided with the package, as a list object.
+
+
 ```{r setup_and_import}
 library(metaboprep)
 
-# the example Olink data file path
+# example file
 olink_file <- system.file("extdata", "olink_v1_example.txt", package="metaboprep")
 
-# read data 
-dat <- read_olink_v1(olink_file)
+# import
+dat <- read_olink(olink_file, 
+                  return_Metaboprep = FALSE )
 ```
+
+
+## Quick look to identify the types of data imported
+
+Note that we would advocate that you read in olink data as a list object first, as it will often have additional information that you may wish to inspect prior to creating the `Metaboprep` object.
+
+
+```{r dat_names}
+names(dat)
+```
+
 
 ## Create Metaboprep object 
-Once imported, we pass the data to the `Metaboprep` class object. 
-```{r metaboprep_obj}
-m <- Metaboprep(data     = dat$data, 
-                features = dat$features, 
-                samples  = dat$samples)
 
-# view 
-summary(m)
+Once imported, we pass the data to the Metaboprep() function to build the `Metaboprep` class object. 
+
+```{r metaboprep_obj}
+mydata <- Metaboprep(data      = dat$data, 
+                     features  = dat$features, 
+                     samples   = dat$samples)
 ```
 
-## QC Olink
+
+## Quick summary of the metaboprep object
+
+```{r summary_before_qc}
+summary(mydata)
+```
+
+
+## QC Olink data
+
+Perform the QC steps using the `quality_control` function.
+
 ```{r qc}
-m <- m |>
+mydata <- mydata |>
   quality_control(source_layer        = "input", 
-                  sample_missingness  = 0.5, 
-                  feature_missingness = 0.3, 
+                  sample_missingness  = 0.2, 
+                  feature_missingness = 0.2, 
                   total_peak_area_sd  = 5, 
                   outlier_udist       = 5, 
                   outlier_treatment   = "leave_be", 
                   winsorize_quantile  = 1.0, 
                   tree_cut_height     = 0.5, 
-                  pc_outlier_sd       = 5)
+                  pc_outlier_sd       = 5,
+                  feature_selection   = "max_var_exp",
+                  features_exclude_but_keep = NULL
+                  )
 
-# view 
-summary(m)
 ```
 
-## Other
-Other Olink specific analyses include...
-```{r other}
+## Quick summary of the metaboprep object following QC
 
+```{r summary_after_qc}
+summary(mydata)
 ```

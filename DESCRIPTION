@@ -7,12 +7,12 @@ Authors@R: c(person("Laura", "Corbin",        email = "laura.corbin@bristol.ac.u
              person("Matthew", "Lee",         email = "matthew.lee@bristol.ac.uk",         role = c("aut")),
              person("Alec", "McKinlay",       email = "am17168@bristol.ac.uk",             role = c("aut")))
 Description: |
-  Reads in raw Metabolon and Nightingale xls sheets and aids in data preparation of all metabolomics data sets.
+  Reads in raw Metabolon, Nightingale Health, Olink, and SomaLogic xls sheets, or flat text files and aids in data preparation of all metabolomics & proteomics data sets.
 Depends: R (>= 4.1.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
     boot,
     car,

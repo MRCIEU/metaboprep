@@ -18,7 +18,9 @@
 #' @param winsorize_quantile numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'
 #' @param pc_outlier_sd numeric, number of PCA SD after which a sample would be excluded
 #' @param max_num_pcs numeric, the maximum number of PCs to use (look in) when filtering samples on PC outlier SD, default=10, set to NULL to use all informative PCs from the Scree analysis
-#' @param features_exclude_but_keep character, vector of feature id indicating features to exclude from the sample and PCA summary analysis but keep in the data, OR a name of a logical column in the features data indicating the same
+#' @param sample_ids character, vector of sample ids to retain and work with, all others samples will be excluded
+#' @param feature_ids character, vector of feature ids to retain and work with, all other features will be excluded
+#' @param features_exclude_but_keep character, vector of feature ids indicating features to exclude from the sample and PCA quality control analysis but keep in the data, OR a name of a logical column in the features data indicating the same
 #' 
 #' @include class_metaboprep.R
 #' @importFrom stats quantile
@@ -262,7 +264,7 @@ method(quality_control, Metaboprep) <- function(metaboprep,
                              source_layer     = "qc", 
                              outlier_udist    = outlier_udist, 
                              tree_cut_height  = tree_cut_height, 
-                             feature_selection=feature_selection,
+                             feature_selection= feature_selection,
                              sample_ids       = sample_ids, 
                              feature_ids      = feature_ids,
                              features_exclude = exclude_but_keep_feats,

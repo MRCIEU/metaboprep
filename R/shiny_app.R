@@ -11,6 +11,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom plotly ggplotly plotlyOutput renderPlotly layout event_data
 #' @importFrom bslib bs_theme
+#' 
 #' @export
 shiny_app <- new_generic("shiny_app", c("metaboprep"), function(metaboprep) { S7_dispatch() })
 #' @name shiny_app

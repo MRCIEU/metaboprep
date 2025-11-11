@@ -58,7 +58,7 @@ Please raise any issues on the [GitHub issues](https://github.com/MRCIEU/metabop
 ---
 
 ## Data preparation workflow:
-```{r workflow, out.width="99%"}
+```{r workflow, out.width="75%"}
 knitr::include_graphics("metaboprep_workflow.png")
 ```
 
