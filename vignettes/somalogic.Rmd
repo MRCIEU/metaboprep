@@ -30,9 +30,9 @@ dat <- read_somalogic(filepath,
                       return_Metaboprep = FALSE)
 
 # create the object (down-sampled for speed)
-m <- Metaboprep(data     = somalogic_data$data[1:9, 1:100], 
-                samples  = somalogic_data$samples[1:9, ], 
-                features = somalogic_data$features[1:100, ],
+m <- Metaboprep(data     = dat$data[1:9, 1:100], 
+                samples  = dat$samples[1:9, ], 
+                features = dat$features[1:100, ],
                 )
 
 ```
