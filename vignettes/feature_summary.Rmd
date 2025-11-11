@@ -65,11 +65,11 @@ In addition to the summary data, the hierarchical cluster dendrogram is appended
 suppressPackageStartupMessages(library(dendextend))
 
 # extract tree from attributes
-tree <- attr(feature_summ1, 'input_tree')
+tree <- attr(feature_sum1, 'input_tree')
 dend <- stats::as.dendrogram(tree)
 
 # color the independent features blue
-metab_color       <- feature_summ1[, c("feature_id", "independent_features")]
+metab_color       <- feature_sum1[, c("feature_id", "independent_features")]
 metab_color       <- metab_color[match(labels(dend), metab_color$feature_id), ]
 metab_color$color <- ifelse(metab_color$independent_features==TRUE, "#477EB8", "grey")
 
@@ -94,14 +94,10 @@ Using the `sample_ids` and `feature_ids` arguments you can run the summary for a
 
 ```{r feature_sum_subset}
 ## define a vector of sample IDs
-sids = mydata@samples |> 
-  dplyr::filter(sex == "female") |> 
-  dplyr::pull(sample_id) 
+sids <- mydata@samples[mydata@samples$sex == "female", "sample_id"] 
 
 ## define a vector of feature IDs
-fids = mydata@features |> 
-  dplyr::pull(feature_id) |> 
-  sample(10)
+fids <- mydata@features[, "feature_id"] |> sample(10)
 
 # note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
 feature_sum_subset <- feature_summary(metaboprep      = mydata, 

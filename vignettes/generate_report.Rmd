@@ -21,8 +21,8 @@ library(metaboprep)
 
 # import data directly as a Metaboprep object
 mydata <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", package = "metaboprep"), 
-                      sheet="OrigScale",
-                      return_Metaboprep = TRUE)
+                         sheet="OrigScale",
+                         return_Metaboprep = TRUE)
 
 ```
 
@@ -30,9 +30,7 @@ mydata <- read_metabolon(system.file("extdata", "metabolon_v1.1_example.xlsx", p
 ## Identify the Xenobiotics to exclude from the QC steps
 
 ```{r xeno_identification}
-xenos = mydata@features |>
-  dplyr::filter(pathway == "xenobiotic") |>
-  dplyr::pull(feature_id)
+xenos <- mydata@features[mydata@features$pathway == "xenobiotic", "feature_id"]
 
 ## how many xenobiotics identified
 length(xenos)

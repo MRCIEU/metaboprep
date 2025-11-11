@@ -61,14 +61,10 @@ Using the `sample_ids` and `feature_ids` arguments you can run the summary for a
 
 ```{r sample_summary_subset}
 ## define a vector of sample IDs
-sids = mydata@samples |> 
-  dplyr::filter(sex == "female") |> 
-  dplyr::pull(sample_id) 
+sids <- mydata@samples[mydata@samples$sex == "female", "sample_id"] 
 
 ## define a vector of feature IDs
-fids = mydata@features |> 
-  dplyr::pull(feature_id) |> 
-  sample(10)
+fids <- mydata@features[, "feature_id"] |> sample(10)
 
 # run sample summary on subset
 sample_sum_subset <- sample_summary(metaboprep    = mydata, 
@@ -158,12 +154,12 @@ ggplot(ve, aes(x = pc, y = var_exp)) +
 
 ```{r sample_feature_summary}
 sf_sum <- summarise(metaboprep    = mydata, 
-                  source_layer    = "input", 
-                  outlier_udist   = 1.0,
-                  tree_cut_height = 0.5,
-                  sample_ids      = sids, ## It is also possible to run on a subset of samples and/or features
-                  feature_ids     = NULL,
-                  output          = "data.frame")
+                    source_layer    = "input", 
+                    outlier_udist   = 1.0,
+                    tree_cut_height = 0.5,
+                    sample_ids      = sids, ## It is also possible to run on a subset of samples and/or features
+                    feature_ids     = NULL,
+                    output          = "data.frame")
 
 ## two data frames are returned as a list object
 names(sf_sum)

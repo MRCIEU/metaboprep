@@ -63,9 +63,8 @@ Use the feature data just imported to identify xenobiotic metabolites.  It may b
 
 
 ```{r xeno_identification}
-xenos = mydata@features |>
-  dplyr::filter(super_pathway == "Xenobiotics") |>
-  dplyr::pull(feature_id)
+xenos <- mydata@features[!is.na(mydata@features$super_pathway) & 
+                           mydata@features$super_pathway == "Xenobiotics", "feature_id"]
 
 ## how many xenobiotics identified
 length(xenos)
