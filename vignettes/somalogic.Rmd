@@ -14,31 +14,83 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Import SomaLogic data
+
+Read in the SomaLogic data using the `read_somalogic` function. Here we will read in the example data provided with the package, as a list object.
+
+
 ```{r setup}
 library(metaboprep)
 
-# Somalogic data file path
+# example file
 filepath <- system.file("extdata", "somalogic_v1_example.adat", package = "metaboprep")
 
-# read Somalogic data
-somalogic_data <- read_somalogic(filepath)
+# import
+dat <- read_somalogic(filepath,
+                      return_Metaboprep = FALSE)
 
-# create the object (downsampled for speed)
+# create the object (down-sampled for speed)
 m <- Metaboprep(data     = somalogic_data$data[1:9, 1:100], 
                 samples  = somalogic_data$samples[1:9, ], 
-                features = somalogic_data$features[1:100, ])
+                features = somalogic_data$features[1:100, ],
+                )
 
-# run QC
-m <- m |>
-  quality_control(source_layer = "input", 
-                  sample_missingness  = 0.5, 
-                  feature_missingness = 0.3, 
+```
+
+
+## Quick look to identify the types of data imported
+
+Note that we would advocate that you read in olink data as a list object first, as it will often have additional information that you may wish to inspect prior to creating the `Metaboprep` object.
+
+
+```{r dat_names}
+names(dat)
+```
+
+
+## Create Metaboprep object 
+
+Once imported, we pass the data to the Metaboprep() function to build the `Metaboprep` class object. 
+
+```{r metaboprep_obj}
+mydata <- Metaboprep(data     = dat$data[1:9, 1:100], 
+                     samples  = dat$samples[1:9, ], 
+                     features = dat$features[1:100, ]
+                     )
+```
+
+
+## Quick summary of the metaboprep object
+
+```{r summary_before_qc}
+summary(mydata)
+```
+
+
+## QC Olink data
+
+Perform the QC steps using the `quality_control` function.
+
+```{r qc}
+mydata <- mydata |>
+  quality_control(source_layer        = "input", 
+                  sample_missingness  = 0.2, 
+                  feature_missingness = 0.2, 
                   total_peak_area_sd  = 5, 
                   outlier_udist       = 5, 
                   outlier_treatment   = "leave_be", 
                   winsorize_quantile  = 1.0, 
                   tree_cut_height     = 0.5, 
-                  pc_outlier_sd       = 5, 
-                  sample_ids          = NULL, 
-                  feature_ids         = NULL)
+                  pc_outlier_sd       = 5,
+                  feature_selection   = "max_var_exp",
+                  features_exclude_but_keep = NULL
+                  )
+
 ```
+
+## Quick summary of the metaboprep object following QC
+
+```{r summary_after_qc}
+summary(mydata)
+```
+

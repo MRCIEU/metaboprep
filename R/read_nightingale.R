@@ -41,9 +41,12 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
 
     # data positioning
     top_corner <- as.matrix(raw[1:ifelse(nrow(raw)<20,nrow(raw),20), 1:ifelse(nrow(raw)<10,nrow(raw),10)])
-    head_inds  <- which(top_corner == "sampleid", arr.ind = TRUE)
-    data_inds  <- which(top_corner == "success %", arr.ind = TRUE) + c(1,1)
-
+    # head_inds  <- which(top_corner == "sampleid", arr.ind = TRUE)
+    # data_inds  <- which(top_corner == "success %", arr.ind = TRUE) + c(1,1)
+    head_inds  <- which( tolower(top_corner) == "sampleid", arr.ind = TRUE)
+    data_inds  <- which( tolower(top_corner) == "success %", arr.ind = TRUE) + c(1,1)
+    
+    
     # samples
     raw_sample_ids    <- unname(unlist(raw[data_inds[1L, "row"]:nrow(raw), head_inds[1L, "col"]:head_inds[1L, "col"]]))
     samples           <- raw[data_inds[1L, "row"]:nrow(raw), 1:(head_inds[1L, "col"] -1 )]
@@ -82,8 +85,11 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
     
     # sample data positioning
     top_corner <- as.matrix(samp_annot[1:ifelse(nrow(samp_annot)<20,nrow(samp_annot),20), 1:ifelse(nrow(samp_annot)<10,nrow(samp_annot),10)])
-    head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(-1,1)
-    data_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(3,0)
+    # head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(-1,1)
+    # data_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(3,0)
+    head_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(-1,1)
+    data_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(3,0)
+    
     
     # sample data
     samples <- samp_annot[data_inds[1L, "row"]:nrow(samp_annot), data_inds[1L, "col"]:ncol(samp_annot)]
@@ -97,8 +103,10 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
     
     # data positioning
     top_corner <- as.matrix(raw[1:ifelse(nrow(raw)<20,nrow(raw),20), 1:ifelse(nrow(raw)<10,nrow(raw),10)])
-    head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE)
-    data_inds  <- which(top_corner == "Subgroup", arr.ind = TRUE) + 1
+    # head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE)
+    # data_inds  <- which(top_corner == "Subgroup", arr.ind = TRUE) + 1
+    head_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE)
+    data_inds  <- which( tolower(top_corner) == "subgroup", arr.ind = TRUE) + 1
     
     # samples
     raw_sample_id_order <- unname(unlist(raw[data_inds[1L,"row"]:nrow(raw), head_inds[1L,"col"]:head_inds[1L,"col"]]))

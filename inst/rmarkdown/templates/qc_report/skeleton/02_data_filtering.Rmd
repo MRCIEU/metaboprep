@@ -28,12 +28,17 @@ general_note <- glue::glue(
 sub_notes <- c(
   "Features manually excluded",
   "Features with missingness >=80%.",
-  glue::glue("Features exclusions based on the user defined threshold of *>={sprintf('%.0f%%', attr(metaboprep@data, 'qc_feature_missingness')*100)}."),
+  glue::glue("Features exclusions based on the user defined threshold of *>={sprintf('%.0f%%', 
+             attr(metaboprep@data, 'qc_feature_missingness')*100)}."),
   "Samples manually excluded",
   "Samples with missingness >=80%.",
-  glue::glue("Samples exclusions based on user defined threshold of *>={sprintf('%.0f%%', attr(metaboprep@data, 'qc_sample_missingness')*100)}."),
-  glue::glue("Samples with a total-peak-area or total-sum-abundance that is *>={attr(metaboprep@data, 'qc_outlier_udist')} SD from the mean."),
-  glue::glue("Samples that are *>={attr(metaboprep@data, 'qc_pc_outlier_sd')} SD from the mean on principal components 1-to-{attr(metaboprep@sample_summary, 'qc_num_pcs_scree')}")
+  glue::glue("Samples exclusions based on user defined threshold of *>={sprintf('%.0f%%', 
+             attr(metaboprep@data, 'qc_sample_missingness')*100)}."),
+  glue::glue("Samples with a total-peak-area or total-sum-abundance that is *>={attr(metaboprep@data, 
+             'qc_outlier_udist')} SD from the mean."),
+  glue::glue("Samples that are *>={attr(metaboprep@data, 
+             'qc_pc_outlier_sd')} SD from the mean on principal components 1-to-{attr(metaboprep@sample_summary, 
+             'qc_num_pcs_scree')}")
 ) |> paste(sep = ifelse(knitr::is_html_output(), "\n", "\\\\\n"))
 
 # table
@@ -135,9 +140,9 @@ The following plot respresents principal components 1 and 2 using `r sum(!is.na(
 # plot
 ggplot(pcs, aes(x = pc1, y = pc2, fill = outliers)) +
   geom_point(size = 2.5, shape = 21 ) +
-  scale_fill_manual(values = c(`Within range`="lightblue", `Outlier`="darkblue"), drop=FALSE) +
-  geom_vline(xintercept = c(cutoffs[1], -cutoffs[1]), color = "darkred") +
-  geom_hline(yintercept = c(cutoffs[2], -cutoffs[2]), color = "darkred") +
+  scale_fill_manual(values = c(`Within range`="#377EB8", `Outlier`="#E41A1C"), drop=FALSE) +
+  geom_vline(xintercept = c(cutoffs[1], -cutoffs[1]), color = "#E41A1C") +
+  geom_hline(yintercept = c(cutoffs[2], -cutoffs[2]), color = "#E41A1C") +
   theme_classic() +
   theme(
     legend.title    = element_blank()

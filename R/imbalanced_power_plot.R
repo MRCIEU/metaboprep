@@ -79,8 +79,8 @@ imbalanced_power_plot = function(mydata){
   })
 
   bin_power <- as.data.frame(do.call(rbind, bin_power))
-  #bin_power$effect = as.factor(bin_power$effect)
-  bin_power$effect = as.numeric(bin_power$effect)
+  bin_power$effect = as.factor(bin_power$effect)
+  # bin_power$effect = as.numeric(bin_power$effect)
   bin_power$type = "imbalanced_casecontrol"
 
 
@@ -102,9 +102,10 @@ imbalanced_power_plot = function(mydata){
     scale_linetype_manual(values=c( "dotdash", "solid")) +
     theme_bw() +
     geom_hline(yintercept=0.8, color = "grey50", size = 1) +
-    scale_color_gradientn(
-      colours = RColorBrewer::brewer.pal(11, "Spectral"),
-    ) +
+    # scale_color_gradientn(
+    #   colours = RColorBrewer::brewer.pal(11, "Spectral"),
+    # ) +
+    scale_color_brewer( palette = "Spectral") +
     labs(y = "Power", x = paste0("Sample size of N-cases out of a total N of ", N),
          title = "Estimated power for presence/absence imbalanced traits",
          color = "Effect\nsize",

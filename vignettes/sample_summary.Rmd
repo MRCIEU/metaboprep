@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 
 ## Create Metaboprep object
+
 ```{r setup}
 library(metaboprep)
 
@@ -25,41 +26,67 @@ samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "met
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
 # create object
-m <- Metaboprep(data = data, samples = samples, features = features)
+mydata <- Metaboprep(data = data, samples = samples, features = features)
+```
 
-# print
-m
+## Summary of Metaboprep object
+
+```{r metaboprep_summary}
+summary(mydata)
 ```
 
 ## Run sample summary
-```{r ssumm}
-sample_summ <- sample_summary(metaboprep    = m, 
-                              source_layer  = "input", 
-                              outlier_udist = 1.0, 
-                              output        = "data.frame")
+
+```{r sample_summary1}
+# note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
+sample_sum1 <- sample_summary(metaboprep      = mydata, 
+                              source_layer    = "input", 
+                              outlier_udist   = 1.0,
+                              output          = "data.frame")
 ```
 
-```{r show, echo=FALSE}
-library(kableExtra)
+## Table of sample summary
 
-kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
+```{r sample_sum1_table, echo=FALSE}
+sample_sum1 |> 
+  head(n = 10) |> 
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = TRUE) 
 ```
+
 
 ## Run sample summary on subset
+
 Using the `sample_ids` and `feature_ids` arguments you can run the summary for a subset of the data. Note: all rows will be return, however summary data will only be returned for the specified ids.  
-```{r summ2}
-sample_summ <- sample_summary(metaboprep    = m, 
-                              source_layer  = "input", 
-                              outlier_udist = 1.0,
-                              sample_ids    = c("id_96", "id_97", "id_98", "id_99", "id_100"),
-                              feature_ids   = c("metab_id_1", "metab_id_2", "metab_id_3"),
-                              output        = "data.frame")
+
+```{r sample_summary_subset}
+## define a vector of sample IDs
+sids = mydata@samples |> 
+  dplyr::filter(sex == "female") |> 
+  dplyr::pull(sample_id) 
+
+## define a vector of feature IDs
+fids = mydata@features |> 
+  dplyr::pull(feature_id) |> 
+  sample(10)
+
+# run sample summary on subset
+sample_sum_subset <- sample_summary(metaboprep    = mydata, 
+                                    source_layer  = "input", 
+                                    outlier_udist = 1.0,
+                                    sample_ids    = sids,
+                                    feature_ids   = fids,
+                                    output        = "data.frame")
 ```
 
-```{r show2, echo=FALSE}
-library(kableExtra)
+## Table of sample summary on subset
 
-kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
+```{r sample_sum_subset_table, echo=FALSE}
+sample_sum_subset |> 
+  na.omit() |>
+  head(n = 10) |> 
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = TRUE) 
 ```
 
 
@@ -67,22 +94,33 @@ kable(head(sample_summ, 10), digits = 3, row.names = FALSE)
 
 `pc_and_outliers()` performs principal component analysis. Missing data is imputed to the median and used to identify the number of informative or 'significant' PCs by (1) an acceleration analysis, and (2) a parallel analysis. Finally the number of sample outliers are determined at 3, 4, and 5 standard deviations from the mean on the top PCs as determined by the acceleration factor analysis.
 
-```{r summ}
-pc_analysis <- pc_and_outliers(metaboprep      = m, 
-                               source_layer    = "input")
+```{r PC_analysis}
+pc_analysis <- pc_and_outliers(metaboprep   = mydata, 
+                               source_layer = "input",
+                               sample_ids   = sids, ## It is also possible to run on a subset of samples and/or features
+                               feature_ids  = NULL
+                               )
 ```
 
-```{r show3, echo=FALSE}
-library(kableExtra)
 
-kable(head(pc_analysis, 10), digits = 3, row.names = FALSE)
+## Table of PCA analysis results
+
+Returned are the PC eigenvectors for the top 10 PCs, and outlier counts at 3, 4, and 5 standard deviations from the mean for the top two PCs
+
+```{r PC_table, echo=FALSE}
+pc_analysis |> 
+  head(n = 10) |> 
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = TRUE) 
 ```
 
 
 ## Additional attributes
+
 In addition, the variance explained vector is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_varexp`, in this case we used the `input` data, therefore the attribute name is `input_varexp`. In a similar way, the results of the acceleration analysis (`input_num_pcs_scree`) and a parallel analysis (`input_num_pcs_parallel`) can also be extracted.
 
-```{r varexp, out.width="100%", fig.align='center', warning=FALSE, message=FALSE, fig.alt = "Variance explained"}
+
+```{r ScreePlot, out.width="100%", fig.align='center', warning=FALSE, message=FALSE, fig.alt = "Variance explained"}
 library(ggplot2)
 
 # extract varexp from attributes
@@ -117,12 +155,31 @@ ggplot(ve, aes(x = pc, y = var_exp)) +
 
 
 ## Run sample & feature summaries together
-```{r summ3}
-summ <- summarise(metaboprep      = m, 
+
+```{r sample_feature_summary}
+sf_sum <- summarise(metaboprep    = mydata, 
                   source_layer    = "input", 
                   outlier_udist   = 1.0,
                   tree_cut_height = 0.5,
+                  sample_ids      = sids, ## It is also possible to run on a subset of samples and/or features
+                  feature_ids     = NULL,
                   output          = "data.frame")
 
-str(summ)
+## two data frames are returned as a list object
+names(sf_sum)
 ```
+
+## Table of sample summary on subset
+
+Note that when the summarise() function is used the sample summary now includes PCA derived summary data. This is not the case when the sample_summary() function is run alone, as seen above. The reason for the difference is because the PCA data is dependent upon the feature_summary() analysis.
+
+Also, please note that when running on a subset, you are returned the full summary for all samples and features, but only the summary data for the specified subset will be populated, the rest will be `NA`.
+
+```{r sample_sum_subset_table, echo=FALSE}
+# note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
+sf_sum$sample_summary |> 
+  head(n = 10) |> 
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = TRUE) 
+```
+

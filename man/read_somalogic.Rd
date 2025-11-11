@@ -4,13 +4,15 @@
 \alias{read_somalogic}
 \title{Read and Process SomaLogic adat file}
 \usage{
-read_somalogic(filepath)
+read_somalogic(filepath, return_Metaboprep = FALSE)
 }
 \arguments{
 \item{filepath}{A string specifying the path to the SomaLogic `.adat` file.}
+
+\item{return_Metaboprep}{logical, if TRUE (default) return a Metaboprep object, if FALSE return a list.}
 }
 \value{
-A named list with the following elements:
+A metaboprep object or a named list with the following elements:
 \describe{
   \item{data}{A matrix of RFU values for experimental samples, with `SampleId`
         as row names and `SeqId` (from columns containing "seq") as column names.}

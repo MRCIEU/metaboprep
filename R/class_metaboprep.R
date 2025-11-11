@@ -195,7 +195,7 @@ add_layer <- function(current, layer, layer_name, force=FALSE) {
     
     current[, , existing_layer_index] <- layer
     
-    # If it doesnt append layer
+    # If it doesn't append layer
   } else {
     
     if (is.array(current)) {

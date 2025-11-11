@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 
 ## Create Metaboprep object
+
 ```{r setup}
 library(metaboprep)
 
@@ -25,83 +26,126 @@ samples  <- read.csv(system.file("extdata", "dummy_samples.csv",  package = "met
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
 # create object
-m <- Metaboprep(data = data, samples = samples, features = features)
+mydata <- Metaboprep(data = data, samples = samples, features = features)
 
-# print
-summary(m)
+```
+
+## Summary of Metaboprep object
+
+```{r metaboprep_summary}
+summary(mydata)
 ```
 
 ## Run feature summary
-```{r summ}
-feature_summ <- feature_summary(metaboprep      = m, 
+
+```{r feature_summary1}
+# note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
+feature_sum1 <- feature_summary(metaboprep     = mydata, 
                                 source_layer    = "input", 
                                 outlier_udist   = 1.0,
                                 tree_cut_height = 0.5,
                                 output          = "data.frame")
 ```
 
-```{r show, echo=FALSE}
-library(kableExtra)
+## Table of feature summary
 
-kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
+```{r feature_sum1_table, echo=FALSE}
+feature_sum1 |> 
+  head(n = 10) |> 
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = FALSE) 
 ```
 
 ## Feature summary attributes
-In addition to the summary data, the hierarchical cluster dendrogram is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_tree`, in this case we summarised the `input` data, therefore the attribute name is `input_tree`.   
 
-```{r tree, out.width="100%", fig.align='center', fig.alt = "Decision tree showing feature importance in dataset"}
+In addition to the summary data, the hierarchical cluster dendrogram is appended to the returned `data.frame` as and `attribute`. This can be accessed with the attribute name: `[source_layer]_tree`, in this case we summarised the `input` data, therefore the attribute name is `input_tree`. 
+
+
+```{r tree, out.width="100%", fig.align='center', fig.alt = "Decision tree showing feature importance in dataset", fig.width = 10, fig.height = 4}
 suppressPackageStartupMessages(library(dendextend))
-library(ggplot2)
 
 # extract tree from attributes
-tree <- attr(feature_summ, 'input_tree')
+tree <- attr(feature_summ1, 'input_tree')
 dend <- stats::as.dendrogram(tree)
 
 # color the independent features blue
-metab_color       <- feature_summ[, c("feature_id", "independent_features")]
+metab_color       <- feature_summ1[, c("feature_id", "independent_features")]
 metab_color       <- metab_color[match(labels(dend), metab_color$feature_id), ]
-metab_color$color <- ifelse(metab_color$independent_features==TRUE, "blue", "black")
+metab_color$color <- ifelse(metab_color$independent_features==TRUE, "#477EB8", "grey")
 
 # format dendrogram for ploting
 dend <- dend |>
-  dendextend::set("labels_cex", 0.5) |>
+  dendextend::set("labels_cex", 0.75) |>
   dendextend::set("labels_col", metab_color$color) |>
-  dendextend::set("branches_lwd", 0.5) |>
+  dendextend::set("branches_lwd", 1) |>
   dendextend::set("branches_k_color",  value = metab_color$color)
 
-# plot
-ggplot(dend, horiz = TRUE) + 
-  geom_hline(yintercept = 0.5, color = "coral2") 
+## plot the dendrogram
+dend |> plot(main = "Feature clustering dendrogram")
+abline(h = 0.5, col = "#E41A1C", lwd = 1.5)
+
 ```
 
 
 ## Run feature summary on subset
+
 Using the `sample_ids` and `feature_ids` arguments you can run the summary for a subset of the data. Note: all rows will be return, however summary data will only be returned for the specified ids.  
-```{r summ2}
-feature_summ <- feature_summary(metaboprep      = m, 
-                                source_layer    = "input", 
-                                outlier_udist   = 1.0,
-                                tree_cut_height = 0.5,
-                                sample_ids      = c("id_96", "id_97", "id_98", "id_99", "id_100"),
-                                feature_ids     = c("metab_id_1", "metab_id_2", "metab_id_3"),
-                                output          = "data.frame")
+
+
+```{r feature_sum_subset}
+## define a vector of sample IDs
+sids = mydata@samples |> 
+  dplyr::filter(sex == "female") |> 
+  dplyr::pull(sample_id) 
+
+## define a vector of feature IDs
+fids = mydata@features |> 
+  dplyr::pull(feature_id) |> 
+  sample(10)
+
+# note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
+feature_sum_subset <- feature_summary(metaboprep      = mydata, 
+                                      source_layer    = "input", 
+                                      outlier_udist   = 1.0,
+                                      tree_cut_height = 0.5,
+                                      sample_ids      = sids,
+                                      feature_ids     = fids,
+                                      output          = "data.frame")
 ```
 
-```{r show2, echo=FALSE}
-library(kableExtra)
 
-kable(head(feature_summ, 10), digits = 3, row.names = FALSE)
+## Table of feature summary for subset
+
+```{r feature_sum_subset_table, echo=FALSE}
+feature_sum_subset |> 
+  na.omit() |>
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = FALSE) |>
+  kableExtra::scroll_box(width = "100%", height = "500px")
 ```
 
 
 
 ## Run sample & feature summaries together
-```{r summ3}
-summ <- summarise(metaboprep      = m, 
-                  source_layer    = "input", 
-                  outlier_udist   = 1.0,
-                  tree_cut_height = 0.5,
-                  output          = "data.frame")
 
-str(summ)
+```{r summarise_data}
+# note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
+sam_n_feat_sum <- summarise(metaboprep      = mydata, 
+                            source_layer    = "input", 
+                            outlier_udist   = 1.0,
+                            tree_cut_height = 0.5,
+                            sample_ids      = sids, 
+                            feature_ids     = fids,
+                            output          = "data.frame")
+```
+
+
+## Table of feature summary for subset
+
+```{r show2, echo=FALSE}
+sam_n_feat_sum$feature_summary |> 
+  na.omit() |>
+  knitr::kable( digits = 3, row.names = FALSE, align = "c") |>
+  kableExtra::kable_styling(full_width = TRUE) |>
+  kableExtra::scroll_box(width = "100%", height = "500px")
 ```

@@ -4,13 +4,14 @@
 #' @return Runs a Shiny app
 #' 
 #' @include class_metaboprep.R
-#' @importFrom shiny navbarPage tabPanel sidebarLayout sidebarPanel selectizeInput plotOutput updateSelectizeInput reactive renderPlot
+#' @importFrom shiny navbarPage tabPanel sidebarLayout sidebarPanel selectizeInput plotOutput updateSelectizeInput reactive renderPlot mainPanel h3 shinyApp
 #' @importFrom DT DTOutput
 #' @import ggplot2
 #' @importFrom shinycssloaders withSpinner
 #' @importFrom reshape2 melt
 #' @importFrom plotly ggplotly plotlyOutput renderPlotly layout event_data
 #' @importFrom bslib bs_theme
+#' 
 #' @export
 shiny_app <- new_generic("shiny_app", c("metaboprep"), function(metaboprep) { S7_dispatch() })
 #' @name shiny_app
