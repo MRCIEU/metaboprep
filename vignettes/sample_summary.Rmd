@@ -171,7 +171,7 @@ Note that when the summarise() function is used the sample summary now includes 
 
 Also, please note that when running on a subset, you are returned the full summary for all samples and features, but only the summary data for the specified subset will be populated, the rest will be `NA`.
 
-```{r sample_sum_subset_table, echo=FALSE}
+```{r sample_sum_subset_table2, echo=FALSE}
 # note that for illustrative purposes we are using a log outlier unit distance of 1.0 here, in practice we tend to favor a value of 5.0.
 sf_sum$sample_summary |> 
   head(n = 10) |> 
