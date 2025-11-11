@@ -93,73 +93,193 @@
 
     
     
+<div class="section level2">
+<h2 id="import-somalogic-data">Import SomaLogic data<a class="anchor" aria-label="anchor" href="#import-somalogic-data"></a>
+</h2>
+<p>Read in the SomaLogic data using the <code>read_somalogic</code>
+function. Here we will read in the example data provided with the
+package, as a list object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Somalogic data file path</span></span>
+<span><span class="co"># example file</span></span>
 <span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"somalogic_v1_example.adat"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># read Somalogic data</span></span>
-<span><span class="va">somalogic_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_somalogic.html">read_somalogic</a></span><span class="op">(</span><span class="va">filepath</span><span class="op">)</span></span>
+<span><span class="co"># import</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_somalogic.html">read_somalogic</a></span><span class="op">(</span><span class="va">filepath</span>,</span>
+<span>                      return_Metaboprep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># create the object (downsampled for speed)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">somalogic_data</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, </span>
-<span>                samples  <span class="op">=</span> <span class="va">somalogic_data</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="op">]</span>, </span>
-<span>                features <span class="op">=</span> <span class="va">somalogic_data</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># run QC</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.3</span>, </span>
+<span><span class="co"># create the object (down-sampled for speed)</span></span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, </span>
+<span>                samples  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="op">]</span>, </span>
+<span>                features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span>,</span>
+<span>                <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-look-to-identify-the-types-of-data-imported">Quick look to identify the types of data imported<a class="anchor" aria-label="anchor" href="#quick-look-to-identify-the-types-of-data-imported"></a>
+</h2>
+<p>Note that we would advocate that you read in olink data as a list
+object first, as it will often have additional information that you may
+wish to inspect prior to creating the <code>Metaboprep</code>
+object.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "data"             "samples"          "features"         "controls"        </span></span>
+<span><span class="co">#&gt; [5] "control_metadata"</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
+</h2>
+<p>Once imported, we pass the data to the Metaboprep() function to build
+the <code>Metaboprep</code> class object.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">]</span>, </span>
+<span>                     samples  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">9</span>, <span class="op">]</span>, </span>
+<span>                     features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="op">]</span></span>
+<span>                     <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-summary-of-the-metaboprep-object">Quick summary of the metaboprep object<a class="anchor" aria-label="anchor" href="#quick-summary-of-the-metaboprep-object"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Metaboprep Object Summary</span></span>
+<span><span class="co">#&gt; --------------------------</span></span>
+<span><span class="co">#&gt; Samples      : 9</span></span>
+<span><span class="co">#&gt; Features     : 100</span></span>
+<span><span class="co">#&gt; Data Layers  : 1</span></span>
+<span><span class="co">#&gt; Layer Names  : input</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Summary Layers : none</span></span>
+<span><span class="co">#&gt; Feature Summary Layers: none</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 34</span></span>
+<span><span class="co">#&gt;   Names  : sample_id, PlateId, PlateRunDate, ScannerID, PlatePosition, SlideId, Subarray, SampleType, PercentDilution, SampleMatrix, Barcode, Barcode2d, SampleName, SampleNotes, AliquotingNotes, SampleDescription, AssayNotes, TimePoint, ExtIdentifier, SsfExtId, SampleGroup, SiteId, TubeUniqueID, CLI, HybControlNormScale, RowCheck, NormScale_20, NormScale_0_005, NormScale_0_5, ANMLFractionUsed_20, ANMLFractionUsed_0_005, ANMLFractionUsed_0_5, Age, Sex</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Feature Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 22</span></span>
+<span><span class="co">#&gt;   Names  : feature_id, SeqId, SeqIdVersion, SomaId, TargetFullName, Target, UniProt, EntrezGeneID, EntrezGeneSymbol, Organism, Units, Type, Dilution, PlateScale_Reference, CalReference, Cal_Example_Adat_Set001, ColCheck, CalQcRatio_Example_Adat_Set001_170255, QcReference_170255, Cal_Example_Adat_Set002, CalQcRatio_Example_Adat_Set002_170255, Dilution2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Exclusion Codes Summary:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Sample Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                     | 0</span></span>
+<span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Feature Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                    | 0</span></span>
+<span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
+<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="qc-olink-data">QC Olink data<a class="anchor" aria-label="anchor" href="#qc-olink-data"></a>
+</h2>
+<p>Perform the QC steps using the <code>quality_control</code>
+function.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="va">mydata</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer        <span class="op">=</span> <span class="st">"input"</span>, </span>
+<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.2</span>, </span>
 <span>                  total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
 <span>                  winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
 <span>                  tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>                  sample_ids          <span class="op">=</span> <span class="cn">NULL</span>, </span>
-<span>                  feature_ids         <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                  feature_selection   <span class="op">=</span> <span class="st">"max_var_exp"</span>,</span>
+<span>                  features_exclude_but_keep <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>                  <span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[9ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[10ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[424ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[457ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[30ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[16ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[15ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[16m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[23ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[18ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…<span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[389ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[401ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[14ms]</span></span></span></code></pre></div>
-  </main>
+</div>
+<div class="section level2">
+<h2 id="quick-summary-of-the-metaboprep-object-following-qc">Quick summary of the metaboprep object following QC<a class="anchor" aria-label="anchor" href="#quick-summary-of-the-metaboprep-object-following-qc"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Metaboprep Object Summary</span></span>
+<span><span class="co">#&gt; --------------------------</span></span>
+<span><span class="co">#&gt; Samples      : 9</span></span>
+<span><span class="co">#&gt; Features     : 100</span></span>
+<span><span class="co">#&gt; Data Layers  : 2</span></span>
+<span><span class="co">#&gt; Layer Names  : input, qc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Summary Layers : input, qc</span></span>
+<span><span class="co">#&gt; Feature Summary Layers: input, qc</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sample Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 36</span></span>
+<span><span class="co">#&gt;   Names  : sample_id, PlateId, PlateRunDate, ScannerID, PlatePosition, SlideId, Subarray, SampleType, PercentDilution, SampleMatrix, Barcode, Barcode2d, SampleName, SampleNotes, AliquotingNotes, SampleDescription, AssayNotes, TimePoint, ExtIdentifier, SsfExtId, SampleGroup, SiteId, TubeUniqueID, CLI, HybControlNormScale, RowCheck, NormScale_20, NormScale_0_005, NormScale_0_5, ANMLFractionUsed_20, ANMLFractionUsed_0_005, ANMLFractionUsed_0_5, Age, Sex, reason_excluded, excluded</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Feature Annotation (metadata):</span></span>
+<span><span class="co">#&gt;   Columns: 24</span></span>
+<span><span class="co">#&gt;   Names  : feature_id, SeqId, SeqIdVersion, SomaId, TargetFullName, Target, UniProt, EntrezGeneID, EntrezGeneSymbol, Organism, Units, Type, Dilution, PlateScale_Reference, CalReference, Cal_Example_Adat_Set001, ColCheck, CalQcRatio_Example_Adat_Set001_170255, QcReference_170255, Cal_Example_Adat_Set002, CalQcRatio_Example_Adat_Set002_170255, Dilution2, reason_excluded, excluded</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Exclusion Codes Summary:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Sample Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                     | 0</span></span>
+<span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
+<span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Feature Exclusions:</span></span>
+<span><span class="co">#&gt; Exclusion | Count</span></span>
+<span><span class="co">#&gt; -----------------</span></span>
+<span><span class="co">#&gt; user_excluded                    | 0</span></span>
+<span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
+<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -169,7 +289,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

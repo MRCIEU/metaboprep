@@ -103,8 +103,11 @@
 <span><span class="va">samples</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"dummy_samples.csv"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, header<span class="op">=</span><span class="cn">T</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">features</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"dummy_features.csv"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span>, header<span class="op">=</span><span class="cn">T</span>, row.names <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, samples <span class="op">=</span> <span class="va">samples</span>, features <span class="op">=</span> <span class="va">features</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">## create Metaboprep object</span></span>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span>, samples <span class="op">=</span> <span class="va">samples</span>, features <span class="op">=</span> <span class="va">features</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## summary of Metaboprep object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Metaboprep Object Summary</span></span>
 <span><span class="co">#&gt; --------------------------</span></span>
 <span><span class="co">#&gt; Samples      : 100</span></span>
@@ -145,7 +148,7 @@
 <h2 id="run-batch-normalisation">Run batch normalisation<a class="anchor" aria-label="anchor" href="#run-batch-normalisation"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="va">mydata</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/batch_normalise.html">batch_normalise</a></span><span class="op">(</span>run_mode_col <span class="op">=</span> <span class="st">"platform"</span>, run_mode_colmap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>pos<span class="op">=</span><span class="st">"pos"</span>, neg<span class="op">=</span><span class="st">"neg"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
@@ -183,21 +186,30 @@
 <div class="section level2">
 <h2 id="accessing-data">Accessing data<a class="anchor" aria-label="anchor" href="#accessing-data"></a>
 </h2>
+<div class="section level3">
+<h3 id="raw-input-data">Raw input data<a class="anchor" aria-label="anchor" href="#raw-input-data"></a>
+</h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span><span class="op">@</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"input"</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">mydata</span><span class="op">@</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"input"</span><span class="op">]</span></span>
 <span><span class="co">#&gt;          metab_id_1 metab_id_2 metab_id_3 metab_id_4 metab_id_5</span></span>
 <span><span class="co">#&gt; id_100 0.7558872597 0.42346365  0.2830023  0.8074991 0.52739494</span></span>
 <span><span class="co">#&gt; id_99  0.6623855066 0.94958532  0.4204349  0.1280644 0.86098936</span></span>
 <span><span class="co">#&gt; id_98  0.4445273969 0.70903790  0.5872781  0.2507785 0.67355499</span></span>
 <span><span class="co">#&gt; id_97  0.6271461844 0.41330541  0.8066944  0.3315470 0.01304103</span></span>
-<span><span class="co">#&gt; id_96  0.0004653491 0.01836408  0.2019952  0.4072693 0.69319890</span></span>
-<span><span class="va">m</span><span class="op">@</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"batch_normalised"</span><span class="op">]</span></span>
+<span><span class="co">#&gt; id_96  0.0004653491 0.01836408  0.2019952  0.4072693 0.69319890</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="batch-normlalised-data">Batch normlalised data<a class="anchor" aria-label="anchor" href="#batch-normlalised-data"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span><span class="op">@</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"batch_normalised"</span><span class="op">]</span></span>
 <span><span class="co">#&gt;          metab_id_1 metab_id_2 metab_id_3 metab_id_4 metab_id_5</span></span>
 <span><span class="co">#&gt; id_100 1.2219122932 0.85292184  0.5567470  2.0502351  0.9094521</span></span>
 <span><span class="co">#&gt; id_99  1.0707641687 1.91261295  0.8271164  0.2650566  1.4847101</span></span>
 <span><span class="co">#&gt; id_98  0.7185906152 1.42811293  1.1553450  0.6367251  1.1614939</span></span>
 <span><span class="co">#&gt; id_97  1.3714905954 0.71888003  1.6124149  0.6862071  0.0243190</span></span>
 <span><span class="co">#&gt; id_96  0.0007522494 0.03698813  0.3973827  0.8429306  1.1953683</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -210,7 +222,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

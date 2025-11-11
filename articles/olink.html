@@ -93,31 +93,49 @@
 
     
     
-<p>Olink data is…</p>
 <div class="section level2">
 <h2 id="import-olink-data">Import Olink data<a class="anchor" aria-label="anchor" href="#import-olink-data"></a>
 </h2>
+<p>Read in the Olink data using the <code>read_olink</code> function.
+Here we will read in the example data provided with the package, as a
+list object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># the example Olink data file path</span></span>
+<span><span class="co"># example file</span></span>
 <span><span class="va">olink_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"olink_v1_example.txt"</span>, package<span class="op">=</span><span class="st">"metaboprep"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># read data </span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_olink_v1.html">read_olink_v1</a></span><span class="op">(</span><span class="va">olink_file</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># import</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_olink.html">read_olink</a></span><span class="op">(</span><span class="va">olink_file</span>, </span>
+<span>                  return_Metaboprep <span class="op">=</span> <span class="cn">FALSE</span> <span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-look-to-identify-the-types-of-data-imported">Quick look to identify the types of data imported<a class="anchor" aria-label="anchor" href="#quick-look-to-identify-the-types-of-data-imported"></a>
+</h2>
+<p>Note that we would advocate that you read in olink data as a list
+object first, as it will often have additional information that you may
+wish to inspect prior to creating the <code>Metaboprep</code>
+object.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "data"             "samples"          "features"         "controls"        </span></span>
+<span><span class="co">#&gt; [5] "control_metadata"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
 </h2>
-<p>Once imported, we pass the data to the <code>Metaboprep</code> class
-object.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, </span>
-<span>                features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span>, </span>
-<span>                samples  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># view </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<p>Once imported, we pass the data to the Metaboprep() function to build
+the <code>Metaboprep</code> class object.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data      <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, </span>
+<span>                     features  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span>, </span>
+<span>                     samples   <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-summary-of-the-metaboprep-object">Quick summary of the metaboprep object<a class="anchor" aria-label="anchor" href="#quick-summary-of-the-metaboprep-object"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Metaboprep Object Summary</span></span>
 <span><span class="co">#&gt; --------------------------</span></span>
 <span><span class="co">#&gt; Samples      : 90</span></span>
@@ -155,60 +173,68 @@ object.</p>
 <span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="qc-olink">QC Olink<a class="anchor" aria-label="anchor" href="#qc-olink"></a>
+<h2 id="qc-olink-data">QC Olink data<a class="anchor" aria-label="anchor" href="#qc-olink-data"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
+<p>Perform the QC steps using the <code>quality_control</code>
+function.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="va">mydata</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer        <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.3</span>, </span>
+<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.2</span>, </span>
 <span>                  total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
 <span>                  winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
 <span>                  tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                  feature_selection   <span class="op">=</span> <span class="st">"max_var_exp"</span>,</span>
+<span>                  features_exclude_but_keep <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>                  <span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[9ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[13ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[1.2s]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[1.1s]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[24ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[22ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[17ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[16ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[22m</span>…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[20m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[18ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[21ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Creating final QC dataset...</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[991ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[985ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[15ms]</span></span></span>
-<span><span class="co">#&gt; </span></span>
-<span></span>
-<span><span class="co"># view </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[14ms]</span></span></span>
+<span><span class="co">#&gt; </span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-summary-of-the-metaboprep-object-following-qc">Quick summary of the metaboprep object following QC<a class="anchor" aria-label="anchor" href="#quick-summary-of-the-metaboprep-object-following-qc"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Metaboprep Object Summary</span></span>
 <span><span class="co">#&gt; --------------------------</span></span>
 <span><span class="co">#&gt; Samples      : 90</span></span>
@@ -245,11 +271,6 @@ object.</p>
 <span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
 <span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="other">Other<a class="anchor" aria-label="anchor" href="#other"></a>
-</h2>
-<p>Other Olink specific analyses include…</p>
-</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -261,7 +282,7 @@ object.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

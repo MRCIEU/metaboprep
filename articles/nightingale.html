@@ -93,10 +93,13 @@
 
     
     
-<p>Nightingale data is…</p>
 <div class="section level2">
-<h2 id="import-nightingale-data">Import Nightingale data<a class="anchor" aria-label="anchor" href="#import-nightingale-data"></a>
+<h2 id="import-nightingale-data-directly-into-a-metaboprep-object">Import Nightingale data directly into a Metaboprep object<a class="anchor" aria-label="anchor" href="#import-nightingale-data-directly-into-a-metaboprep-object"></a>
 </h2>
+<p>Read in the Nightingale Health data using the
+<code>read_nightingale</code> function. Here we will read in the example
+data provided with the package, and convert it directly into a
+Metaboprep S7 object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mrcieu.github.io/metaboprep/">metaboprep</a></span><span class="op">)</span></span>
 <span></span>
@@ -104,114 +107,88 @@
 <span><span class="va">filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nightingale_v2_example.xlsx"</span>, package <span class="op">=</span> <span class="st">"metaboprep"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># import</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_nightingale.html">read_nightingale</a></span><span class="op">(</span><span class="va">filepath</span>, return_Metaboprep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># view structure</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 3</span></span>
-<span><span class="co">#&gt;  $ data    : num [1:50, 1:15] 2.84e-10 3.86e-11 9.59e-11 2.21e-10 1.24e-10 ...</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
-<span><span class="co">#&gt;  $ samples :'data.frame':    50 obs. of  5 variables:</span></span>
-<span><span class="co">#&gt;   ..$ sample_id                    : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
-<span><span class="co">#&gt;   ..$ high_pyruvate                : int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ high_lactate                 : int [1:50] 0 0 0 0 0 0 0 1 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ low_glutamine__high_glutamate: int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ plasma_sample                : int [1:50] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;  $ features:'data.frame':    15 obs. of  1 variable:</span></span>
-<span><span class="co">#&gt;   ..$ feature_id: chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span></code></pre></div>
+<span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_nightingale.html">read_nightingale</a></span><span class="op">(</span><span class="va">filepath</span>, return_Metaboprep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="create-metaboprep-object">Create Metaboprep object<a class="anchor" aria-label="anchor" href="#create-metaboprep-object"></a>
+<h2 id="quick-look-at-data-structure-of-the-imported-data">Quick look at data structure of the imported data<a class="anchor" aria-label="anchor" href="#quick-look-at-data-structure-of-the-imported-data"></a>
 </h2>
-<p>Once imported, we pass the data to the <code>Metaboprep</code> class
-object.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/class_metaboprep.html">Metaboprep</a></span><span class="op">(</span>data     <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">data</span>, </span>
-<span>                features <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">features</span>, </span>
-<span>                samples  <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">samples</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># view </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Metaboprep Object Summary</span></span>
-<span><span class="co">#&gt; --------------------------</span></span>
-<span><span class="co">#&gt; Samples      : 50</span></span>
-<span><span class="co">#&gt; Features     : 15</span></span>
-<span><span class="co">#&gt; Data Layers  : 1</span></span>
-<span><span class="co">#&gt; Layer Names  : input</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sample Summary Layers : none</span></span>
-<span><span class="co">#&gt; Feature Summary Layers: none</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sample Annotation (metadata):</span></span>
-<span><span class="co">#&gt;   Columns: 5</span></span>
-<span><span class="co">#&gt;   Names  : sample_id, high_pyruvate, high_lactate, low_glutamine__high_glutamate, plasma_sample</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Feature Annotation (metadata):</span></span>
-<span><span class="co">#&gt;   Columns: 1</span></span>
-<span><span class="co">#&gt;   Names  : feature_id</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Exclusion Codes Summary:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Sample Exclusions:</span></span>
-<span><span class="co">#&gt; Exclusion | Count</span></span>
-<span><span class="co">#&gt; -----------------</span></span>
-<span><span class="co">#&gt; user_excluded                     | 0</span></span>
-<span><span class="co">#&gt; extreme_sample_missingness        | 0</span></span>
-<span><span class="co">#&gt; user_defined_sample_missingness   | 0</span></span>
-<span><span class="co">#&gt; user_defined_sample_totalpeakarea | 0</span></span>
-<span><span class="co">#&gt; user_defined_sample_pca_outlier   | 0</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Feature Exclusions:</span></span>
-<span><span class="co">#&gt; Exclusion | Count</span></span>
-<span><span class="co">#&gt; -----------------</span></span>
-<span><span class="co">#&gt; user_excluded                    | 0</span></span>
-<span><span class="co">#&gt; extreme_feature_missingness      | 0</span></span>
-<span><span class="co">#&gt; user_defined_feature_missingness | 0</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;metaboprep::Metaboprep&gt;</span></span>
+<span><span class="co">#&gt;  @ data           : num [1:50, 1:15, 1] 2.84e-10 3.86e-11 9.59e-11 2.21e-10 1.24e-10 ...</span></span>
+<span><span class="co">#&gt;  .. - attr(*, "dimnames")=List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:50] "ind1" "ind2" "ind3" "ind4" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr [1:15] "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  ..  ..$ : chr "input"</span></span>
+<span><span class="co">#&gt;  @ samples        :'data.frame': 50 obs. of  5 variables:</span></span>
+<span><span class="co">#&gt;  .. $ sample_id                    : chr  "ind1" "ind2" "ind3" "ind4" ...</span></span>
+<span><span class="co">#&gt;  .. $ high_pyruvate                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ high_lactate                 : int  0 0 0 0 0 0 0 1 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ low_glutamine__high_glutamate: int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  .. $ plasma_sample                : int  0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;  @ features       :'data.frame': 15 obs. of  1 variable:</span></span>
+<span><span class="co">#&gt;  .. $ feature_id: chr  "XXL-VLDL-P" "XXL-VLDL-L" "XXL-VLDL-PL" "XXL-VLDL-C" ...</span></span>
+<span><span class="co">#&gt;  @ exclusions     :List of 2</span></span>
+<span><span class="co">#&gt;  .. $ samples :List of 5</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                    : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_sample_missingness       : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_missingness  : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_totalpeakarea: chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_sample_pca_outlier  : chr(0) </span></span>
+<span><span class="co">#&gt;  .. $ features:List of 3</span></span>
+<span><span class="co">#&gt;  ..  ..$ user_excluded                   : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ extreme_feature_missingness     : chr(0) </span></span>
+<span><span class="co">#&gt;  ..  ..$ user_defined_feature_missingness: chr(0) </span></span>
+<span><span class="co">#&gt;  @ feature_summary: num[0 , 0 , 0 ] </span></span>
+<span><span class="co">#&gt;  @ sample_summary : num[0 , 0 , 0 ]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="qc-nightingale">QC Nightingale<a class="anchor" aria-label="anchor" href="#qc-nightingale"></a>
 </h2>
+<p>Perform the QC steps using the <code>quality_control</code>
+function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="va">m</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">&lt;-</span> <span class="va">mydata</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/quality_control.html">quality_control</a></span><span class="op">(</span>source_layer        <span class="op">=</span> <span class="st">"input"</span>, </span>
-<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.3</span>, </span>
+<span>                  sample_missingness  <span class="op">=</span> <span class="fl">0.2</span>, </span>
+<span>                  feature_missingness <span class="op">=</span> <span class="fl">0.2</span>, </span>
 <span>                  total_peak_area_sd  <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_udist       <span class="op">=</span> <span class="fl">5</span>, </span>
 <span>                  outlier_treatment   <span class="op">=</span> <span class="st">"leave_be"</span>, </span>
 <span>                  winsorize_quantile  <span class="op">=</span> <span class="fl">1.0</span>, </span>
 <span>                  tree_cut_height     <span class="op">=</span> <span class="fl">0.5</span>, </span>
-<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>                  pc_outlier_sd       <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                  feature_selection   <span class="op">=</span> <span class="st">"max_var_exp"</span>,</span>
+<span>                  features_exclude_but_keep <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>                  <span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Starting Metabolite QC Process</span> <span style="color: #00BBBB;">──────────────────────────────────────────────</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Validating input parameters</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Validating input parameters <span style="color: #B2B2B2;">[8ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample &amp; Feature Summary Statistics for raw data</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[145ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Sample &amp; Feature Summary Statistics for raw data <span style="color: #B2B2B2;">[191ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Copying input data to new 'qc' data layer</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[30ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Copying input data to new 'qc' data layer <span style="color: #B2B2B2;">[22ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[17ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme sample missingness &gt;=80% - excluding 0 sample(s) <span style="color: #B2B2B2;">[16ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[16m</span>…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for extreme feature missingness &gt;=80% - excluding 0 feature(s) <span style="color: #B2B2B2;">[20m</span>…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=50% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for sample missingness at specified level of &gt;=20% - excluding 0 sa…</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=30% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Assessing for feature missingness at specified level of &gt;=20% - excluding 0 f…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Running sample data PCA outlier analysis at +/- 5 Sdev</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[49ms]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Running sample data PCA outlier analysis at +/- 5 Sdev <span style="color: #B2B2B2;">[20ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Sample PCA outlier analysis - re-identify feature independence and PC outlier…</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [7]</span></span>
@@ -221,10 +198,13 @@ object.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Creating final QC dataset... <span style="color: #B2B2B2;">[113ms]</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Metabolite QC Process Completed</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[19ms]</span></span></span>
-<span></span>
-<span><span class="co"># view </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Metabolite QC Process Completed <span style="color: #B2B2B2;">[23ms]</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="quick-summary-of-the-metaboprep-object-following-qc">Quick summary of the metaboprep object following QC<a class="anchor" aria-label="anchor" href="#quick-summary-of-the-metaboprep-object-following-qc"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Metaboprep Object Summary</span></span>
 <span><span class="co">#&gt; --------------------------</span></span>
 <span><span class="co">#&gt; Samples      : 50</span></span>
@@ -272,7 +252,7 @@ object.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
