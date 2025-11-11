@@ -4,7 +4,7 @@
 #' @return Runs a Shiny app
 #' 
 #' @include class_metaboprep.R
-#' @importFrom shiny navbarPage tabPanel sidebarLayout sidebarPanel selectizeInput plotOutput updateSelectizeInput reactive renderPlot
+#' @importFrom shiny navbarPage mainPanel tabPanel sidebarLayout sidebarPanel selectizeInput plotOutput updateSelectizeInput reactive renderPlot h3
 #' @importFrom DT DTOutput
 #' @import ggplot2
 #' @importFrom shinycssloaders withSpinner
