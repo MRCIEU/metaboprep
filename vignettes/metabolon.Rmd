@@ -14,9 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-Metabolon data is...
 
 ## Import Metabolon data
+
+Read in the Metabolon data using the `read_metabolon` function. Here we will read in the example data provided with the package, as a list object.
+
 ```{r setup}
 library(metaboprep)
 
@@ -24,28 +26,62 @@ library(metaboprep)
 filepath <- system.file("extdata", "metabolon_v1.2_example.xlsx", package = "metaboprep")
 
 # import data as a list object rather than directly as a Metaboprep object
-dat <- read_metabolon(filepath, sheet = 'OrigScale', return_Metaboprep = FALSE)
+dat <- read_metabolon(filepath, 
+                      sheet = 'OrigScale', 
+                      return_Metaboprep = FALSE)
+```
 
-# view structure
+## Quick look at data structure of the imported data
+
+```{r data_str}
 str(dat)
 ```
 
+
 ## Create Metaboprep object 
 
-Once imported, we pass the data to the `Metaboprep` class object. 
+Once imported, we pass the data to the Metaboprep() function to build the `Metaboprep` class object. 
 
 ```{r metaboprep_obj}
-m <- Metaboprep(data     = dat$data, 
-                features = dat$features, 
-                samples  = dat$samples)
+## This step could be avoided by defining return_Metaboprep = TRUE in read_metabolon() function above.
+mydata <- Metaboprep(data     = dat$data, 
+                     features = dat$features, 
+                     samples  = dat$samples)
+```
 
-# view 
-m
+
+## Quick summary of the metaboprep object
+
+```{r summary_before_qc}
+summary(mydata)
+```
+
+
+## Identify the Xenobiotics to exclude from the QC steps
+
+Use the feature data just imported to identify xenobiotic metabolites.  It may be best to excluded these features from the quality-control (QC) process. Xenobiotics typically exhibit much higher levels of missingness than endogenous metabolites, and including them in QC can result in excessive exclusion of both features and samples. This step will allow you to retain these features in the final dataset, by excluding them from QC filtering steps.
+
+
+```{r xeno_identification}
+xenos = mydata@features |>
+  dplyr::filter(super_pathway == "Xenobiotics") |>
+  dplyr::pull(feature_id)
+
+## how many xenobiotics identified
+length(xenos)
 ```
 
 ## QC Metabolon
+
+Perform the QC steps using the `quality_control` function, specifying the xenobiotics to exclude from the QC steps.
+
 ```{r qc}
-m <- m |>
+## Given the high missingness in metabolon data, 
+##   we suggest using the `least_missingness` feature selection method
+##   for the identification of principle variable that will then be 
+##   used in the construction of PCs. 
+
+mydata <- mydata |>
   quality_control(source_layer        = "input", 
                   sample_missingness  = 0.2, 
                   feature_missingness = 0.2, 
@@ -54,8 +90,15 @@ m <- m |>
                   outlier_treatment   = "leave_be", 
                   winsorize_quantile  = 1.0, 
                   tree_cut_height     = 0.5, 
-                  pc_outlier_sd       = 5)
+                  pc_outlier_sd       = 5,
+                  feature_selection   = "least_missingness", ## We suggest using `least_missingness` when working with data, like Metabolon, with high missingness. Default is "max_var_exp".
+                  features_exclude_but_keep = xenos ## exclude xenobiotics from QC, but retain them in the final dataset
+                  )
 
-# view 
-m
+```
+
+## Quick summary of the metaboprep object following QC
+
+```{r summary_after_qc}
+summary(mydata)
 ```

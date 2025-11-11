@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ## Create Metaboprep object
+
 ```{r setup}
 library(metaboprep)
 
@@ -22,20 +23,33 @@ data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metabop
 samples  <- read.csv(system.file("extdata", "dummy_samples.csv", package = "metaboprep"), header=T, row.names = 1)
 features <- read.csv(system.file("extdata", "dummy_features.csv", package = "metaboprep"), header=T, row.names = 1)
 
-m <- Metaboprep(data = data, samples = samples, features = features)
-summary(m)
+## create Metaboprep object
+mydata <- Metaboprep(data = data, samples = samples, features = features)
 
+## summary of Metaboprep object
+summary(mydata)
 ```
 
 ## Run batch normalisation
+
 ```{r batch_normalise}
-m <- m |>
+mydata <- mydata |>
   batch_normalise(run_mode_col = "platform", run_mode_colmap = c(pos="pos", neg="neg")) |>
   print()
 ```
 
 ## Accessing data
+
+### Raw input data
+
 ```{r data}
-m@data[1:5, 1:5, "input"]
-m@data[1:5, 1:5, "batch_normalised"]
+mydata@data[1:5, 1:5, "input"]
 ```
+
+### Batch normlalised data
+
+```{r}
+mydata@data[1:5, 1:5, "batch_normalised"]
+```
+
+
