@@ -40,9 +40,7 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
     )
 
     # data positioning
-    top_corner <- as.matrix(raw[1:ifelse(nrow(raw)<20,nrow(raw),20), 1:ifelse(nrow(raw)<10,nrow(raw),10)])
-    # head_inds  <- which(top_corner == "sampleid", arr.ind = TRUE)
-    # data_inds  <- which(top_corner == "success %", arr.ind = TRUE) + c(1,1)
+    top_corner <- as.matrix(raw[1:ifelse(nrow(raw)<20,nrow(raw),20), 1:ifelse(ncol(raw)<10,ncol(raw),10)])
     head_inds  <- which( tolower(top_corner) == "sampleid", arr.ind = TRUE)
     data_inds  <- which( tolower(top_corner) == "success %", arr.ind = TRUE) + c(1,1)
     
@@ -84,17 +82,54 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
     )
     
     # sample data positioning
-    top_corner <- as.matrix(samp_annot[1:ifelse(nrow(samp_annot)<20,nrow(samp_annot),20), 1:ifelse(nrow(samp_annot)<10,nrow(samp_annot),10)])
-    # head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(-1,1)
-    # data_inds  <- which(top_corner == "Sample id", arr.ind = TRUE) + c(3,0)
+    top_corner <- as.matrix(samp_annot[1:ifelse(nrow(samp_annot)<20,nrow(samp_annot),20), 1:ifelse(ncol(samp_annot)<10,ncol(samp_annot),10)])
     head_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(-1,1)
     data_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(3,0)
-    
     
     # sample data
     samples <- samp_annot[data_inds[1L, "row"]:nrow(samp_annot), data_inds[1L, "col"]:ncol(samp_annot)]
     names(samples) <- c("sample_id", unlist(samp_annot[head_inds[1L,"row"]:head_inds[1L,"row"], head_inds[1L,"col"]:ncol(samp_annot)]))
     names(samples) <- clean_names(names(samples))
+    
+    # sample - tags per biomarker
+    samp_tags <- suppressMessages(
+      readxl::read_xlsx(filepath, sheet="Tags per biomarker") |> as.data.frame()
+    )
+    
+    # sample - tags per biomarker positioning
+    top_corner <- as.matrix(samp_tags[1:ifelse(nrow(samp_tags)<20,nrow(samp_tags),20), 1:ifelse(ncol(samp_tags)<20,ncol(samp_tags),20)])
+    head_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(0,1)
+    data_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE) + c(5,0)
+    
+    # sample - tags data
+    tags <- samp_tags[data_inds[1L, "row"]:nrow(samp_tags), data_inds[1L, "col"]:ncol(samp_tags)]
+    names(tags) <- c("sample_id", unlist(samp_tags[head_inds[1L,"row"]:head_inds[1L,"row"], head_inds[1L,"col"]:ncol(samp_tags)]))
+    names(tags) <- clean_names(names(tags))
+    
+    # map annotations - get position & data into a named list
+    annot_inds <- which( tolower(top_corner) == "annotations", arr.ind = TRUE) + c(1,0)
+    keys <- top_corner[annot_inds[1L, "row"]:(which(is.na(top_corner[, annot_inds[1L, "col"]]))[1]-1L), 
+                       annot_inds[1L, "col"]]
+    values <- top_corner[annot_inds[1L, "row"]:(which(is.na(top_corner[, annot_inds[1L, "col"]]))[1]-1L), 
+                         annot_inds[1L, "col"] + 1L]
+    annots <- stats::setNames(values, keys)
+    
+    # annotate the data 
+    tags[] <- lapply(tags, function(col) {
+      idx <- match(col, names(annots))
+      ifelse(!is.na(idx), annots[idx], col)
+    })
+    
+    # bind the sample tags
+    samples$sample_id <- as.character(samples$sample_id)
+    tags$sample_id    <- as.character(tags$sample_id)
+    tag_cols <- setdiff(names(tags), "sample_id")
+    for (col in tag_cols) {
+      samples[col] <- tags[match(samples$sample_id, tags$sample_id), col]
+    }
+    
+    # convert to factors as very few annotations, repeated potentially many times
+    samples[tag_cols] <- lapply(samples[tag_cols], factor)
     
     # data
     raw <- suppressMessages(
@@ -103,8 +138,6 @@ read_nightingale <- function(filepath, return_Metaboprep = TRUE) {
     
     # data positioning
     top_corner <- as.matrix(raw[1:ifelse(nrow(raw)<20,nrow(raw),20), 1:ifelse(nrow(raw)<10,nrow(raw),10)])
-    # head_inds  <- which(top_corner == "Sample id", arr.ind = TRUE)
-    # data_inds  <- which(top_corner == "Subgroup", arr.ind = TRUE) + 1
     head_inds  <- which( tolower(top_corner) == "sample id", arr.ind = TRUE)
     data_inds  <- which( tolower(top_corner) == "subgroup", arr.ind = TRUE) + 1
     

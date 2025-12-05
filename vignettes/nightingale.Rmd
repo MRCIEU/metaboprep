@@ -24,7 +24,7 @@ Read in the Nightingale Health data using the `read_nightingale` function. Here 
 library(metaboprep)
 
 # example file
-filepath <- system.file("extdata", "nightingale_v2_example.xlsx", package = "metaboprep")
+filepath <- system.file("extdata", "nightingale_v1_example.xlsx", package = "metaboprep")
 
 # import
 mydata <- read_nightingale(filepath, return_Metaboprep = TRUE)
