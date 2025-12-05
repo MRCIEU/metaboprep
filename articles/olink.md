@@ -107,13 +107,13 @@ mydata <- mydata |>
 #> ✔ Sample & Feature Summary Statistics for raw data [1.1s]
 #> 
 #> ℹ Copying input data to new 'qc' data layer
-#> ✔ Copying input data to new 'qc' data layer [23ms]
+#> ✔ Copying input data to new 'qc' data layer [22ms]
 #> 
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)
-#> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [17ms]
+#> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [16ms]
 #> 
 #> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)
-#> ✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [21m…
+#> ✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [20m…
 #> 
 #> ℹ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…
 #> ✔ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…
@@ -125,13 +125,13 @@ mydata <- mydata |>
 #> ✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
 #> 
 #> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev
-#> ✔ Running sample data PCA outlier analysis at +/- 5 Sdev [22ms]
+#> ✔ Running sample data PCA outlier analysis at +/- 5 Sdev [21ms]
 #> 
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
 #> ✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
 #> 
 #> ℹ Creating final QC dataset...
-#> ✔ Creating final QC dataset... [996ms]
+#> ✔ Creating final QC dataset... [983ms]
 #> 
 #> ℹ Metabolite QC Process Completed
 #> ✔ Metabolite QC Process Completed [14ms]

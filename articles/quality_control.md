@@ -29,13 +29,13 @@ m <- quality_control(m,
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters
-#> ✔ Validating input parameters [8ms]
+#> ✔ Validating input parameters [12ms]
 #> 
 #> ℹ Sample & Feature Summary Statistics for raw data
-#> ✔ Sample & Feature Summary Statistics for raw data [903ms]
+#> ✔ Sample & Feature Summary Statistics for raw data [878ms]
 #> 
 #> ℹ Copying input data to new 'qc' data layer
-#> ✔ Copying input data to new 'qc' data layer [38ms]
+#> ✔ Copying input data to new 'qc' data layer [36ms]
 #> 
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)
 #> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [17ms]
@@ -60,7 +60,7 @@ m <- quality_control(m,
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
 #> 
 #> ℹ Creating final QC dataset...
-#> ✔ Creating final QC dataset... [877ms]
+#> ✔ Creating final QC dataset... [858ms]
 #> 
 #> ℹ Metabolite QC Process Completed
 #> ✔ Metabolite QC Process Completed [24ms]
