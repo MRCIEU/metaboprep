@@ -9,6 +9,8 @@ quality_control(
   source_layer = "input",
   sample_missingness = 0.2,
   feature_missingness = 0.2,
+  feature_skewness_threshold = NULL,
+  feature_skewness_direction = "left",
   total_peak_area_sd = 5,
   outlier_udist = 5,
   outlier_treatment = "leave_be",
@@ -30,6 +32,10 @@ quality_control(
 \item{sample_missingness}{numeric 0-1, percentage of data missingness which should prompt exclusion of a sample}
 
 \item{feature_missingness}{numeric 0-1, percentage of data missingness which should prompt exclusion of a feature}
+
+\item{feature_skewness_threshold}{numeric, optional skewness threshold to exclude features with skewed distributions. Set to `NULL` to disable.}
+
+\item{feature_skewness_direction}{character, direction of skewness to apply when `feature_skewness_threshold` is set. One of `"left"`, `"right"`, or `"both"`.}
 
 \item{total_peak_area_sd}{numeric, number of TPA SD after which a sample would be excluded}
 

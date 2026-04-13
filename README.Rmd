@@ -72,6 +72,8 @@ mydata <-  Metaboprep(data     = mydata$data,
 mydata <- mydata |> quality_control( source_layer = "input", 
                                      sample_missingness  = 0.2, 
                                      feature_missingness = 0.2, 
+                                     feature_skewness_threshold = NULL,
+                                     feature_skewness_direction = "left",
                                      total_peak_area_sd  = 5, 
                                      outlier_udist       = 5, 
                                      outlier_treatment   = "leave_be", 
@@ -98,4 +100,3 @@ tree <- attr(mydata@feature_summary, "qc_tree")
 par(mar = c(1,3,5,1) )
 plot(tree, hang = -1, cex = 0.75, main = "Example Dataset Feature Tree", sub = "", xlab = "")
 ```
-

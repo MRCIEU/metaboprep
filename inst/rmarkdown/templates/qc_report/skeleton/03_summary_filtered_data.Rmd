@@ -368,6 +368,62 @@ ggplot(wdat, aes(x = w, fill = type)) +
 ```
 
 
+### Estimates of skewness on raw abundances
+```{r skewness_for_text}
+skew_thresh <- attr(metaboprep@data, "qc_feature_skewness_threshold")
+skew_dir <- attr(metaboprep@data, "qc_feature_skewness_direction")
+if (is.null(skew_dir) || is.na(skew_dir)) skew_dir <- "left"
+
+skew_df <- feature_skewness(
+  data = qc_data,
+  threshold = skew_thresh,
+  direction = skew_dir
+)
+
+count_skew <- nrow(skew_df)
+left_count <- sum(skew_df$skew < 0, na.rm = TRUE)
+right_count <- sum(skew_df$skew > 0, na.rm = TRUE)
+mean_skew <- signif(mean(skew_df$skew, na.rm = TRUE), digits = 3)
+
+if (!is.null(skew_thresh) && !is.na(skew_thresh)) {
+  skew_excluded_count <- sum(skew_df$exclude_by_skewness %in% TRUE, na.rm = TRUE)
+  skew_threshold_text <- switch(
+    skew_dir,
+    "left" = glue::glue("skew <= {-skew_thresh}"),
+    "right" = glue::glue("skew >= {skew_thresh}"),
+    "both" = glue::glue("|skew| >= {skew_thresh}")
+  )
+} else {
+  skew_excluded_count <- NA_integer_
+  skew_threshold_text <- "No skewness-based feature exclusion threshold was applied during QC."
+}
+```
+
+Across the `r count_skew` included features, `r left_count` have negative skewness and `r right_count` have positive skewness (mean skewness = `r mean_skew`). Strong negative skewness may indicate upper-end assay censoring (an upper detection bound).
+
+`r if (!is.na(skew_excluded_count)) glue::glue("Using the configured skewness criterion ({skew_threshold_text}), {skew_excluded_count} feature(s) were excluded.") else skew_threshold_text`
+
+```{r skew_dist_plot, fig.width=12, fig.height=5}
+p <- ggplot(skew_df, aes(x = skew)) +
+  geom_histogram(bins = 20, fill = "#377EB8", color = "black", alpha = 0.7) +
+  geom_vline(xintercept = 0, color = "#4D4D4D", linetype = "dashed", size = 0.8) +
+  theme_classic() +
+  labs(x = "Feature skewness", y = "Frequency")
+
+if (!is.null(skew_thresh) && !is.na(skew_thresh)) {
+  if (identical(skew_dir, "left")) {
+    p <- p + geom_vline(xintercept = -skew_thresh, color = "#E41A1C", linetype = "dashed", size = 1)
+  } else if (identical(skew_dir, "right")) {
+    p <- p + geom_vline(xintercept = skew_thresh, color = "#E41A1C", linetype = "dashed", size = 1)
+  } else {
+    p <- p + geom_vline(xintercept = c(-skew_thresh, skew_thresh), color = "#E41A1C", linetype = "dashed", size = 1)
+  }
+}
+
+p
+```
+
+
 \newpage
 
 ## Outliers

@@ -14,7 +14,8 @@ Metaboprep(
     character(), user_defined_sample_totalpeakarea = character(),
     user_defined_sample_pca_outlier = character()), features = list(user_excluded =
     character(), extreme_feature_missingness = character(),
-    user_defined_feature_missingness = character())),
+    user_defined_feature_missingness = character(), user_defined_feature_skewness =
+    character())),
   feature_summary = array(data = NA_real_, dim = c(0, 0, 0)),
   sample_summary = array(data = NA_real_, dim = c(0, 0, 0))
 )

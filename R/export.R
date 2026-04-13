@@ -76,6 +76,8 @@ method(export_metaboprep, list(Metaboprep, class_character)) <- function(metabop
                    layer_name  = layer,
                    sample_missingness        = attr(metaboprep@data, paste0(layer, "_sample_missingness")), 
                    feature_missingness       = attr(metaboprep@data, paste0(layer, "_feature_missingness")), 
+                   feature_skewness_threshold = attr(metaboprep@data, paste0(layer, "_feature_skewness_threshold")),
+                   feature_skewness_direction = attr(metaboprep@data, paste0(layer, "_feature_skewness_direction")),
                    total_peak_area_sd        = attr(metaboprep@data, paste0(layer, "_total_peak_area_sd")), 
                    outlier_udist             = attr(metaboprep@data, paste0(layer, "_outlier_udist")), 
                    outlier_treatment         = attr(metaboprep@data, paste0(layer, "_outlier_treatment")), 
@@ -420,6 +422,5 @@ method(export_metaboanalyst, list(Metaboprep, class_character)) <- function(meta
   write.csv(data, fp, row.names = FALSE)
   
 }
-
 
 

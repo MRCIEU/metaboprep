@@ -52,11 +52,11 @@ Metaboprep <- new_class(
                               validator = function(value) {
                                 if (length(value)==0) return(NULL)
                                 check_samp  <- identical(names(value[["samples"]]), c("user_excluded", "extreme_sample_missingness","user_defined_sample_missingness", "user_defined_sample_totalpeakarea", "user_defined_sample_pca_outlier"))
-                                check_feat  <- identical(names(value[["features"]]), c("user_excluded", "extreme_feature_missingness","user_defined_feature_missingness"))
+                                check_feat  <- identical(names(value[["features"]]), c("user_excluded", "extreme_feature_missingness", "user_defined_feature_missingness", "user_defined_feature_skewness"))
                                 if (check_samp && check_feat) {
                                   return(NULL)
                                 } else {
-                                  return("should be a lists with names 'samples' and 'features'. In addition, 'samples' should be a list of character vectors named 'user_excluded', extreme_sample_missingness','user_defined_sample_missingness', 'user_defined_sample_totalpeakarea', 'user_defined_sample_pca_outlier'; and 'features' a list of character vectors named 'user_excluded', 'extreme_feature_missingness', 'user_defined_feature_missingness'")
+                                  return("should be a lists with names 'samples' and 'features'. In addition, 'samples' should be a list of character vectors named 'user_excluded', extreme_sample_missingness','user_defined_sample_missingness', 'user_defined_sample_totalpeakarea', 'user_defined_sample_pca_outlier'; and 'features' a list of character vectors named 'user_excluded', 'extreme_feature_missingness', 'user_defined_feature_missingness', 'user_defined_feature_skewness'")
                                 }
                               }),
     # summary data for features
@@ -79,7 +79,8 @@ Metaboprep <- new_class(
                                                            user_defined_sample_pca_outlier   = character()),
                                            features = list(user_excluded                     = character(),
                                                            extreme_feature_missingness       = character(),
-                                                           user_defined_feature_missingness  = character())), 
+                                                           user_defined_feature_missingness  = character(),
+                                                           user_defined_feature_skewness     = character())), 
                          feature_summary = array(data = NA_real_, dim = c(0,0,0)), 
                          sample_summary  = array(data = NA_real_, dim = c(0,0,0))) {
     # if data is a matrix, convert to 3D array

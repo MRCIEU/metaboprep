@@ -53,6 +53,7 @@ Collate:
     'cramer_v.R'
     'export.R'
     'feature_describe.R'
+    'feature_skewness.R'
     'feature_summary.R'
     'generate_report.R'
     'imbalanced_power_plot.R'

@@ -26,6 +26,8 @@ navbar:
         href: articles/sample_summary.html
       - text: Features
         href: articles/feature_summary.html
+      - text: Skewness & truncation
+        href: articles/skewness_qc.html
       - text: QC pipeline
         href: articles/quality_control.html
       - text: -------

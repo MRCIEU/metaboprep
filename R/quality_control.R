@@ -13,6 +13,8 @@
 #' @inheritParams sample_summary
 #' @param sample_missingness numeric 0-1, percentage of data missingness which should prompt exclusion of a sample
 #' @param feature_missingness numeric 0-1, percentage of data missingness which should prompt exclusion of a feature
+#' @param feature_skewness_threshold numeric, optional skewness threshold to exclude features with skewed distributions. Set to `NULL` to disable.
+#' @param feature_skewness_direction character, direction of skewness to apply when `feature_skewness_threshold` is set. One of `"left"`, `"right"`, or `"both"`.
 #' @param total_peak_area_sd numeric, number of TPA SD after which a sample would be excluded
 #' @param outlier_treatment character, how to handle outlier data values - options 'leave_be', 'turn_NA', or 'winsorize'
 #' @param winsorize_quantile numeric, quantile to winsorize to, only relevant if 'outlier_treatment'='winsorize'
@@ -31,6 +33,8 @@ quality_control <- new_generic("quality_control", c("metaboprep"), function(meta
                                                                             source_layer="input", 
                                                                             sample_missingness = 0.2, 
                                                                             feature_missingness = 0.2, 
+                                                                            feature_skewness_threshold = NULL,
+                                                                            feature_skewness_direction = "left",
                                                                             total_peak_area_sd = 5, 
                                                                             outlier_udist = 5, 
                                                                             outlier_treatment ="leave_be", 
@@ -47,6 +51,8 @@ method(quality_control, Metaboprep) <- function(metaboprep,
                                                 source_layer="input", 
                                                 sample_missingness = 0.2, 
                                                 feature_missingness = 0.2, 
+                                                feature_skewness_threshold = NULL,
+                                                feature_skewness_direction = "left",
                                                 total_peak_area_sd = 5, 
                                                 outlier_udist = 5, 
                                                 outlier_treatment ="leave_be", 
@@ -66,8 +72,10 @@ method(quality_control, Metaboprep) <- function(metaboprep,
   cli::cli_progress_step("Validating input parameters")
   source_layer <- match.arg(source_layer, choices = dimnames(metaboprep@data)[[3]])
   outlier_treatment <- match.arg(outlier_treatment, choices = c("leave_be", "turn_NA", "winsorize"))
+  feature_skewness_direction <- match.arg(feature_skewness_direction, choices = c("left", "right", "both"))
   stopifnot("sample_ids must all be found in the data" = is.null(sample_ids) || all(sample_ids %in% metaboprep@samples[["sample_id"]]))
   stopifnot("feature_ids must all be found in the data" = is.null(feature_ids) || all(feature_ids %in% metaboprep@features[["feature_id"]]))  
+  stopifnot("feature_skewness_threshold must be NULL or a non-negative numeric scalar" = is.null(feature_skewness_threshold) || (is.numeric(feature_skewness_threshold) && length(feature_skewness_threshold) == 1 && !is.na(feature_skewness_threshold) && feature_skewness_threshold >= 0))
   stopifnot("`features_exclude_but_keep` must be a logical column in the features data or a vector of feature ids all present in the data" = is.null(features_exclude_but_keep) || (all(features_exclude_but_keep %in% names(metaboprep@features)) && all(is.logical(metaboprep@features[[features_exclude_but_keep]]))) || all(features_exclude_but_keep %in% metaboprep@features[["feature_id"]]) )
   cli_progress_update()
   
@@ -194,6 +202,28 @@ method(quality_control, Metaboprep) <- function(metaboprep,
     feature_ids <- setdiff(feature_ids, excl_feats)
   }
 
+  # re-estimate feature skewness
+  if (!is.null(feature_skewness_threshold) && !is.na(feature_skewness_threshold)) {
+    excl_feats <- c()
+    skew_cut_text <- switch(
+      feature_skewness_direction,
+      "left" = paste0("<= -", signif(feature_skewness_threshold, digits = 3)),
+      "right" = paste0(">= ", signif(feature_skewness_threshold, digits = 3)),
+      "both" = paste0("|skew| >= ", signif(feature_skewness_threshold, digits = 3))
+    )
+    cli::cli_progress_step("Assessing for feature skewness at threshold {skew_cut_text} - excluding {length(excl_feats)} feature(s)")
+    est_samps <- sample_ids
+    est_feats <- setdiff(feature_ids, exclude_but_keep_feats)
+    stopifnot("No remaining features" = length(est_feats) > 0)
+    stopifnot("No remaining samples" = length(est_samps) > 0)
+    dat <- metaboprep@data[est_samps, est_feats, "qc"]
+    skew_df <- feature_skewness(dat, threshold = feature_skewness_threshold, direction = feature_skewness_direction)
+    excl_feats <- skew_df[skew_df$exclude_by_skewness %in% TRUE, "feature_id"]
+    cli::cli_progress_update()
+    metaboprep@exclusions$features$user_defined_feature_skewness <- excl_feats
+    feature_ids <- setdiff(feature_ids, excl_feats)
+  }
+
   
   # total peak area
   if (!is.null(total_peak_area_sd) && !is.na(total_peak_area_sd)) {
@@ -304,6 +334,8 @@ method(quality_control, Metaboprep) <- function(metaboprep,
   # set parameters used
   attr(metaboprep@data, "qc_sample_missingness")        <- sample_missingness
   attr(metaboprep@data, "qc_feature_missingness")       <- feature_missingness
+  attr(metaboprep@data, "qc_feature_skewness_threshold") <- feature_skewness_threshold
+  attr(metaboprep@data, "qc_feature_skewness_direction") <- feature_skewness_direction
   attr(metaboprep@data, "qc_total_peak_area_sd")        <- total_peak_area_sd
   attr(metaboprep@data, "qc_outlier_udist")             <- outlier_udist
   attr(metaboprep@data, "qc_outlier_treatment")         <- outlier_treatment
