@@ -10,9 +10,7 @@ tree_and_independent_features(
   data,
   tree_cut_height = 0.5,
   features_exclude = NULL,
-  feature_selection = "max_var_exp",
-  cores = NULL,
-  fast = FALSE
+  feature_selection = "max_var_exp"
 )
 ```
 
@@ -36,24 +34,7 @@ tree_and_independent_features(
 - feature_selection:
 
   character. Method for selecting a representative feature from each
-  correlated feature cluster.
-
-- cores:
-
-  number of cores available for parallelism; the default null will try
-  find the maximum available cores - 1; set to 1 for linear, but
-  potentially slow, computation of the correlation matrix.
-
-- fast:
-
-  If `TRUE`, accelerates correlation computation by imputing missing
-  values to the column minimum, pre-ranking all columns, and computing
-  Pearson correlation on ranked data (approximating Spearman).
-  Substantially faster than exact Spearman at large feature dimensions
-  (\\p \> 5000\\) but assumes missing data are missing at random.
-  Features with high missingness will have inflated rank ties at the
-  median (ensure these are filtered out appropriately with the
-  missingness option). Default `FALSE`. One of:
+  correlated feature cluster. One of:
 
   `"max_var_exp"`
 

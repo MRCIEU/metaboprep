@@ -7,6 +7,7 @@ will read in the example data provided with the package, as a list
 object.
 
 ``` r
+
 library(metaboprep)
 
 # example file
@@ -30,6 +31,7 @@ first, as it will often have additional information that you may wish to
 inspect prior to creating the `Metaboprep` object.
 
 ``` r
+
 names(dat)
 #> [1] "data"             "samples"          "features"         "controls"        
 #> [5] "control_metadata"
@@ -41,6 +43,7 @@ Once imported, we pass the data to the Metaboprep() function to build
 the `Metaboprep` class object.
 
 ``` r
+
 mydata <- Metaboprep(data     = dat$data[1:9, 1:100], 
                      samples  = dat$samples[1:9, ], 
                      features = dat$features[1:100, ]
@@ -50,6 +53,7 @@ mydata <- Metaboprep(data     = dat$data[1:9, 1:100],
 ## Quick summary of the metaboprep object
 
 ``` r
+
 summary(mydata)
 #> Metaboprep Object Summary
 #> --------------------------
@@ -93,6 +97,7 @@ summary(mydata)
 Perform the QC steps using the `quality_control` function.
 
 ``` r
+
 mydata <- mydata |>
   quality_control(source_layer        = "input", 
                   sample_missingness  = 0.2, 
@@ -104,26 +109,24 @@ mydata <- mydata |>
                   tree_cut_height     = 0.5, 
                   pc_outlier_sd       = 5,
                   feature_selection   = "max_var_exp",
-                  features_exclude_but_keep = NULL, 
-                  cores               = 1
+                  features_exclude_but_keep = NULL
                   )
 #> 
 #> ── Starting Metabolite QC Process ──────────────────────────────────────────────
 #> ℹ Validating input parameters
-#> ✔ Validating input parameters [8ms]
+#> ✔ Validating input parameters [7ms]
 #> 
 #> ℹ Sample & Feature Summary Statistics for raw data
-#> AF =  1
-#> ✔ Sample & Feature Summary Statistics for raw data [393ms]
+#> ✔ Sample & Feature Summary Statistics for raw data [287ms]
 #> 
 #> ℹ Copying input data to new 'qc' data layer
-#> ✔ Copying input data to new 'qc' data layer [27ms]
+#> ✔ Copying input data to new 'qc' data layer [15ms]
 #> 
 #> ℹ Assessing for extreme sample missingness >=80% - excluding 0 sample(s)
-#> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [19ms]
+#> ✔ Assessing for extreme sample missingness >=80% - excluding 0 sample(s) [10ms]
 #> 
 #> ℹ Assessing for extreme feature missingness >=80% - excluding 0 feature(s)
-#> ✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [28m…
+#> ✔ Assessing for extreme feature missingness >=80% - excluding 0 feature(s) [10m…
 #> 
 #> ℹ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…
 #> ✔ Assessing for sample missingness at specified level of >=20% - excluding 0 sa…
@@ -135,40 +138,23 @@ mydata <- mydata |>
 #> ✔ Calculating total peak abundance outliers at +/- 5 Sdev - excluding 0 sample(…
 #> 
 #> ℹ Running sample data PCA outlier analysis at +/- 5 Sdev
-#> ✔ Running sample data PCA outlier analysis at +/- 5 Sdev [17ms]
+#> ✔ Running sample data PCA outlier analysis at +/- 5 Sdev [10ms]
 #> 
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
-#> AF =  1
 #> ! The stated max PCs [max_num_pcs=10] to use in PCA outlier assessment is greater than the number of available informative PCs [2]
 #> ℹ Sample PCA outlier analysis - re-identify feature independence and PC outlier…✔ Sample PCA outlier analysis - re-identify feature independence and PC outlier…
 #> 
 #> ℹ Creating final QC dataset...
-#> AF =  1
-#> ✔ Creating final QC dataset... [351ms]
+#> ✔ Creating final QC dataset... [264ms]
 #> 
 #> ℹ Metabolite QC Process Completed
-#> 
-#> ℹ Metabolite QC Process Completed── Step timings ──
-#> ℹ Metabolite QC Process Completed
-#> ℹ Metabolite QC Process Completed
-#>                         step seconds  pct
-#>                   validation    0.00  0.0
-#>                summarise_raw    0.38 28.1
-#>                   copy_layer    0.00  0.0
-#>   extreme_sample_missingness    0.00  0.0
-#>  extreme_feature_missingness    0.00  0.0
-#>           sample_missingness    0.00  0.0
-#>          feature_missingness    0.00  0.0
-#>              total_peak_area    0.00  0.0
-#>                summarise_pca    0.44 32.5
-#>              summarise_final    0.33 24.4
-#>                        total    1.35 99.8
-#> ✔ Metabolite QC Process Completed [20ms]
+#> ✔ Metabolite QC Process Completed [10ms]
 ```
 
 ## Quick summary of the metaboprep object following QC
 
 ``` r
+
 summary(mydata)
 #> Metaboprep Object Summary
 #> --------------------------

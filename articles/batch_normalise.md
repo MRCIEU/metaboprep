@@ -3,6 +3,7 @@
 ## Create Metaboprep object
 
 ``` r
+
 library(metaboprep)
 
 data     <- read.csv(system.file("extdata", "dummy_data.csv", package = "metaboprep"), header=T, row.names = 1) |> as.matrix()
@@ -54,6 +55,7 @@ summary(mydata)
 ## Run batch normalisation
 
 ``` r
+
 mydata <- mydata |>
   batch_normalise(run_mode_col = "platform", run_mode_colmap = c(pos="pos", neg="neg")) |>
   print()
@@ -95,6 +97,7 @@ mydata <- mydata |>
 ### Raw input data
 
 ``` r
+
 mydata@data[1:5, 1:5, "input"]
 #>          metab_id_1 metab_id_2 metab_id_3 metab_id_4 metab_id_5
 #> id_100 0.7558872597 0.42346365  0.2830023  0.8074991 0.52739494
@@ -107,6 +110,7 @@ mydata@data[1:5, 1:5, "input"]
 ### Batch normlalised data
 
 ``` r
+
 mydata@data[1:5, 1:5, "batch_normalised"]
 #>          metab_id_1 metab_id_2 metab_id_3 metab_id_4 metab_id_5
 #> id_100 1.2219122932 0.85292184  0.5567470  2.0502351  0.9094521

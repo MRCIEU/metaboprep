@@ -27,9 +27,7 @@ quality_control(
   max_num_pcs = 10,
   sample_ids = NULL,
   feature_ids = NULL,
-  features_exclude_but_keep = NULL,
-  cores = NULL,
-  fast = FALSE
+  features_exclude_but_keep = NULL
 )
 ```
 
@@ -107,20 +105,3 @@ quality_control(
   character, vector of feature ids indicating features to exclude from
   the sample and PCA quality control analysis but keep in the data, OR a
   name of a logical column in the features data indicating the same
-
-- cores:
-
-  number of cores available for parallelism; the default null will try
-  find the maximum available cores - 1; set to 1 for linear, but
-  potentially slow, computation of the correlation matrix.
-
-- fast:
-
-  If `TRUE`, accelerates correlation computation by imputing missing
-  values to the column minimum, pre-ranking all columns, and computing
-  Pearson correlation on ranked data (approximating Spearman).
-  Substantially faster than exact Spearman at large feature dimensions
-  (\\p \> 5000\\) but assumes missing data are missing at random.
-  Features with high missingness will have inflated rank ties at the
-  median (ensure these are filtered out appropriately with the
-  missingness option). Default `FALSE`.
