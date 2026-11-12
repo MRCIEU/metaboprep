@@ -112,7 +112,7 @@ tree_and_independent_features = function(wdata, minimum_samplesize = 50, tree_cu
   ind2 = sapply(k_group, function(x){
     w = which(k %in% x); n = names( k[w] )
     #o = sort(fmis[n], decreasing = FALSE)
-    o = sort(N[n], decreasing = FALSE)
+    o = sort(N[n], decreasing = TRUE)
     out = names(o)[1]
     return(out)
   })
