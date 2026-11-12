@@ -91,7 +91,7 @@ tree_and_independent_features = function(data, tree_cut_height = 0.5, features_e
     ind2 <- sapply(cluster_ids, function(x){
       w   <- which(k %in% x)
       n   <- names( k[w] )
-      o   <- sort(N[n], decreasing = FALSE)
+      o   <- sort(N[n], decreasing = TRUE)
       out <- names(o)[1]
       return(out)
     })
