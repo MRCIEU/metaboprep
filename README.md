@@ -4,10 +4,58 @@
 # metaboprep
 
 <!-- badges: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Lifecycle: superseded](https://img.shields.io/badge/lifecycle-superseded-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#superseded)
+[![Project Status: Unsupported](https://www.repostatus.org/badges/latest/unsupported.svg)](https://www.repostatus.org/#unsupported)
+[![Successor: omiprep](https://img.shields.io/badge/successor-omiprep-brightgreen)](https://github.com/MRCIEU/omiprep)
+[![Known issue](https://img.shields.io/badge/known%20issue-principal%20variable%20selection-red)](#known-issue-principal-variable-selection)
+[![Paper](https://img.shields.io/badge/Bioinformatics-10.1093%2Fbioinformatics%2Fbtac059-blue)](https://doi.org/10.1093/bioinformatics/btac059)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <!-- badges: end -->
+
+> [!IMPORTANT]
+> **metaboprep is no longer maintained. Please use [omiprep](https://github.com/MRCIEU/omiprep).**
+>
+> omiprep is the successor to metaboprep for metabolomics and proteomics data. It was first released as metaboprep v2 and has since been renamed.
+>
+> - Code: <https://github.com/MRCIEU/omiprep>
+> - Software archive: [10.5281/zenodo.20941283](https://doi.org/10.5281/zenodo.20941283)
+> - Manuscript (bioRxiv preprint, under revision; posted as metaboprep v2): [10.1101/2025.11.11.687831](https://www.biorxiv.org/content/10.1101/2025.11.11.687831v1)
+>
+> ```r
+> # install.packages("pak")
+> pak::pak("MRCIEU/omiprep")
+> ```
+>
+> This repository remains available so that published analyses can be reproduced. No further fixes or features will be added.
+
+## Known issue: principal variable selection
+
+metaboprep identifies a set of approximately independent features, or *principal variables*, by clustering features on a dendrogram (distance = 1 − |Spearman's ρ|), cutting the tree at `tree_cut_height`, and keeping one feature from each cluster. The intended rule, as described in [Hughes et al. 2022](https://doi.org/10.1093/bioinformatics/btac059), was to keep the feature with the **least** missingness in each cluster.
+
+The pipeline code instead kept the feature with the **most** missingness. It counted the non-missing values per feature and then selected the feature with the smallest count.
+
+**Who is affected**
+
+| Version | Selection rule | Affected? |
+|---|---|---|
+| From the first release (2020) to July 2025, including v1.0 | Least missingness (the only option) | **Yes**, in the main QC pipeline |
+| Current `master` (v1.0.1 and later), default `feature_selection = "max_var_exp"` | Feature with the highest summed correlation to the rest of its cluster | No |
+| Current `master` with `feature_selection = "least_missingness"` | Least missingness | **Yes** |
+
+The standalone function `feature.tree.independence()` in older versions selected correctly.
+
+This will not be fixed in metaboprep. It is fixed in omiprep.
+
+**What changes**
+
+- The number of clusters, and therefore the number of principal variables, is **not** affected.
+- Which feature represents each multi-feature cluster **is** affected. Results that use the principal-variable set can differ, including the PCA used to flag sample outliers and the principal-variable summaries in the report.
+
+**What to do**
+
+- For new work, use [omiprep](https://github.com/MRCIEU/omiprep), where this is fixed.
+- If you used an affected version, re-running the QC with omiprep, or with metaboprep's default `feature_selection = "max_var_exp"`, will show whether your sample exclusions change.
+- Do not use `feature_selection = "least_missingness"` in metaboprep.
 
 <!-- <div style="text-align: center"> -->
 
